@@ -1,0 +1,2868 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Link Emocional | Regalos Digitales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --pink: #8b6ff0;
+    --pink-soft: #b9a6ff;
+    --wine: #241a4a;
+    --wine-soft: #6f5bc0;
+    --blue: #2a8fae;
+    --blue-light: #6fd6e8;
+    --blue-deep: #1c1440;
+    --navy: #0d0a1e;
+    --navy-2: #050308;
+    --ink: #f2f0fb;
+    --muted: #a8a0c4;
+    --muted-2: #756e94;
+    --glass: rgba(255,255,255,0.045);
+    --glass-strong: rgba(255,255,255,0.09);
+    --grad-brand: linear-gradient(120deg, var(--blue-light) 0%, var(--pink) 55%, var(--wine-soft) 100%);
+    --border-soft: rgba(139,111,240,0.22);
+    --border-soft-blue: rgba(134,215,232,0.22);
+}
+* { box-sizing: border-box; }
+html, body {
+    margin: 0;
+    min-height: 100%;
+    background:
+        radial-gradient(circle at 12% -8%, rgba(139,111,240,0.20), transparent 42%),
+        radial-gradient(circle at 92% 8%, rgba(134,215,232,0.16), transparent 40%),
+        radial-gradient(circle at 50% 115%, rgba(58,42,112,0.30), transparent 55%),
+        linear-gradient(165deg, var(--navy-2) 0%, var(--navy) 45%, #0c0818 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
+    overflow-x: hidden;
+}
+#stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.view { position: relative; z-index: 1; min-height: 100vh; }
+
+/* ===== VISTA: PORTADA ===== */
+.wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 56px 24px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+.avatar {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    background: linear-gradient(150deg, var(--pink) 0%, var(--wine) 55%, var(--blue-deep) 100%);
+    padding: 3px;
+    border: 1px solid rgba(255,255,255,0.35);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 10px 45px rgba(139,111,240,0.35), 0 0 60px rgba(58,150,180,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 44px;
+    margin-bottom: 24px;
+}
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    background: var(--navy-2);
+}
+h1 {
+    font-size: 22px; font-weight: 800; margin: 0 0 8px; letter-spacing: 0.01em;
+    background-image: var(--grad-brand);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: brandShift 6s ease-in-out infinite;
+}
+.subtitle { font-size: 13.5px; color: var(--muted); margin: 0 0 26px; line-height: 1.55; max-width: 340px; }
+.socials { display: flex; gap: 14px; margin-bottom: 32px; }
+.socials a {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--glass);
+    border: 1px solid var(--border-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; text-decoration: none; color: var(--ink);
+    transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.socials a svg { display: block; }
+.socials a:hover {
+    transform: translateY(-3px) scale(1.06);
+    background: rgba(139,111,240,0.14);
+    border-color: rgba(139,111,240,0.5);
+    box-shadow: 0 8px 20px rgba(139,111,240,0.25);
+    color: var(--pink-soft);
+}
+.pill {
+    width: 100%; display: block; text-decoration: none; color: var(--ink);
+    position: relative;
+    background: var(--glass);
+    border: 1px solid var(--border-soft-blue);
+    border-radius: 20px; padding: 18px 24px; margin-bottom: 14px;
+    font-weight: 700; font-size: 14.5px; line-height: 1.4; cursor: pointer;
+    transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+    backdrop-filter: blur(6px);
+}
+.pill span { display: block; font-weight: 600; font-size: 12px; color: var(--muted); margin-top: 4px; }
+.pill:hover { transform: translateY(-3px); }
+.pill.main {
+    background: linear-gradient(135deg, rgba(139,111,240,0.22), rgba(58,150,180,0.16));
+    border-color: rgba(139,111,240,0.55);
+}
+.pill.main:hover { box-shadow: 0 12px 30px rgba(139,111,240,0.28); border-color: rgba(139,111,240,0.8); }
+.pill.free {
+    background: linear-gradient(135deg, rgba(58,42,112,0.24), rgba(58,42,112,0.06));
+    border-color: rgba(167,140,245,0.5);
+}
+.pill.free:hover { box-shadow: 0 12px 30px rgba(58,42,112,0.3); border-color: rgba(167,140,245,0.8); }
+.footer { margin-top: auto; padding-top: 40px; font-size: 11px; color: var(--muted-2); letter-spacing: 0.02em; }
+
+/* ===== VISTA: CATALOGO ===== */
+.topbar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 22px;
+    background: rgba(12,4,20,0.82); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-soft);
+}
+.topbar button.back {
+    color: var(--ink); background: none; border: none; text-decoration: none;
+    font-weight: 700; font-size: 13.5px; display: flex; align-items: center; gap: 6px;
+    cursor: pointer; font-family: inherit; padding: 6px 4px;
+    transition: color .15s ease;
+}
+.topbar button.back:hover { color: var(--pink-soft); }
+.topbar .brand {
+    font-weight: 800; font-size: 14.5px; letter-spacing: 0.01em;
+    background-image: var(--grad-brand);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: brandShift 6s ease-in-out infinite;
+}
+.hero { text-align: center; padding: 44px 20px 12px; }
+.hero h1 { font-size: 25px; margin: 0 0 8px; }
+.hero p { font-size: 13.5px; color: var(--muted); margin: 0; }
+
+@keyframes brandShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* pestañas del catalogo no personalizado: todos / sin editor / gratis */
+.cat-tabs {
+    max-width: 420px; margin: 24px auto 0; padding: 0 20px;
+    display: flex; gap: 8px;
+}
+.cat-tab {
+    flex: 1; text-align: center; cursor: pointer; font-family: inherit;
+    font-weight: 700; font-size: 12.5px; padding: 12px 10px; border-radius: 999px;
+    background: var(--glass); border: 1px solid var(--border-soft-blue);
+    color: var(--muted); transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.cat-tab.active {
+    background: linear-gradient(135deg, rgba(139,111,240,0.28), rgba(58,150,180,0.22));
+    border-color: rgba(139,111,240,0.6); color: var(--ink);
+    box-shadow: 0 6px 18px rgba(139,111,240,0.2);
+}
+.cat-note { max-width: 420px; margin: 14px auto 0; padding: 0 20px; font-size: 12px; color: var(--muted); text-align: center; line-height: 1.5; }
+
+.section-heading {
+    max-width: 1080px; margin: 40px auto 0; padding: 0 20px 0;
+    font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 8px;
+}
+.section-heading .pill-count {
+    font-size: 10.5px; font-weight: 700; color: var(--muted); background: var(--glass);
+    border: 1px solid var(--border-soft-blue); padding: 2px 9px; border-radius: 999px;
+}
+.section-heading.gratis { color: var(--pink-soft); }
+
+.grid {
+    max-width: 1080px; margin: 30px auto 60px; padding: 0 20px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 22px;
+}
+.card {
+    background: linear-gradient(165deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+    border: 1px solid var(--border-soft-blue);
+    border-radius: 20px; overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(139,111,240,0.45);
+    box-shadow: 0 16px 34px rgba(20,4,35,0.45), 0 0 0 1px rgba(139,111,240,0.08);
+}
+.card-thumb { height: 180px; position: relative; background: #05080a; overflow: hidden; }
+.card-thumb canvas, .card-thumb .thumb2d { display: block; width: 100%; height: 100%; }
+.card-thumb .thumb2d { position: relative; }
+
+/* contenedor de badges de la esquina superior izquierda (categoria + dimension) */
+.thumb-badges-left {
+    position: absolute; top: 10px; left: 10px; z-index: 2;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+}
+.card-thumb .tag {
+    font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    background: rgba(0,0,0,0.45); padding: 4px 9px; border-radius: 999px;
+}
+.card-thumb .badge-3d {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.03em;
+    background: rgba(134,215,232,0.22); border: 1px solid rgba(134,215,232,0.5); color: #9fe3ef;
+    padding: 3px 8px 3px 7px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 4px;
+}
+
+/* badge "con editor" / "tambien personalizable": boton con tooltip de beneficios */
+.card-thumb .editor-badge {
+    position: absolute; top: 10px; right: 10px; z-index: 3;
+    font-size: 10px; font-weight: 700; font-family: inherit;
+    background: rgba(139,111,240,0.22); border: 1px solid rgba(139,111,240,0.5); color: var(--pink-soft);
+    padding: 4px 8px; border-radius: 999px; display: flex; align-items: center; gap: 4px;
+    cursor: pointer; transition: background .15s ease;
+}
+.card-thumb .editor-badge:hover { background: rgba(139,111,240,0.34); }
+.card-thumb .editor-badge.also-badge {
+    background: rgba(134,215,232,0.2); border-color: rgba(134,215,232,0.5); color: #9fe3ef;
+}
+.card-thumb .editor-badge.also-badge:hover { background: rgba(134,215,232,0.32); }
+
+/* tooltip flotante UNICO y compartido, fuera de la miniatura (que tiene overflow:hidden) */
+#sharedTooltip {
+    position: fixed; width: 210px; max-height: 190px;
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+    background: rgba(15,5,24,0.97); border: 1px solid rgba(139,111,240,0.35);
+    border-radius: 12px; padding: 10px 12px; text-align: left;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.5);
+    opacity: 0; transform: translateY(-6px); pointer-events: none;
+    transition: opacity .15s ease, transform .15s ease;
+    z-index: 999;
+}
+#sharedTooltip.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+#sharedTooltip .tooltip-title {
+    display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--pink-soft); margin-bottom: 6px; font-weight: 800;
+    position: sticky; top: 0; background: inherit; padding-bottom: 2px;
+}
+#sharedTooltip .tooltip-price {
+    display: block; font-size: 11.5px; font-weight: 800; color: #9fe3ef; margin-bottom: 8px;
+}
+#sharedTooltip ul { margin: 0; padding-left: 16px; }
+#sharedTooltip li { font-size: 11px; font-weight: 600; color: var(--ink); line-height: 1.5; margin-bottom: 4px; }
+#sharedTooltip li:last-child { margin-bottom: 0; }
+#sharedTooltip::-webkit-scrollbar { width: 5px; }
+#sharedTooltip::-webkit-scrollbar-thumb { background: rgba(139,111,240,0.45); border-radius: 3px; }
+
+.card-body { padding: 17px 18px 19px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.card-body h3 { margin: 0; font-size: 15.5px; font-weight: 800; }
+.card-body p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; flex: 1; }
+.price { font-size: 13.5px; font-weight: 800; background-image: var(--grad-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.price.gratis { background-image: none; color: var(--pink-soft); }
+.card-actions { display: flex; gap: 8px; margin-top: 8px; }
+.btn {
+    flex: 1; text-align: center; text-decoration: none; font-weight: 700; font-size: 12px;
+    padding: 11px 8px; border-radius: 11px; border: 1px solid var(--border-soft-blue);
+    color: var(--ink); background: var(--glass); transition: background .15s ease, border-color .15s ease;
+    font-family: inherit; cursor: pointer;
+}
+.btn:hover { background: var(--glass-strong); border-color: rgba(139,111,240,0.4); }
+.btn.whatsapp { background: rgba(38,224,102,0.14); border-color: rgba(38,224,102,0.4); color: #7cffb0; display: flex; align-items: center; justify-content: center; gap: 5px; }
+.btn.whatsapp:hover { background: rgba(38,224,102,0.24); }
+.note { max-width: 1080px; margin: 0 auto 40px; padding: 0 20px; font-size: 12px; color: var(--muted-2); text-align: center; }
+
+/* miniatura 2D generica (SVG) */
+.flores2d-svg { width: 100%; height: 100%; display: block; }
+
+/* mini splash overlay (solo para Flores Amarillas 3D), replica la pantalla de bienvenida del producto real */
+.mini-intro-overlay {
+    position: absolute; inset: 0; z-index: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 10px 12px;
+    background: radial-gradient(ellipse at center, rgba(40,26,6,0.97) 0%, rgba(6,4,2,0.99) 75%);
+    transition: opacity .5s ease, visibility .5s ease;
+    cursor: pointer;
+}
+.mini-intro-overlay.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+.mini-intro-badge { color: #ffcf40; font-size: 8px; font-weight: 700; letter-spacing: 0.18em; margin-bottom: 4px; }
+.mini-intro-title { font-family: 'Quicksand', sans-serif; font-weight: 800; font-size: 11px; color: #fff6e0; text-shadow: 0 0 10px rgba(255,207,64,0.7); margin: 0 0 2px; }
+.mini-intro-sub { color: #e8c98a; font-size: 9px; font-style: italic; margin: 0 0 4px; }
+.mini-bouquet { margin-bottom: 6px; filter: drop-shadow(0 3px 6px rgba(0,0,0,.35)); }
+.mini-intro-btn {
+    background: linear-gradient(135deg,#ffe28a,#ffcf40); color: #3a2604; border: none; border-radius: 999px;
+    padding: 6px 14px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 9.5px;
+    cursor: pointer; box-shadow: 0 4px 12px rgba(255,207,64,.35);
+}
+
+/* toast de aviso (ej. video aun no disponible) */
+#appToast {
+    position: fixed; left: 50%; bottom: 28px; z-index: 1000;
+    transform: translateX(-50%) translateY(16px);
+    max-width: 90vw; width: 340px;
+    background: rgba(15,5,24,0.97); border: 1px solid rgba(139,111,240,0.4);
+    border-radius: 14px; padding: 13px 16px; text-align: left;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.5);
+    display: flex; align-items: center; gap: 10px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .22s ease, transform .22s ease;
+}
+#appToast.open { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+#appToast .toast-icon { font-size: 18px; flex-shrink: 0; }
+#appToast .toast-text { font-size: 12.5px; font-weight: 600; color: var(--ink); line-height: 1.45; }
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<!-- ===================== VISTA 1: PORTADA ===================== -->
+<div class="view view-home" id="viewHome">
+    <div class="wrap">
+        <div class="avatar"><img src="LOGO_DATA_URI" alt="Link Emocional"></div>
+        <h1>Link Emocional</h1>
+        <p class="subtitle">Dedicatorias animadas en 3D y 2D, personalizadas para esa personita especial 🎁</p>
+
+        <div class="socials">
+            <a href="https://www.tiktok.com/@linkemocional1" target="_blank" title="TikTok">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.1 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/linkemocional20/" target="_blank" title="Instagram">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.02-3.58.07-4.85c.15-3.23 1.67-4.77 4.92-4.92 1.27-.06 1.65-.07 4.85-.07zm0-2.16c-3.26 0-3.67.01-4.95.07-4.35.2-6.78 2.62-6.98 6.98-.06 1.28-.07 1.69-.07 4.95s.01 3.67.07 4.95c.2 4.35 2.62 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98-1.28-.06-1.69-.07-4.95-.07zm0 5.84a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm0 9.89a3.89 3.89 0 1 1 0-7.78 3.89 3.89 0 0 1 0 7.78zm6.41-10.11a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61594557770772" target="_blank" title="Facebook">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M22 12.07C22 6.5 17.52 2 12 2S2 6.5 2 12.07c0 5.02 3.66 9.18 8.44 9.93v-7.02H7.9v-2.9h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.9h-2.34V22c4.78-.75 8.44-4.91 8.44-9.93z"/></svg>
+            </a>
+            <a href="https://wa.me/59170000000" target="_blank" title="WhatsApp">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 4.99L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.79 14.1c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.13.11-1.82-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36h.55c.18 0 .42-.07.65.5.24.58.81 2 .88 2.15.07.15.12.32.02.51-.1.19-.15.3-.29.47-.15.17-.31.37-.44.5-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.15.46.13.63-.08.17-.21.72-.85.92-1.14.19-.29.38-.24.64-.14.26.1 1.66.79 1.94.93.29.14.47.22.55.34.07.12.07.7-.17 1.38z"/></svg>
+            </a>
+        </div>
+
+        <button class="pill main" onclick="showView('catalogo','personalizado')" style="border:none; font-family:inherit;">
+            Código Personalizado (Con Editor)
+            <span>HTML listo para enviar 💗</span>
+        </button>
+
+        <button class="pill free" onclick="showView('catalogo','nopersonalizado')" style="border:none; font-family:inherit;">
+            Código No Personalizado (Sin Editor)
+            <span>Diseños bonitos, algunos gratis 💝</span>
+        </button>
+
+        <div class="footer">© Link Emocional</div>
+    </div>
+</div>
+
+<!-- ===================== VISTA 2: CATALOGO ===================== -->
+<div class="view view-catalogo" id="viewCatalogo" style="display:none;">
+    <div class="topbar">
+        <button class="back" onclick="showView('home')">&larr; Inicio</button>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <img src="LOGO_DATA_URI" alt="Link Emocional" style="height:26px; width:26px; object-fit:contain; display:block; border-radius:50%; border:none; background:none;">
+            <div class="brand">Link Emocional</div>
+        </div>
+    </div>
+
+    <div class="hero">
+        <h1 id="catalogoTitulo">Código completo</h1>
+        <p id="catalogoSubtitulo">Elegí un diseño, mirá el video y pedí el tuyo por WhatsApp</p>
+    </div>
+
+    <!-- estas pestañas solo se muestran dentro del catalogo "no personalizado" -->
+    <div class="cat-tabs" id="catTabs">
+        <button class="cat-tab" id="tabTodos" onclick="setSubTab('todos')">Todos</button>
+        <button class="cat-tab" id="tabSinEditor" onclick="setSubTab('sinEditor')">Sin editor</button>
+        <button class="cat-tab" id="tabGratis" onclick="setSubTab('gratis')">Gratis</button>
+    </div>
+    <p class="cat-note" id="catNote"></p>
+
+    <div id="grid"></div>
+
+</div>
+
+<!-- toast de aviso general -->
+<div id="appToast">
+    <span class="toast-icon">🎬</span>
+    <span class="toast-text" id="appToastText"></span>
+</div>
+
+<!-- simbolo compartido de la flor, para la miniatura 2D de Flores Amarillas -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="flowerShape2d" viewBox="-10 -10 20 20">
+      <g>
+        <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#FFD766" transform="rotate(0)"/>
+        <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#FFD766" transform="rotate(45)"/>
+        <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#F5B324" transform="rotate(90)"/>
+        <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#FFD766" transform="rotate(135)"/>
+        <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#F5B324" transform="rotate(180)"/>
+        <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#FFD766" transform="rotate(225)"/>
+        <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#F5B324" transform="rotate(270)"/>
+        <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#FFD766" transform="rotate(315)"/>
+        <circle cx="0" cy="0" r="3.1" fill="#4A2412"/>
+        <circle cx="-0.7" cy="-0.7" r="1.1" fill="#7A4420" opacity=".8"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<script>
+/* ===================== DATOS DE PRODUCTOS ===================== */
+/* Cada producto puede tener precioPersonalizado y/o precioNoPersonalizado.
+   precioPersonalizado != null  -> aparece en el catalogo "Personalizado" (accedido desde el boton de inicio "Código Personalizado")
+   precioNoPersonalizado != null -> aparece en el catalogo "No personalizado" (accedido desde "Catálogo No Personalizado"),
+                                     dentro de sus pestañas Todos / Sin editor / Gratis segun corresponda.
+   videoUrl: si esta definido, el boton "Ver Video" abre ese enlace (ej. un video de TikTok).
+   Si es null, se muestra un aviso de que el video se publicara pronto en redes sociales. */
+var PRODUCTS = [
+    {
+        id: "saturno",
+        name: "Saturno de Recuerdos",
+        tag: "Amor",
+        dim: "3D",
+        desc: "Un planeta 3D interactivo con mensajes, fotos y palabras orbitando alrededor.",
+        precioPersonalizado: 4.99,
+        precioNoPersonalizado: null,
+        videoUrl: null,
+        features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
+        preview: "three-saturno"
+    },
+    {
+        id: "rosa",
+        name: "Rosa Virtual",
+        tag: "Amor",
+        dim: "3D",
+        desc: "Una rosa 3D que florece por completo, con frases y fotos flotando alrededor.",
+        precioPersonalizado: 4.99,
+        precioNoPersonalizado: null,
+        videoUrl: null,
+        features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
+        preview: "three-rosa"
+    },
+    {
+        id: "fenix",
+        name: "Fénix Renaciente",
+        tag: "Renacer",
+        dim: "3D",
+        desc: "Un Fénix de fuego que renace desde las cenizas, con tu mensaje en el pecho.",
+        precioPersonalizado: 5.99,
+        precioNoPersonalizado: null,
+        videoUrl: null,
+        features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
+        preview: "three-fenix"
+    },
+    {
+        id: "caja",
+        name: "Caja Sorpresa",
+        tag: "Sorpresa",
+        dim: "3D",
+        desc: "Una caja de regalo que se abre y libera una nube de luz con tu mensaje adentro.",
+        precioPersonalizado: 4.99,
+        precioNoPersonalizado: null,
+        videoUrl: null,
+        features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
+        preview: "three-caja"
+    },
+    {
+        /* unico producto 2D con version personalizada Y no personalizada */
+        id: "flores",
+        name: "Flores Amarillas",
+        tag: "Amor",
+        dim: "2D",
+        desc: "Un jardín de girasoles que florece en forma de corazón, con tus frases y música de fondo.",
+        /* PRECIOS DE MUESTRA — decime los reales y los cambio */
+        precioPersonalizado: 3.99,
+        precioNoPersonalizado: 1.99,
+        videoUrl: null,
+        features: ["Frases personalizadas ilimitadas","Música de fondo opcional"],
+        preview: "flores2d"
+    },
+    {
+        /* solo existe version NO personalizada, y es gratis (precioNoPersonalizado = 0) */
+        id: "corazon-particulas",
+        name: "Corazón de Partículas",
+        tag: "Amor",
+        dim: "3D",
+        desc: "Un corazón de partículas ci que se arma en el aire y brilla.",
+        precioPersonalizado: null,
+        precioNoPersonalizado: 0,
+        videoUrl: null,
+        features: [],
+        preview: "three-corazon"
+    },
+    {
+        /* solo NO personalizado, con costo de 1 dolar */
+        id: "cumpleanos",
+        name: "Feliz Cumpleaños",
+        tag: "Cumpleaños",
+        dim: "2D",
+        desc: "Una torta con vela que se sopla al tocarla, entre confeti y un mensaje de cumpleaños.",
+        precioPersonalizado: null,
+        precioNoPersonalizado: 1.00,
+        videoUrl: null,
+        features: [],
+        preview: "cumple2d"
+    },
+    {
+        /* solo NO personalizado, con costo de 1 dolar */
+        id: "dia-de-la-novia",
+        name: "Día de la Novia",
+        tag: "Amor",
+        dim: "2D",
+        desc: "Una galaxia de partículas rosa que revela un 'Te Amo' y termina en una tarjeta especial para tu novia.",
+        precioPersonalizado: null,
+        precioNoPersonalizado: 1.00,
+        videoUrl: null,
+        features: [],
+        preview: "novia2d"
+    },
+    {
+        /* CON EDITOR — precios de muestra, aun no confirmados */
+        id: "buzon-cartas",
+        name: "Buzón de Cartas",
+        tag: "Amor",
+        dim: "2D",
+        desc: "Un buzón que se abre con la puerta girando en 3D y libera varios sobres para elegir y leer, con confeti al abrir cada uno.",
+        precioPersonalizado: 3.99,
+        precioNoPersonalizado: null,
+        videoUrl: null,
+        features: ["Título e instrucción editables","Entre 1 y 8 cartas","Etiqueta y mensaje por carta","Foto opcional por carta","Confeti al abrir cada carta"],
+        preview: "buzon2d"
+    },
+    {
+        id: "capsula-tiempo",
+        name: "Cápsula del Tiempo",
+        tag: "Amor",
+        dim: "2D",
+        desc: "Cartas selladas para abrir cuando quieras, o con candado hasta la fecha que elijas para cada una.",
+        precioPersonalizado: 3.99,
+        precioNoPersonalizado: null,
+        videoUrl: null,
+        features: ["Título e instrucción editables","Entre 1 y 8 cartas","Fecha de apertura opcional por carta","Foto opcional por carta","Confeti al abrir"],
+        preview: "capsula2d"
+    },
+    {
+        id: "regalo-caja-carrusel",
+        name: "Un Regalo Para Ti",
+        tag: "Sorpresa",
+        dim: "3D",
+        desc: "Una caja de regalo 3D que se abre con un estallido de corazones y pasa a un carrusel de fotos: cada una se voltea y revela un mensaje.",
+        precioPersonalizado: 4.99,
+        precioNoPersonalizado: null,
+        videoUrl: null,
+        features: ["Título y pistas editables","Entre 1 y 10 fotos","Mensaje al voltear cada foto","Animación de apertura con corazones"],
+        preview: "regalo2d"
+    },
+    {
+        id: "nuestra-historia",
+        name: "Nuestra Historia",
+        tag: "Amor",
+        dim: "2D",
+        desc: "Un libro interactivo: dedicatoria, línea del tiempo, galería de recuerdos, medidor de amor, ruleta de planes y un quiz de '¿cuánto me conoces?'.",
+        precioPersonalizado: 5.99,
+        precioNoPersonalizado: null,
+        videoUrl: null,
+        features: ["Portada y dedicatoria editables","Línea del tiempo (hasta 6 momentos)","Galería con mensajes ocultos","Ruleta de planes personalizable","Quiz de '¿cuánto me conoces?' con puntaje"],
+        preview: "libro2d"
+    },
+    {
+        id: "maquina-amor",
+        name: "Máquina de Amor",
+        tag: "Amor",
+        dim: "2D",
+        desc: "Una máquina expendedora con 9 casilleros: cada uno puede ser una frase, una foto o un 'rasca y descubre' sorpresa.",
+        precioPersonalizado: 4.99,
+        precioNoPersonalizado: null,
+        videoUrl: null,
+        features: ["Título e instrucción editables","9 casilleros personalizables","Cada casillero: frase, foto o rasca y descubre","Confeti al dispensar"],
+        preview: "maquina2d"
+    },
+    {
+        id: "anniversary-times",
+        name: "The Anniversary Times",
+        tag: "Aniversario",
+        dim: "2D",
+        desc: "Un periódico de una sola edición con titular, foto y cita destacada, sopa de letras, rasca y gana, encuesta y memorama del amor.",
+        precioPersonalizado: 5.99,
+        precioNoPersonalizado: null,
+        videoUrl: null,
+        features: ["Titular, foto y cita editables","Índice de amor con barras","Sopa de letras con tu palabra","Rasca y descubre","Galería de hasta 6 fotos","Encuesta y memorama personalizables"],
+        preview: "periodico2d"
+    },
+    {
+        /* SOLO NO PERSONALIZADO — distinto del producto "Flores Amarillas" 2D del corazón de girasoles */
+        id: "rama-floreciente",
+        name: "Rama Floreciente para Ti",
+        tag: "Amor",
+        dim: "3D",
+        desc: "Una ramita que crece de a poco y se llena de flores doradas, entre luciérnagas y estrellas fugaces de fondo.",
+        precioPersonalizado: null,
+        precioNoPersonalizado: 1.50,
+        videoUrl: null,
+        features: [],
+        preview: "three-rama"
+    },
+    {
+        /* SOLO NO PERSONALIZADO — sol de girasoles tipo planeta, distinto de "Flores Amarillas" 2D */
+        id: "flores-amarillas-3d",
+        name: "Flores Amarillas 3D",
+        tag: "Amor",
+        dim: "3D",
+        desc: "Un sol de girasoles con anillo dorado tipo planeta, ramitos y palabras orbitando, con frases que van cambiando en el centro.",
+        precioPersonalizado: null,
+        precioNoPersonalizado: 1.50,
+        videoUrl: null,
+        features: [],
+        preview: "flores-dorado"
+    }
+];
+
+/* catalogMode: 'personalizado' (boton "Código Personalizado (Con Editor)") o 'nopersonalizado' (boton "Código No Personalizado (Sin Editor)")
+   subTab: solo aplica cuando catalogMode === 'nopersonalizado' -> 'todos' | 'sinEditor' | 'gratis' */
+var catalogMode = "personalizado";
+var subTab = "todos";
+
+/* ===================== TOAST DE AVISO ===================== */
+var toastTimer = null;
+function showToast(message, icon){
+    var toast = document.getElementById('appToast');
+    var text = document.getElementById('appToastText');
+    var iconEl = toast.querySelector('.toast-icon');
+    text.textContent = message;
+    iconEl.textContent = icon || '🎬';
+    toast.classList.add('open');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('open'); }, 3600);
+}
+
+/* ===================== NAVEGACION ENTRE VISTAS ===================== */
+function showView(name, mode){
+    document.getElementById('viewHome').style.display = (name === 'home') ? 'block' : 'none';
+    document.getElementById('viewCatalogo').style.display = (name === 'catalogo') ? 'block' : 'none';
+    window.scrollTo(0, 0);
+    if (name === 'catalogo') {
+        setCatalogMode(mode || 'personalizado');
+    }
+}
+
+function setCatalogMode(mode){
+    catalogMode = mode;
+    var tabs = document.getElementById('catTabs');
+    var note = document.getElementById('catNote');
+
+    if (mode === 'personalizado') {
+        /* boton de inicio "Código Personalizado": solo lo que tiene editor, sin pestañas */
+        tabs.style.display = 'none';
+        document.getElementById('catalogoTitulo').textContent = 'Código personalizado';
+        document.getElementById('catalogoSubtitulo').textContent = 'Elegí un diseño, mirá el video y pedí el tuyo por WhatsApp';
+        note.style.display = 'block';
+        note.textContent = 'Todos vienen con editor: cambiás frases, fotos, colores y más antes de recibirlo.';
+        renderGrid();
+    } else {
+        /* boton de inicio "Catálogo No Personalizado": con pestañas Todos / Sin editor / Gratis */
+        tabs.style.display = 'flex';
+        document.getElementById('catalogoTitulo').textContent = 'Código no personalizado';
+        document.getElementById('catalogoSubtitulo').textContent = 'Diseños simples, listos como están — algunos son gratis';
+        setSubTab('todos');
+    }
+}
+
+function setSubTab(tab){
+    subTab = tab;
+    document.getElementById('tabTodos').classList.toggle('active', tab === 'todos');
+    document.getElementById('tabSinEditor').classList.toggle('active', tab === 'sinEditor');
+    document.getElementById('tabGratis').classList.toggle('active', tab === 'gratis');
+
+    var note = document.getElementById('catNote');
+    note.style.display = 'block';
+    if (tab === 'todos') {
+        note.textContent = 'Todo el código no personalizado, con costo y gratis, tal como está.';
+    } else if (tab === 'sinEditor') {
+        note.textContent = 'Sin editor y a menor precio. Si un diseño te gusta pero querés personalizarlo, mirá el botón rosa de su tarjeta.';
+    } else {
+        note.textContent = 'Gratis — escribinos por WhatsApp para obtenerlo 💌';
+    }
+
+    renderGrid();
+}
+
+/* ===================== RENDER DEL GRID ===================== */
+function thumbIdFor(p){
+    return 'thumb-' + p.id + '-' + catalogMode + (catalogMode === 'nopersonalizado' ? ('-' + subTab) : '');
+}
+
+function previewKindFor(p){
+    /* algunos productos tienen un preview distinto para el catalogo "no personalizado"
+       (por ahora solo Flores Amarillas, con su version real en tonos dorados) */
+    return (catalogMode !== 'personalizado' && p.previewAlt) ? p.previewAlt : p.preview;
+}
+
+function buildCardHtml(p, priceShown, isFree, rightBadge, thumbId){
+    var isThree = previewKindFor(p).indexOf('three-') === 0;
+    var thumbInner = isThree
+        ? '<canvas id="' + thumbId + '"></canvas>'
+        : '<div class="thumb2d" id="' + thumbId + '"></div>';
+
+    var priceHtml = isFree ? 'Gratis 🎁' : ('$ ' + priceShown.toFixed(2));
+    var pedirLabel = isFree ? 'Escríbenos' : 'Pedir';
+
+    var introOverlayHtml = '';
+    if (p.id === 'flores-amarillas-3d') {
+        introOverlayHtml =
+            '<div class="mini-intro-overlay" id="introOverlay-' + thumbId + '">' +
+                '<div class="mini-intro-badge">&#10022; LOVE YOU &#10022;</div>' +
+                '<div class="mini-intro-title">🌼 FLORES AMARILLAS 🌼</div>' +
+                '<div class="mini-intro-sub">para ti</div>' +
+                '<svg class="mini-bouquet" viewBox="0 0 100 90" width="64" height="58">' +
+                    '<use href="#flowerShape2d" x="34" y="4" width="22" height="22"></use>' +
+                    '<use href="#flowerShape2d" x="14" y="24" width="18" height="18"></use>' +
+                    '<use href="#flowerShape2d" x="58" y="24" width="18" height="18"></use>' +
+                    '<use href="#flowerShape2d" x="24" y="42" width="16" height="16"></use>' +
+                    '<use href="#flowerShape2d" x="52" y="42" width="16" height="16"></use>' +
+                    '<use href="#flowerShape2d" x="38" y="34" width="15" height="15"></use>' +
+                '</svg>' +
+                '<button type="button" class="mini-intro-btn">Ver mi regalo &rarr;</button>' +
+            '</div>';
+    }
+
+    return {
+        thumbId: thumbId,
+        html:
+            '<div class="card-thumb" data-3d="' + isThree + '">' +
+                '<div class="thumb-badges-left">' +
+                    '<span class="tag">' + p.tag + '</span>' +
+                    '<span class="badge-3d" title="Animación ' + p.dim + ' interactiva">' + (p.dim === '2D' ? '🌼' : '🧊') + ' ' + p.dim + '</span>' +
+                '</div>' +
+                rightBadge +
+                thumbInner +
+                introOverlayHtml +
+            '</div>' +
+            '<div class="card-body">' +
+                '<h3>' + p.name + '</h3>' +
+                '<p>' + p.desc + '</p>' +
+                '<div class="price' + (isFree ? ' gratis' : '') + '">' + priceHtml + '</div>' +
+                '<div class="card-actions">' +
+                    '<button type="button" class="btn btn-video" data-product-id="' + p.id + '">Ver Video</button>' +
+                    '<a class="btn whatsapp" href="#"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex-shrink:0"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 4.99L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.79 14.1c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.13.11-1.82-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36h.55c.18 0 .42-.07.65.5.24.58.81 2 .88 2.15.07.15.12.32.02.51-.1.19-.15.3-.29.47-.15.17-.31.37-.44.5-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.15.46.13.63-.08.17-.21.72-.85.92-1.14.19-.29.38-.24.64-.14.26.1 1.66.79 1.94.93.29.14.47.22.55.34.07.12.07.7-.17 1.38z"/></svg>' + pedirLabel + '</a>' +
+                '</div>' +
+            '</div>'
+    };
+}
+
+function rightBadgeFor(p){
+    if (catalogMode === 'personalizado') {
+        return '<button type="button" class="editor-badge" data-features="' + p.features.join(';') + '">✎ Con editor</button>';
+    } else if (p.precioPersonalizado) {
+        /* si ademas existe version personalizada, avisar con precio y beneficios */
+        return '<button type="button" class="editor-badge also-badge" data-features="' + p.features.join(';') + '" data-also-price="$ ' + p.precioPersonalizado.toFixed(2) + '">🎨 Hay editor</button>';
+    }
+    return '';
+}
+
+function appendGridSection(container, list){
+    if (!list.length) return;
+    var grid = document.createElement('div');
+    grid.className = 'grid';
+    list.forEach(function(p){
+        var isFree = catalogMode !== 'personalizado' && p.precioNoPersonalizado === 0;
+        var priceShown = (catalogMode === 'personalizado') ? p.precioPersonalizado : p.precioNoPersonalizado;
+        var card = document.createElement('div');
+        card.className = 'card';
+        var built = buildCardHtml(p, priceShown, isFree, rightBadgeFor(p), thumbIdFor(p));
+        card.innerHTML = built.html;
+        grid.appendChild(card);
+    });
+    container.appendChild(grid);
+}
+
+function renderGrid(){
+    var container = document.getElementById('grid');
+    container.innerHTML = '';
+
+    var list;
+    if (catalogMode === 'personalizado') {
+        list = PRODUCTS.filter(function(p){ return p.precioPersonalizado != null; });
+    } else {
+        /* nota: 0 es "gratis" y es un precio valido, por eso se compara con != null en vez de usar !! */
+        var base = PRODUCTS.filter(function(p){ return p.precioNoPersonalizado != null; });
+        if (subTab === 'sinEditor') {
+            list = base.filter(function(p){ return p.precioNoPersonalizado > 0; });
+        } else if (subTab === 'gratis') {
+            list = base.filter(function(p){ return p.precioNoPersonalizado === 0; });
+        } else {
+            list = base; /* todos */
+        }
+    }
+
+    appendGridSection(container, list);
+
+    requestAnimationFrame(function(){
+        initTooltips();
+        initVideoButtons();
+        list.forEach(function(p){
+            startPreview(previewKindFor(p), thumbIdFor(p));
+            if (p.id === 'flores-amarillas-3d') {
+                var overlayEl = document.getElementById('introOverlay-' + thumbIdFor(p));
+                if (overlayEl) {
+                    overlayEl.addEventListener('click', function(){
+                        overlayEl.classList.add('hide');
+                    });
+                }
+            }
+        });
+    });
+}
+
+/* boton "Ver Video": si el producto ya tiene un videoUrl (ej. link de TikTok), lo abre.
+   si todavia no hay video publicado, avisa que se viene pronto en redes. */
+function initVideoButtons(){
+    document.querySelectorAll('.btn-video').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+            e.stopPropagation();
+            var id = btn.getAttribute('data-product-id');
+            var product = PRODUCTS.filter(function(p){ return p.id === id; })[0];
+            if (product && product.videoUrl) {
+                window.open(product.videoUrl, '_blank');
+            } else {
+                showToast('Pronto se publicará el video en nuestras redes sociales 🎥', '🎬');
+            }
+        });
+    });
+}
+
+/* estrellas de fondo */
+(function(){
+    var canvas = document.getElementById("stars");
+    var ctx = canvas.getContext("2d");
+    var stars = [];
+    function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    function build(){
+        stars = [];
+        var count = Math.floor((window.innerWidth * window.innerHeight) / 9000);
+        for (var i = 0; i < count; i++) {
+            var angle = Math.random()*Math.PI*2;
+            var speed = Math.random()*0.06 + 0.015;
+            stars.push({
+                x: Math.random()*canvas.width,
+                y: Math.random()*canvas.height,
+                r: Math.random()*1.4+0.3,
+                a: Math.random()*0.6+0.2,
+                s: Math.random()*0.015+0.005,
+                vx: Math.cos(angle)*speed,
+                vy: Math.sin(angle)*speed
+            });
+        }
+    }
+    function draw(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(function(st){
+            st.a += st.s;
+            st.x += st.vx;
+            st.y += st.vy;
+            if (st.x < -5) st.x = canvas.width + 5;
+            if (st.x > canvas.width + 5) st.x = -5;
+            if (st.y < -5) st.y = canvas.height + 5;
+            if (st.y > canvas.height + 5) st.y = -5;
+            var op = 0.35 + 0.35 * Math.sin(st.a);
+            ctx.beginPath();
+            ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(180,255,240," + op + ")";
+            ctx.fill();
+        });
+        requestAnimationFrame(draw);
+    }
+    window.addEventListener("resize", function(){ resize(); build(); });
+    resize(); build(); draw();
+})();
+
+/* tooltip de beneficios (editor / tambien-personalizable): un unico tooltip flotante */
+function initTooltips(){
+    var tooltip = document.getElementById("sharedTooltip");
+    if (!tooltip) {
+        tooltip = document.createElement("div");
+        tooltip.id = "sharedTooltip";
+        tooltip.innerHTML = '<span class="tooltip-title">Qué podés personalizar</span><span class="tooltip-price" id="tooltipPrice" style="display:none;"></span><ul></ul>';
+        document.body.appendChild(tooltip);
+    }
+    var tooltipList = tooltip.querySelector("ul");
+    var tooltipPrice = tooltip.querySelector("#tooltipPrice");
+    var currentBadge = null;
+
+    function closeTooltip(){
+        tooltip.classList.remove("open");
+        currentBadge = null;
+    }
+
+    function openTooltipFor(badge){
+        var featuresAttr = badge.getAttribute("data-features") || "";
+        var features = featuresAttr.split(";").map(function(s){ return s.trim(); }).filter(Boolean);
+        tooltipList.innerHTML = "";
+        features.forEach(function(f){
+            var li = document.createElement("li");
+            li.textContent = f;
+            tooltipList.appendChild(li);
+        });
+
+        var alsoPrice = badge.getAttribute("data-also-price");
+        if (alsoPrice) {
+            tooltipPrice.style.display = "block";
+            tooltipPrice.textContent = "Versión con editor: " + alsoPrice;
+        } else {
+            tooltipPrice.style.display = "none";
+        }
+
+        tooltip.scrollTop = 0;
+
+        var rect = badge.getBoundingClientRect();
+        var tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+        var left = rect.right - tw;
+        left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+        var top = rect.bottom + 8;
+        if (top + th > window.innerHeight - 8) top = Math.max(8, rect.top - th - 8);
+
+        tooltip.style.left = left + "px";
+        tooltip.style.top = top + "px";
+        tooltip.classList.add("open");
+        currentBadge = badge;
+    }
+
+    document.querySelectorAll(".editor-badge").forEach(function(badge){
+        badge.addEventListener("click", function(e){
+            e.stopPropagation();
+            if (currentBadge === badge && tooltip.classList.contains("open")) {
+                closeTooltip();
+                return;
+            }
+            openTooltipFor(badge);
+        });
+    });
+
+    tooltip.addEventListener("click", function(e){ e.stopPropagation(); });
+    document.addEventListener("click", closeTooltip);
+    window.addEventListener("scroll", closeTooltip, true);
+    window.addEventListener("resize", closeTooltip);
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+
+function startPreview(kind, containerId){
+    /* nota: el grid se destruye y se vuelve a crear cada vez que se cambia de pestaña/modo
+       (mismos ids, elementos nuevos), asi que siempre arrancamos un loop nuevo.
+       los loops viejos se auto-terminan solos al notar que su canvas/contenedor
+       ya no esta en el DOM (ver chequeo .isConnected en cada loop). */
+    if (kind.indexOf('three-') === 0) {
+        if (typeof THREE === "undefined") return;
+        startThreePreview(kind.replace('three-',''), containerId);
+    } else if (kind === 'flores2d') {
+        startFlores2dPreview(containerId);
+    } else if (kind === 'cumple2d') {
+        startCumple2dPreview(containerId);
+    } else if (kind === 'novia2d') {
+        startNovia2dPreview(containerId);
+    } else if (kind === 'buzon2d') {
+        startBuzon2dPreview(containerId);
+    } else if (kind === 'capsula2d') {
+        startCapsula2dPreview(containerId);
+    } else if (kind === 'libro2d') {
+        startLibro2dPreview(containerId);
+    } else if (kind === 'maquina2d') {
+        startMaquina2dPreview(containerId);
+    } else if (kind === 'periodico2d') {
+        startPeriodico2dPreview(containerId);
+    } else if (kind === 'regalo2d') {
+        startRegalo2dPreview(containerId);
+    }
+}
+
+/* ============== miniatura 2D: Flores Amarillas (jardin de girasoles en forma de corazon) ============== */
+function heartPoint(t, scale){
+    var x = 16 * Math.pow(Math.sin(t), 3);
+    var y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+    return { x: x * scale, y: -y * scale };
+}
+
+function startFlores2dPreview(containerId){
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 300 200");
+    svg.setAttribute("class", "flores2d-svg");
+    svg.style.background = "linear-gradient(165deg,#160A1E 0%,#3A1030 55%,#5C1444 100%)";
+    container.appendChild(svg);
+
+    /* panel color marfil, igual que la tarjeta real */
+    var panel = document.createElementNS(svgNS, "rect");
+    panel.setAttribute("x", "10"); panel.setAttribute("y", "10");
+    panel.setAttribute("width", "280"); panel.setAttribute("height", "180");
+    panel.setAttribute("rx", "20");
+    panel.setAttribute("fill", "#F4E8CB");
+    svg.appendChild(panel);
+
+    /* frase superior, itálica, como en el producto real */
+    var topText = document.createElementNS(svgNS, "text");
+    topText.setAttribute("x", "26"); topText.setAttribute("y", "34");
+    topText.setAttribute("font-family", "'Cormorant Garamond', serif");
+    topText.setAttribute("font-style", "italic");
+    topText.setAttribute("font-weight", "600");
+    topText.setAttribute("font-size", "11");
+    topText.setAttribute("fill", "#3A1030");
+    topText.setAttribute("opacity", "0.8");
+    topText.textContent = "Esto empezó siendo una ramita...";
+    svg.appendChild(topText);
+
+    /* linea de piso */
+    var ground = document.createElementNS(svgNS, "line");
+    ground.setAttribute("x1", "34"); ground.setAttribute("y1", "158");
+    ground.setAttribute("x2", "266"); ground.setAttribute("y2", "158");
+    ground.setAttribute("stroke", "#3A1030"); ground.setAttribute("stroke-opacity", "0.3");
+    ground.setAttribute("stroke-width", "1");
+    svg.appendChild(ground);
+
+    /* tronco + ramas, mismo estilo curvo que el original */
+    var trunk = document.createElementNS(svgNS, "path");
+    trunk.setAttribute("d", "M150,158 C142,132 154,116 146,96 C140,82 152,78 148,66");
+    trunk.setAttribute("fill", "none"); trunk.setAttribute("stroke", "#6B3A1F");
+    trunk.setAttribute("stroke-width", "6"); trunk.setAttribute("stroke-linecap", "round");
+    svg.appendChild(trunk);
+
+    var branchL = document.createElementNS(svgNS, "path");
+    branchL.setAttribute("d", "M148,104 C130,96 116,88 102,78");
+    branchL.setAttribute("fill", "none"); branchL.setAttribute("stroke", "#6B3A1F");
+    branchL.setAttribute("stroke-width", "4"); branchL.setAttribute("stroke-linecap", "round");
+    svg.appendChild(branchL);
+
+    var branchR = document.createElementNS(svgNS, "path");
+    branchR.setAttribute("d", "M150,98 C168,90 182,82 196,72");
+    branchR.setAttribute("fill", "none"); branchR.setAttribute("stroke", "#6B3A1F");
+    branchR.setAttribute("stroke-width", "4"); branchR.setAttribute("stroke-linecap", "round");
+    svg.appendChild(branchR);
+
+    /* frase inferior, itálica */
+    var bottomText = document.createElementNS(svgNS, "text");
+    bottomText.setAttribute("x", "26"); bottomText.setAttribute("y", "178");
+    bottomText.setAttribute("font-family", "'Cormorant Garamond', serif");
+    bottomText.setAttribute("font-style", "italic");
+    bottomText.setAttribute("font-weight", "600");
+    bottomText.setAttribute("font-size", "10");
+    bottomText.setAttribute("fill", "#3A1030");
+    bottomText.setAttribute("opacity", "0");
+    bottomText.textContent = "Sembré este jardín para pensar en ti.";
+    svg.appendChild(bottomText);
+
+    /* corazon de girasoles, igual estructura que el editor real, a menor escala */
+    var centerX = 150, centerY = 70;
+    var layers = [0.32, 0.5, 0.68, 0.85, 1.0];
+    var points = [];
+    layers.forEach(function(scaleLayer){
+        var steps = 8 + Math.round(scaleLayer * 6);
+        for (var i = 0; i < steps; i++){
+            var t = (i / steps) * Math.PI * 2;
+            var p = heartPoint(t, 6.2 * scaleLayer);
+            points.push({
+                x: centerX + p.x + (Math.random()-0.5) * 3,
+                y: centerY + p.y + (Math.random()-0.5) * 3,
+                size: 11 + Math.random() * 4,
+                t: t
+            });
+        }
+    });
+    points.sort(function(a,b){ return a.t - b.t; });
+
+    var flowers = points.map(function(p){
+        var use = document.createElementNS(svgNS, "use");
+        use.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#flowerShape2d");
+        use.setAttribute("href", "#flowerShape2d");
+        use.setAttribute("x", p.x - p.size/2);
+        use.setAttribute("y", p.y - p.size/2);
+        use.setAttribute("width", p.size);
+        use.setAttribute("height", p.size);
+        use.style.opacity = "0";
+        use.style.transformBox = "fill-box";
+        use.style.transformOrigin = "center";
+        svg.appendChild(use);
+        return use;
+    });
+
+    var LOOP = 7.5, REVEAL_START = 0.5, STEP_GAP = 0.1, TEXT_IN = 6.0, HOLD_UNTIL = 6.6, FADE_OUT_DUR = 0.7;
+    var start = performance.now();
+
+    function tick(){
+        if (!container.isConnected) return; /* la tarjeta ya no existe: cortamos el loop */
+        requestAnimationFrame(tick);
+        var t = (performance.now() - start) / 1000;
+        var lt = t % LOOP;
+
+        flowers.forEach(function(f, i){
+            var apparition = REVEAL_START + i * STEP_GAP;
+            if (lt < apparition){
+                f.style.opacity = "0";
+                f.style.transform = "scale(0)";
+            } else if (lt < HOLD_UNTIL) {
+                var localT = Math.min(1, (lt - apparition) / 0.6);
+                f.style.opacity = String(localT);
+                f.style.transform = "scale(" + (0.3 + 0.7*localT) + ")";
+            } else {
+                var fadeT = Math.min(1, (lt - HOLD_UNTIL) / FADE_OUT_DUR);
+                f.style.opacity = String(Math.max(0, 1 - fadeT));
+                f.style.transform = "scale(1)";
+            }
+        });
+
+        var textT = clamp01((lt - TEXT_IN) / 0.6);
+        var textFade = lt < HOLD_UNTIL ? textT : Math.max(0, 1 - (lt - HOLD_UNTIL) / FADE_OUT_DUR);
+        bottomText.setAttribute("opacity", String(0.8 * textFade));
+    }
+    tick();
+}
+
+/* ============== miniatura 2D: Feliz Cumpleaños (torta + vela + confeti) ============== */
+function startCumple2dPreview(containerId){
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 300 200");
+    svg.setAttribute("class", "flores2d-svg");
+    svg.style.background = "linear-gradient(160deg,#ffd6e6 0%,#ff9fc4 65%,#ff7fb0 100%)";
+    container.appendChild(svg);
+
+    var title = document.createElementNS(svgNS, "text");
+    title.setAttribute("x", "150"); title.setAttribute("y", "32");
+    title.setAttribute("text-anchor", "middle");
+    title.setAttribute("font-family", "'Cormorant Garamond', serif");
+    title.setAttribute("font-style", "italic");
+    title.setAttribute("font-weight", "700");
+    title.setAttribute("font-size", "17");
+    title.setAttribute("fill", "#c2185b");
+    title.textContent = "Feliz Cumpleaños";
+    svg.appendChild(title);
+
+    var plate = document.createElementNS(svgNS, "ellipse");
+    plate.setAttribute("cx", "150"); plate.setAttribute("cy", "172");
+    plate.setAttribute("rx", "62"); plate.setAttribute("ry", "7");
+    plate.setAttribute("fill", "#fff1f6");
+    svg.appendChild(plate);
+
+    var body = document.createElementNS(svgNS, "rect");
+    body.setAttribute("x", "108"); body.setAttribute("y", "128");
+    body.setAttribute("width", "84"); body.setAttribute("height", "44");
+    body.setAttribute("rx", "6");
+    body.setAttribute("fill", "#8a5a3d");
+    svg.appendChild(body);
+
+    var icing = document.createElementNS(svgNS, "rect");
+    icing.setAttribute("x", "104"); icing.setAttribute("y", "116");
+    icing.setAttribute("width", "92"); icing.setAttribute("height", "18");
+    icing.setAttribute("rx", "10");
+    icing.setAttribute("fill", "#fff9f2");
+    svg.appendChild(icing);
+
+    var cherry = document.createElementNS(svgNS, "circle");
+    cherry.setAttribute("cx", "150"); cherry.setAttribute("cy", "108"); cherry.setAttribute("r", "6");
+    cherry.setAttribute("fill", "#e0245e");
+    svg.appendChild(cherry);
+
+    var candle = document.createElementNS(svgNS, "rect");
+    candle.setAttribute("x", "146"); candle.setAttribute("y", "90"); candle.setAttribute("width", "6"); candle.setAttribute("height", "20");
+    candle.setAttribute("fill", "#f4e9c9");
+    svg.appendChild(candle);
+
+    var flame = document.createElementNS(svgNS, "ellipse");
+    flame.setAttribute("cx", "149"); flame.setAttribute("cy", "86"); flame.setAttribute("rx", "5"); flame.setAttribute("ry", "8");
+    flame.setAttribute("fill", "#ffcf5c");
+    svg.appendChild(flame);
+
+    var hint = document.createElementNS(svgNS, "text");
+    hint.setAttribute("x", "150"); hint.setAttribute("y", "190");
+    hint.setAttribute("text-anchor", "middle");
+    hint.setAttribute("font-size", "9");
+    hint.setAttribute("fill", "#8a1447");
+    hint.setAttribute("opacity", "0.85");
+    hint.textContent = "toca la vela y pide un deseo 🕯️";
+    svg.appendChild(hint);
+
+    var confettiColors = ["#ff5c8a","#ffd166","#ff9fc4","#ffffff","#c2185b"];
+    var confetti = [];
+    for (var i = 0; i < 22; i++){
+        var rect = document.createElementNS(svgNS, "rect");
+        var size = 3 + Math.random()*3;
+        rect.setAttribute("width", size); rect.setAttribute("height", size*0.6);
+        rect.setAttribute("fill", confettiColors[i % confettiColors.length]);
+        svg.appendChild(rect);
+        confetti.push({
+            el: rect,
+            x: Math.random()*300,
+            y: -20 - Math.random()*180,
+            vy: 0.4 + Math.random()*0.5,
+            rot: Math.random()*360,
+            vr: (Math.random()-0.5)*4
+        });
+    }
+
+    var start = performance.now();
+    function tick(){
+        if (!container.isConnected) return;
+        requestAnimationFrame(tick);
+        var t = (performance.now() - start) / 1000;
+
+        var flick = 1 + 0.12*Math.sin(t*9);
+        flame.setAttribute("rx", 5*flick);
+        flame.setAttribute("ry", 8*flick);
+
+        confetti.forEach(function(c){
+            c.y += c.vy;
+            c.rot += c.vr;
+            if (c.y > 205) { c.y = -10; c.x = Math.random()*300; }
+            c.el.setAttribute("x", c.x); c.el.setAttribute("y", c.y);
+            c.el.setAttribute("transform", "rotate(" + c.rot.toFixed(1) + " " + c.x.toFixed(1) + " " + c.y.toFixed(1) + ")");
+        });
+    }
+    tick();
+}
+
+/* ============== miniatura 2D: Día de la Novia (galaxia rosa + "Te Amo") ============== */
+function startNovia2dPreview(containerId){
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 300 200");
+    svg.setAttribute("class", "flores2d-svg");
+    svg.style.background = "#050107";
+    container.appendChild(svg);
+
+    var gradId = "noviaGlow-" + containerId;
+    var defs = document.createElementNS(svgNS, "defs");
+    var glowDef = document.createElementNS(svgNS, "radialGradient");
+    glowDef.setAttribute("id", gradId);
+    var s1 = document.createElementNS(svgNS,"stop"); s1.setAttribute("offset","0%"); s1.setAttribute("stop-color","#ffdcf0"); s1.setAttribute("stop-opacity","0.9");
+    var s2 = document.createElementNS(svgNS,"stop"); s2.setAttribute("offset","40%"); s2.setAttribute("stop-color","#ff2f92"); s2.setAttribute("stop-opacity","0.55");
+    var s3 = document.createElementNS(svgNS,"stop"); s3.setAttribute("offset","100%"); s3.setAttribute("stop-color","#ff2f92"); s3.setAttribute("stop-opacity","0");
+    glowDef.appendChild(s1); glowDef.appendChild(s2); glowDef.appendChild(s3);
+    defs.appendChild(glowDef);
+    svg.appendChild(defs);
+
+    for (var s = 0; s < 26; s++){
+        var star = document.createElementNS(svgNS, "circle");
+        star.setAttribute("cx", (Math.random()*300).toFixed(1));
+        star.setAttribute("cy", (Math.random()*200).toFixed(1));
+        star.setAttribute("r", (0.4 + Math.random()*1).toFixed(2));
+        star.setAttribute("fill", "#fff");
+        star.setAttribute("opacity", (0.2 + Math.random()*0.5).toFixed(2));
+        svg.appendChild(star);
+    }
+
+    var cx = 150, cy = 100;
+    var glowCircle = document.createElementNS(svgNS, "circle");
+    glowCircle.setAttribute("cx", cx); glowCircle.setAttribute("cy", cy); glowCircle.setAttribute("r", "36");
+    glowCircle.setAttribute("fill", "url(#" + gradId + ")");
+    svg.appendChild(glowCircle);
+
+    var title = document.createElementNS(svgNS, "text");
+    title.setAttribute("x", cx); title.setAttribute("y", cy + 6);
+    title.setAttribute("text-anchor", "middle");
+    title.setAttribute("font-family", "Quicksand, sans-serif");
+    title.setAttribute("font-weight", "800");
+    title.setAttribute("font-size", "22");
+    title.setAttribute("fill", "#fff");
+    title.textContent = "Te Amo";
+    svg.appendChild(title);
+
+    var N = 55;
+    var parts = [];
+    for (var i = 0; i < N; i++){
+        var circ = document.createElementNS(svgNS, "circle");
+        circ.setAttribute("r", "1.4");
+        circ.setAttribute("fill", Math.random() < 0.7 ? "#ff6fc0" : "#c58bff");
+        svg.appendChild(circ);
+        parts.push({
+            el: circ,
+            angle: (i / N) * Math.PI * 2 + (Math.random()-0.5)*0.15,
+            dist: Math.random()*40,
+            speed: 0.6 + Math.random()*1.0
+        });
+    }
+
+    var start = performance.now();
+    function tick(){
+        if (!container.isConnected) return;
+        requestAnimationFrame(tick);
+        var t = (performance.now() - start) / 1000;
+        var maxR = 150;
+        parts.forEach(function(p){
+            p.dist += p.speed;
+            if (p.dist > maxR) { p.dist = 0; p.angle += (Math.random()-0.5)*0.1; }
+            var x = cx + Math.cos(p.angle)*p.dist;
+            var y = cy + Math.sin(p.angle)*p.dist*0.72;
+            var tt = p.dist / maxR;
+            p.el.setAttribute("cx", x.toFixed(1));
+            p.el.setAttribute("cy", y.toFixed(1));
+            p.el.setAttribute("opacity", (1 - tt).toFixed(2));
+        });
+        var pulse = 1 + 0.06*Math.sin(t*1.4);
+        glowCircle.setAttribute("r", (36*pulse).toFixed(1));
+    }
+    tick();
+}
+
+/* ============== miniatura 2D: Buzón de Cartas (puerta que se abre + sobres apareciendo) ============== */
+function startBuzon2dPreview(containerId){
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 300 200");
+    svg.setAttribute("class", "flores2d-svg");
+    svg.style.background = "linear-gradient(170deg,#0e1a30 0%,#193a5c 55%,#2a5c8f 100%)";
+    container.appendChild(svg);
+
+    var topLabel = document.createElementNS(svgNS, "text");
+    topLabel.setAttribute("x","150"); topLabel.setAttribute("y","24");
+    topLabel.setAttribute("text-anchor","middle");
+    topLabel.setAttribute("font-family","'Quicksand',sans-serif");
+    topLabel.setAttribute("font-weight","700");
+    topLabel.setAttribute("font-size","10");
+    topLabel.setAttribute("letter-spacing","2");
+    topLabel.setAttribute("fill","#e2c07d");
+    topLabel.textContent = "TIENES CARTAS NUEVAS";
+    svg.appendChild(topLabel);
+
+    var post = document.createElementNS(svgNS,"rect");
+    post.setAttribute("x","146"); post.setAttribute("y","110"); post.setAttribute("width","8"); post.setAttribute("height","40");
+    post.setAttribute("fill","#3a2c18");
+    svg.appendChild(post);
+
+    var lid = document.createElementNS(svgNS,"path");
+    lid.setAttribute("d","M112,66 Q150,42 188,66 L188,80 L112,80 Z");
+    lid.setAttribute("fill","#c8354a");
+    lid.setAttribute("stroke","#e2c07d");
+    lid.setAttribute("stroke-width","2");
+    svg.appendChild(lid);
+
+    var body = document.createElementNS(svgNS,"rect");
+    body.setAttribute("x","112"); body.setAttribute("y","78"); body.setAttribute("width","76"); body.setAttribute("height","36");
+    body.setAttribute("rx","8");
+    body.setAttribute("fill","#a4172a");
+    body.setAttribute("stroke","#e2c07d");
+    body.setAttribute("stroke-width","2");
+    svg.appendChild(body);
+
+    var doorGroup = document.createElementNS(svgNS,"g");
+    doorGroup.setAttribute("transform","translate(150,96)");
+    var door = document.createElementNS(svgNS,"rect");
+    door.setAttribute("x","-26"); door.setAttribute("y","-14"); door.setAttribute("width","52"); door.setAttribute("height","28");
+    door.setAttribute("rx","4");
+    door.setAttribute("fill","#d94a5c");
+    door.setAttribute("stroke","#e2c07d");
+    door.setAttribute("stroke-width","1.5");
+    doorGroup.appendChild(door);
+    svg.appendChild(doorGroup);
+
+    var flagGroup = document.createElementNS(svgNS,"g");
+    flagGroup.setAttribute("transform","translate(186,84)");
+    var flag = document.createElementNS(svgNS,"path");
+    flag.setAttribute("d","M0,0 L0,-16 L10,-8 Z");
+    flag.setAttribute("fill","#e2c07d");
+    flagGroup.appendChild(flag);
+    svg.appendChild(flagGroup);
+
+    var envGroup = document.createElementNS(svgNS,"g");
+    svg.appendChild(envGroup);
+    var envelopes = [];
+    var positions = [[95,150],[150,158],[205,150]];
+    positions.forEach(function(pos){
+        var g = document.createElementNS(svgNS,"g");
+        g.setAttribute("transform","translate("+pos[0]+","+pos[1]+") scale(0)");
+        var rect = document.createElementNS(svgNS,"rect");
+        rect.setAttribute("x","-20"); rect.setAttribute("y","-14"); rect.setAttribute("width","40"); rect.setAttribute("height","28");
+        rect.setAttribute("rx","3");
+        rect.setAttribute("fill","#f7ecd9");
+        g.appendChild(rect);
+        var flap = document.createElementNS(svgNS,"path");
+        flap.setAttribute("d","M-20,-14 L0,2 L20,-14 Z");
+        flap.setAttribute("fill","#e2c07d");
+        g.appendChild(flap);
+        envGroup.appendChild(g);
+        envelopes.push(g);
+    });
+
+    var DOOR_START=0.4, DOOR_DUR=0.7, ENV_GAP=0.18, HOLD_UNTIL=3.0, LOOP=3.8;
+    var start = performance.now();
+    function tick(){
+        if (!container.isConnected) return;
+        requestAnimationFrame(tick);
+        var t = (performance.now()-start)/1000;
+        var lt = t % LOOP;
+        var doorT = clamp01((lt-DOOR_START)/DOOR_DUR);
+        var scaleX = Math.cos(doorT*Math.PI*0.5);
+        doorGroup.setAttribute("transform","translate(150,96) scale("+Math.max(0.05,scaleX).toFixed(3)+",1)");
+        var fadeMul = lt>HOLD_UNTIL ? Math.max(0,1-(lt-HOLD_UNTIL)/(LOOP-HOLD_UNTIL)) : 1;
+        envelopes.forEach(function(g, i){
+            var et = clamp01((lt - (DOOR_START+DOOR_DUR) - i*ENV_GAP)/0.5);
+            var sc = (0.15+0.85*et) * fadeMul;
+            var pos = positions[i];
+            g.setAttribute("transform","translate("+pos[0]+","+(pos[1]-et*6)+") scale("+sc.toFixed(3)+")");
+        });
+        flagGroup.setAttribute("transform","translate(186,84) rotate("+(-20*Math.sin(t*1.4))+")");
+    }
+    tick();
+}
+
+/* ============== miniatura 2D: Cápsula del Tiempo (cartas selladas, una con candado abriendose) ============== */
+function startCapsula2dPreview(containerId){
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 300 200");
+    svg.setAttribute("class", "flores2d-svg");
+    svg.style.background = "linear-gradient(170deg,#0a1330 0%,#12245c 55%,#1c3a8f 100%)";
+    container.appendChild(svg);
+
+    var topLabel = document.createElementNS(svgNS, "text");
+    topLabel.setAttribute("x","150"); topLabel.setAttribute("y","24");
+    topLabel.setAttribute("text-anchor","middle");
+    topLabel.setAttribute("font-family","'Quicksand',sans-serif");
+    topLabel.setAttribute("font-weight","700");
+    topLabel.setAttribute("font-size","10");
+    topLabel.setAttribute("letter-spacing","1.5");
+    topLabel.setAttribute("fill","#e2c07d");
+    topLabel.textContent = "CARTAS PARA ABRIR CON EL TIEMPO";
+    svg.appendChild(topLabel);
+
+    var defs = ["Cuando me extrañes","Nuestro aniversario","Abrir hoy"];
+    var locked = [true, true, false];
+    var cardsGroup = document.createElementNS(svgNS,"g");
+    svg.appendChild(cardsGroup);
+    var cards = [];
+    var xs = [78, 150, 222];
+    defs.forEach(function(label, i){
+        var g = document.createElementNS(svgNS,"g");
+        g.setAttribute("transform","translate("+xs[i]+",108)");
+        var rect = document.createElementNS(svgNS,"rect");
+        rect.setAttribute("x","-40"); rect.setAttribute("y","-32"); rect.setAttribute("width","80"); rect.setAttribute("height","64");
+        rect.setAttribute("rx","10");
+        rect.setAttribute("fill","#16265e");
+        rect.setAttribute("stroke","rgba(226,192,125,0.4)");
+        g.appendChild(rect);
+        var seal = document.createElementNS(svgNS,"circle");
+        seal.setAttribute("cx","0"); seal.setAttribute("cy","-8"); seal.setAttribute("r","13");
+        seal.setAttribute("fill", locked[i] ? "#3a4260" : "#a4172a");
+        g.appendChild(seal);
+        var icon = document.createElementNS(svgNS,"text");
+        icon.setAttribute("x","0"); icon.setAttribute("y","-3");
+        icon.setAttribute("text-anchor","middle");
+        icon.setAttribute("font-size","13");
+        icon.setAttribute("fill","#fbe3e6");
+        icon.textContent = locked[i] ? "\uD83D\uDD12" : "\u2661";
+        g.appendChild(icon);
+        var lab = document.createElementNS(svgNS,"text");
+        lab.setAttribute("x","0"); lab.setAttribute("y","18");
+        lab.setAttribute("text-anchor","middle");
+        lab.setAttribute("font-family","'Work Sans',sans-serif");
+        lab.setAttribute("font-weight","600");
+        lab.setAttribute("font-size","9");
+        lab.setAttribute("fill","#eaf0ff");
+        lab.textContent = label;
+        g.appendChild(lab);
+        cardsGroup.appendChild(g);
+        cards.push({ g: g, seal: seal, icon: icon, baseLocked: locked[i] });
+    });
+
+    var LOOP = 4.4, UNLOCK_AT = 2.1, RELOCK_AT = 3.6;
+    var start = performance.now();
+    function tick(){
+        if (!container.isConnected) return;
+        requestAnimationFrame(tick);
+        var t = (performance.now()-start)/1000;
+        var lt = t % LOOP;
+        var firstUnlocked = lt > UNLOCK_AT && lt < RELOCK_AT;
+        cards.forEach(function(c, i){
+            var isLocked = i===0 ? (c.baseLocked && !firstUnlocked) : c.baseLocked;
+            c.seal.setAttribute("fill", isLocked ? "#3a4260" : "#a4172a");
+            c.icon.textContent = isLocked ? "\uD83D\uDD12" : "\u2661";
+            var pulse = 1 + (i===0 && lt>UNLOCK_AT && lt<UNLOCK_AT+0.4 ? 0.15*Math.sin((lt-UNLOCK_AT)/0.4*Math.PI) : 0);
+            c.g.setAttribute("transform","translate("+xs[i]+",108) scale("+pulse.toFixed(3)+")");
+        });
+    }
+    tick();
+}
+
+/* ============== miniatura 2D: Nuestra Historia (libro pasando paginas) ============== */
+function startLibro2dPreview(containerId){
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 300 200");
+    svg.setAttribute("class", "flores2d-svg");
+    svg.style.background = "linear-gradient(180deg,#230a17 0%,#3c0f24 45%,#5c1a38 100%)";
+    container.appendChild(svg);
+
+    var frame = document.createElementNS(svgNS,"rect");
+    frame.setAttribute("x","20"); frame.setAttribute("y","18"); frame.setAttribute("width","260"); frame.setAttribute("height","164");
+    frame.setAttribute("rx","6");
+    frame.setAttribute("fill","none");
+    frame.setAttribute("stroke","rgba(184,134,59,0.4)");
+    svg.appendChild(frame);
+
+    var brand = document.createElementNS(svgNS,"text");
+    brand.setAttribute("x","150"); brand.setAttribute("y","34");
+    brand.setAttribute("text-anchor","middle");
+    brand.setAttribute("font-family","'Cormorant Garamond',serif");
+    brand.setAttribute("font-size","11");
+    brand.setAttribute("letter-spacing","2");
+    brand.setAttribute("fill","#e2c07d");
+    brand.textContent = "NUESTRA HISTORIA";
+    svg.appendChild(brand);
+
+    var pageA = document.createElementNS(svgNS,"rect");
+    pageA.setAttribute("x","46"); pageA.setAttribute("y","46"); pageA.setAttribute("width","208"); pageA.setAttribute("height","118");
+    pageA.setAttribute("rx","3");
+    pageA.setAttribute("fill","#f4ead8");
+    svg.appendChild(pageA);
+
+    var chA = document.createElementNS(svgNS,"text");
+    chA.setAttribute("x","150"); chA.setAttribute("y","74");
+    chA.setAttribute("text-anchor","middle");
+    chA.setAttribute("font-family","'Cormorant Garamond',serif");
+    chA.setAttribute("font-style","italic");
+    chA.setAttribute("font-weight","700");
+    chA.setAttribute("font-size","15");
+    chA.setAttribute("fill","#3a2415");
+    chA.textContent = "Nuestra línea del tiempo";
+    svg.appendChild(chA);
+
+    var dots = [];
+    for (var i=0;i<4;i++){
+        var dy = 92 + i*15;
+        var dot = document.createElementNS(svgNS,"circle");
+        dot.setAttribute("cx","70"); dot.setAttribute("cy",dy); dot.setAttribute("r","3");
+        dot.setAttribute("fill","#b8863b");
+        svg.appendChild(dot);
+        var line = document.createElementNS(svgNS,"rect");
+        line.setAttribute("x","82"); line.setAttribute("y",dy-4); line.setAttribute("width","140"); line.setAttribute("height","6");
+        line.setAttribute("rx","2");
+        line.setAttribute("fill","rgba(58,36,21,0.18)");
+        svg.appendChild(line);
+        dots.push(dot);
+    }
+
+    var pageB = document.createElementNS(svgNS,"rect");
+    pageB.setAttribute("x","46"); pageB.setAttribute("y","46"); pageB.setAttribute("width","208"); pageB.setAttribute("height","118");
+    pageB.setAttribute("rx","3");
+    pageB.setAttribute("fill","#efe0c4");
+    pageB.style.opacity = "0";
+    svg.appendChild(pageB);
+
+    var heart = document.createElementNS(svgNS,"text");
+    heart.setAttribute("x","150"); heart.setAttribute("y","100");
+    heart.setAttribute("text-anchor","middle");
+    heart.setAttribute("font-size","30");
+    heart.setAttribute("fill","#c98a92");
+    heart.textContent = "\u2661";
+    heart.style.opacity = "0";
+    svg.appendChild(heart);
+
+    var chB = document.createElementNS(svgNS,"text");
+    chB.setAttribute("x","150"); chB.setAttribute("y","128");
+    chB.setAttribute("text-anchor","middle");
+    chB.setAttribute("font-family","'Cormorant Garamond',serif");
+    chB.setAttribute("font-style","italic");
+    chB.setAttribute("font-weight","600");
+    chB.setAttribute("font-size","13");
+    chB.setAttribute("fill","#8a6b45");
+    chB.textContent = "Gracias por ser tú";
+    chB.style.opacity = "0";
+    svg.appendChild(chB);
+
+    var LOOP = 5.2, FLIP_AT = 2.4, FLIP_DUR = 0.5;
+    var start = performance.now();
+    function tick(){
+        if (!container.isConnected) return;
+        requestAnimationFrame(tick);
+        var t = (performance.now()-start)/1000;
+        var lt = t % LOOP;
+        var flipT = clamp01((lt-FLIP_AT)/FLIP_DUR);
+        var scaleX = Math.cos(flipT*Math.PI);
+        pageB.style.opacity = flipT>0.5 ? "1" : "0";
+        pageB.setAttribute("transform","translate(150,105) scale("+scaleX.toFixed(3)+",1) translate(-150,-105)");
+        pageA.setAttribute("transform","translate(150,105) scale("+(flipT<0.5?1:Math.max(0.001,-scaleX)).toFixed(3)+",1) translate(-150,-105)");
+        pageA.style.opacity = flipT<0.5 ? "1" : "0";
+        chA.style.opacity = flipT<0.5 ? "1" : "0";
+        dots.forEach(function(d){ d.style.opacity = flipT<0.5 ? "1" : "0"; });
+        heart.style.opacity = flipT>0.55 ? "1" : "0";
+        chB.style.opacity = flipT>0.55 ? "1" : "0";
+    }
+    tick();
+}
+
+/* ============== miniatura 2D: Máquina de Amor (casillero dispensando) ============== */
+function startMaquina2dPreview(containerId){
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 300 200");
+    svg.setAttribute("class", "flores2d-svg");
+    svg.style.background = "linear-gradient(165deg,#2a0a1e 0%,#5c1436 55%,#8f1f4e 100%)";
+    container.appendChild(svg);
+
+    var header = document.createElementNS(svgNS,"text");
+    header.setAttribute("x","150"); header.setAttribute("y","24");
+    header.setAttribute("text-anchor","middle");
+    header.setAttribute("font-family","'Baloo 2',sans-serif");
+    header.setAttribute("font-weight","800");
+    header.setAttribute("font-size","11");
+    header.setAttribute("letter-spacing","1");
+    header.setAttribute("fill","#e2c07d");
+    header.textContent = "\u2661 MÁQUINA DE AMOR \u2661";
+    svg.appendChild(header);
+
+    var machine = document.createElementNS(svgNS,"rect");
+    machine.setAttribute("x","78"); machine.setAttribute("y","34"); machine.setAttribute("width","144"); machine.setAttribute("height","118");
+    machine.setAttribute("rx","14");
+    machine.setAttribute("fill","#3a0f28");
+    machine.setAttribute("stroke","#b8863b");
+    machine.setAttribute("stroke-width","2");
+    svg.appendChild(machine);
+
+    var glass = document.createElementNS(svgNS,"rect");
+    glass.setAttribute("x","92"); glass.setAttribute("y","44"); glass.setAttribute("width","116"); glass.setAttribute("height","58");
+    glass.setAttribute("rx","8");
+    glass.setAttribute("fill","#1c0a16");
+    svg.appendChild(glass);
+
+    var slots = [];
+    for (var r=0;r<3;r++){
+        for (var c2=0;c2<3;c2++){
+            var g = document.createElementNS(svgNS,"g");
+            var cx = 108 + c2*40, cy = 58 + r*17;
+            g.setAttribute("transform","translate("+cx+","+cy+")");
+            var icon = document.createElementNS(svgNS,"text");
+            icon.setAttribute("text-anchor","middle");
+            icon.setAttribute("font-size","12");
+            icon.textContent = (r*3+c2)===4 ? "\uD83C\uDF81" : "\uD83D\uDC8C";
+            g.appendChild(icon);
+            svg.appendChild(g);
+            slots.push(g);
+        }
+    }
+    var dropSlot = slots[4];
+
+    var tray = document.createElementNS(svgNS,"rect");
+    tray.setAttribute("x","92"); tray.setAttribute("y","106"); tray.setAttribute("width","116"); tray.setAttribute("height","10");
+    tray.setAttribute("rx","3");
+    tray.setAttribute("fill","#17070f");
+    svg.appendChild(tray);
+
+    var resultCard = document.createElementNS(svgNS,"g");
+    resultCard.setAttribute("transform","translate(150,150) scale(0)");
+    var cardBg = document.createElementNS(svgNS,"rect");
+    cardBg.setAttribute("x","-58"); cardBg.setAttribute("y","-22"); cardBg.setAttribute("width","116"); cardBg.setAttribute("height","44");
+    cardBg.setAttribute("rx","8");
+    cardBg.setAttribute("fill","#f7ecd9");
+    resultCard.appendChild(cardBg);
+    var cardTxt = document.createElementNS(svgNS,"text");
+    cardTxt.setAttribute("x","0"); cardTxt.setAttribute("y","4");
+    cardTxt.setAttribute("text-anchor","middle");
+    cardTxt.setAttribute("font-family","'Caveat',cursive");
+    cardTxt.setAttribute("font-size","15");
+    cardTxt.setAttribute("fill","#c8305a");
+    cardTxt.textContent = "\"Eres lo mejor que me ha pasado\"";
+    resultCard.appendChild(cardTxt);
+    svg.appendChild(resultCard);
+
+    var LOOP = 3.6, DROP_AT = 1.2, DROP_DUR = 0.35, RESULT_AT = 1.7, RESULT_DUR = 0.5, HOLD_UNTIL = 3.1;
+    var start = performance.now();
+    function tick(){
+        if (!container.isConnected) return;
+        requestAnimationFrame(tick);
+        var t = (performance.now()-start)/1000;
+        var lt = t % LOOP;
+        var dropT = clamp01((lt-DROP_AT)/DROP_DUR);
+        var dropOffset = dropT>0 && dropT<1 ? dropT*22 : 0;
+        dropSlot.setAttribute("transform","translate(108,"+(58+dropOffset)+") scale("+(1-dropT*0.3)+")");
+        var resT = clamp01((lt-RESULT_AT)/RESULT_DUR);
+        var fadeMul = lt>HOLD_UNTIL ? Math.max(0,1-(lt-HOLD_UNTIL)/(LOOP-HOLD_UNTIL)) : 1;
+        var sc = easeOutCubic(resT) * fadeMul;
+        resultCard.setAttribute("transform","translate(150,150) scale("+sc.toFixed(3)+")");
+    }
+    tick();
+}
+
+/* ============== miniatura 2D: The Anniversary Times (portada de periodico) ============== */
+function startPeriodico2dPreview(containerId){
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 300 200");
+    svg.setAttribute("class", "flores2d-svg");
+    svg.style.background = "linear-gradient(160deg,#3a0a1c 0%,#6e1230 55%,#a8264a 100%)";
+    container.appendChild(svg);
+
+    var paper = document.createElementNS(svgNS,"rect");
+    paper.setAttribute("x","20"); paper.setAttribute("y","14"); paper.setAttribute("width","260"); paper.setAttribute("height","172");
+    paper.setAttribute("rx","3");
+    paper.setAttribute("fill","#f4ead8");
+    svg.appendChild(paper);
+
+    var edition = document.createElementNS(svgNS,"text");
+    edition.setAttribute("x","150"); edition.setAttribute("y","30");
+    edition.setAttribute("text-anchor","middle");
+    edition.setAttribute("font-family","'Work Sans',sans-serif");
+    edition.setAttribute("font-size","7");
+    edition.setAttribute("letter-spacing","1.5");
+    edition.setAttribute("fill","#a4172a");
+    edition.textContent = "EDICIÓN LIMITADA DE ANIVERSARIO";
+    svg.appendChild(edition);
+
+    var masthead = document.createElementNS(svgNS,"text");
+    masthead.setAttribute("x","150"); masthead.setAttribute("y","48");
+    masthead.setAttribute("text-anchor","middle");
+    masthead.setAttribute("font-family","'Playfair Display',serif");
+    masthead.setAttribute("font-weight","800");
+    masthead.setAttribute("font-size","18");
+    masthead.setAttribute("fill","#241b14");
+    masthead.textContent = "THE ANNIVERSARY TIMES";
+    svg.appendChild(masthead);
+
+    var rule = document.createElementNS(svgNS,"line");
+    rule.setAttribute("x1","32"); rule.setAttribute("y1","54"); rule.setAttribute("x2","268"); rule.setAttribute("y2","54");
+    rule.setAttribute("stroke","#241b14"); rule.setAttribute("stroke-width","1.6");
+    svg.appendChild(rule);
+
+    var headline = document.createElementNS(svgNS,"text");
+    headline.setAttribute("x","150"); headline.setAttribute("y","70");
+    headline.setAttribute("text-anchor","middle");
+    headline.setAttribute("font-family","'Playfair Display',serif");
+    headline.setAttribute("font-weight","800");
+    headline.setAttribute("font-size","11.5");
+    headline.setAttribute("fill","#241b14");
+    var headLine1 = document.createElementNS(svgNS,"tspan");
+    headLine1.setAttribute("x","150"); headLine1.setAttribute("dy","0");
+    headLine1.textContent = "¡HOY CELEBRAMOS";
+    headline.appendChild(headLine1);
+    var headLine2 = document.createElementNS(svgNS,"tspan");
+    headLine2.setAttribute("x","150"); headLine2.setAttribute("dy","13");
+    headLine2.textContent = "NUESTRO ANIVERSARIO!";
+    headline.appendChild(headLine2);
+    svg.appendChild(headline);
+
+    var photoBox = document.createElementNS(svgNS,"rect");
+    photoBox.setAttribute("x","46"); photoBox.setAttribute("y","98"); photoBox.setAttribute("width","208"); photoBox.setAttribute("height","46");
+    photoBox.setAttribute("rx","2");
+    photoBox.setAttribute("fill","#d9cbaa");
+    photoBox.setAttribute("stroke","rgba(36,27,20,0.28)");
+    svg.appendChild(photoBox);
+    var photoTxt = document.createElementNS(svgNS,"text");
+    photoTxt.setAttribute("x","150"); photoTxt.setAttribute("y","124");
+    photoTxt.setAttribute("text-anchor","middle");
+    photoTxt.setAttribute("font-size","8.5");
+    photoTxt.setAttribute("fill","#4a3a2a");
+    photoTxt.textContent = "Foto principal aquí";
+    svg.appendChild(photoTxt);
+
+    var quote = document.createElementNS(svgNS,"text");
+    quote.setAttribute("x","150"); quote.setAttribute("y","158");
+    quote.setAttribute("text-anchor","middle");
+    quote.setAttribute("font-family","'Caveat',cursive");
+    quote.setAttribute("font-size","14");
+    quote.setAttribute("fill","#7a1220");
+    quote.style.opacity = "0";
+    quote.textContent = "\u201CTe amo no solo por lo que eres...\u201D";
+    svg.appendChild(quote);
+
+    var bars = [];
+    var barVals = [30, 55, 75, 100];
+    for (var i=0;i<4;i++){
+        var bx = 96 + i*30;
+        var bar = document.createElementNS(svgNS,"rect");
+        bar.setAttribute("x", bx); bar.setAttribute("width","14"); bar.setAttribute("y","172"); bar.setAttribute("height","0");
+        bar.setAttribute("rx","2");
+        bar.setAttribute("fill","#a4172a");
+        svg.appendChild(bar);
+        bars.push({ el: bar, target: barVals[i] });
+    }
+
+    var LOOP = 4.0, QUOTE_AT = 1.6, QUOTE_DUR = 0.6, BARS_AT = 2.2, BARS_DUR = 1.0, HOLD_UNTIL = 3.4;
+    var start = performance.now();
+    function tick(){
+        if (!container.isConnected) return;
+        requestAnimationFrame(tick);
+        var t = (performance.now()-start)/1000;
+        var lt = t % LOOP;
+        var fadeMul = lt>HOLD_UNTIL ? Math.max(0,1-(lt-HOLD_UNTIL)/(LOOP-HOLD_UNTIL)) : 1;
+        var qT = clamp01((lt-QUOTE_AT)/QUOTE_DUR);
+        quote.style.opacity = String(qT*fadeMul);
+        var bT = easeOutCubic(clamp01((lt-BARS_AT)/BARS_DUR));
+        bars.forEach(function(b){
+            var h = b.target*0.26*bT;
+            b.el.setAttribute("height", h.toFixed(1));
+            b.el.setAttribute("y", (172-h).toFixed(1));
+            b.el.style.opacity = String(fadeMul);
+        });
+    }
+    tick();
+}
+
+/* ============== miniatura 2D: Un Regalo Para Ti (caja rosa/magenta real con moño dorado
+   que se abre y libera un carrusel de fotos con corazones) ============== */
+function startRegalo2dPreview(containerId){
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", "0 0 300 200");
+    svg.setAttribute("class", "flores2d-svg");
+    svg.style.background = "radial-gradient(circle at 50% 38%, #4a1240 0%, #2a0a30 45%, #150520 100%)";
+    container.appendChild(svg);
+
+    /* titulo tipo "Para Ti" */
+    var title = document.createElementNS(svgNS,"text");
+    title.setAttribute("x","150"); title.setAttribute("y","28");
+    title.setAttribute("text-anchor","middle");
+    title.setAttribute("font-family","'Cormorant Garamond',serif");
+    title.setAttribute("font-style","italic");
+    title.setAttribute("font-weight","600");
+    title.setAttribute("font-size","16");
+    title.setAttribute("fill","#ffe9a8");
+    title.textContent = "Para Ti";
+    svg.appendChild(title);
+
+    /* resplandor detras de la caja */
+    var glowGrad = document.createElementNS(svgNS,"radialGradient");
+    var glowId = "regaloGlow-" + containerId;
+    glowGrad.setAttribute("id", glowId);
+    var gs1 = document.createElementNS(svgNS,"stop"); gs1.setAttribute("offset","0%"); gs1.setAttribute("stop-color","#ff2f76"); gs1.setAttribute("stop-opacity","0.55");
+    var gs2 = document.createElementNS(svgNS,"stop"); gs2.setAttribute("offset","100%"); gs2.setAttribute("stop-color","#ff2f76"); gs2.setAttribute("stop-opacity","0");
+    glowGrad.appendChild(gs1); glowGrad.appendChild(gs2);
+    var defs = document.createElementNS(svgNS,"defs");
+    defs.appendChild(glowGrad);
+    svg.appendChild(defs);
+    var glow = document.createElementNS(svgNS,"circle");
+    glow.setAttribute("cx","150"); glow.setAttribute("cy","104"); glow.setAttribute("r","62");
+    glow.setAttribute("fill","url(#"+glowId+")");
+    svg.appendChild(glow);
+
+    /* sombra ovalada en el piso */
+    var shadow = document.createElementNS(svgNS,"ellipse");
+    shadow.setAttribute("cx","150"); shadow.setAttribute("cy","166"); shadow.setAttribute("rx","44"); shadow.setAttribute("ry","7");
+    shadow.setAttribute("fill","rgba(0,0,0,0.4)");
+    svg.appendChild(shadow);
+
+    /* cuerpo de la caja: cara frontal e izquierda simulando 3D, magenta con degrade */
+    var boxGroup = document.createElementNS(svgNS,"g");
+    boxGroup.setAttribute("transform","translate(150,104)");
+    svg.appendChild(boxGroup);
+
+    function rectGradient(id, c1, c2){
+        var g = document.createElementNS(svgNS,"linearGradient");
+        g.setAttribute("id", id);
+        g.setAttribute("x1","0%"); g.setAttribute("y1","0%"); g.setAttribute("x2","100%"); g.setAttribute("y2","0%");
+        var a = document.createElementNS(svgNS,"stop"); a.setAttribute("offset","0%"); a.setAttribute("stop-color",c1);
+        var b = document.createElementNS(svgNS,"stop"); b.setAttribute("offset","100%"); b.setAttribute("stop-color",c2);
+        g.appendChild(a); g.appendChild(b);
+        defs.appendChild(g);
+        return "url(#"+id+")";
+    }
+    var frontFill = rectGradient("regaloFront-"+containerId, "#ff5c96", "#c81257");
+    var sideFill = rectGradient("regaloSide-"+containerId, "#9c1259", "#6f0d3f");
+    var lidFrontFill = rectGradient("regaloLidFront-"+containerId, "#ff6fa8", "#d61c62");
+    var lidSideFill = rectGradient("regaloLidSide-"+containerId, "#b8206c", "#7a1148");
+
+    /* lado derecho (sombra), cuerpo, y tapa: todo en un grupo que "respira" */
+    var side = document.createElementNS(svgNS,"path");
+    side.setAttribute("d","M34,-6 L44,-14 L44,30 L34,38 Z");
+    side.setAttribute("fill", sideFill);
+    boxGroup.appendChild(side);
+
+    var front = document.createElementNS(svgNS,"rect");
+    front.setAttribute("x","-34"); front.setAttribute("y","-6"); front.setAttribute("width","68"); front.setAttribute("height","44");
+    front.setAttribute("rx","2");
+    front.setAttribute("fill", frontFill);
+    boxGroup.appendChild(front);
+
+    var ribbonV = document.createElementNS(svgNS,"rect");
+    ribbonV.setAttribute("x","-7"); ribbonV.setAttribute("y","-6"); ribbonV.setAttribute("width","14"); ribbonV.setAttribute("height","44");
+    ribbonV.setAttribute("fill","#ffd166");
+    boxGroup.appendChild(ribbonV);
+
+    var ribbonSideTop = document.createElementNS(svgNS,"path");
+    ribbonSideTop.setAttribute("d","M34,-6 L44,-14 L44,-4 L34,4 Z");
+    ribbonSideTop.setAttribute("fill","#f0b93a");
+    boxGroup.appendChild(ribbonSideTop);
+
+    /* grupo de la tapa (bisagra en el fondo de la caja), rota para abrirse */
+    var lidHinge = document.createElementNS(svgNS,"g");
+    lidHinge.setAttribute("transform","translate(0,-6)");
+    boxGroup.appendChild(lidHinge);
+
+    var lidSide = document.createElementNS(svgNS,"path");
+    lidSide.setAttribute("d","M34,0 L46,-9 L46,1 L34,10 Z");
+    lidSide.setAttribute("fill", lidSideFill);
+    lidHinge.appendChild(lidSide);
+
+    var lidFront = document.createElementNS(svgNS,"rect");
+    lidFront.setAttribute("x","-36"); lidFront.setAttribute("y","-4"); lidFront.setAttribute("width","72"); lidFront.setAttribute("height","14");
+    lidFront.setAttribute("rx","3");
+    lidFront.setAttribute("fill", lidFrontFill);
+    lidHinge.appendChild(lidFront);
+
+    var lidRibbon = document.createElementNS(svgNS,"rect");
+    lidRibbon.setAttribute("x","-7"); lidRibbon.setAttribute("y","-4"); lidRibbon.setAttribute("width","14"); lidRibbon.setAttribute("height","14");
+    lidRibbon.setAttribute("fill","#ffe9a8");
+    lidHinge.appendChild(lidRibbon);
+
+    /* moño dorado encima de la tapa */
+    var bow = document.createElementNS(svgNS,"g");
+    bow.setAttribute("transform","translate(0,-4)");
+    lidHinge.appendChild(bow);
+    var loopL = document.createElementNS(svgNS,"ellipse");
+    loopL.setAttribute("cx","-9"); loopL.setAttribute("cy","-2"); loopL.setAttribute("rx","9"); loopL.setAttribute("ry","7");
+    loopL.setAttribute("fill","#ffe9a8"); loopL.setAttribute("transform","rotate(-24 -9 -2)");
+    bow.appendChild(loopL);
+    var loopR = document.createElementNS(svgNS,"ellipse");
+    loopR.setAttribute("cx","9"); loopR.setAttribute("cy","-2"); loopR.setAttribute("rx","9"); loopR.setAttribute("ry","7");
+    loopR.setAttribute("fill","#ffe9a8"); loopR.setAttribute("transform","rotate(24 9 -2)");
+    bow.appendChild(loopR);
+    var knot = document.createElementNS(svgNS,"circle");
+    knot.setAttribute("cx","0"); knot.setAttribute("cy","-2"); knot.setAttribute("r","4.5");
+    knot.setAttribute("fill","#fff3cf");
+    bow.appendChild(knot);
+
+    /* corazones que estallan al abrir */
+    var heartsGroup = document.createElementNS(svgNS,"g");
+    svg.appendChild(heartsGroup);
+    var HEART_N = 14;
+    var hearts = [];
+    for (var i=0;i<HEART_N;i++){
+        var h = document.createElementNS(svgNS,"text");
+        h.setAttribute("font-size", (9+Math.random()*7).toFixed(1));
+        h.setAttribute("fill", Math.random()>0.5 ? "#ff6fa8" : "#ffd166");
+        h.textContent = "\u2764";
+        h.style.opacity = "0";
+        heartsGroup.appendChild(h);
+        hearts.push({
+            el: h,
+            angle: Math.random()*Math.PI*2,
+            speed: 12 + Math.random()*20
+        });
+    }
+
+    /* tarjeta de foto que aparece arriba, tipo carrusel, con un corazon adentro */
+    var card = document.createElementNS(svgNS,"g");
+    card.setAttribute("transform","translate(150,104) scale(0)");
+    svg.appendChild(card);
+    var cardBg = document.createElementNS(svgNS,"rect");
+    cardBg.setAttribute("x","-26"); cardBg.setAttribute("y","-34"); cardBg.setAttribute("width","52"); cardBg.setAttribute("height","64");
+    cardBg.setAttribute("rx","4");
+    cardBg.setAttribute("fill","#fff6ec");
+    card.appendChild(cardBg);
+    var cardPh = document.createElementNS(svgNS,"rect");
+    cardPh.setAttribute("x","-21"); cardPh.setAttribute("y","-29"); cardPh.setAttribute("width","42"); cardPh.setAttribute("height","42");
+    cardPh.setAttribute("rx","2");
+    cardPh.setAttribute("fill","#ecdfe4");
+    card.appendChild(cardPh);
+    var cardHeart = document.createElementNS(svgNS,"text");
+    cardHeart.setAttribute("x","0"); cardHeart.setAttribute("y","-3");
+    cardHeart.setAttribute("text-anchor","middle");
+    cardHeart.setAttribute("font-size","16");
+    cardHeart.setAttribute("fill","#e0245e");
+    cardHeart.textContent = "\u2764";
+    card.appendChild(cardHeart);
+    var cardCap = document.createElementNS(svgNS,"text");
+    cardCap.setAttribute("x","0"); cardCap.setAttribute("y","24");
+    cardCap.setAttribute("text-anchor","middle");
+    cardCap.setAttribute("font-family","'Quicksand',sans-serif");
+    cardCap.setAttribute("font-size","6.5");
+    cardCap.setAttribute("fill","#8a6b6f");
+    cardCap.textContent = "Toca para leer";
+    card.appendChild(cardCap);
+
+    var hint = document.createElementNS(svgNS,"text");
+    hint.setAttribute("x","150"); hint.setAttribute("y","190");
+    hint.setAttribute("text-anchor","middle");
+    hint.setAttribute("font-size","9");
+    hint.setAttribute("fill","#ffe9a8");
+    hint.setAttribute("opacity","0.85");
+    hint.textContent = "toca la caja para abrir tu regalo";
+    svg.appendChild(hint);
+
+    var LID_START = 0.5, LID_DUR = 0.7, BURST_AT = 1.05, CARD_START = 1.15, CARD_DUR = 0.6,
+        HOLD_UNTIL = 3.0, LOOP = 3.8;
+    var start = performance.now();
+    var burstDone = false;
+
+    function tick(){
+        if (!container.isConnected) return;
+        requestAnimationFrame(tick);
+        var t = (performance.now()-start)/1000;
+        var lt = t % LOOP;
+        if (lt < 0.02) burstDone = false;
+
+        /* suave balanceo de toda la caja mientras esta cerrada */
+        var sway = Math.sin(t*1.3)*2;
+        boxGroup.setAttribute("transform","translate(150,"+(104+Math.sin(t*1.6)*1.5)+") rotate("+sway+")");
+
+        var lidT = clamp01((lt-LID_START)/LID_DUR);
+        var lidEase = easeOutCubic(lidT);
+        lidHinge.setAttribute("transform","translate(0,-6) rotate("+(-lidEase*100)+")");
+
+        if (lt > BURST_AT && !burstDone){
+            burstDone = true;
+            hearts.forEach(function(hh){ hh.dist = 0; hh.el.style.opacity = "1"; });
+        }
+        hearts.forEach(function(hh){
+            if (hh.el.style.opacity === "0" || hh.el.style.opacity === "") return;
+            hh.dist = (hh.dist || 0) + hh.speed*0.045;
+            var hx = 150 + Math.cos(hh.angle)*hh.dist;
+            var hy = 96 - hh.dist*0.9 + Math.sin(hh.angle)*hh.dist*0.3;
+            hh.el.setAttribute("x", hx.toFixed(1));
+            hh.el.setAttribute("y", hy.toFixed(1));
+            var op = Math.max(0, 1 - hh.dist/70);
+            hh.el.style.opacity = String(op);
+        });
+
+        var cardT = clamp01((lt-CARD_START)/CARD_DUR);
+        var cardEase = easeOutCubic(cardT);
+        var fadeMul = lt>HOLD_UNTIL ? Math.max(0,1-(lt-HOLD_UNTIL)/(LOOP-HOLD_UNTIL)) : 1;
+        var floatY = 104 - cardEase*46 - Math.sin(t*2.2)*2;
+        card.setAttribute("transform","translate(150,"+floatY.toFixed(1)+") scale("+(cardEase*fadeMul).toFixed(3)+")");
+
+        glow.setAttribute("r", (58 + 6*Math.sin(t*1.4)).toFixed(1));
+    }
+    tick();
+}
+
+/* ============== previews 3D (Three.js) ============== */
+function makeDustTexture(size){
+    size = size || 128;
+    var c = document.createElement("canvas");
+    c.width = c.height = size;
+    var ctx = c.getContext("2d"),
+        g = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+    g.addColorStop(0, "rgba(255,255,255,1)");
+    g.addColorStop(0.35, "rgba(255,255,255,0.8)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+}
+var dustTex = null;
+
+function makeTextTexture(text, shadowColor){
+    var c = document.createElement("canvas");
+    c.width = 256; c.height = 72;
+    var ctx = c.getContext("2d");
+    ctx.font = "800 30px Quicksand, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#ffffff";
+    ctx.shadowColor = shadowColor;
+    ctx.shadowBlur = 16;
+    ctx.fillText(text, c.width/2, c.height/2);
+    return new THREE.CanvasTexture(c);
+}
+
+function makeOrbitWords(words, hues, radius, heightOffset, scaleW, scaleH){
+    var group = new THREE.Group();
+    var sprites = [];
+    words.forEach(function(w, i){
+        var tex = makeTextTexture(w, hues[i % hues.length]);
+        var mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
+        var spr = new THREE.Sprite(mat);
+        spr.scale.set(scaleW, scaleH, 1);
+        spr.userData.baseTheta = (i / words.length) * Math.PI * 2;
+        spr.userData.phi = Math.PI/2 + (Math.random()-0.5)*0.9;
+        spr.userData.pulsePhase = Math.random()*Math.PI*2;
+        group.add(spr);
+        sprites.push(spr);
+    });
+    return {
+        group: group,
+        update: function(t, fadeAmount){
+            sprites.forEach(function(spr){
+                var theta = spr.userData.baseTheta + t*0.35;
+                var phi = spr.userData.phi;
+                spr.position.set(
+                    radius*Math.sin(phi)*Math.cos(theta),
+                    heightOffset + radius*Math.cos(phi)*0.5,
+                    radius*Math.sin(phi)*Math.sin(theta)
+                );
+                var pulse = 0.75 + 0.25*(0.5+0.5*Math.sin(2*t + spr.userData.pulsePhase));
+                spr.material.opacity = fadeAmount * pulse;
+            });
+        }
+    };
+}
+
+function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+function easeInOutCubic(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
+function clamp01(v){ return Math.max(0, Math.min(1, v)); }
+
+function makeMiniPreview(canvasId, setup){
+    var canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    if (!dustTex) dustTex = makeDustTexture();
+    var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(50, 1, 0.1, 3000);
+
+    function resize(){
+        var w = canvas.clientWidth || canvas.parentElement.clientWidth;
+        var h = canvas.clientHeight || canvas.parentElement.clientHeight;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+    }
+
+    var ctx = setup(scene, camera, THREE, dustTex);
+    resize();
+    window.addEventListener("resize", resize);
+
+    var start = performance.now();
+    function loopTick(){
+        if (!canvas.isConnected) { renderer.dispose(); return; }
+        requestAnimationFrame(loopTick);
+        var t = (performance.now() - start) / 1000;
+        ctx.update(t);
+        renderer.render(scene, camera);
+    }
+    loopTick();
+}
+
+function startThreePreview(name, canvasId){
+    if (name === "saturno") {
+/* ============== SATURNO: nucleo + halo + doble anillo convergiendo en loop ============== */
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+    scene.background = new THREE.Color(0x00050a);
+    camera.position.set(0, 60, 260);
+    camera.lookAt(0, 0, 0);
+
+    scene.add(new THREE.AmbientLight(0x123330, 1.2));
+    var rim = new THREE.PointLight(0x40e0d0, 1.4, 800);
+    rim.position.set(80, 100, 120);
+    scene.add(rim);
+
+    var COLOR = "#40e0d0";
+    var CORE_COLOR = new THREE.Color(COLOR).lerp(new THREE.Color(0xffffff), 0.3);
+
+    var CORE_N = 1100;
+    var target = new Float32Array(CORE_N * 3);
+    var scatter = new Float32Array(CORE_N * 3);
+    var current = new Float32Array(CORE_N * 3);
+    for (var i = 0; i < CORE_N; i++){
+        var r = 20 + Math.random()*9, th = Math.random()*Math.PI*2, ph = Math.acos(2*Math.random()-1);
+        target[3*i] = r*Math.sin(ph)*Math.cos(th);
+        target[3*i+1] = r*Math.cos(ph);
+        target[3*i+2] = r*Math.sin(ph)*Math.sin(th);
+        var sr = 220 + Math.random()*220, sth = Math.random()*Math.PI*2, sph = Math.acos(2*Math.random()-1);
+        scatter[3*i] = sr*Math.sin(sph)*Math.cos(sth);
+        scatter[3*i+1] = sr*Math.cos(sph);
+        scatter[3*i+2] = sr*Math.sin(sph)*Math.sin(sth);
+    }
+    current.set(scatter);
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(current, 3));
+    var mat = new THREE.PointsMaterial({ map: dustTex, size: 3.2, color: CORE_COLOR, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
+    var core = new THREE.Points(geo, mat);
+    scene.add(core);
+
+    function rimGlowTex(){
+        var size=512, c=document.createElement("canvas");
+        c.width=c.height=size;
+        var ctx = c.getContext("2d");
+        var g = ctx.createRadialGradient(size/2,size/2,0.16*size,size/2,size/2,0.5*size);
+        g.addColorStop(0, "rgba(220,255,250,0.55)");
+        g.addColorStop(0.55, "rgba(64,224,208,0.35)");
+        g.addColorStop(1, "rgba(20,90,80,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(0,0,size,size);
+        return new THREE.CanvasTexture(c);
+    }
+    var rimGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: rimGlowTex(), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
+    rimGlow.scale.set(65, 65, 1);
+    scene.add(rimGlow);
+
+    function ringTex(){
+        var size = 512, c = document.createElement("canvas");
+        c.width = c.height = size;
+        var cx = c.getContext("2d");
+        cx.translate(size/2, size/2);
+        var inner = 0.34*size, outer = 0.49*size;
+        var g = cx.createRadialGradient(0,0,0.3*inner,0,0,outer);
+        g.addColorStop(0, "rgba(225,255,250,1)");
+        g.addColorStop(0.25, "rgba(64,224,208,0.9)");
+        g.addColorStop(0.6, "rgba(32,140,130,0.55)");
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        cx.fillStyle = g;
+        cx.beginPath();
+        cx.arc(0,0,outer,0,2*Math.PI);
+        cx.arc(0,0,inner,0,2*Math.PI,true);
+        cx.closePath();
+        cx.fill();
+        return new THREE.CanvasTexture(c);
+    }
+    var ring1 = new THREE.Mesh(new THREE.RingGeometry(61, 85, 96), new THREE.MeshBasicMaterial({ map: ringTex(), transparent: true, side: THREE.DoubleSide, opacity: 0 }));
+    var ring2 = new THREE.Mesh(new THREE.RingGeometry(89, 109, 96), new THREE.MeshBasicMaterial({ map: ringTex(), transparent: true, side: THREE.DoubleSide, opacity: 0 }));
+    ring1.rotation.x = ring2.rotation.x = Math.PI/2;
+    scene.add(ring1); scene.add(ring2);
+
+    var words = makeOrbitWords(["AMOR","ETERNO","ESPECIAL","GRACIAS"], [COLOR,"#5ec2ff","#ffd166","#ff6fa5"], 100, 0, 34, 10);
+    scene.add(words.group);
+
+    var REVEAL_END = 1.4, WORDS_START = 1.15, WORDS_END = 2.35, LOOP = 3.3;
+    return {
+        update: function(t){
+            var lt = t % LOOP;
+            var intro = clamp01(lt / REVEAL_END);
+            var ease = easeOutCubic(intro);
+            for (var i=0;i<CORE_N*3;i++) current[i] = scatter[i] + (target[i]-scatter[i])*ease;
+            geo.attributes.position.needsUpdate = true;
+            mat.opacity = Math.min(1, intro*2.2);
+            rimGlow.material.opacity = ease;
+            var pulse = 1 + 0.08*Math.sin(1.4*t);
+            rimGlow.scale.set(65*pulse, 65*pulse, 1);
+            ring1.material.opacity = ease;
+            ring2.material.opacity = ease * 0.55;
+            ring1.rotation.z += 0.012;
+            ring2.rotation.z -= 0.008;
+            core.rotation.y += 0.006;
+            words.update(t, clamp01((lt-WORDS_START)/(WORDS_END-WORDS_START)));
+        }
+    };
+});
+    } else if (name === "rosa") {
+/* ============== ROSA: petalos abriendose en loop (version reducida) ============== */
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+    scene.background = new THREE.Color(0x030007);
+    camera.position.set(0, 20, 130);
+    camera.lookAt(0, 20, 0);
+
+    scene.add(new THREE.AmbientLight(0x554044, 1.3));
+    var rim = new THREE.PointLight(0xc81d43, 1.6, 500);
+    rim.position.set(40, 60, 60);
+    scene.add(rim);
+
+    function buildPetalGeometry(){
+        var geo = new THREE.PlaneGeometry(1,1,4,6);
+        geo.translate(0,0.5,0);
+        var pos = geo.attributes.position;
+        for (var i=0;i<pos.count;i++){
+            var x=pos.getX(i), y=pos.getY(i), z=pos.getZ(i);
+            var t = Math.max(0, Math.min(1,y));
+            var w = Math.max(Math.sin(Math.pow(t,0.75)*Math.PI), 0.001);
+            pos.setX(i, x*w);
+            pos.setZ(i, z + Math.sin(t*Math.PI*0.5)*3 - Math.pow(Math.abs(x),1.6)*2.2);
+        }
+        pos.needsUpdate = true;
+        geo.computeVertexNormals();
+        return geo;
+    }
+    var PETAL_GEO = buildPetalGeometry();
+    var CLOSED = new THREE.Color(0x2e3b1f).lerp(new THREE.Color(0x4a1620), 0.55);
+    var OPEN = new THREE.Color("#c81d43");
+    var WHORLS = [
+        { count:5, len:12, wid:9,  closedR:1.4, openR:3,  closedY:9, openY:8, closedA:6,  openA:32 },
+        { count:6, len:17, wid:12, closedR:2,   openR:7,  closedY:8, openY:6.5, closedA:14, openA:70 },
+        { count:7, len:21, wid:15, closedR:2.4, openR:11, closedY:7, openY:5, closedA:22, openA:110 }
+    ];
+    var mats = WHORLS.map(function(){ return new THREE.MeshPhongMaterial({ color: CLOSED.clone(), shininess:8, side: THREE.DoubleSide }); });
+    var group = new THREE.Group();
+    scene.add(group);
+    var petals = [];
+    WHORLS.forEach(function(w, wi){
+        var step = (Math.PI*2)/w.count, off = (wi%2===0)?0:step/2;
+        for (var i=0;i<w.count;i++){
+            var theta = i*step + off;
+            var yaw = new THREE.Group(); yaw.rotation.y = theta;
+            var hinge = new THREE.Group(); yaw.add(hinge);
+            var mesh = new THREE.Mesh(PETAL_GEO, mats[wi]);
+            mesh.scale.set(w.wid, w.len, 1);
+            hinge.add(mesh);
+            group.add(yaw);
+            petals.push({ hinge:hinge, w:w, closedA: w.closedA*Math.PI/180, openA: w.openA*Math.PI/180 });
+        }
+    });
+    var stemGeo = new THREE.CylinderGeometry(0.9,1.6,1,8);
+    stemGeo.translate(0,-0.5,0);
+    var stem = new THREE.Mesh(stemGeo, new THREE.MeshPhongMaterial({ color: 0x2e5d2a }));
+    stem.scale.y = 24;
+    scene.add(stem);
+
+    var words = makeOrbitWords(["ROSA","BELLEZA","PARA TI","ETERNA"], ["#c81d43","#ff6fa5","#ffd166","#a06bff"], 40, 20, 26, 8);
+    scene.add(words.group);
+
+    var BLOOM_END = 1.6, WORDS_START = 1.3, WORDS_END = 2.5, LOOP = 3.4;
+    return {
+        update: function(t){
+            var lt = t % LOOP;
+            var bt = easeInOutCubic(clamp01(lt / BLOOM_END));
+            for (var i=0;i<petals.length;i++){
+                var p = petals[i], w = p.w;
+                var r = w.closedR + (w.openR-w.closedR)*bt;
+                var y = w.closedY + (w.openY-w.closedY)*bt;
+                var ang = p.closedA + (p.openA-p.closedA)*bt;
+                p.hinge.position.set(r, y, 0);
+                p.hinge.rotation.z = -ang;
+                p.hinge.scale.setScalar(0.5+0.5*bt);
+            }
+            mats.forEach(function(m, i){
+                m.color.copy(CLOSED).lerp(OPEN.clone().lerp(new THREE.Color(0x1a0a10), i*0.05), bt);
+            });
+            group.rotation.y += 0.005;
+            words.update(t, clamp01((lt-WORDS_START)/(WORDS_END-WORDS_START)));
+        }
+    };
+});
+    } else if (name === "fenix") {
+/* ============== FENIX: silueta de particulas apareciendo en loop ============== */
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+    scene.background = new THREE.Color(0x040404);
+    camera.position.set(0, 10, 190);
+    camera.lookAt(0, 10, 0);
+
+    scene.add(new THREE.AmbientLight(0x201008, 1.1));
+    var rim = new THREE.PointLight(0xff7a1a, 1.8, 700);
+    rim.position.set(0, 40, 60);
+    scene.add(rim);
+
+    var FIRE = ["#ff7a1a", "#ff2d2d", "#ffd23f"];
+
+    function buildSilhouette(){
+        var W=300,H=220,cx=150,cy=110;
+        var c = document.createElement("canvas"); c.width=W; c.height=H;
+        var ctx = c.getContext("2d");
+        ctx.fillStyle = "#fff";
+        ctx.beginPath(); ctx.ellipse(cx, cy+10, 10, 34, 0, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(cx, cy-28, 7, 0, Math.PI*2); ctx.fill();
+        function fan(ox, oy, a0, a1, n, minLen, maxLen, wBase){
+            for (var i=0;i<n;i++){
+                var f = n===1?0.5:i/(n-1);
+                var a = a0 + (a1-a0)*f;
+                var len = minLen + (maxLen-minLen)*Math.sin(Math.PI*f);
+                var w = wBase*(0.4+0.6*Math.sin(Math.PI*f));
+                var perp = a+Math.PI/2;
+                var tipX = ox+Math.cos(a)*len, tipY = oy+Math.sin(a)*len;
+                ctx.beginPath();
+                ctx.moveTo(ox+Math.cos(perp)*w*0.5, oy+Math.sin(perp)*w*0.5);
+                ctx.lineTo(tipX, tipY);
+                ctx.lineTo(ox-Math.cos(perp)*w*0.5, oy-Math.sin(perp)*w*0.5);
+                ctx.closePath(); ctx.fill();
+            }
+        }
+        fan(cx-6, cy-5, Math.PI*0.97, Math.PI*0.52, 8, 22, 85, 13);
+        fan(cx+6, cy-5, Math.PI*0.03, Math.PI*0.48, 8, 22, 85, 13);
+        fan(cx, cy+40, Math.PI*0.32, Math.PI*0.68, 5, 16, 48, 9);
+        var data = ctx.getImageData(0,0,W,H).data;
+        var pts = [];
+        for (var py=0; py<H; py+=2){
+            for (var px=0; px<W; px+=2){
+                if (data[(py*W+px)*4+3] > 40 && Math.random()<0.85) pts.push({x:px,y:py});
+            }
+        }
+        var meanX=0, meanY=0;
+        pts.forEach(function(p){ meanX+=p.x; meanY+=p.y; });
+        meanX/=pts.length; meanY/=pts.length;
+        var maxAbs=1;
+        pts.forEach(function(p){ maxAbs = Math.max(maxAbs, Math.abs(p.x-meanX)); });
+        var scale = 55/maxAbs;
+        return pts.map(function(p){
+            return [ (p.x-meanX)*scale, -(p.y-meanY)*scale, (Math.random()-0.5)*6 ];
+        });
+    }
+    var pts = buildSilhouette();
+    var n = pts.length;
+    var target = new Float32Array(n*3), scatter = new Float32Array(n*3), current = new Float32Array(n*3), colors = new Float32Array(n*3);
+    for (var i=0;i<n;i++){
+        target[3*i]=pts[i][0]; target[3*i+1]=pts[i][1]; target[3*i+2]=pts[i][2];
+        scatter[3*i]=(Math.random()-0.5)*10;
+        scatter[3*i+1]=-60+(Math.random()-0.5)*20;
+        scatter[3*i+2]=(Math.random()-0.5)*10;
+        var col = new THREE.Color(FIRE[i % FIRE.length]).lerp(new THREE.Color(0xfff6d0), 0.25);
+        colors[3*i]=col.r; colors[3*i+1]=col.g; colors[3*i+2]=col.b;
+    }
+    current.set(scatter);
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(current,3));
+    geo.setAttribute("color", new THREE.BufferAttribute(colors,3));
+    var mat = new THREE.PointsMaterial({ map: dustTex, size: 2.6, vertexColors:true, transparent:true, depthWrite:false, blending: THREE.AdditiveBlending, opacity:0 });
+    var group = new THREE.Group();
+    group.add(new THREE.Points(geo, mat));
+    scene.add(group);
+
+    var words = makeOrbitWords(["RENACER","FUERZA","NUEVO INICIO","GRACIAS"], ["#ff7a1a","#ff2d2d","#ffd23f","#ff9f4a"], 50, 5, 30, 9);
+    scene.add(words.group);
+
+    var REVEAL_END = 1.3, WORDS_START = 1.0, WORDS_END = 2.2, LOOP = 3.0;
+    return {
+        update: function(t){
+            var lt = t % LOOP;
+            var revealT = easeOutCubic(clamp01(lt/REVEAL_END));
+            for (var i=0;i<n*3;i++) current[i] = scatter[i] + (target[i]-scatter[i])*revealT;
+            geo.attributes.position.needsUpdate = true;
+            mat.opacity = Math.min(1, revealT*1.3);
+            group.rotation.y += 0.006;
+            words.update(t, clamp01((lt-WORDS_START)/(WORDS_END-WORDS_START)));
+        }
+    };
+});
+    } else if (name === "caja") {
+/* ============== CAJA SORPRESA: tapa que se abre + nube de luz en loop ============== */
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+    scene.background = new THREE.Color(0x00020a);
+    camera.position.set(0, 40, 150);
+    camera.lookAt(0, 15, 0);
+
+    scene.add(new THREE.AmbientLight(0x123330, 1.2));
+    var rim = new THREE.PointLight(0x26e0c8, 1.4, 800);
+    rim.position.set(60, 90, 90);
+    scene.add(rim);
+
+    var COLOR = "#26e0c8";
+    var h = 13, H = 20;
+
+    function sampleEdges(edges, perEdge){
+        var total = edges.length*perEdge;
+        var pos = new Float32Array(total*3);
+        var idx = 0;
+        edges.forEach(function(pair){
+            var p0=pair[0], p1=pair[1];
+            for (var i=0;i<perEdge;i++){
+                var t = Math.random();
+                pos[idx++] = p0[0]+(p1[0]-p0[0])*t + (Math.random()-0.5)*0.3;
+                pos[idx++] = p0[1]+(p1[1]-p0[1])*t + (Math.random()-0.5)*0.3;
+                pos[idx++] = p0[2]+(p1[2]-p0[2])*t + (Math.random()-0.5)*0.3;
+            }
+        });
+        return pos;
+    }
+    var c = {
+        b00:[-h,0,-h], b10:[h,0,-h], b11:[h,0,h], b01:[-h,0,h],
+        t00:[-h,H,-h], t10:[h,H,-h], t11:[h,H,h], t01:[-h,H,h]
+    };
+    var baseEdges = [
+        [c.b00,c.b10],[c.b10,c.b11],[c.b11,c.b01],[c.b01,c.b00],
+        [c.b00,c.t00],[c.b10,c.t10],[c.b11,c.t11],[c.b01,c.t01]
+    ];
+    var baseGeo = new THREE.BufferGeometry();
+    baseGeo.setAttribute("position", new THREE.BufferAttribute(sampleEdges(baseEdges, 16), 3));
+    var baseMat = new THREE.PointsMaterial({ map: dustTex, size: 2.8, color: new THREE.Color(COLOR), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
+    var boxBase = new THREE.Points(baseGeo, baseMat);
+    scene.add(boxBase);
+
+    var lidEdgesLocal = [
+        [[-h,0,0],[h,0,0]], [[h,0,0],[h,0,2*h]], [[h,0,2*h],[-h,0,2*h]], [[-h,0,2*h],[-h,0,0]]
+    ];
+    var lidGeo = new THREE.BufferGeometry();
+    lidGeo.setAttribute("position", new THREE.BufferAttribute(sampleEdges(lidEdgesLocal, 16), 3));
+    var lidMat = new THREE.PointsMaterial({ map: dustTex, size: 2.8, color: new THREE.Color(COLOR).lerp(new THREE.Color(0xffffff), 0.3), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
+    var lidPoints = new THREE.Points(lidGeo, lidMat);
+    var lidGroup = new THREE.Group();
+    lidGroup.position.set(0, H, -h);
+    lidGroup.add(lidPoints);
+    scene.add(lidGroup);
+
+    var CLOUD_N = 500;
+    var target = new Float32Array(CLOUD_N*3), scatter = new Float32Array(CLOUD_N*3), current = new Float32Array(CLOUD_N*3);
+    for (var i=0;i<CLOUD_N;i++){
+        var r = 18 + Math.random()*10, th = Math.random()*Math.PI*2, ph = Math.acos(2*Math.random()-1);
+        target[3*i] = r*Math.sin(ph)*Math.cos(th);
+        target[3*i+1] = 16 + r*Math.cos(ph)*0.6;
+        target[3*i+2] = r*Math.sin(ph)*Math.sin(th);
+        scatter[3*i] = (Math.random()-0.5)*2*h;
+        scatter[3*i+1] = Math.random()*H*0.6;
+        scatter[3*i+2] = (Math.random()-0.5)*2*h;
+    }
+    current.set(scatter);
+    var cloudGeo = new THREE.BufferGeometry();
+    cloudGeo.setAttribute("position", new THREE.BufferAttribute(current, 3));
+    var cloudMat = new THREE.PointsMaterial({ map: dustTex, size: 2.6, color: new THREE.Color(COLOR).lerp(new THREE.Color(0xffffff), 0.15), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
+    var cloud = new THREE.Points(cloudGeo, cloudMat);
+    scene.add(cloud);
+
+    function makeGlowTexture(){
+        var size=512, cc=document.createElement("canvas");
+        cc.width=cc.height=size;
+        var ctx = cc.getContext("2d");
+        var grad = ctx.createRadialGradient(size/2,size/2,0.04*size,size/2,size/2,0.5*size);
+        grad.addColorStop(0, "rgba(220,255,250,0.9)");
+        grad.addColorStop(0.4, "rgba(38,224,200,0.45)");
+        grad.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0,0,size,size);
+        return new THREE.CanvasTexture(cc);
+    }
+    var glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeGlowTexture(), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
+    glow.scale.set(90, 90, 1);
+    glow.position.set(0, 16, 0);
+    scene.add(glow);
+
+    var words = makeOrbitWords(["SORPRESA","PARA TI","FELICIDADES","TE QUIERO"], [COLOR,"#ff6fa5","#ffd166","#a06bff"], 45, 16, 28, 8);
+    scene.add(words.group);
+
+    var BOX_FADE_IN = 0.4, LID_START = 0.5, LID_DUR = 1.1, CLOUD_START = 0.6, CLOUD_DUR = 1.8,
+        BOX_OUT_START = 1.3, BOX_OUT_DUR = 0.8, WORDS_START = 2.0, WORDS_END = 3.0, LOOP = 3.6;
+
+    return {
+        update: function(t){
+            var lt = t % LOOP;
+
+            baseMat.opacity = clamp01(lt / BOX_FADE_IN);
+            lidMat.opacity = clamp01(lt / BOX_FADE_IN);
+
+            var lidT = clamp01((lt-LID_START)/LID_DUR);
+            var lidEase = easeOutCubic(lidT);
+            lidGroup.rotation.x = -lidEase * Math.PI * 0.6;
+
+            var cloudT = clamp01((lt-CLOUD_START)/CLOUD_DUR);
+            var cloudEase = easeOutCubic(cloudT);
+            for (var i=0;i<CLOUD_N*3;i++) current[i] = scatter[i] + (target[i]-scatter[i])*cloudEase;
+            cloudGeo.attributes.position.needsUpdate = true;
+            cloudMat.opacity = 0.85 * cloudEase;
+            glow.material.opacity = cloudEase;
+
+            var boxOutT = clamp01((lt-BOX_OUT_START)/BOX_OUT_DUR);
+            baseMat.opacity = clamp01(baseMat.opacity - boxOutT);
+            lidMat.opacity = clamp01(lidMat.opacity - boxOutT);
+
+            var glowPulse = 1 + 0.08*Math.sin(1.5*t);
+            glow.scale.set(90*glowPulse, 90*glowPulse, 1);
+
+            words.update(t, clamp01((lt-WORDS_START)/(WORDS_END-WORDS_START)));
+        }
+    };
+});
+    } else if (name === "corazon") {
+/* ============== CORAZÓN DE PARTÍCULAS: corazón cian armándose en loop ============= */
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+    scene.background = new THREE.Color(0x020207);
+    camera.position.set(0, 10, 210);
+    camera.lookAt(0, 10, 0);
+
+    scene.add(new THREE.AmbientLight(0x102030, 1.2));
+    var rim = new THREE.PointLight(0x2fb3ff, 1.5, 700);
+    rim.position.set(40, 80, 90);
+    scene.add(rim);
+
+    var colA = new THREE.Color("#8fe9ff");
+    var colB = new THREE.Color("#2fb3ff");
+    var colC = new THREE.Color("#b98cff");
+
+    function heartPointN(t){
+        var x = 16*Math.pow(Math.sin(t),3);
+        var y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+        return { x: x/17, y: y/17 };
+    }
+
+    var N = 900;
+    var target = new Float32Array(N*3), scatter = new Float32Array(N*3), current = new Float32Array(N*3), colors = new Float32Array(N*3);
+    for (var i=0;i<N;i++){
+        var t = Math.random()*Math.PI*2;
+        var p = heartPointN(t);
+        var r = Math.sqrt(Math.random());
+        var hx = p.x*r*44, hy = p.y*r*44 + 14, hz = (Math.random()-0.5)*16;
+        target[3*i]=hx; target[3*i+1]=hy; target[3*i+2]=hz;
+        var ang = Math.random()*Math.PI*2, rad = 60+Math.random()*140;
+        scatter[3*i] = Math.cos(ang)*rad;
+        scatter[3*i+1] = -60 + Math.random()*30;
+        scatter[3*i+2] = Math.sin(ang)*rad;
+        var mix = Math.random()<0.4 ? colA : (Math.random()<0.7 ? colB : colC);
+        colors[3*i]=mix.r; colors[3*i+1]=mix.g; colors[3*i+2]=mix.b;
+    }
+    current.set(scatter);
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(current,3));
+    geo.setAttribute("color", new THREE.BufferAttribute(colors,3));
+    var mat = new THREE.PointsMaterial({ map: dustTex, size: 2.6, vertexColors:true, transparent:true, depthWrite:false, blending: THREE.AdditiveBlending, opacity: 0 });
+    var points = new THREE.Points(geo, mat);
+    scene.add(points);
+
+    function poolTex(){
+        var size=512, c=document.createElement("canvas");
+        c.width=c.height=size;
+        var ctx=c.getContext("2d");
+        var g=ctx.createRadialGradient(size/2,size/2,size*0.05,size/2,size/2,size*0.48);
+        g.addColorStop(0,"rgba(230,250,255,0.9)");
+        g.addColorStop(0.35,"rgba(80,200,255,0.5)");
+        g.addColorStop(1,"rgba(40,140,255,0)");
+        ctx.fillStyle=g; ctx.fillRect(0,0,size,size);
+        return new THREE.CanvasTexture(c);
+    }
+    var pool = new THREE.Sprite(new THREE.SpriteMaterial({ map: poolTex(), transparent:true, depthWrite:false, blending: THREE.AdditiveBlending, opacity:0 }));
+    pool.scale.set(90,28,1);
+    pool.position.set(0,-30,0);
+    scene.add(pool);
+
+    var REVEAL_END = 1.5, HOLD_UNTIL = 2.6, LOOP = 3.4;
+    return {
+        update: function(t){
+            var lt = t % LOOP;
+            var e = easeOutCubic(clamp01(lt/REVEAL_END));
+            for (var i=0;i<N*3;i++) current[i] = scatter[i] + (target[i]-scatter[i])*e;
+            geo.attributes.position.needsUpdate = true;
+            var fadeMul = 1;
+            if (lt > HOLD_UNTIL) fadeMul = Math.max(0, 1 - (lt-HOLD_UNTIL)/(LOOP-HOLD_UNTIL));
+            mat.opacity = Math.min(1, e*1.4) * fadeMul;
+            pool.material.opacity = e*0.85 * fadeMul;
+            points.rotation.y += 0.006;
+        }
+    };
+});
+    } else if (name === "rama") {
+/* ============== RAMA FLORECIENTE: tronco creciendo + flores doradas abriendose ============== */
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+    scene.background = new THREE.Color(0x03040c);
+    camera.position.set(0, 20, 150);
+    camera.lookAt(0, 30, 0);
+
+    scene.add(new THREE.AmbientLight(0x3a2e40, 1.2));
+    var rim = new THREE.PointLight(0xffd83d, 1.4, 700);
+    rim.position.set(60, 90, 90);
+    scene.add(rim);
+
+    var trunkGeo = new THREE.CylinderGeometry(1.6, 2.6, 1, 7);
+    trunkGeo.translate(0, 0.5, 0);
+    var trunkMat = new THREE.MeshPhongMaterial({ color: 0x6b4a34, shininess: 6 });
+    var trunk = new THREE.Mesh(trunkGeo, trunkMat);
+    trunk.position.set(0, -34, 0);
+    trunk.scale.y = 0.001;
+    scene.add(trunk);
+
+    var branchGeo = new THREE.CylinderGeometry(0.7, 1.1, 1, 6);
+    branchGeo.translate(0, 0.5, 0);
+    var branchMat = new THREE.MeshPhongMaterial({ color: 0x6b4a34, shininess: 6 });
+    var branchL = new THREE.Mesh(branchGeo, branchMat);
+    branchL.position.set(-4, -6, 0);
+    branchL.rotation.z = 0.9;
+    branchL.scale.y = 0.001;
+    scene.add(branchL);
+    var branchR = new THREE.Mesh(branchGeo, branchMat);
+    branchR.position.set(4, 2, 0);
+    branchR.rotation.z = -0.9;
+    branchR.scale.y = 0.001;
+    scene.add(branchR);
+
+    function buildPetalGeometry(){
+        var geo = new THREE.PlaneGeometry(1,1,4,6);
+        geo.translate(0,0.5,0);
+        var pos = geo.attributes.position;
+        for (var i=0;i<pos.count;i++){
+            var x=pos.getX(i), y=pos.getY(i), z=pos.getZ(i);
+            var t = Math.max(0, Math.min(1,y));
+            var w = Math.max(Math.sin(Math.pow(t,0.75)*Math.PI), 0.001);
+            pos.setX(i, x*w);
+            pos.setZ(i, z + Math.sin(t*Math.PI*0.5)*3 - Math.pow(Math.abs(x),1.6)*2.2);
+        }
+        pos.needsUpdate = true;
+        geo.computeVertexNormals();
+        return geo;
+    }
+    var PETAL_GEO = buildPetalGeometry();
+    var CLOSED = new THREE.Color(0x2e3b1f);
+    var OPEN = new THREE.Color("#ffd83d");
+
+    function makeFlower(x, y, scale){
+        var mat = new THREE.MeshPhongMaterial({ color: CLOSED.clone(), shininess:14, side: THREE.DoubleSide });
+        var group = new THREE.Group();
+        var petals = [];
+        var COUNT = 6;
+        for (var i=0;i<COUNT;i++){
+            var theta = (i/COUNT)*Math.PI*2;
+            var yaw = new THREE.Group(); yaw.rotation.y = theta;
+            var hinge = new THREE.Group(); yaw.add(hinge);
+            var mesh = new THREE.Mesh(PETAL_GEO, mat);
+            mesh.scale.set(6*scale, 9*scale, 1);
+            hinge.add(mesh);
+            group.add(yaw);
+            petals.push(hinge);
+        }
+        group.position.set(x, y, 0);
+        scene.add(group);
+        return { group: group, petals: petals, mat: mat, scale: scale };
+    }
+    var flowers = [
+        makeFlower(0, 28, 1.1), makeFlower(-8, 16, 0.8), makeFlower(7, 20, 0.85),
+        makeFlower(-3, 8, 0.7), makeFlower(5, 5, 0.65)
+    ];
+    flowers.forEach(function(f){
+        f.petals.forEach(function(p){ p.scale.setScalar(0); });
+    });
+
+    var TRUNK_END = 1.4, FLOWER_START = 1.1, FLOWER_END = 2.6, HOLD_UNTIL = 3.2, LOOP = 3.9;
+    return {
+        update: function(t){
+            var lt = t % LOOP;
+            var trunkT = easeOutCubic(clamp01(lt/TRUNK_END));
+            trunk.scale.y = Math.max(0.001, trunkT);
+            branchL.scale.y = Math.max(0.001, clamp01((lt-0.3)/1.0));
+            branchR.scale.y = Math.max(0.001, clamp01((lt-0.5)/1.0));
+
+            var bt = easeInOutCubic(clamp01((lt-FLOWER_START)/(FLOWER_END-FLOWER_START)));
+            var fadeMul = lt > HOLD_UNTIL ? Math.max(0, 1-(lt-HOLD_UNTIL)/(LOOP-HOLD_UNTIL)) : 1;
+            flowers.forEach(function(f, i){
+                var localT = clamp01(bt - i*0.06);
+                f.petals.forEach(function(p, pi){
+                    var ang = 0.15 + localT*1.6;
+                    p.rotation.z = -ang;
+                    p.scale.setScalar((0.3+0.7*localT) * fadeMul);
+                });
+                f.mat.color.copy(CLOSED).lerp(OPEN, localT);
+                f.mat.opacity = fadeMul;
+            });
+            scene.rotation.y = 0.08*Math.sin(0.4*t);
+        }
+    };
+});
+    } else if (name === "flores-dorado") {
+/* ============== FLORES AMARILLAS (version real): anillo dorado con girasoles, solo para "no personalizado" ============== */
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+    scene.background = new THREE.Color(0x0a0704);
+    camera.position.set(0, 55, 250);
+    camera.lookAt(0, 0, 0);
+
+    scene.add(new THREE.AmbientLight(0x3a2c14, 1.4));
+    var rim = new THREE.PointLight(0xffcf40, 1.6, 800);
+    rim.position.set(80, 100, 120);
+    scene.add(rim);
+
+    var GOLD = "#ffcf40";
+    var CORE_COLOR = new THREE.Color(GOLD).lerp(new THREE.Color(0xfff6e0), 0.3);
+
+    var CORE_N = 900;
+    var target = new Float32Array(CORE_N*3), scatter = new Float32Array(CORE_N*3), current = new Float32Array(CORE_N*3);
+    for (var i=0;i<CORE_N;i++){
+        var r = 18+Math.random()*8, th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
+        target[3*i]=r*Math.sin(ph)*Math.cos(th);
+        target[3*i+1]=r*Math.cos(ph);
+        target[3*i+2]=r*Math.sin(ph)*Math.sin(th);
+        var sr=200+Math.random()*200, sth=Math.random()*Math.PI*2, sph=Math.acos(2*Math.random()-1);
+        scatter[3*i]=sr*Math.sin(sph)*Math.cos(sth);
+        scatter[3*i+1]=sr*Math.cos(sph);
+        scatter[3*i+2]=sr*Math.sin(sph)*Math.sin(sth);
+    }
+    current.set(scatter);
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(current,3));
+    var mat = new THREE.PointsMaterial({ map: dustTex, size: 3, color: CORE_COLOR, transparent:true, depthWrite:false, blending: THREE.AdditiveBlending, opacity: 0 });
+    var core = new THREE.Points(geo, mat);
+    scene.add(core);
+
+    function glowTex(){
+        var size=512, c=document.createElement("canvas");
+        c.width=c.height=size;
+        var ctx=c.getContext("2d");
+        var g=ctx.createRadialGradient(size/2,size/2,0.05*size,size/2,size/2,0.5*size);
+        g.addColorStop(0,"rgba(255,248,220,0.95)");
+        g.addColorStop(0.4,"rgba(255,207,64,0.55)");
+        g.addColorStop(1,"rgba(255,207,64,0)");
+        ctx.fillStyle=g; ctx.fillRect(0,0,size,size);
+        return new THREE.CanvasTexture(c);
+    }
+    var glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex(), transparent:true, depthWrite:false, blending: THREE.AdditiveBlending, opacity:0 }));
+    glow.scale.set(80,80,1);
+    scene.add(glow);
+
+    function ringTex(){
+        var size=512, c=document.createElement("canvas");
+        c.width=c.height=size;
+        var cx=c.getContext("2d");
+        cx.translate(size/2,size/2);
+        var inner=0.34*size, outer=0.49*size;
+        var g=cx.createRadialGradient(0,0,0.3*inner,0,0,outer);
+        g.addColorStop(0,"rgba(255,250,235,1)");
+        g.addColorStop(0.25,"rgba(255,207,64,0.9)");
+        g.addColorStop(0.6,"rgba(150,110,20,0.55)");
+        g.addColorStop(1,"rgba(0,0,0,0)");
+        cx.fillStyle=g;
+        cx.beginPath(); cx.arc(0,0,outer,0,2*Math.PI); cx.arc(0,0,inner,0,2*Math.PI,true); cx.closePath(); cx.fill();
+        return new THREE.CanvasTexture(c);
+    }
+    var ring1 = new THREE.Mesh(new THREE.RingGeometry(55,76,96), new THREE.MeshBasicMaterial({ map: ringTex(), transparent:true, side: THREE.DoubleSide, opacity:0, depthWrite:false }));
+    ring1.rotation.x = Math.PI/2;
+    scene.add(ring1);
+
+    function flowerTex(){
+        var size=90, c=document.createElement("canvas");
+        c.width=c.height=size;
+        var ctx=c.getContext("2d");
+        var cx=size/2, cy=size/2, r=size*0.42;
+        for (var p=0;p<10;p++){
+            var a=(p/10)*Math.PI*2;
+            ctx.beginPath();
+            ctx.ellipse(cx+Math.cos(a)*r*0.55, cy+Math.sin(a)*r*0.55, r*0.32, r*0.46, a, 0, Math.PI*2);
+            ctx.fillStyle = "#fff6d8";
+            ctx.fill();
+        }
+        ctx.beginPath(); ctx.arc(cx,cy,r*0.34,0,Math.PI*2);
+        ctx.fillStyle = "#6b3a10";
+        ctx.fill();
+        return new THREE.CanvasTexture(c);
+    }
+    var fTex = flowerTex();
+    var FLOWER_N = 10;
+    var flowers = [];
+    for (var fi=0; fi<FLOWER_N; fi++){
+        var fSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: fTex, transparent:true, depthWrite:false, opacity:0 }));
+        var fAngle = (fi/FLOWER_N)*Math.PI*2;
+        var fRadius = 62 + (Math.random()-0.5)*6;
+        fSprite.scale.set(14,14,1);
+        fSprite.userData.angle = fAngle;
+        fSprite.userData.radius = fRadius;
+        scene.add(fSprite);
+        flowers.push(fSprite);
+    }
+
+    var words = makeOrbitWords(["MI AMOR","TE AMO","GIRASOLES","MI SOL"], [GOLD,"#fff3c4","#ffb64a","#fff6e0"], 92, 0, 30, 8);
+    scene.add(words.group);
+
+    var REVEAL_END = 1.5, WORDS_START = 1.2, WORDS_END = 2.4, LOOP = 3.4;
+    return {
+        update: function(t){
+            var lt = t % LOOP;
+            var e = easeOutCubic(clamp01(lt/REVEAL_END));
+            for (var i=0;i<CORE_N*3;i++) current[i] = scatter[i] + (target[i]-scatter[i])*e;
+            geo.attributes.position.needsUpdate = true;
+            mat.opacity = Math.min(1, e*2);
+            glow.material.opacity = e;
+            var pulse = 1 + 0.06*Math.sin(1.3*t);
+            glow.scale.set(80*pulse, 80*pulse, 1);
+            ring1.material.opacity = e;
+            ring1.rotation.z += 0.01;
+
+            flowers.forEach(function(f, i){
+                f.userData.angle += 0.006;
+                var a = f.userData.angle, r = f.userData.radius;
+                f.position.set(Math.cos(a)*r, Math.sin(a*0.3+i)*3, Math.sin(a)*r*0.55);
+                f.material.opacity = e;
+            });
+
+            words.update(t, clamp01((lt-WORDS_START)/(WORDS_END-WORDS_START)));
+        }
+    };
+});
+    }
+}
+
+window.startPreview = startPreview;
+})();
+</script>
+</body>
+</html>
