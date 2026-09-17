@@ -957,10 +957,30 @@ function renderGrid(){
         if (supportsObserver) {
             gridObserver = new IntersectionObserver(function(entries){
                 entries.forEach(function(entry){
-                    if (!entry.isIntersecting) return;
                     var el = entry.target;
-                    gridObserver.unobserve(el);
-                    startPreview(el.getAttribute('data-preview-kind'), el.id);
+                    var kind = el.getAttribute('data-preview-kind');
+                    var isThree = kind && kind.indexOf('three-') === 0;
+
+                    if (entry.isIntersecting) {
+                        if (el.getAttribute('data-preview-active') !== '1') {
+                            startPreview(kind, el.id);
+                            el.setAttribute('data-preview-active', '1');
+                        }
+                        if (!isThree) {
+                            /* las 2D son livianas (SVG, sin WebGL): arrancan una vez y listo */
+                            gridObserver.unobserve(el);
+                        }
+                    } else if (isThree && el.getAttribute('data-preview-active') === '1') {
+                        /* se fue de pantalla: apaga el contexto WebGL reemplazando el canvas por
+                           uno nuevo y vacio, para liberar memoria en celulares. Al volver a
+                           entrar en pantalla se vuelve a armar desde cero, mas abajo. */
+                        var freshCanvas = document.createElement('canvas');
+                        freshCanvas.id = el.id;
+                        freshCanvas.setAttribute('data-preview-kind', kind);
+                        if (el.parentNode) el.parentNode.replaceChild(freshCanvas, el);
+                        gridObserver.unobserve(el);
+                        gridObserver.observe(freshCanvas);
+                    }
                 });
             }, { root: null, rootMargin: '250px 0px', threshold: 0.01 });
         }
