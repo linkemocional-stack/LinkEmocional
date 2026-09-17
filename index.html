@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -134,6 +135,7 @@ h1 {
 }
 .pill span { display: block; font-weight: 600; font-size: 12px; color: var(--muted); margin-top: 4px; }
 .pill:hover { transform: translateY(-3px); }
+.pill:active { transform: scale(0.97); }
 .pill.main {
     background: linear-gradient(135deg, rgba(139,111,240,0.22), rgba(58,150,180,0.16));
     border-color: rgba(139,111,240,0.55);
@@ -187,8 +189,9 @@ h1 {
     flex: 1; text-align: center; cursor: pointer; font-family: inherit;
     font-weight: 700; font-size: 12.5px; padding: 12px 10px; border-radius: 999px;
     background: var(--glass); border: 1px solid var(--border-soft-blue);
-    color: var(--muted); transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+    color: var(--muted); transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .1s ease;
 }
+.cat-tab:active { transform: scale(0.95); }
 .cat-tab.active {
     background: linear-gradient(135deg, rgba(139,111,240,0.28), rgba(58,150,180,0.22));
     border-color: rgba(139,111,240,0.6); color: var(--ink);
@@ -309,14 +312,21 @@ h1 {
 .card-body p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; flex: 1; }
 .price { font-size: 13.5px; font-weight: 800; background-image: var(--grad-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .price.gratis { background-image: none; color: var(--pink-soft); }
+.also-noeditor {
+    font-size: 10.5px; font-weight: 700; color: var(--muted);
+    background: var(--glass); border: 1px solid var(--border-soft-blue);
+    display: inline-flex; align-items: center; gap: 4px; width: fit-content;
+    padding: 3px 9px; border-radius: 999px;
+}
 .card-actions { display: flex; gap: 8px; margin-top: 8px; }
 .btn {
     flex: 1; text-align: center; text-decoration: none; font-weight: 700; font-size: 12px;
     padding: 11px 8px; border-radius: 11px; border: 1px solid var(--border-soft-blue);
-    color: var(--ink); background: var(--glass); transition: background .15s ease, border-color .15s ease;
+    color: var(--ink); background: var(--glass); transition: background .15s ease, border-color .15s ease, transform .1s ease;
     font-family: inherit; cursor: pointer;
 }
 .btn:hover { background: var(--glass-strong); border-color: rgba(139,111,240,0.4); }
+.btn:active { transform: scale(0.95); }
 .btn.whatsapp { background: rgba(38,224,102,0.14); border-color: rgba(38,224,102,0.4); color: #7cffb0; display: flex; align-items: center; justify-content: center; gap: 5px; }
 .btn.whatsapp:hover { background: rgba(38,224,102,0.24); }
 .note { max-width: 1080px; margin: 0 auto 40px; padding: 0 20px; font-size: 12px; color: var(--muted-2); text-align: center; }
@@ -369,7 +379,7 @@ h1 {
     <div class="wrap">
         <div class="avatar"><img src="data:image/jpeg;base64,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" alt="Link Emocional"></div>
         <h1>Link Emocional</h1>
-        <p class="subtitle">Dedicatorias animadas en 3D y 2D, personalizadas para esa personita especial 🎁</p>
+        <p class="subtitle">Dedicatorias animadas en 3D y 2D para esa personita especial 🎁</p>
 
         <div class="socials">
             <a href="https://www.tiktok.com/@linkemocional1" target="_blank" title="TikTok">
@@ -387,13 +397,13 @@ h1 {
         </div>
 
         <button class="pill main" onclick="showView('catalogo','personalizado')" style="border:none; font-family:inherit;">
-            Código Personalizado (Con Editor)
-            <span>HTML listo para enviar 💗</span>
+            Con Editor — Hazlo Tuyo 💗
+            <span>Personaliza frases, fotos, colores y más antes de recibirlo</span>
         </button>
 
         <button class="pill free" onclick="showView('catalogo','nopersonalizado')" style="border:none; font-family:inherit;">
-            Código No Personalizado (Sin Editor)
-            <span>Diseños bonitos, algunos gratis 💝</span>
+            Sin Editor — Ya Está Listo 💝
+            <span>Diseños ya armados y bonitos, algunos gratis</span>
         </button>
 
         <div class="footer">© Link Emocional</div>
@@ -466,8 +476,10 @@ var PRODUCTS = [
         tag: "Amor",
         dim: "3D",
         desc: "Un planeta 3D interactivo con mensajes, fotos y palabras orbitando alrededor.",
-        precioPersonalizado: 4.99,
-        precioNoPersonalizado: null,
+        precioPersonalizado: 3.99,
+        precioNoPersonalizado: 2.99,
+        ordenPersonalizado: 4,
+        ordenNoPersonalizado: 12,
         videoUrl: null,
         features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
         preview: "three-saturno"
@@ -478,8 +490,10 @@ var PRODUCTS = [
         tag: "Amor",
         dim: "3D",
         desc: "Una rosa 3D que florece por completo, con frases y fotos flotando alrededor.",
-        precioPersonalizado: 4.99,
-        precioNoPersonalizado: null,
+        precioPersonalizado: 3.99,
+        precioNoPersonalizado: 2.99,
+        ordenPersonalizado: 3,
+        ordenNoPersonalizado: 13,
         videoUrl: null,
         features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
         preview: "three-rosa"
@@ -490,8 +504,10 @@ var PRODUCTS = [
         tag: "Renacer",
         dim: "3D",
         desc: "Un Fénix de fuego que renace desde las cenizas, con tu mensaje en el pecho.",
-        precioPersonalizado: 5.99,
-        precioNoPersonalizado: null,
+        precioPersonalizado: 3.99,
+        precioNoPersonalizado: 2.99,
+        ordenPersonalizado: 7,
+        ordenNoPersonalizado: 15,
         videoUrl: null,
         features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
         preview: "three-fenix"
@@ -502,8 +518,10 @@ var PRODUCTS = [
         tag: "Sorpresa",
         dim: "3D",
         desc: "Una caja de regalo que se abre y libera una nube de luz con tu mensaje adentro.",
-        precioPersonalizado: 4.99,
-        precioNoPersonalizado: null,
+        precioPersonalizado: 3.99,
+        precioNoPersonalizado: 2.99,
+        ordenPersonalizado: 9,
+        ordenNoPersonalizado: 14,
         videoUrl: null,
         features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
         preview: "three-caja"
@@ -514,8 +532,10 @@ var PRODUCTS = [
         tag: "Amor",
         dim: "2D",
         desc: "Un jardín de girasoles que florece en forma de corazón, con tus frases y música de fondo.",
-        precioPersonalizado: 3.99,
+        precioPersonalizado: 2.99,
         precioNoPersonalizado: 1.99,
+        ordenPersonalizado: 15,
+        ordenNoPersonalizado: 10,
         videoUrl: null,
         features: ["Frases personalizadas ilimitadas","Música de fondo opcional"],
         preview: "flores2d"
@@ -528,6 +548,8 @@ var PRODUCTS = [
         desc: "Un corazón de partículas ci que se arma en el aire y brilla.",
         precioPersonalizado: null,
         precioNoPersonalizado: 0,
+        ordenPersonalizado: 99,
+        ordenNoPersonalizado: 2,
         videoUrl: null,
         features: [],
         preview: "three-corazon"
@@ -540,6 +562,8 @@ var PRODUCTS = [
         desc: "Una torta con vela que se sopla al tocarla, entre confeti y un mensaje de cumpleaños.",
         precioPersonalizado: null,
         precioNoPersonalizado: 1.00,
+        ordenPersonalizado: 99,
+        ordenNoPersonalizado: 7,
         videoUrl: null,
         features: [],
         preview: "cumple2d"
@@ -552,6 +576,8 @@ var PRODUCTS = [
         desc: "Una galaxia de partículas rosa que revela un 'Te Amo' y termina en una tarjeta especial para tu novia.",
         precioPersonalizado: null,
         precioNoPersonalizado: 1.00,
+        ordenPersonalizado: 99,
+        ordenNoPersonalizado: 6,
         videoUrl: null,
         features: [],
         preview: "novia2d"
@@ -562,8 +588,10 @@ var PRODUCTS = [
         tag: "Amor",
         dim: "2D",
         desc: "Un buzón que se abre con la puerta girando en 3D y libera varios sobres para elegir y leer, con confeti al abrir cada uno.",
-        precioPersonalizado: 3.99,
+        precioPersonalizado: 1.99,
         precioNoPersonalizado: null,
+        ordenPersonalizado: 12,
+        ordenNoPersonalizado: 99,
         videoUrl: null,
         features: ["Título e instrucción editables","Entre 1 y 8 cartas","Etiqueta y mensaje por carta","Foto opcional por carta","Confeti al abrir cada carta"],
         preview: "buzon2d"
@@ -574,8 +602,10 @@ var PRODUCTS = [
         tag: "Amor",
         dim: "2D",
         desc: "Cartas selladas para abrir cuando quieras, o con candado hasta la fecha que elijas para cada una.",
-        precioPersonalizado: 3.99,
+        precioPersonalizado: 1.99,
         precioNoPersonalizado: null,
+        ordenPersonalizado: 14,
+        ordenNoPersonalizado: 99,
         videoUrl: null,
         features: ["Título e instrucción editables","Entre 1 y 8 cartas","Fecha de apertura opcional por carta","Foto opcional por carta","Confeti al abrir"],
         preview: "capsula2d"
@@ -586,8 +616,10 @@ var PRODUCTS = [
         tag: "Sorpresa",
         dim: "3D",
         desc: "Una caja de regalo 3D que se abre con un estallido de corazones y pasa a un carrusel de fotos: cada una se voltea y revela un mensaje.",
-        precioPersonalizado: 4.99,
+        precioPersonalizado: 1.99,
         precioNoPersonalizado: null,
+        ordenPersonalizado: 8,
+        ordenNoPersonalizado: 99,
         videoUrl: null,
         features: ["Título y pistas editables","Entre 1 y 10 fotos","Mensaje al voltear cada foto","Animación de apertura con corazones"],
         preview: "regalo2d"
@@ -598,8 +630,10 @@ var PRODUCTS = [
         tag: "Amor",
         dim: "2D",
         desc: "Un libro interactivo: dedicatoria, línea del tiempo, galería de recuerdos, medidor de amor, ruleta de planes y un quiz de '¿cuánto me conoces?'.",
-        precioPersonalizado: 5.99,
+        precioPersonalizado: 3.99,
         precioNoPersonalizado: null,
+        ordenPersonalizado: 6,
+        ordenNoPersonalizado: 99,
         videoUrl: null,
         features: ["Portada y dedicatoria editables","Línea del tiempo (hasta 6 momentos)","Galería con mensajes ocultos","Ruleta de planes personalizable","Quiz de '¿cuánto me conoces?' con puntaje"],
         preview: "libro2d"
@@ -610,8 +644,10 @@ var PRODUCTS = [
         tag: "Amor",
         dim: "2D",
         desc: "Una máquina expendedora con 9 casilleros: cada uno puede ser una frase, una foto o un 'rasca y descubre' sorpresa.",
-        precioPersonalizado: 4.99,
+        precioPersonalizado: 1.99,
         precioNoPersonalizado: null,
+        ordenPersonalizado: 10,
+        ordenNoPersonalizado: 99,
         videoUrl: null,
         features: ["Título e instrucción editables","9 casilleros personalizables","Cada casillero: frase, foto o rasca y descubre","Confeti al dispensar"],
         preview: "maquina2d"
@@ -622,8 +658,10 @@ var PRODUCTS = [
         tag: "Aniversario",
         dim: "2D",
         desc: "Un periódico de una sola edición con titular, foto y cita destacada, sopa de letras, rasca y gana, encuesta y memorama del amor.",
-        precioPersonalizado: 5.99,
+        precioPersonalizado: 3.99,
         precioNoPersonalizado: null,
+        ordenPersonalizado: 2,
+        ordenNoPersonalizado: 99,
         videoUrl: null,
         features: ["Titular, foto y cita editables","Índice de amor con barras","Sopa de letras con tu palabra","Rasca y descubre","Galería de hasta 6 fotos","Encuesta y memorama personalizables"],
         preview: "periodico2d"
@@ -636,6 +674,8 @@ var PRODUCTS = [
         desc: "Una ramita que crece de a poco y se llena de flores doradas, entre luciérnagas y estrellas fugaces de fondo.",
         precioPersonalizado: null,
         precioNoPersonalizado: 1.50,
+        ordenPersonalizado: 99,
+        ordenNoPersonalizado: 5,
         videoUrl: null,
         features: [],
         preview: "three-rama"
@@ -648,6 +688,8 @@ var PRODUCTS = [
         desc: "Un sol de girasoles con anillo dorado tipo planeta, ramitos y palabras orbitando, con frases que van cambiando en el centro.",
         precioPersonalizado: null,
         precioNoPersonalizado: 1.50,
+        ordenPersonalizado: 99,
+        ordenNoPersonalizado: 3,
         videoUrl: null,
         features: [],
         preview: "three-flores-dorado"
@@ -658,8 +700,10 @@ var PRODUCTS = [
         tag: "Amor",
         dim: "3D",
         desc: "Un cielo 3D donde cada estrella guarda un mensaje distinto: se van encendiendo una a una hasta formar tu constelación completa.",
-        precioPersonalizado: 4.99,
-        precioNoPersonalizado: null,
+        precioPersonalizado: 2.99,
+        precioNoPersonalizado: 1.99,
+        ordenPersonalizado: 5,
+        ordenNoPersonalizado: 9,
         videoUrl: null,
         features: ["Título e instrucción editables","Color de las estrellas (paleta o personalizado)","3 formas de constelación: corazón, estrella o círculo","Mensajes editables (uno por estrella, hasta agregar los que quieras)","Mensaje final al completar la constelación"],
         preview: "three-constelacion"
@@ -670,8 +714,10 @@ var PRODUCTS = [
         tag: "Amor",
         dim: "3D",
         desc: "Una galaxia espiral que converge en un corazón de partículas, con rosas y ramos orbitando y ráfagas al tocar la pantalla.",
-        precioPersonalizado: 6.99,
-        precioNoPersonalizado: 2.50,
+        precioPersonalizado: 3.99,
+        precioNoPersonalizado: 2.99,
+        ordenPersonalizado: 1,
+        ordenNoPersonalizado: 11,
         videoUrl: null,
         features: ["Color principal editable","Forma de las ráfagas: corazón o estrella","6 tipografías para el texto y las palabras","Texto de amor central editable","Palabras orbitando personalizables","Hasta 6 fotos flotando","Música de fondo opcional (mp3)"],
         preview: "three-galaxia-rosa"
@@ -682,8 +728,10 @@ var PRODUCTS = [
         tag: "Amor",
         dim: "2D",
         desc: "Un atardecer con farolillos apagados esperando: cada uno guarda un deseo y se enciende y vuela al tocarlo.",
-        precioPersonalizado: 3.99,
-        precioNoPersonalizado: null,
+        precioPersonalizado: 2.99,
+        precioNoPersonalizado: 1.99,
+        ordenPersonalizado: 11,
+        ordenNoPersonalizado: 4,
         videoUrl: null,
         features: ["Título e instrucción editables","Color de los farolillos","Deseos editables (uno por farolillo)","Mensaje final al soltarlos todos"],
         preview: "farolillos2d"
@@ -694,8 +742,10 @@ var PRODUCTS = [
         tag: "Amor",
         dim: "2D",
         desc: "Un frasco de vidrio lleno de estrellitas: cada una guarda una razón distinta por la que la quieres, y brilla más al abrirlas todas.",
-        precioPersonalizado: 3.99,
-        precioNoPersonalizado: null,
+        precioPersonalizado: 1.99,
+        precioNoPersonalizado: 1.49,
+        ordenPersonalizado: 13,
+        ordenNoPersonalizado: 8,
         videoUrl: null,
         features: ["Título e instrucción editables","Razones editables (una por estrella, hasta agregar las que quieras)","Mensaje final al abrir todas"],
         preview: "frasco2d"
@@ -708,6 +758,8 @@ var PRODUCTS = [
         desc: "Un sobre que se abre y revela la gran pregunta: el botón 'NO' se escapa cada vez que lo tocas, hasta que solo queda el 'SÍ'.",
         precioPersonalizado: null,
         precioNoPersonalizado: 1.00,
+        ordenPersonalizado: 99,
+        ordenNoPersonalizado: 1,
         videoUrl: null,
         features: [],
         preview: "citas2d"
@@ -747,15 +799,15 @@ function setCatalogMode(mode){
 
     if (mode === 'personalizado') {
         tabs.style.display = 'none';
-        document.getElementById('catalogoTitulo').textContent = 'Código personalizado';
-        document.getElementById('catalogoSubtitulo').textContent = 'Elegí un diseño, mirá el video y pedí el tuyo por WhatsApp';
+        document.getElementById('catalogoTitulo').textContent = 'Con Editor';
+        document.getElementById('catalogoSubtitulo').textContent = 'Elegí un diseño, hazlo tuyo y pedilo por WhatsApp';
         note.style.display = 'block';
-        note.textContent = 'Todos vienen con editor: cambiás frases, fotos, colores y más antes de recibirlo.';
+        note.textContent = 'Todos vienen con editor: puedes cambiar frases, fotos, colores y más.';
         renderGrid();
     } else {
         tabs.style.display = 'flex';
-        document.getElementById('catalogoTitulo').textContent = 'Código no personalizado';
-        document.getElementById('catalogoSubtitulo').textContent = 'Diseños simples, listos como están — algunos son gratis';
+        document.getElementById('catalogoTitulo').textContent = 'Sin Editor';
+        document.getElementById('catalogoSubtitulo').textContent = 'Diseños ya armados y bonitos, algunos gratis';
         setSubTab('todos');
     }
 }
@@ -769,11 +821,11 @@ function setSubTab(tab){
     var note = document.getElementById('catNote');
     note.style.display = 'block';
     if (tab === 'todos') {
-        note.textContent = 'Todo el código no personalizado, con costo y gratis, tal como está.';
+        note.textContent = 'Todos los diseños sin editor: gratis y con costo, listos tal como están.';
     } else if (tab === 'sinEditor') {
-        note.textContent = 'Sin editor y a menor precio. Si un diseño te gusta pero querés personalizarlo, mirá el botón rosa de su tarjeta.';
+        note.textContent = 'Sin editor y a menor precio. Si un diseño te gusta pero quieres personalizarlo, mirá el botón celeste de su tarjeta.';
     } else {
-        note.textContent = 'Gratis — escribinos por WhatsApp para obtenerlo 💌';
+        note.textContent = 'Gratis — escríbenos por WhatsApp para obtenerlo 💌';
     }
 
     renderGrid();
@@ -798,6 +850,11 @@ function buildCardHtml(p, priceShown, isFree, rightBadge, thumbId){
     var pedirLabel = isFree ? 'Escríbenos' : 'Pedir';
     var waMsg = encodeURIComponent('Hola! Me interesa el diseño "' + p.name + '" 💗');
     var waHref = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + waMsg;
+
+    var noEditorHtml = '';
+    if (catalogMode === 'personalizado' && p.precioNoPersonalizado != null) {
+        noEditorHtml = '<div class="also-noeditor">🔓 Sin editor: $ ' + p.precioNoPersonalizado.toFixed(2) + '</div>';
+    }
 
     var introOverlayHtml = '';
     if (p.id === 'flores-amarillas-3d') {
@@ -834,6 +891,7 @@ function buildCardHtml(p, priceShown, isFree, rightBadge, thumbId){
                 '<h3>' + p.name + '</h3>' +
                 '<p>' + p.desc + '</p>' +
                 '<div class="price' + (isFree ? ' gratis' : '') + '">' + priceHtml + '</div>' +
+                noEditorHtml +
                 '<div class="card-actions">' +
                     '<button type="button" class="btn btn-video" data-product-id="' + p.id + '">Ver Video</button>' +
                     '<a class="btn whatsapp" href="' + waHref + '" target="_blank"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex-shrink:0"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 4.99L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.79 14.1c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.13.11-1.82-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36h.55c.18 0 .42-.07.65.5.24.58.81 2 .88 2.15.07.15.12.32.02.51-.1.19-.15.3-.29.47-.15.17-.31.37-.44.5-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.15.46.13.63-.08.17-.21.72-.85.92-1.14.19-.29.38-.24.64-.14.26.1 1.66.79 1.94.93.29.14.47.22.55.34.07.12.07.7-.17 1.38z"/></svg>' + pedirLabel + '</a>' +
@@ -855,7 +913,7 @@ function appendGridSection(container, list){
     if (!list.length) return;
     var grid = document.createElement('div');
     grid.className = 'grid';
-    list.forEach(function(p){
+    list.forEach(function(p, i){
         var isFree = catalogMode !== 'personalizado' && p.precioNoPersonalizado === 0;
         var priceShown = (catalogMode === 'personalizado') ? p.precioPersonalizado : p.precioNoPersonalizado;
         var card = document.createElement('div');
@@ -874,8 +932,10 @@ function renderGrid(){
     var list;
     if (catalogMode === 'personalizado') {
         list = PRODUCTS.filter(function(p){ return p.precioPersonalizado != null; });
+        list.sort(function(a,b){ return (a.ordenPersonalizado||99) - (b.ordenPersonalizado||99); });
     } else {
         var base = PRODUCTS.filter(function(p){ return p.precioNoPersonalizado != null; });
+        base.sort(function(a,b){ return (a.ordenNoPersonalizado||99) - (b.ordenNoPersonalizado||99); });
         if (subTab === 'sinEditor') {
             list = base.filter(function(p){ return p.precioNoPersonalizado > 0; });
         } else if (subTab === 'gratis') {
@@ -898,6 +958,7 @@ function renderGrid(){
                     overlayEl.addEventListener('click', function(){
                         overlayEl.classList.add('hide');
                     });
+                    setTimeout(function(){ overlayEl.classList.add('hide'); }, 3200);
                 }
             }
         });
@@ -968,7 +1029,7 @@ function initTooltips(){
     if (!tooltip) {
         tooltip = document.createElement("div");
         tooltip.id = "sharedTooltip";
-        tooltip.innerHTML = '<span class="tooltip-title">Qué podés personalizar</span><span class="tooltip-price" id="tooltipPrice" style="display:none;"></span><ul></ul>';
+        tooltip.innerHTML = '<span class="tooltip-title">Qué se puede personalizar</span><span class="tooltip-price" id="tooltipPrice" style="display:none;"></span><ul></ul>';
         document.body.appendChild(tooltip);
     }
     var tooltipList = tooltip.querySelector("ul");
@@ -1793,7 +1854,7 @@ function startLibro2dPreview(containerId){
         var scaleX = Math.cos(flipT*Math.PI);
         var showB = flipT > 0.5;
         pageB.style.opacity = showB ? "1" : "0";
-        pageB.setAttribute("transform","translate(150,108) scale("+scaleX.toFixed(3)+",1) translate(-150,-108)");
+        pageB.setAttribute("transform","translate(150,108) scale("+Math.abs(scaleX).toFixed(3)+",1) translate(-150,-108)");
         pageA.setAttribute("transform","translate(150,108) scale("+(flipT<0.5?1:Math.max(0.001,-scaleX)).toFixed(3)+",1) translate(-150,-108)");
         pageA.style.opacity = flipT<0.5 ? "1" : "0";
         navMid.textContent = showB ? "2 / 9" : "1 / 9";
@@ -1910,16 +1971,6 @@ function startPeriodico2dPreview(containerId){
     paper.setAttribute("rx","2");
     paper.setAttribute("fill","#f4ead8");
     svg.appendChild(paper);
-
-    var edition = document.createElementNS(svgNS,"text");
-    edition.setAttribute("x","150"); edition.setAttribute("y","24");
-    edition.setAttribute("text-anchor","middle");
-    edition.setAttribute("font-family","'Work Sans',sans-serif");
-    edition.setAttribute("font-size","6.5");
-    edition.setAttribute("letter-spacing","1.5");
-    edition.setAttribute("fill","#a4172a");
-    edition.textContent = "EDICIÓN LIMITADA DE ANIVERSARIO";
-    svg.appendChild(edition);
 
     var masthead = document.createElementNS(svgNS,"text");
     masthead.setAttribute("x","150"); masthead.setAttribute("y","41");
@@ -2783,7 +2834,6 @@ function makeMiniPreview(canvasId, setup){
 
 function startThreePreview(name, canvasId){
     if (name === "saturno") {
-/* ============== SATURNO: nucleo + halo + doble anillo convergiendo en loop ============== */
 makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     scene.background = new THREE.Color(0x00050a);
     camera.position.set(0, 60, 260);
@@ -2883,7 +2933,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     };
 });
     } else if (name === "rosa") {
-/* ============== ROSA: petalos abriendose en loop (version reducida) ============== */
 makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     scene.background = new THREE.Color(0x030007);
     camera.position.set(0, 20, 130);
@@ -2966,7 +3015,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     };
 });
     } else if (name === "fenix") {
-/* ============== FENIX: silueta de particulas apareciendo en loop ============== */
 makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     scene.background = new THREE.Color(0x040404);
     camera.position.set(0, 10, 190);
@@ -3058,7 +3106,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     };
 });
     } else if (name === "caja") {
-/* ============== CAJA SORPRESA: tapa que se abre + nube de luz en loop ============== */
 makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     scene.background = new THREE.Color(0x00020a);
     camera.position.set(0, 40, 150);
@@ -3184,7 +3231,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     };
 });
     } else if (name === "corazon") {
-/* ============== CORAZÓN DE PARTÍCULAS: corazón cian armándose en loop ============== */
 makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     scene.background = new THREE.Color(0x020207);
     camera.position.set(0, 10, 210);
@@ -3260,7 +3306,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     };
 });
     } else if (name === "rama") {
-/* ============== RAMA FLORECIENTE: tronco creciendo desde particulas + estrellas de fondo + flores doradas grandes ============== */
 makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     scene.background = new THREE.Color(0x03040c);
     camera.position.set(0, 14, 128);
@@ -3410,7 +3455,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     };
 });
     } else if (name === "flores-dorado") {
-/* ============== FLORES AMARILLAS 3D (sol de girasoles tipo planeta) ============== */
 makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     scene.background = new THREE.Color(0x0a0704);
     camera.position.set(0, 55, 250);
@@ -3537,7 +3581,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     };
 });
     } else if (name === "galaxia-rosa") {
-/* ============== GALAXIA DE ROSA ROJA: espiral roja + corazon de particulas + rosa orbitando + "Te amo" central ============== */
 makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     scene.background = new THREE.Color(0x000000);
     camera.position.set(0, 62, 235);
@@ -3553,7 +3596,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     var cIn = cMid.clone().lerp(new THREE.Color(0xffffff), 0.82);
     var cOut = cMid.clone().lerp(new THREE.Color(0x000000), 0.58);
 
-    /* espiral de la galaxia, mismos parametros de forma que el producto real (5 brazos) */
     var GAL_N = 2600;
     var RADIUS = 82, BRANCHES = 5, SPIN = 1.4;
     var galAngle = new Float32Array(GAL_N), galRadius = new Float32Array(GAL_N);
@@ -3575,7 +3617,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     var galPoints = new THREE.Points(galGeo, galMat);
     scene.add(galPoints);
 
-    /* corazon de particulas central, igual espiritu que el producto real */
     function heartPointN(t){
         var x = 16*Math.pow(Math.sin(t),3);
         var y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
@@ -3605,7 +3646,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     var hPoints = new THREE.Points(hGeo, hMat);
     scene.add(hPoints);
 
-    /* "Te amo" central en texto, igual que el sprite grande del producto real */
     function makeLoveTex(){
         var c = document.createElement("canvas");
         c.width = 300; c.height = 110;
@@ -3625,7 +3665,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     loveSprite.position.set(0, 68, 0);
     scene.add(loveSprite);
 
-    /* rosita orbitando, version simplificada del sprite pintado a mano del producto real */
     function makeRoseTex(){
         var size=140, c=document.createElement("canvas");
         c.width=c.height=size;
@@ -3709,7 +3748,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     };
 });
     } else if (name === "constelacion") {
-/* ============== TU CONSTELACIÓN: cielo con estrellas doradas en forma de corazon que se encienden una a una ============== */
 makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     scene.background = new THREE.Color(0x04030c);
     camera.position.set(0, 8, 205);
@@ -3717,7 +3755,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
 
     scene.add(new THREE.AmbientLight(0x223055, 1.2));
 
-    /* campo de estrellas de fondo, igual espiritu que el producto real */
     var BG_N = 170;
     var bgGeo = new THREE.BufferGeometry();
     var bgPos = new Float32Array(BG_N*3);
@@ -3731,7 +3768,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     var bgMat = new THREE.PointsMaterial({ map: dustTex, size: 3.2, color: 0xffffff, transparent:true, opacity:0.62, depthWrite:false, blending: THREE.AdditiveBlending });
     scene.add(new THREE.Points(bgGeo, bgMat));
 
-    /* lucecitas de ambiente de colores, igual que el producto real */
     var AMB_N = 90;
     var ambGeo = new THREE.BufferGeometry();
     var ambPos = new Float32Array(AMB_N*3), ambCol = new Float32Array(AMB_N*3);
@@ -3752,7 +3788,6 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     var GOLD = new THREE.Color("#ffe9a8");
     var DIM = new THREE.Color(0x8892b8);
 
-    /* forma de corazon, misma formula que la constelacion real (heart shape por defecto) */
     function heartShape(t, scale){
         var x = 16*Math.pow(Math.sin(t),3);
         var y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
