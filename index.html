@@ -1,5 +1,6 @@
 
 
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -7,7 +8,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Link Emocional | Regalos Digitales</title>
 
-<!-- Favicon (usa el mismo logo que ya tenías) -->
+<!-- Favicon (usa el mismo logo) -->
 <link rel="icon" type="image/jpeg" href="og-image.jpg">
 <link rel="apple-touch-icon" href="og-image.jpg">
 
@@ -269,6 +270,13 @@ h1 {
 }
 .card-thumb .editor-badge.also-badge:hover { background: rgba(134,215,232,0.32); }
 
+/* variante dorada para los productos PRO: mismo boton, brillo mas fuerte */
+.card-thumb .editor-badge.pro-badge {
+    background: rgba(226,192,125,0.24); border-color: rgba(226,192,125,0.65); color: #f6dfa0;
+    animation-name: badgeGlowGold;
+}
+.card-thumb .editor-badge.pro-badge:hover { background: rgba(226,192,125,0.38); }
+
 /* brillo pulsante para llamar la atencion sobre el boton de editor, en el mismo
    espiritu del degrade animado del logo (brandShift) */
 @keyframes badgeGlow {
@@ -278,6 +286,19 @@ h1 {
 @keyframes badgeGlowBlue {
     0%, 100% { box-shadow: 0 0 0 0 rgba(134,215,232,0); }
     50% { box-shadow: 0 0 10px 2px rgba(134,215,232,0.55); }
+}
+@keyframes badgeGlowGold {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(226,192,125,0); }
+    50% { box-shadow: 0 0 14px 4px rgba(226,192,125,0.75); }
+}
+
+/* franja PRO dorada en la esquina de la miniatura */
+.card-thumb .pro-ribbon {
+    position: absolute; bottom: 10px; left: 10px; z-index: 3;
+    font-size: 9.5px; font-weight: 800; letter-spacing: 0.04em; font-family: inherit;
+    background: linear-gradient(120deg, #f6dfa0, #e2c07d 55%, #f6dfa0);
+    color: #241405; padding: 3px 8px; border-radius: 999px;
+    box-shadow: 0 0 10px 2px rgba(226,192,125,0.55);
 }
 
 /* tooltip flotante UNICO y compartido, fuera de la miniatura (que tiene overflow:hidden) */
@@ -469,6 +490,66 @@ h1 {
 var WHATSAPP_NUMBER = "59178550176";
 
 var PRODUCTS = [
+    {
+        id: "rosa-cristal-pro",
+        name: "Rosa de Cristal PRO",
+        tag: "Amor",
+        dim: "3D",
+        desc: "Una rosa de partículas que abre sus pétalos dentro de una cúpula de cristal, en un jardín nocturno con luciérnagas, luna y estrellas fugaces.",
+        precioPersonalizado: 4.99,
+        precioNoPersonalizado: 3.99,
+        ordenPersonalizado: 0,
+        ordenNoPersonalizado: 0,
+        videoUrl: null,
+        isPro: true,
+        features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Figura que se transforma: capullo → rosa abierta","Cúpula de cristal","Luciérnagas ajustables","Pétalos flotando y estrellas fugaces"],
+        preview: "three-rosa-cristal-pro"
+    },
+    {
+        id: "mariposa-infinita-pro",
+        name: "Mariposa Infinita PRO",
+        tag: "Amor",
+        dim: "3D",
+        desc: "Una mariposa de partículas que aletea y se transforma en el símbolo del infinito, entre pétalos que suben, estrellas fugaces y una aurora de color.",
+        precioPersonalizado: 4.99,
+        precioNoPersonalizado: 3.99,
+        ordenPersonalizado: 0.1,
+        ordenNoPersonalizado: 0.1,
+        videoUrl: null,
+        isPro: true,
+        features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Figura que se transforma: mariposa → infinito","Velocidad y fuerza del aleteo ajustables","Pétalos flotando y estrellas fugaces"],
+        preview: "three-mariposa-infinita-pro"
+    },
+    {
+        id: "flores-amarillas-pro",
+        name: "Flores Amarillas PRO",
+        tag: "Amor",
+        dim: "3D",
+        desc: "Una galaxia dorada donde un corazón de partículas se transforma en una flor y vuelve a corazón, con fotos y frases para el Día de las Flores Amarillas.",
+        precioPersonalizado: 4.99,
+        precioNoPersonalizado: 3.99,
+        ordenPersonalizado: 0.2,
+        ordenNoPersonalizado: 0.2,
+        videoUrl: null,
+        isPro: true,
+        features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Galaxia dorada de fondo","Corazón de partículas que se transforma en flor"],
+        preview: "three-flores-amarillas-pro"
+    },
+    {
+        id: "corazon-galactico-pro",
+        name: "Corazón Galáctico PRO",
+        tag: "Amor",
+        dim: "3D",
+        desc: "Un corazón de partículas brillante flotando sobre una galaxia espiral de cuatro brazos, con fotos y frases orbitando alrededor.",
+        precioPersonalizado: 4.99,
+        precioNoPersonalizado: 3.99,
+        ordenPersonalizado: 0.3,
+        ordenNoPersonalizado: 0.3,
+        videoUrl: null,
+        isPro: true,
+        features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Galaxia espiral de fondo","Corazón de partículas brillante"],
+        preview: "three-corazon-galactico-pro"
+    },
     {
         id: "saturno",
         name: "Saturno de Recuerdos",
@@ -875,6 +956,8 @@ function buildCardHtml(p, priceShown, isFree, rightBadge, thumbId){
             '</div>';
     }
 
+    var proRibbonHtml = p.isPro ? '<span class="pro-ribbon">✨ PRO</span>' : '';
+
     return {
         thumbId: thumbId,
         html:
@@ -885,6 +968,7 @@ function buildCardHtml(p, priceShown, isFree, rightBadge, thumbId){
                 '</div>' +
                 rightBadge +
                 thumbInner +
+                proRibbonHtml +
                 introOverlayHtml +
             '</div>' +
             '<div class="card-body">' +
@@ -901,10 +985,11 @@ function buildCardHtml(p, priceShown, isFree, rightBadge, thumbId){
 }
 
 function rightBadgeFor(p){
+    var proCls = p.isPro ? ' pro-badge' : '';
     if (catalogMode === 'personalizado') {
-        return '<button type="button" class="editor-badge" data-features="' + p.features.join(';') + '">✎ Con editor</button>';
+        return '<button type="button" class="editor-badge' + proCls + '" data-features="' + p.features.join(';') + '">✎ Con editor</button>';
     } else if (p.precioPersonalizado) {
-        return '<button type="button" class="editor-badge also-badge" data-features="' + p.features.join(';') + '" data-also-price="$ ' + p.precioPersonalizado.toFixed(2) + '">🎨 Hay editor</button>';
+        return '<button type="button" class="editor-badge also-badge' + proCls + '" data-features="' + p.features.join(';') + '" data-also-price="$ ' + p.precioPersonalizado.toFixed(2) + '">🎨 Hay editor</button>';
     }
     return '';
 }
@@ -3789,6 +3874,301 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
             });
 
             words.update(t, clamp01((lt-WORDS_START)/(WORDS_END-WORDS_START)));
+        }
+    };
+});
+    } else if (name === "rosa-cristal-pro") {
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+    scene.background = new THREE.Color(0x0c0418);
+    camera.position.set(0, 10, 165);
+    camera.lookAt(0, 10, 0);
+    scene.add(new THREE.AmbientLight(0x3a1a2c, 1.2));
+    var rim = new THREE.PointLight(0xe0245e, 1.5, 600);
+    rim.position.set(40, 60, 70);
+    scene.add(rim);
+
+    function curveFor(kind, t){
+        if (kind === "capullo"){
+            var r = 10 * (1 + 0.20*Math.cos(6*t));
+            return { x: r*Math.cos(t), y: r*Math.sin(t) };
+        }
+        var r2 = (0.55 + 0.45*Math.cos(5*t)) * 58;
+        r2 *= (1 + 0.09*Math.cos(15*t));
+        return { x: r2*Math.cos(t), y: r2*Math.sin(t) };
+    }
+    var N = 1500;
+    var seeds = new Float32Array(N);
+    for (var i=0;i<N;i++) seeds[i] = Math.random();
+    function buildShape(kind){
+        var arr = new Float32Array(N*3);
+        for (var i=0;i<N;i++){
+            var t = seeds[i]*Math.PI*2;
+            var p0 = curveFor(kind, t), p1 = curveFor(kind, t+0.01);
+            var tx = p1.x-p0.x, ty = p1.y-p0.y, len = Math.hypot(tx,ty)||1;
+            var nx = -ty/len, ny = tx/len;
+            var off = (seeds[(i+7)%N]-0.5) * 4.5;
+            arr[i*3]   = p0.x + nx*off;
+            arr[i*3+1] = p0.y + ny*off;
+            arr[i*3+2] = (seeds[(i+13)%N]-0.5) * 7;
+        }
+        return arr;
+    }
+    var shapeA = buildShape("capullo"), shapeB = buildShape("rosaAbierta");
+    var live = new Float32Array(shapeA);
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(live, 3));
+    var mat = new THREE.PointsMaterial({ color: 0xe0245e, size: 2.3, map: dustTex, transparent: true, depthWrite: false, opacity: 0.95, blending: THREE.AdditiveBlending });
+    var rose = new THREE.Points(geo, mat);
+    scene.add(rose);
+
+    var dome = new THREE.Mesh(new THREE.SphereGeometry(78, 24, 16), new THREE.MeshBasicMaterial({ color: 0xffe6ef, wireframe: true, transparent: true, opacity: 0.12 }));
+    scene.add(dome);
+
+    var FN = 26;
+    var fireGeo = new THREE.BufferGeometry();
+    var firePos = new Float32Array(FN*3);
+    var fireData = [];
+    for (var f=0; f<FN; f++){
+        var ang = Math.random()*Math.PI*2, rad = 40 + Math.random()*70;
+        firePos[f*3] = Math.cos(ang)*rad; firePos[f*3+1] = -40 + Math.random()*90; firePos[f*3+2] = Math.sin(ang)*rad;
+        fireData.push({ ang: ang, rad: rad, vy: 4 + Math.random()*6 });
+    }
+    fireGeo.setAttribute("position", new THREE.BufferAttribute(firePos, 3));
+    var fireMat = new THREE.PointsMaterial({ color: 0xffd27a, size: 2, map: dustTex, transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending });
+    var fireflies = new THREE.Points(fireGeo, fireMat);
+    scene.add(fireflies);
+
+    var words = makeOrbitWords(["ROSA","CRISTAL","ETERNA","PARA TI"], ["#e0245e","#ff7fa6","#ffd27a","#c86bff"], 105, 15, 30, 9);
+    scene.add(words.group);
+
+    var HOLD = 1.6, MORPH = 1.3, CYCLE = (HOLD+MORPH)*2;
+    return {
+        update: function(t){
+            var p = t % CYCLE, mix;
+            if (p < HOLD) mix = 0;
+            else if (p < HOLD+MORPH) mix = easeInOutCubic((p-HOLD)/MORPH);
+            else if (p < HOLD*2+MORPH) mix = 1;
+            else mix = 1 - easeInOutCubic((p-HOLD*2-MORPH)/MORPH);
+            var arr = geo.attributes.position.array;
+            for (var i=0;i<N;i++){
+                var ix = i*3;
+                arr[ix]   = shapeA[ix]   + (shapeB[ix]   - shapeA[ix])*mix;
+                arr[ix+1] = shapeA[ix+1] + (shapeB[ix+1] - shapeA[ix+1])*mix;
+                arr[ix+2] = shapeA[ix+2] + (shapeB[ix+2] - shapeA[ix+2])*mix;
+            }
+            geo.attributes.position.needsUpdate = true;
+            rose.rotation.y += 0.006;
+            dome.rotation.y += 0.003;
+            var fp = fireGeo.attributes.position.array;
+            for (var f=0; f<FN; f++){
+                var d = fireData[f]; var ix2 = f*3;
+                fp[ix2+1] += d.vy*0.016;
+                if (fp[ix2+1] > 55){ fp[ix2+1] = -40; }
+                d.ang += 0.004;
+                fp[ix2] = Math.cos(d.ang)*d.rad; fp[ix2+2] = Math.sin(d.ang)*d.rad;
+            }
+            fireGeo.attributes.position.needsUpdate = true;
+            words.update(t, 0.9);
+        }
+    };
+});
+    } else if (name === "mariposa-infinita-pro") {
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+    scene.background = new THREE.Color(0x120a22);
+    camera.position.set(0, 6, 155);
+    camera.lookAt(0, 6, 0);
+    scene.add(new THREE.AmbientLight(0x2a1a44, 1.3));
+    var rim = new THREE.PointLight(0xc86bff, 1.5, 600);
+    rim.position.set(-40, 60, 70);
+    scene.add(rim);
+
+    function curveFor(kind, t){
+        if (kind === "mariposa"){
+            var r = Math.exp(Math.cos(t)) - 2*Math.cos(4*t) - Math.pow(Math.sin(t/12), 5);
+            return { x: Math.sin(t)*r*7.2, y: Math.cos(t)*r*7.2 - 4 };
+        }
+        var d = 1 + Math.sin(t)*Math.sin(t);
+        return { x: (Math.cos(t)/d)*40, y: (Math.sin(t)*Math.cos(t)/d)*40 };
+    }
+    var N = 1500;
+    var seeds = new Float32Array(N);
+    for (var i=0;i<N;i++) seeds[i] = Math.random();
+    function buildShape(kind, tmax){
+        var arr = new Float32Array(N*3);
+        for (var i=0;i<N;i++){
+            var t = seeds[i]*tmax;
+            var p0 = curveFor(kind, t), p1 = curveFor(kind, t+0.01);
+            var tx = p1.x-p0.x, ty = p1.y-p0.y, len = Math.hypot(tx,ty)||1;
+            var nx = -ty/len, ny = tx/len;
+            var off = (seeds[(i+7)%N]-0.5) * 3.6;
+            arr[i*3]   = p0.x + nx*off;
+            arr[i*3+1] = p0.y + ny*off;
+            arr[i*3+2] = (seeds[(i+13)%N]-0.5) * 6;
+        }
+        return arr;
+    }
+    var shapeA = buildShape("mariposa", 12*Math.PI);
+    var shapeB = buildShape("infinito", Math.PI*2);
+    var live = new Float32Array(shapeA);
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(live, 3));
+    var mat = new THREE.PointsMaterial({ color: 0xc86bff, size: 2.1, map: dustTex, transparent: true, depthWrite: false, opacity: 0.95, blending: THREE.AdditiveBlending });
+    var fig = new THREE.Points(geo, mat);
+    scene.add(fig);
+
+    var words = makeOrbitWords(["MARIPOSA","INFINITO","POR SIEMPRE","TE AMO"], ["#c86bff","#ff8fd1","#8fd7ff","#ffd27a"], 100, 10, 30, 9);
+    scene.add(words.group);
+
+    var HOLD = 1.6, MORPH = 1.3, CYCLE = (HOLD+MORPH)*2;
+    return {
+        update: function(t){
+            var p = t % CYCLE, mix;
+            if (p < HOLD) mix = 0;
+            else if (p < HOLD+MORPH) mix = easeInOutCubic((p-HOLD)/MORPH);
+            else if (p < HOLD*2+MORPH) mix = 1;
+            else mix = 1 - easeInOutCubic((p-HOLD*2-MORPH)/MORPH);
+            var arr = geo.attributes.position.array;
+            for (var i=0;i<N;i++){
+                var ix = i*3;
+                arr[ix]   = shapeA[ix]   + (shapeB[ix]   - shapeA[ix])*mix;
+                arr[ix+1] = shapeA[ix+1] + (shapeB[ix+1] - shapeA[ix+1])*mix;
+                arr[ix+2] = shapeA[ix+2] + (shapeB[ix+2] - shapeA[ix+2])*mix;
+            }
+            geo.attributes.position.needsUpdate = true;
+            var flap = 1 + 0.16*Math.sin(t*3.2);
+            fig.scale.set(flap, 1, 1);
+            fig.rotation.y += 0.005;
+            words.update(t, 0.9);
+        }
+    };
+});
+    } else if (name === "flores-amarillas-pro") {
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+    scene.background = new THREE.Color(0x140f02);
+    camera.position.set(0, 8, 160);
+    camera.lookAt(0, 8, 0);
+    scene.add(new THREE.AmbientLight(0x443311, 1.3));
+    var rim = new THREE.PointLight(0xffc93d, 1.6, 600);
+    rim.position.set(40, 60, 70);
+    scene.add(rim);
+
+    function heartCurve(t){
+        var x = 16*Math.pow(Math.sin(t), 3);
+        var y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+        return { x: x, y: y };
+    }
+    function flowerCurve(t){
+        var r = 16*Math.cos(4*t);
+        return { x: r*Math.cos(t), y: r*Math.sin(t) };
+    }
+    var N = 1500;
+    var seeds = new Float32Array(N);
+    for (var i=0;i<N;i++) seeds[i] = Math.random();
+    function buildShape(curveFn){
+        var arr = new Float32Array(N*3);
+        for (var i=0;i<N;i++){
+            var t = seeds[i]*Math.PI*2;
+            var p0 = curveFn(t), p1 = curveFn(t+0.005);
+            var tx = p1.x-p0.x, ty = p1.y-p0.y, len = Math.hypot(tx,ty)||1;
+            var nx = -ty/len, ny = tx/len;
+            var off = (seeds[(i+7)%N]-0.5) * 3.4;
+            arr[i*3]   = (p0.x + nx*off) * 3.2;
+            arr[i*3+1] = (p0.y + ny*off + 6) * 3.2;
+            arr[i*3+2] = (seeds[(i+13)%N]-0.5) * 8;
+        }
+        return arr;
+    }
+    var shapeA = buildShape(heartCurve), shapeB = buildShape(flowerCurve);
+    var live = new Float32Array(shapeA);
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(live, 3));
+    var mat = new THREE.PointsMaterial({ color: 0xffc93d, size: 1.9, map: dustTex, transparent: true, depthWrite: false, opacity: 0.95, blending: THREE.AdditiveBlending });
+    var fig = new THREE.Points(geo, mat);
+    scene.add(fig);
+
+    var words = makeOrbitWords(["FLORES","AMARILLAS","GRACIAS","PARA TI"], ["#ffc93d","#ffe08a","#ff9f6b","#fff4c9"], 100, 12, 30, 9);
+    scene.add(words.group);
+
+    var HOLD = 1.6, MORPH = 1.3, CYCLE = (HOLD+MORPH)*2;
+    return {
+        update: function(t){
+            var p = t % CYCLE, mix;
+            if (p < HOLD) mix = 0;
+            else if (p < HOLD+MORPH) mix = easeInOutCubic((p-HOLD)/MORPH);
+            else if (p < HOLD*2+MORPH) mix = 1;
+            else mix = 1 - easeInOutCubic((p-HOLD*2-MORPH)/MORPH);
+            var arr = geo.attributes.position.array;
+            for (var i=0;i<N;i++){
+                var ix = i*3;
+                arr[ix]   = shapeA[ix]   + (shapeB[ix]   - shapeA[ix])*mix;
+                arr[ix+1] = shapeA[ix+1] + (shapeB[ix+1] - shapeA[ix+1])*mix;
+                arr[ix+2] = shapeA[ix+2] + (shapeB[ix+2] - shapeA[ix+2])*mix;
+            }
+            geo.attributes.position.needsUpdate = true;
+            fig.rotation.y += 0.006;
+            words.update(t, 0.9);
+        }
+    };
+});
+    } else if (name === "corazon-galactico-pro") {
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+    scene.background = new THREE.Color(0x0d0212);
+    camera.position.set(0, 20, 190);
+    camera.lookAt(0, 5, 0);
+    scene.add(new THREE.AmbientLight(0x3a0a2c, 1.3));
+    var rim = new THREE.PointLight(0xff3399, 1.6, 700);
+    rim.position.set(40, 80, 90);
+    scene.add(rim);
+
+    function heartCurve(t){
+        var x = 16*Math.pow(Math.sin(t), 3);
+        var y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+        return { x: x, y: y };
+    }
+    var HN = 1400;
+    var heartPos = new Float32Array(HN*3);
+    for (var i=0;i<HN;i++){
+        var t = Math.random()*Math.PI*2;
+        var p0 = heartCurve(t), p1 = heartCurve(t+0.005);
+        var tx = p1.x-p0.x, ty = p1.y-p0.y, len = Math.hypot(tx,ty)||1;
+        var nx = -ty/len, ny = tx/len;
+        var off = (Math.random()-0.5) * 3.4;
+        heartPos[i*3]   = (p0.x + nx*off) * 3.2;
+        heartPos[i*3+1] = (p0.y + ny*off + 6) * 3.2;
+        heartPos[i*3+2] = (Math.random()-0.5) * 8;
+    }
+    var heartGeo = new THREE.BufferGeometry();
+    heartGeo.setAttribute("position", new THREE.BufferAttribute(heartPos, 3));
+    var heartMat = new THREE.PointsMaterial({ color: 0xff3399, size: 1.9, map: dustTex, transparent: true, depthWrite: false, opacity: 0.95, blending: THREE.AdditiveBlending });
+    var heart = new THREE.Points(heartGeo, heartMat);
+    scene.add(heart);
+
+    var arms = 4, SN = 1400;
+    var spiralPos = new Float32Array(SN*3);
+    for (var i=0;i<SN;i++){
+        var r = Math.random()*90;
+        var armIndex = Math.floor(Math.random()*arms);
+        var theta = (armIndex*Math.PI*2/arms) + r*0.045 + (Math.random()*0.4-0.2);
+        spiralPos[i*3]   = Math.cos(theta)*r;
+        spiralPos[i*3+1] = -14 - (r*0.16) + (Math.random()*3-1.5);
+        spiralPos[i*3+2] = Math.sin(theta)*r;
+    }
+    var spiralGeo = new THREE.BufferGeometry();
+    spiralGeo.setAttribute("position", new THREE.BufferAttribute(spiralPos, 3));
+    var spiralMat = new THREE.PointsMaterial({ color: 0xff3399, size: 1.5, map: dustTex, transparent: true, depthWrite: false, opacity: 0.85, blending: THREE.AdditiveBlending });
+    var spiral = new THREE.Points(spiralGeo, spiralMat);
+    scene.add(spiral);
+
+    var words = makeOrbitWords(["GALAXIA","CORAZÓN","PARA TI","TE AMO"], ["#ff3399","#ff8fd1","#a06bff","#ffd27a"], 105, 20, 30, 9);
+    scene.add(words.group);
+
+    return {
+        update: function(t){
+            heart.rotation.y += 0.005;
+            var beat = 1 + 0.05*Math.sin(t*2.4);
+            heart.scale.set(beat, beat, beat);
+            spiral.rotation.y += 0.01;
+            words.update(t, 0.9);
         }
     };
 });
