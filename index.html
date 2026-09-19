@@ -1,6 +1,3 @@
-
-
-
 <!doctype html>
 <html lang="es">
 <head>
@@ -201,10 +198,15 @@ h1 {
 .cat-note { max-width: 420px; margin: 14px auto 0; padding: 0 20px; font-size: 12px; color: var(--muted); text-align: center; line-height: 1.5; }
 
 /* aviso del catalogo: aclara que la vista previa es solo una muestra chica
-   y que el video muestra el producto real completo. Texto discreto, sin caja. */
+   y que el video muestra el producto real completo. Con el mismo degradado
+   animado de la marca para llamar la atencion. */
 .preview-disclaimer {
     max-width: 420px; margin: 10px auto 0; padding: 0 20px;
-    text-align: center; font-size: 11.5px; color: var(--muted-2); line-height: 1.5;
+    text-align: center; font-size: 12.5px; line-height: 1.5; font-weight: 800;
+    background-image: var(--grad-brand);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: brandShift 6s ease-in-out infinite;
 }
 
 .section-heading {
@@ -401,6 +403,7 @@ h1 {
         <div class="avatar"><img src="logo.jpg" alt="Link Emocional"></div>
         <h1>Link Emocional</h1>
         <p class="subtitle">Dedicatorias animadas en 3D y 2D para esa personita especial 🎁</p>
+        <p class="subtitle" style="margin-top:-14px; font-weight:800; background-image: var(--grad-brand); background-size: 200% 200%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: brandShift 6s ease-in-out infinite;">💫 Regalos digitales de por vida — quedan guardados para siempre</p>
 
         <div class="socials">
             <a href="https://www.tiktok.com/@linkemocional1" target="_blank" title="TikTok">
@@ -1010,6 +1013,14 @@ function appendGridSection(container, list){
     container.appendChild(grid);
 }
 
+function shuffleArray(arr){
+    for (var i = arr.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+}
+
 function renderGrid(){
     var container = document.getElementById('grid');
     container.innerHTML = '';
@@ -1017,10 +1028,17 @@ function renderGrid(){
     var list;
     if (catalogMode === 'personalizado') {
         list = PRODUCTS.filter(function(p){ return p.precioPersonalizado != null; });
-        list.sort(function(a,b){ return (a.ordenPersonalizado||99) - (b.ordenPersonalizado||99); });
+        list.sort(function(a,b){
+            var av = (a.ordenPersonalizado === undefined || a.ordenPersonalizado === null) ? 99 : a.ordenPersonalizado;
+            var bv = (b.ordenPersonalizado === undefined || b.ordenPersonalizado === null) ? 99 : b.ordenPersonalizado;
+            return av - bv;
+        });
     } else {
         var base = PRODUCTS.filter(function(p){ return p.precioNoPersonalizado != null; });
-        base.sort(function(a,b){ return (a.ordenNoPersonalizado||99) - (b.ordenNoPersonalizado||99); });
+        /* en "sin editor" no fijamos el orden: se mezcla cada vez que se abre
+           la vista, asi ningun producto (ni siquiera los PRO) se queda pegado
+           siempre arriba quitandole protagonismo al resto. */
+        shuffleArray(base);
         if (subTab === 'sinEditor') {
             list = base.filter(function(p){ return p.precioNoPersonalizado > 0; });
         } else if (subTab === 'gratis') {
@@ -3938,7 +3956,28 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     var fireflies = new THREE.Points(fireGeo, fireMat);
     scene.add(fireflies);
 
-    var words = makeOrbitWords(["ROSA","CRISTAL","ETERNA","PARA TI"], ["#e0245e","#ff7fa6","#ffd27a","#c86bff"], 105, 15, 30, 9);
+    var SN2 = 190;
+    var starGeo = new THREE.BufferGeometry();
+    var starPos = new Float32Array(SN2*3);
+    var starPhase = new Float32Array(SN2);
+    for (var s=0; s<SN2; s++){
+        var rad = 120 + Math.random()*190;
+        var th = Math.random()*Math.PI*2, ph = Math.acos(Math.random()*2-1);
+        starPos[s*3]   = rad*Math.sin(ph)*Math.cos(th);
+        starPos[s*3+1] = rad*Math.cos(ph)*0.62;
+        starPos[s*3+2] = rad*Math.sin(ph)*Math.sin(th);
+        starPhase[s] = Math.random()*Math.PI*2;
+    }
+    starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
+    var starMat = new THREE.PointsMaterial({ color: 0xffd6e6, size: 1.6, map: dustTex, transparent: true, opacity: 0.6, depthWrite: false, blending: THREE.AdditiveBlending });
+    var stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
+
+    var words = makeOrbitWords(
+        ["ROSA","CRISTAL","ETERNA","PARA TI","NUNCA SE MARCHITA","SIEMPRE CONMIGO","MI JARDÍN","EDICIÓN PRO"],
+        ["#e0245e","#ff7fa6","#ffd27a","#c86bff","#ffe6ef","#f6dfa0","#ff9fc0","#e2c07d"],
+        108, 16, 30, 9
+    );
     scene.add(words.group);
 
     var HOLD = 1.6, MORPH = 1.3, CYCLE = (HOLD+MORPH)*2;
@@ -3959,6 +3998,9 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
             geo.attributes.position.needsUpdate = true;
             rose.rotation.y += 0.006;
             dome.rotation.y += 0.003;
+            stars.rotation.y += 0.0012;
+            var sp = starGeo.attributes.position;
+            starMat.opacity = 0.45 + 0.25*Math.sin(t*1.1);
             var fp = fireGeo.attributes.position.array;
             for (var f=0; f<FN; f++){
                 var d = fireData[f]; var ix2 = f*3;
@@ -4016,7 +4058,40 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     var fig = new THREE.Points(geo, mat);
     scene.add(fig);
 
-    var words = makeOrbitWords(["MARIPOSA","INFINITO","POR SIEMPRE","TE AMO"], ["#c86bff","#ff8fd1","#8fd7ff","#ffd27a"], 100, 10, 30, 9);
+    var SN2 = 190;
+    var starGeo = new THREE.BufferGeometry();
+    var starPos = new Float32Array(SN2*3);
+    for (var s=0; s<SN2; s++){
+        var rad = 110 + Math.random()*180;
+        var th = Math.random()*Math.PI*2, ph = Math.acos(Math.random()*2-1);
+        starPos[s*3]   = rad*Math.sin(ph)*Math.cos(th);
+        starPos[s*3+1] = rad*Math.cos(ph)*0.62;
+        starPos[s*3+2] = rad*Math.sin(ph)*Math.sin(th);
+    }
+    starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
+    var starMat = new THREE.PointsMaterial({ color: 0xd8bbff, size: 1.6, map: dustTex, transparent: true, opacity: 0.6, depthWrite: false, blending: THREE.AdditiveBlending });
+    var stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
+
+    var PN = 22;
+    var petGeo = new THREE.BufferGeometry();
+    var petPos = new Float32Array(PN*3);
+    var petData = [];
+    for (var q=0; q<PN; q++){
+        var pang = Math.random()*Math.PI*2, prad = 30 + Math.random()*70;
+        petPos[q*3] = Math.cos(pang)*prad; petPos[q*3+1] = -45 + Math.random()*95; petPos[q*3+2] = Math.sin(pang)*prad;
+        petData.push({ ang: pang, rad: prad, vy: 3 + Math.random()*5 });
+    }
+    petGeo.setAttribute("position", new THREE.BufferAttribute(petPos, 3));
+    var petMat = new THREE.PointsMaterial({ color: 0xff9fd6, size: 2.1, map: dustTex, transparent: true, opacity: 0.75, depthWrite: false, blending: THREE.AdditiveBlending });
+    var petals = new THREE.Points(petGeo, petMat);
+    scene.add(petals);
+
+    var words = makeOrbitWords(
+        ["MARIPOSA","INFINITO","POR SIEMPRE","TE AMO","VUELA CONMIGO","ALAS DE LUZ","NUESTRA HISTORIA","EDICIÓN PRO"],
+        ["#c86bff","#ff8fd1","#8fd7ff","#ffd27a","#d8bbff","#ff9fd6","#c9f0ff","#e2c07d"],
+        104, 11, 30, 9
+    );
     scene.add(words.group);
 
     var HOLD = 1.6, MORPH = 1.3, CYCLE = (HOLD+MORPH)*2;
@@ -4038,6 +4113,17 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
             var flap = 1 + 0.16*Math.sin(t*3.2);
             fig.scale.set(flap, 1, 1);
             fig.rotation.y += 0.005;
+            stars.rotation.y += 0.0012;
+            starMat.opacity = 0.45 + 0.25*Math.sin(t*1.1);
+            var pp = petGeo.attributes.position.array;
+            for (var q=0; q<PN; q++){
+                var d = petData[q]; var ix3 = q*3;
+                pp[ix3+1] += d.vy*0.016;
+                if (pp[ix3+1] > 55){ pp[ix3+1] = -45; }
+                d.ang += 0.003;
+                pp[ix3] = Math.cos(d.ang)*d.rad; pp[ix3+2] = Math.sin(d.ang)*d.rad;
+            }
+            petGeo.attributes.position.needsUpdate = true;
             words.update(t, 0.9);
         }
     };
@@ -4086,7 +4172,26 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     var fig = new THREE.Points(geo, mat);
     scene.add(fig);
 
-    var words = makeOrbitWords(["FLORES","AMARILLAS","GRACIAS","PARA TI"], ["#ffc93d","#ffe08a","#ff9f6b","#fff4c9"], 100, 12, 30, 9);
+    var SN2 = 200;
+    var starGeo = new THREE.BufferGeometry();
+    var starPos = new Float32Array(SN2*3);
+    for (var s=0; s<SN2; s++){
+        var rad = 120 + Math.random()*190;
+        var th = Math.random()*Math.PI*2, ph = Math.acos(Math.random()*2-1);
+        starPos[s*3]   = rad*Math.sin(ph)*Math.cos(th);
+        starPos[s*3+1] = rad*Math.cos(ph)*0.6;
+        starPos[s*3+2] = rad*Math.sin(ph)*Math.sin(th);
+    }
+    starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
+    var starMat = new THREE.PointsMaterial({ color: 0xffe9b0, size: 1.6, map: dustTex, transparent: true, opacity: 0.6, depthWrite: false, blending: THREE.AdditiveBlending });
+    var stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
+
+    var words = makeOrbitWords(
+        ["FLORES","AMARILLAS","GRACIAS","PARA TI","MI SOL","AMISTAD ETERNA","FELIZ DÍA","EDICIÓN PRO"],
+        ["#ffc93d","#ffe08a","#ff9f6b","#fff4c9","#ffd27a","#ffb454","#fff9e0","#e2c07d"],
+        108, 13, 30, 9
+    );
     scene.add(words.group);
 
     var HOLD = 1.6, MORPH = 1.3, CYCLE = (HOLD+MORPH)*2;
@@ -4106,6 +4211,8 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
             }
             geo.attributes.position.needsUpdate = true;
             fig.rotation.y += 0.006;
+            stars.rotation.y += 0.0012;
+            starMat.opacity = 0.45 + 0.25*Math.sin(t*1.1);
             words.update(t, 0.9);
         }
     };
@@ -4159,7 +4266,26 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
     var spiral = new THREE.Points(spiralGeo, spiralMat);
     scene.add(spiral);
 
-    var words = makeOrbitWords(["GALAXIA","CORAZÓN","PARA TI","TE AMO"], ["#ff3399","#ff8fd1","#a06bff","#ffd27a"], 105, 20, 30, 9);
+    var SN2 = 220;
+    var starGeo = new THREE.BufferGeometry();
+    var starPos = new Float32Array(SN2*3);
+    for (var s=0; s<SN2; s++){
+        var rad = 130 + Math.random()*220;
+        var th = Math.random()*Math.PI*2, ph = Math.acos(Math.random()*2-1);
+        starPos[s*3]   = rad*Math.sin(ph)*Math.cos(th);
+        starPos[s*3+1] = rad*Math.cos(ph)*0.55;
+        starPos[s*3+2] = rad*Math.sin(ph)*Math.sin(th);
+    }
+    starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
+    var starMat = new THREE.PointsMaterial({ color: 0xffd6ec, size: 1.6, map: dustTex, transparent: true, opacity: 0.6, depthWrite: false, blending: THREE.AdditiveBlending });
+    var stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
+
+    var words = makeOrbitWords(
+        ["GALAXIA","CORAZÓN","PARA TI","TE AMO","ERES MI UNIVERSO","LATIDO ETERNO","MI CONSTELACIÓN","EDICIÓN PRO"],
+        ["#ff3399","#ff8fd1","#a06bff","#ffd27a","#ff9fd6","#c9a0ff","#ffe9b0","#e2c07d"],
+        112, 22, 30, 9
+    );
     scene.add(words.group);
 
     return {
@@ -4168,6 +4294,8 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
             var beat = 1 + 0.05*Math.sin(t*2.4);
             heart.scale.set(beat, beat, beat);
             spiral.rotation.y += 0.01;
+            stars.rotation.y += 0.001;
+            starMat.opacity = 0.45 + 0.25*Math.sin(t*1.1);
             words.update(t, 0.9);
         }
     };
@@ -4271,6 +4399,29 @@ makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
 window.startPreview = startPreview;
 })();
 </script>
+<script>
+// ============ PROTECCION BASICA CONTRA COPIA ============
+// Nota real: esto NO oculta el codigo de verdad — cualquier navegador puede
+// leer el HTML/CSS/JS que ya se descargo para mostrar la pagina, y alguien
+// con conocimientos tecnicos siempre puede saltarse estos bloqueos. Lo unico
+// que hace es quitar los atajos mas comunes (clic derecho, F12, etc.) para
+// que un cliente curioso no se tope con el codigo por accidente.
+(function(){
+    document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+    document.addEventListener('keydown', function(e){
+        var k = e.key ? e.key.toUpperCase() : '';
+        if (k === 'F12') { e.preventDefault(); return; }
+        if (e.ctrlKey && e.shiftKey && (k === 'I' || k === 'J' || k === 'C')) { e.preventDefault(); return; }
+        if (e.ctrlKey && (k === 'U' || k === 'S')) { e.preventDefault(); return; }
+        if (e.metaKey && e.altKey && (k === 'I' || k === 'J' || k === 'C')) { e.preventDefault(); return; }
+    });
+    document.addEventListener('dragstart', function(e){ e.preventDefault(); });
+    document.documentElement.style.webkitUserSelect = 'none';
+    document.documentElement.style.userSelect = 'none';
+    var exceptStyle = document.createElement('style');
+    exceptStyle.textContent = 'input, textarea, [contenteditable="true"] { -webkit-user-select: text; user-select: text; }';
+    document.head.appendChild(exceptStyle);
+})();
+</script>
 </body>
 </html>
-s
