@@ -482,7 +482,7 @@ precioPersonalizado: 3.99,
 precioNoPersonalizado: 2.99,
 ordenPersonalizado: 0.1,
 ordenNoPersonalizado: 0.1,
-videoUrl: null,
+videoUrl: "https://www.tiktok.com/@linkemocional1/video/7688203058559356181?is_from_webapp=1&sender_device=pc&web_id=7680607510172780049",
 isPro: true,
 features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Figura que se transforma: mariposa → infinito","Velocidad y fuerza del aleteo ajustables","Pétalos flotando y estrellas fugaces"],
 preview: "three-mariposa-infinita-pro"
@@ -531,6 +531,21 @@ videoUrl: "https://www.tiktok.com/@linkemocional1/video/7687275360957779221",
 isPro: true,
 features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Figura que se transforma: girasol → corazón (9 figuras a elegir)","Corona de flores","Luciérnagas ajustables","Polen dorado y estrellas fugaces","Carta con mensaje personalizado"],
 preview: "three-girasol-eterno-pro"
+},
+{
+    id: "corazon-cristal-pro",
+    name: "Corazón de Cristal PRO",
+    tag: "Amor",
+    dim: "3D",
+    desc: "Una gema de corazón tallada envuelta en una cinta de luz en espiral, con gemas orbitando, confeti de cristal cayendo y una figura de partículas que pasa de flor a estrella, entre tus frases.",
+    precioPersonalizado: 3.99,
+    precioNoPersonalizado: 2.99,
+    ordenPersonalizado: 0.45,
+    ordenNoPersonalizado: 0.45,
+    videoUrl: "https://www.tiktok.com/@linkemocional1/video/7688207773812657428?is_from_webapp=1&sender_device=pc&web_id=7680607510172780049",
+    isPro: true,
+    features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Figura que se transforma: flor → estrella (9 figuras a elegir)","Gema de corazón tallada con cinta de luz","Gemas orbitando ajustables","Confeti de cristal y estrellas fugaces","Carta con mensaje personalizado"],
+    preview: "three-corazon-cristal-pro"
 },
 {
 id: "saturno",
@@ -780,7 +795,7 @@ precioPersonalizado: 2.99,
 precioNoPersonalizado: 1.99,
 ordenPersonalizado: 1,
 ordenNoPersonalizado: 11,
-videoUrl: null,
+videoUrl: "https://www.tiktok.com/@linkemocional1/video/7687861562094259476?is_from_webapp=1&sender_device=pc&web_id=7680607510172780049",
 features: ["Color principal editable","Forma de las ráfagas: corazón o estrella","6 tipografías para el texto y las palabras","Texto de amor central editable","Palabras orbitando personalizables","Hasta 6 fotos flotando","Música de fondo opcional (mp3)"],
 preview: "three-galaxia-rosa"
 },
@@ -2758,7 +2773,357 @@ renderer.render(scene, camera);
 loopTick();
 }
 function startThreePreview(name, canvasId){
-if (name === "saturno") {
+if (name === "corazon-cristal-pro") {
+/* Vista previa del Corazon de Cristal PRO: la misma escena del producto (fondo
+   de terciopelo tipo joyero, figura de particulas flor<->estrella, gema de
+   corazon tallada, cinta de luz en espiral, gemas orbitando, confeti de
+   cristal cayendo, estrellas fugaces y frases en Dancing Script), en miniatura. */
+makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
+var HEX = "#ff3d78";
+var FRASES = ["Mi joya más preciada 💎", "Nada vale más que vos", "Te guardo como un tesoro", "Mi para siempre", "Contigo todo brilla más", "Eres irremplazable", "Mi lugar favorito eres tú", "Cada día te elijo", "Gracias por quedarte", "Mi tesoro más grande", "Nunca dejes de brillar", "Mi mejor hallazgo", "Contigo el tiempo se detiene", "Mi corazón es tuyo", "Eres mi milagro diario", "Te cuido como cristal fino", "Mi alma te reconoce", "Un amor sin fecha de vencimiento", "Contigo hasta lo simple es precioso", "Para toda la vida 💎"];
+
+function hx(h){ h = h.replace("#",""); return { r: parseInt(h.substr(0,2),16), g: parseInt(h.substr(2,2),16), b: parseInt(h.substr(4,2),16) }; }
+function darkStr(h,a){ var c = hx(h); return "rgb("+Math.round(c.r*(1-a))+","+Math.round(c.g*(1-a))+","+Math.round(c.b*(1-a))+")"; }
+
+var ROT_X = 0.18, DIST = 250;
+camera.fov = 58;
+camera.position.set(0, DIST*Math.sin(ROT_X), DIST*Math.cos(ROT_X));
+camera.lookAt(0, 0, 0);
+
+function makeDot(){
+    var s = 64, c = document.createElement("canvas"); c.width = c.height = s;
+    var x = c.getContext("2d"), g = x.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
+    g.addColorStop(0,"rgba(255,255,255,1)"); g.addColorStop(0.55,"rgba(255,255,255,1)");
+    g.addColorStop(0.85,"rgba(255,255,255,0.55)"); g.addColorStop(1,"rgba(255,255,255,0)");
+    x.fillStyle = g; x.fillRect(0,0,s,s);
+    return new THREE.CanvasTexture(c);
+}
+var dot = makeDot();
+
+function makeVelvet(size, hex){
+    var c = document.createElement("canvas"); c.width = c.height = size;
+    var x = c.getContext("2d");
+    x.fillStyle = "#05030a"; x.fillRect(0,0,size,size);
+    var base = x.createRadialGradient(size*0.5,size*0.46,0,size*0.5,size*0.46,size*0.62);
+    base.addColorStop(0, darkStr(hex,0.55).replace("rgb(","rgba(").replace(")",",0.55)"));
+    base.addColorStop(0.55, darkStr("#2a0e2a",0.25).replace("rgb(","rgba(").replace(")",",0.6)"));
+    base.addColorStop(1,"rgba(0,0,0,0.92)");
+    x.fillStyle = base; x.fillRect(0,0,size,size);
+    for (var i=0;i<260;i++){
+        x.fillStyle = "rgba(255,255,255,"+(Math.random()*0.5)+")";
+        var s = Math.random()*1.5;
+        x.fillRect(Math.random()*size, Math.random()*size, s, s);
+    }
+    var vig = x.createRadialGradient(size*0.5,size*0.5,size*0.35,size*0.5,size*0.5,size*0.72);
+    vig.addColorStop(0,"rgba(0,0,0,0)"); vig.addColorStop(1,"rgba(0,0,0,0.55)");
+    x.fillStyle = vig; x.fillRect(0,0,size,size);
+    return new THREE.CanvasTexture(c);
+}
+scene.background = makeVelvet(512, HEX);
+
+var STN = 900, stPos = new Float32Array(STN*3);
+for (var si=0; si<STN; si++){
+    var sr0 = 700 + Math.random()*900, sth = Math.random()*Math.PI*2, sph = Math.acos(2*Math.random()-1);
+    stPos[si*3] = sr0*Math.sin(sph)*Math.cos(sth); stPos[si*3+1] = sr0*Math.cos(sph); stPos[si*3+2] = sr0*Math.sin(sph)*Math.sin(sth);
+}
+var stGeo = new THREE.BufferGeometry(); stGeo.setAttribute("position", new THREE.BufferAttribute(stPos,3));
+scene.add(new THREE.Points(stGeo, new THREE.PointsMaterial({ size: 1.6, sizeAttenuation: false, map: dot, transparent: true, alphaTest: 0.01, depthWrite: false, opacity: 0.85, color: 0xfff0ff })));
+
+function curveFor(kind, t){
+    if (kind === "flor"){ var r = Math.cos(5*t)*27; return { x: r*Math.cos(t), y: r*Math.sin(t) }; }
+    var tot = 10, va = Math.PI*2/tot, u = (t % (Math.PI*2)) / va, k = Math.floor(u), f = u - k;
+    var r0 = (k%2===0) ? 27 : 11, r1 = ((k+1)%2===0) ? 27 : 11;
+    var a0 = -Math.PI/2 + k*va, a1 = -Math.PI/2 + (k+1)*va;
+    var r = r0 + (r1-r0)*f, a = a0 + (a1-a0)*f;
+    return { x: r*Math.cos(a), y: r*Math.sin(a) };
+}
+var FIG_N = 3400, seeds = new Float32Array(FIG_N);
+for (var q=0;q<FIG_N;q++) seeds[q] = Math.random();
+function buildShape(kind){
+    var arr = new Float32Array(FIG_N*3);
+    for (var i=0;i<FIG_N;i++){
+        var t = seeds[i]*Math.PI*2, p0 = curveFor(kind,t), p1 = curveFor(kind,t+0.002);
+        var tx = p1.x-p0.x, ty = p1.y-p0.y, len = Math.hypot(tx,ty) || 1;
+        var off = (seeds[(i+7)%FIG_N]-0.5)*3, px = p0.x + (-ty/len)*off, py = p0.y + (tx/len)*off;
+        arr[i*3] = px; arr[i*3+1] = py - 4; arr[i*3+2] = (seeds[(i+13)%FIG_N]-0.5)*6;
+    }
+    return arr;
+}
+var shapeA = buildShape("flor"), shapeB = buildShape("estrella");
+var live = new Float32Array(shapeA);
+var figGeo = new THREE.BufferGeometry(); figGeo.setAttribute("position", new THREE.BufferAttribute(live,3));
+var figMat = new THREE.PointsMaterial({ color: new THREE.Color(HEX), size: 3.4, map: dot, transparent: true, alphaTest: 0.01, depthWrite: false, opacity: 0.96, blending: THREE.AdditiveBlending });
+var fig = new THREE.Points(figGeo, figMat); scene.add(fig);
+var HOLD = 3.2, MORPH = 2.0, CYCLE = (HOLD+MORPH)*2;
+function mixAt(sec){
+    var p = sec % CYCLE;
+    if (p < HOLD) return 0;
+    if (p < HOLD+MORPH) return easeInOutCubic((p-HOLD)/MORPH);
+    if (p < HOLD*2+MORPH) return 1;
+    return 1 - easeInOutCubic((p-HOLD*2-MORPH)/MORPH);
+}
+function easeInOutCubic(x){ return x < 0.5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2; }
+
+/* corazon de cristal: gema tallada (extrude + bordes) */
+function heartShape2D(scale){
+    var shape = new THREE.Shape(); var N = 64;
+    for (var i=0;i<=N;i++){
+        var t = (i/N)*Math.PI*2;
+        var x = 16*Math.pow(Math.sin(t),3) * scale;
+        var y = (13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t)) * scale;
+        if (i===0) shape.moveTo(x,y); else shape.lineTo(x,y);
+    }
+    return shape;
+}
+var domeGroup = new THREE.Group();
+try {
+    var gemGeom = new THREE.ExtrudeGeometry(heartShape2D(2.75), { depth: 10, bevelEnabled: true, bevelThickness: 4, bevelSize: 3, bevelSegments: 3, curveSegments: 26 });
+    gemGeom.center();
+    var gemFaces = new THREE.Mesh(gemGeom, new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.22, wireframe: true, depthWrite: false }));
+    var gemEdges = new THREE.LineSegments(new THREE.EdgesGeometry(gemGeom, 18), new THREE.LineBasicMaterial({ color: 0xffd2e2, transparent: true, opacity: 0.75, depthWrite: false }));
+    domeGroup.add(gemFaces, gemEdges);
+} catch(e){}
+domeGroup.position.y = -4;
+scene.add(domeGroup);
+
+/* cinta de luz en espiral */
+function ribbonTexFn(){
+    var w = 256, h = 16, c = document.createElement("canvas"); c.width = w; c.height = h;
+    var x = c.getContext("2d"), g = x.createLinearGradient(0,0,w,0);
+    g.addColorStop(0.00,"rgba(255,180,210,0.05)"); g.addColorStop(0.35,"rgba(255,220,235,0.15)");
+    g.addColorStop(0.50,"rgba(255,255,255,0.95)"); g.addColorStop(0.65,"rgba(255,220,235,0.15)"); g.addColorStop(1.00,"rgba(255,180,210,0.05)");
+    x.fillStyle = g; x.fillRect(0,0,w,h);
+    var tex = new THREE.CanvasTexture(c); tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(4,1);
+    return tex;
+}
+function HelixCurve(radius, height, turns){ THREE.Curve.call(this); this.radius = radius; this.height = height; this.turns = turns; }
+HelixCurve.prototype = Object.create(THREE.Curve.prototype);
+HelixCurve.prototype.getPoint = function(t){ var a = t*Math.PI*2*this.turns; return new THREE.Vector3(Math.cos(a)*this.radius, (t-0.5)*this.height, Math.sin(a)*this.radius); };
+var ribbon = null, ribbonMat = null, ribbonTex = null;
+try {
+    ribbonTex = ribbonTexFn();
+    var ribbonCurve = new HelixCurve(66, 140, 2.6);
+    var ribbonGeom = new THREE.TubeGeometry(ribbonCurve, 220, 5, 12, false);
+    ribbonMat = new THREE.MeshBasicMaterial({ map: ribbonTex, color: 0xffd6e6, transparent: true, opacity: 0.95, blending: THREE.NormalBlending, depthWrite: false, side: THREE.DoubleSide });
+    ribbon = new THREE.Mesh(ribbonGeom, ribbonMat);
+    ribbon.position.y = -4;
+    scene.add(ribbon);
+} catch(e){}
+
+/* gemas (diamantes) orbitando */
+function gemTex(){
+    var size = 64, c = document.createElement("canvas"); c.width = c.height = size;
+    var x = c.getContext("2d"); x.translate(size/2,size/2);
+    var g = x.createRadialGradient(-4,-6,1,0,0,size*0.38);
+    g.addColorStop(0,"rgba(255,255,255,1)"); g.addColorStop(0.45,"rgba(255,210,230,0.9)"); g.addColorStop(1,"rgba(255,120,170,0.15)");
+    x.fillStyle = g;
+    x.beginPath(); x.moveTo(0,-size*0.40); x.lineTo(size*0.26,-size*0.06); x.lineTo(size*0.15,size*0.38);
+    x.lineTo(-size*0.15,size*0.38); x.lineTo(-size*0.26,-size*0.06); x.closePath(); x.fill();
+    return new THREE.CanvasTexture(c);
+}
+var GEM_N = 55, gemPos = new Float32Array(GEM_N*3), gemData = [];
+for (var gi=0; gi<GEM_N; gi++){
+    var gr = 78 + Math.random()*130, gph = Math.acos(2*Math.random()-1), gth = Math.random()*Math.PI*2;
+    gemPos[gi*3] = gr*Math.sin(gph)*Math.cos(gth); gemPos[gi*3+1] = gr*Math.cos(gph); gemPos[gi*3+2] = gr*Math.sin(gph)*Math.sin(gth);
+    gemData.push({ phi: gph, theta: gth, radius: gr, speed: 0.0012 + Math.random()*0.0016 });
+}
+var gemGeo = new THREE.BufferGeometry(); gemGeo.setAttribute("position", new THREE.BufferAttribute(gemPos,3));
+var gems = new THREE.Points(gemGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 5, map: gemTex(), transparent: true, alphaTest: 0.01, depthWrite: false, opacity: 0.95, blending: THREE.AdditiveBlending }));
+scene.add(gems);
+
+/* confeti de cristal cayendo */
+function shardTex(){
+    var size = 64, c = document.createElement("canvas"); c.width = c.height = size;
+    var x = c.getContext("2d"); x.translate(size/2,size/2);
+    var g = x.createLinearGradient(-size*0.3,-size*0.4,size*0.3,size*0.4);
+    g.addColorStop(0,"rgba(255,255,255,0.95)"); g.addColorStop(0.5,"rgba(255,255,255,0.55)"); g.addColorStop(1,"rgba(255,255,255,0.15)");
+    x.fillStyle = g;
+    x.beginPath(); x.moveTo(0,-size*0.42); x.lineTo(size*0.30,0); x.lineTo(0,size*0.42); x.lineTo(-size*0.30,0); x.closePath(); x.fill();
+    x.strokeStyle = "rgba(255,255,255,0.8)"; x.lineWidth = 1.5; x.stroke();
+    return new THREE.CanvasTexture(c);
+}
+var PET_N = 130, petPos = new Float32Array(PET_N*3), petData = [];
+for (var pi=0; pi<PET_N; pi++){
+    var pr = 30 + Math.random()*170, pa = Math.random()*Math.PI*2;
+    petPos[pi*3] = Math.cos(pa)*pr; petPos[pi*3+1] = -140 + Math.random()*280; petPos[pi*3+2] = Math.sin(pa)*pr;
+    petData.push({ speed: 9 + Math.random()*15, sway: Math.random()*Math.PI*2, amp: 4 + Math.random()*7 });
+}
+var petGeo = new THREE.BufferGeometry(); petGeo.setAttribute("position", new THREE.BufferAttribute(petPos,3));
+var spiral = new THREE.Points(petGeo, new THREE.PointsMaterial({ color: 0xffd7e6, size: 4.8, map: shardTex(), transparent: true, alphaTest: 0.01, depthWrite: false, opacity: 0.9, blending: THREE.AdditiveBlending }));
+scene.add(spiral);
+
+/* polvo esferico */
+var R_IN = 88, R_OUT = 205, DUST_N = 2400, dPos = new Float32Array(DUST_N*3);
+for (var di=0; di<DUST_N; di++){
+    var dr = R_IN + Math.random()*(R_OUT-R_IN), dth = Math.random()*Math.PI*2, dph = Math.acos(2*Math.random()-1);
+    dPos[di*3] = dr*Math.sin(dph)*Math.cos(dth); dPos[di*3+1] = dr*Math.cos(dph); dPos[di*3+2] = dr*Math.sin(dph)*Math.sin(dth);
+}
+var dGeo = new THREE.BufferGeometry(); dGeo.setAttribute("position", new THREE.BufferAttribute(dPos,3));
+var dust = new THREE.Points(dGeo, new THREE.PointsMaterial({ color: 0xffe6f0, size: 2.4, map: dot, transparent: true, alphaTest: 0.01, depthWrite: false, opacity: 0.34, blending: THREE.AdditiveBlending }));
+scene.add(dust);
+
+/* resplandor + anillos */
+function makeGlow(size, c1, c2){
+    var c = document.createElement("canvas"); c.width = c.height = size;
+    var g = c.getContext("2d"), gr = g.createRadialGradient(size/2,size/2,size*0.05,size/2,size/2,size*0.5);
+    gr.addColorStop(0,"rgba("+c1+",0.7)"); gr.addColorStop(0.5,"rgba("+c2+",0.2)"); gr.addColorStop(1,"rgba(0,0,0,0)");
+    g.fillStyle = gr; g.fillRect(0,0,size,size);
+    return new THREE.CanvasTexture(c);
+}
+var glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeGlow(512,"255,110,150","255,200,150"), transparent: true, depthWrite: false, opacity: 0.55, blending: THREE.AdditiveBlending }));
+glow.scale.set(215,215,1); scene.add(glow);
+function ringTex(size){
+    var c = document.createElement("canvas"); c.width = c.height = size;
+    var g = c.getContext("2d"); g.translate(size/2,size/2);
+    var r1 = size*0.35, r2 = size*0.48, gr = g.createRadialGradient(0,0,r1*0.6,0,0,r2);
+    gr.addColorStop(0.0,"rgba(255,240,235,1)"); gr.addColorStop(0.3,"rgba(224,36,94,1)"); gr.addColorStop(0.7,"rgba(120,10,45,0.8)"); gr.addColorStop(1.0,"rgba(0,0,0,0)");
+    g.fillStyle = gr; g.beginPath(); g.arc(0,0,r2,0,Math.PI*2); g.arc(0,0,r1,0,Math.PI*2,true); g.closePath(); g.fill();
+    return new THREE.CanvasTexture(c);
+}
+var rTex = ringTex(512);
+var ring1 = new THREE.Mesh(new THREE.RingGeometry(86,118,96), new THREE.MeshBasicMaterial({ map: rTex, transparent: true, side: THREE.DoubleSide, opacity: 0.3, blending: THREE.AdditiveBlending, depthWrite: false }));
+var ring2 = new THREE.Mesh(new THREE.RingGeometry(132,160,96), new THREE.MeshBasicMaterial({ map: rTex, transparent: true, side: THREE.DoubleSide, opacity: 0.18, blending: THREE.AdditiveBlending, depthWrite: false }));
+ring1.rotation.x = Math.PI/2; ring2.rotation.x = Math.PI/2; ring2.rotation.z = 0.6;
+scene.add(ring1); scene.add(ring2);
+
+/* estrellas fugaces */
+var shootTex = (function(){
+    var w = 256, h = 16, c = document.createElement("canvas"); c.width = w; c.height = h;
+    var x = c.getContext("2d"), g = x.createLinearGradient(0,0,w,0);
+    g.addColorStop(0,"rgba(255,255,255,0)"); g.addColorStop(0.75,"rgba(255,255,255,0.65)"); g.addColorStop(1,"rgba(255,255,255,1)");
+    x.fillStyle = g; x.beginPath(); x.ellipse(w/2,h/2,w/2,h/2.6,0,0,Math.PI*2); x.fill();
+    return new THREE.CanvasTexture(c);
+})();
+var shoots = [];
+for (var hi=0; hi<4; hi++){
+    var sm = new THREE.SpriteMaterial({ map: shootTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
+    var ss = new THREE.Sprite(sm); ss.visible = false;
+    ss.userData = { alive: false, vel: new THREE.Vector3(), life: 0 };
+    scene.add(ss); shoots.push(ss);
+}
+var shootTimer = 1.1;
+var shootTint = new THREE.Color(HEX).lerp(new THREE.Color(0xffffff), 0.6);
+function launchShoot(){
+    var s = null;
+    for (var k=0;k<shoots.length;k++){ if (!shoots[k].userData.alive){ s = shoots[k]; break; } }
+    if (!s) return;
+    var ph = Math.acos(2*Math.random()-1), th = Math.random()*Math.PI*2, r = 200 + Math.random()*110;
+    s.position.set(r*Math.sin(ph)*Math.cos(th), r*Math.cos(ph)*0.7, r*Math.sin(ph)*Math.sin(th));
+    var target = new THREE.Vector3((Math.random()-0.5)*200, (Math.random()-0.5)*110, (Math.random()-0.5)*110);
+    var dir = target.sub(s.position).normalize();
+    s.userData.vel = dir.clone().multiplyScalar(200 + Math.random()*110);
+    s.userData.life = 1; s.userData.alive = true;
+    s.material.opacity = 1; s.material.color.copy(shootTint);
+    s.material.rotation = Math.atan2(dir.y, dir.x);
+    s.scale.set(80, 5, 1); s.visible = true;
+}
+
+/* frases orbitando, en Dancing Script como en el producto */
+var COLORS = ["#e0245e","#ff6f91","#ffb37a","#ff8fae","#c81d43","#ffd6a5","#ff4d7d","#f7cac9","#ffe0c2"];
+var textGroup = new THREE.Group(); scene.add(textGroup);
+function phraseTex(text, color){
+    var c = document.createElement("canvas"); c.width = 1024; c.height = 128;
+    var x = c.getContext("2d"); x.clearRect(0,0,c.width,c.height);
+    x.textAlign = "center"; x.textBaseline = "middle";
+    var fs = 52, font = function(){ return "700 "+fs+"px 'Dancing Script', cursive"; };
+    x.font = font();
+    while (x.measureText(text).width > c.width-50 && fs > 24){ fs -= 2; x.font = font(); }
+    x.fillStyle = "#fff7f2"; x.shadowColor = color; x.shadowBlur = 26;
+    x.fillText(text, c.width/2, c.height/2);
+    return new THREE.CanvasTexture(c);
+}
+function buildPhrases(){
+    var all = FRASES.concat(FRASES);
+    for (var i=0;i<all.length;i++){
+        var mat = new THREE.SpriteMaterial({ map: phraseTex(all[i], COLORS[i % COLORS.length]), transparent: true, depthWrite: false, alphaTest: 0.01 });
+        var sp = new THREE.Sprite(mat);
+        sp.scale.set(88, 11, 1);
+        var phi = Math.acos(2*Math.random()-1), theta = Math.random()*Math.PI*2, r = R_IN + Math.random()*(R_OUT-R_IN-20);
+        sp.position.set(r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+        sp.userData = { phi: phi, theta: theta, radius: r, speed: 0.0035 + Math.random()*0.003 };
+        textGroup.add(sp);
+    }
+}
+var fontsReady = (document.fonts && document.fonts.load) ? document.fonts.load("700 50px 'Dancing Script'") : Promise.resolve();
+fontsReady.then(buildPhrases, buildPhrases);
+
+var lastT = 0;
+return {
+    update: function(t){
+        var dt = Math.min(0.05, Math.max(0, t - lastT)); lastT = t;
+        var tt = t*0.6;
+
+        ring1.rotation.z += 0.0022*3; ring2.rotation.z -= 0.0016*3;
+        dust.rotation.y += 0.0006*2.5;
+        var gsz = 215*(1 + Math.sin(tt*0.4)*0.035); glow.scale.set(gsz, gsz, 1);
+
+        var beat = 1 + 0.045*Math.sin(tt*3.4); fig.scale.set(beat, beat, beat);
+        var mix = mixAt(t), arr = figGeo.attributes.position.array;
+        for (var i=0;i<FIG_N;i++){
+            var ix = i*3;
+            arr[ix]   = shapeA[ix]   + (shapeB[ix]   - shapeA[ix])*mix;
+            arr[ix+1] = shapeA[ix+1] + (shapeB[ix+1] - shapeA[ix+1])*mix;
+            arr[ix+2] = shapeA[ix+2] + (shapeB[ix+2] - shapeA[ix+2])*mix;
+        }
+        figGeo.attributes.position.needsUpdate = true;
+        fig.rotation.y = 0.5*Math.sin(t*0.42);
+
+        domeGroup.rotation.y += 0.0018*3;
+        domeGroup.rotation.x = Math.sin(tt*0.25)*0.08;
+        var gemFacesObj = domeGroup.children[0], gemEdgesObj = domeGroup.children[1];
+        if (gemEdgesObj) gemEdgesObj.material.opacity = 0.4 + 0.25*Math.sin(tt*0.9);
+        if (gemFacesObj) gemFacesObj.material.opacity = 0.04 + 0.04*Math.sin(tt*0.7);
+
+        if (ribbon){
+            ribbon.rotation.y += 0.006*3;
+            if (ribbonTex) ribbonTex.offset.x -= dt*0.35;
+            ribbonMat.opacity = 0.7 + 0.25*Math.sin(tt*1.1);
+        }
+
+        var gp = gemGeo.attributes.position.array;
+        for (var g=0; g<GEM_N; g++){
+            var gd = gemData[g], gx = g*3;
+            gd.theta += gd.speed;
+            gp[gx] = gd.radius*Math.sin(gd.phi)*Math.cos(gd.theta);
+            gp[gx+1] = gd.radius*Math.cos(gd.phi);
+            gp[gx+2] = gd.radius*Math.sin(gd.phi)*Math.sin(gd.theta);
+        }
+        gemGeo.attributes.position.needsUpdate = true;
+
+        var pp = petGeo.attributes.position.array;
+        for (var p=0; p<PET_N; p++){
+            var pd = petData[p], px = p*3;
+            pp[px+1] -= pd.speed*dt*2.2; pd.sway += dt*1.4;
+            pp[px] += Math.cos(pd.sway)*pd.amp*dt; pp[px+2] += Math.sin(pd.sway*0.7)*pd.amp*dt;
+            if (pp[px+1] < -140){
+                var nr = 30 + Math.random()*170, na = Math.random()*Math.PI*2;
+                pp[px] = Math.cos(na)*nr; pp[px+1] = 140; pp[px+2] = Math.sin(na)*nr;
+            }
+        }
+        petGeo.attributes.position.needsUpdate = true;
+        spiral.rotation.y += 0.0005*2.5;
+
+        shootTimer -= dt;
+        if (shootTimer <= 0){ launchShoot(); shootTimer = 1.4 + Math.random()*2.4; }
+        for (var h=0; h<shoots.length; h++){
+            var s = shoots[h]; if (!s.userData.alive) continue;
+            s.userData.life -= dt/1.5;
+            if (s.userData.life <= 0){ s.userData.alive = false; s.visible = false; continue; }
+            s.position.addScaledVector(s.userData.vel, dt);
+            s.material.opacity = Math.sin(s.userData.life*Math.PI)*0.9;
+        }
+
+        textGroup.children.forEach(function(sp){
+            var u = sp.userData;
+            sp.material.opacity = 0.8 + 0.2*Math.sin(tt*2 + u.radius);
+            u.theta += u.speed;
+            sp.position.x = u.radius*Math.sin(u.phi)*Math.cos(u.theta);
+            sp.position.z = u.radius*Math.sin(u.phi)*Math.sin(u.theta);
+        });
+    }
+};
+});
+} else if (name === "saturno") {
 makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
 scene.background = new THREE.Color(0x00050a);
 camera.position.set(0, 60, 260);
