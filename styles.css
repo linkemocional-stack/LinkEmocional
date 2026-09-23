@@ -299,16 +299,86 @@ display: inline-flex; align-items: center; gap: 4px; width: fit-content;
 padding: 3px 9px; border-radius: 999px;
 }
 .card-actions { display: flex; gap: 8px; margin-top: 8px; }
+/* fila de medios de pago (Takenos / Meru / QR), debajo de Ver Video / Pedir */
+.pago-row { display: flex; gap: 6px; margin-top: 6px; }
+.btn-pago {
+box-sizing: border-box;
+flex: 1; display: flex; align-items: center; justify-content: center; gap: 4px;
+height: 34px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+text-align: center; font-weight: 700; font-size: 10.5px; line-height: 1;
+padding: 0 4px; border-radius: 9px; border: 1px solid var(--border-soft-blue);
+color: var(--muted); background: var(--glass); transition: background .15s ease, border-color .15s ease, transform .1s ease;
+font-family: inherit; cursor: pointer;
+}
+.btn-pago:hover { background: var(--glass-strong); border-color: rgba(139,111,240,0.4); color: var(--ink); }
+.btn-pago:active { transform: scale(0.95); }
+.pago-more {
+display: block; text-align: center; margin-top: 6px;
+font-size: 10.5px; font-weight: 600; color: var(--muted);
+text-decoration: none; cursor: pointer; transition: color .15s ease;
+}
+.pago-more:hover { color: var(--pink-soft); }
+/* mismo alto y mismo box-model para TODOS los botones (button y <a>, con o sin
+icono), para que nunca se vea uno mas grande que otro por diferencias de
+line-height o por un texto que salta de linea */
 .btn {
-flex: 1; text-align: center; text-decoration: none; font-weight: 700; font-size: 12px;
-padding: 11px 8px; border-radius: 11px; border: 1px solid var(--border-soft-blue);
+box-sizing: border-box;
+flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px;
+height: 42px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+text-align: center; text-decoration: none; font-weight: 700; font-size: 12px; line-height: 1;
+padding: 0 8px; border-radius: 11px; border: 1px solid var(--border-soft-blue);
 color: var(--ink); background: var(--glass); transition: background .15s ease, border-color .15s ease, transform .1s ease;
 font-family: inherit; cursor: pointer;
 }
 .btn:hover { background: var(--glass-strong); border-color: rgba(139,111,240,0.4); }
 .btn:active { transform: scale(0.95); }
-.btn.whatsapp { background: rgba(38,224,102,0.14); border-color: rgba(38,224,102,0.4); color: #7cffb0; display: flex; align-items: center; justify-content: center; gap: 5px; }
+.btn.whatsapp { background: rgba(38,224,102,0.14); border-color: rgba(38,224,102,0.4); color: #7cffb0; }
 .btn.whatsapp:hover { background: rgba(38,224,102,0.24); }
+/* boton "Ver que incluye": ocupa todo el ancho, arriba de Ver Video / Pedir */
+.btn-details {
+width: 100%;
+flex: 0 0 auto;
+background: rgba(139,111,240,0.14); border-color: rgba(139,111,240,0.4); color: var(--pink-soft);
+}
+.btn-details:hover { background: rgba(139,111,240,0.24); }
+/* ===== VISTA: DETALLE DE PRODUCTO (pantalla completa, misma logica que Inicio/Catalogo) ===== */
+.detalle-wrap { max-width: 480px; margin: 0 auto; padding: 24px 20px 60px; }
+.detalle-thumb {
+position: relative; height: 230px; border-radius: 20px; overflow: hidden;
+background: #05080a; border: 1px solid var(--border-soft-blue);
+margin-bottom: 20px;
+}
+.detalle-thumb canvas, .detalle-thumb .thumb2d { display: block; width: 100%; height: 100%; }
+#detalleTitulo { font-size: 22px; font-weight: 800; margin: 0 0 6px; }
+.detalle-price {
+font-size: 17px; font-weight: 800; margin-bottom: 16px;
+background-image: var(--grad-brand); background-size: 200% 200%;
+-webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.detalle-price.gratis { background-image: none; color: var(--pink-soft); }
+.detalle-desc { font-size: 13.5px; color: var(--muted); line-height: 1.6; margin: 0 0 18px; }
+.detalle-intro {
+font-size: 14px; font-weight: 700; line-height: 1.6; margin: 0 0 22px;
+background-image: var(--grad-brand); background-size: 200% 200%;
+-webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.detalle-heading {
+font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800;
+color: var(--pink-soft); margin-bottom: 12px;
+}
+.detalle-list { margin: 0 0 16px; padding-left: 20px; }
+.detalle-list li { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.7; margin-bottom: 7px; }
+.detalle-closing { font-size: 12.5px; color: var(--muted); font-style: italic; line-height: 1.6; margin: -6px 0 18px; }
+.detalle-note {
+font-size: 12.5px; color: #9fe3ef; line-height: 1.55; margin: 0 0 24px;
+background: rgba(134,215,232,0.1); border: 1px solid rgba(134,215,232,0.3);
+border-radius: 14px; padding: 13px 15px;
+}
+.detalle-actions { display: flex; flex-direction: column; gap: 10px; }
+.detalle-actions-main { display: flex; gap: 10px; }
+.detalle-actions .btn { height: 48px; font-size: 13px; }
+.detalle-actions .btn-pago { height: 38px; font-size: 11.5px; }
+
 .note { max-width: 1080px; margin: 0 auto 40px; padding: 0 20px; font-size: 12px; color: var(--muted-2); text-align: center; }
 /* miniatura 2D generica (SVG) */
 .flores2d-svg { width: 100%; height: 100%; display: block; }

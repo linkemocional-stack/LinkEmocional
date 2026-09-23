@@ -1,8 +1,59 @@
 /* ===================== DATOS DE PRODUCTOS ===================== */
 var WHATSAPP_NUMBER = "59178550176";
+var WHATSAPP_SVG = '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex-shrink:0"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 4.99L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.79 14.1c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.13.11-1.82-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36h.55c.18 0 .42-.07.65.5.24.58.81 2 .88 2.15.07.15.12.32.02.51-.1.19-.15.3-.29.47-.15.17-.31.37-.44.5-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.15.46.13.63-.08.17-.21.72-.85.92-1.14.19-.29.38-.24.64-.14.26.1 1.66.79 1.94.93.29.14.47.22.55.34.07.12.07.7-.17 1.38z"/></svg>';
+/* ===================== CONVERSION A BOLIVIANOS =====================
+Tipo de cambio fijo usado en todo el sitio para mostrar el precio en
+Bs junto al precio en dolares: 1 USD = 10 Bs. Si el tipo de cambio
+cambia, solo hay que actualizar este numero. */
+var USD_TO_BOB = 10;
+function formatPrice(usd){
+return '$ ' + usd.toFixed(2) + ' / Bs ' + Math.round(usd * USD_TO_BOB);
+}
+/* ===================== BOTONES DE PAGO (Takenos / Meru / QR) =====================
+Se muestran en cada producto, en la tarjeta del catalogo y en la vista de detalle.
+- Takenos y Meru: si el producto todavia no tiene su link cargado (pagoTakenos /
+pagoMeru en null, arriba en PRODUCTS), el boton muestra un aviso "muy pronto".
+En cuanto se pega el link real en el producto, el boton abre ese link directo.
+- QR: pensado para clientes de Bolivia. Por ahora es solo el boton (sin imagen
+todavia); mas adelante se le puede sumar un link o una imagen de QR igual que
+Takenos/Meru. */
+function paymentRowHtml(p, isFree){
+if (isFree) return '';
+var waMsg = encodeURIComponent('Hola! Quiero pedir el diseño "' + p.name + '" pero tengo otro medio de pago, ¿qué opciones tienen? 💗');
+var waHref = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + waMsg;
+return '<div class="pago-row">' +
+'<button type="button" class="btn-pago" data-pago="takenos" data-product-id="' + p.id + '">💳 Takenos</button>' +
+'<button type="button" class="btn-pago" data-pago="meru" data-product-id="' + p.id + '">🪙 Meru</button>' +
+'<button type="button" class="btn-pago" data-pago="qr" data-product-id="' + p.id + '" title="QR — pagos dentro de Bolivia">📱 QR Bolivia</button>' +
+'</div>' +
+'<a class="pago-more" href="' + waHref + '" target="_blank">¿Tenés otro medio de pago? Consultanos por WhatsApp 💬</a>';
+}
+function initPagoButtons(){
+document.querySelectorAll('.btn-pago').forEach(function(btn){
+btn.addEventListener('click', function(e){
+e.stopPropagation();
+var id = btn.getAttribute('data-product-id');
+var metodo = btn.getAttribute('data-pago');
+var product = PRODUCTS.filter(function(p){ return p.id === id; })[0];
+if (!product) return;
+if (metodo === 'takenos') {
+if (product.pagoTakenos) { window.open(product.pagoTakenos, '_blank'); }
+else { showToast('Muy pronto vas a poder pagar con Takenos aquí 💳 — mientras tanto, coordinalo por WhatsApp.', '💳'); }
+} else if (metodo === 'meru') {
+if (product.pagoMeru) { window.open(product.pagoMeru, '_blank'); }
+else { showToast('Muy pronto vas a poder pagar con Meru aquí 🪙 — mientras tanto, coordinalo por WhatsApp.', '🪙'); }
+} else if (metodo === 'qr') {
+if (product.pagoQR) { window.open(product.pagoQR, '_blank'); }
+else { showToast('Muy pronto vas a poder pagar por QR (Bolivia) aquí 📱 — mientras tanto, coordinalo por WhatsApp.', '📱'); }
+}
+});
+});
+}
 var PRODUCTS = [
 {
 id: "rosa-cristal-pro",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "rosa-cristal-pro" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "rosa-cristal-pro" cuando lo tengas
 name: "Rosa de Cristal PRO",
 tag: "Amor",
 dim: "3D",
@@ -18,6 +69,8 @@ preview: "three-rosa-cristal-pro"
 },
 {
 id: "mariposa-infinita-pro",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "mariposa-infinita-pro" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "mariposa-infinita-pro" cuando lo tengas
 name: "Mariposa Infinita PRO",
 tag: "Amor",
 dim: "3D",
@@ -33,6 +86,8 @@ preview: "three-mariposa-infinita-pro"
 },
 {
 id: "flores-amarillas-pro",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "flores-amarillas-pro" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "flores-amarillas-pro" cuando lo tengas
 name: "Flores Amarillas PRO",
 tag: "Amor",
 dim: "3D",
@@ -48,6 +103,8 @@ preview: "three-flores-amarillas-pro"
 },
 {
 id: "corazon-galactico-pro",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "corazon-galactico-pro" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "corazon-galactico-pro" cuando lo tengas
 name: "Corazón Galáctico PRO",
 tag: "Amor",
 dim: "3D",
@@ -63,6 +120,8 @@ preview: "three-corazon-galactico-pro"
 },
 {
 id: "girasol-eterno-pro",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "girasol-eterno-pro" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "girasol-eterno-pro" cuando lo tengas
 name: "Girasol Eterno PRO",
 tag: "Amistad",
 dim: "3D",
@@ -93,6 +152,8 @@ preview: "three-girasol-eterno-pro"
 },
 {
 id: "saturno",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "saturno" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "saturno" cuando lo tengas
 name: "Saturno de Recuerdos",
 tag: "Amor",
 dim: "3D",
@@ -107,6 +168,8 @@ preview: "three-saturno"
 },
 {
 id: "rosa",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "rosa" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "rosa" cuando lo tengas
 name: "Rosa Eterna",
 tag: "Amor",
 dim: "3D",
@@ -121,6 +184,8 @@ preview: "three-rosa"
 },
 {
 id: "fenix",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "fenix" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "fenix" cuando lo tengas
 name: "Fénix Renaciente",
 tag: "Renacer",
 dim: "3D",
@@ -135,6 +200,8 @@ preview: "three-fenix"
 },
 {
 id: "caja",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "caja" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "caja" cuando lo tengas
 name: "Caja Sorpresa",
 tag: "Sorpresa",
 dim: "3D",
@@ -149,6 +216,8 @@ preview: "three-caja"
 },
 {
 id: "flores",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "flores" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "flores" cuando lo tengas
 name: "Flores Amarillas",
 tag: "Amor",
 dim: "2D",
@@ -163,6 +232,8 @@ preview: "flores2d"
 },
 {
 id: "corazon-particulas",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "corazon-particulas" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "corazon-particulas" cuando lo tengas
 name: "Corazón de Partículas",
 tag: "Amor",
 dim: "3D",
@@ -173,10 +244,13 @@ ordenPersonalizado: 99,
 ordenNoPersonalizado: 2,
 videoUrl: "https://www.tiktok.com/@linkemocional1/video/7687122506234236168",
 features: [],
+highlights: ["Miles de partículas armando un corazón brillante en el aire, en 3D","Ideal para probar cómo se siente un regalo Link Emocional, sin gastar nada","Se ve igual de bien en cualquier celular, sin instalar nada"],
 preview: "three-corazon"
 },
 {
 id: "cumpleanos",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "cumpleanos" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "cumpleanos" cuando lo tengas
 name: "Feliz Cumpleaños",
 tag: "Cumpleaños",
 dim: "2D",
@@ -187,10 +261,13 @@ ordenPersonalizado: 99,
 ordenNoPersonalizado: 7,
 videoUrl: null,
 features: [],
+highlights: ["Vela que se apaga de verdad al tocar la pantalla, con su humito","Lluvia de confeti de cumpleaños justo en ese momento","Mensaje de feliz cumpleaños ya integrado, para abrir y sorprender"],
 preview: "cumple2d"
 },
 {
 id: "dia-de-la-novia",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "dia-de-la-novia" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "dia-de-la-novia" cuando lo tengas
 name: "Día de la Novia",
 tag: "Amor",
 dim: "2D",
@@ -201,10 +278,13 @@ ordenPersonalizado: 99,
 ordenNoPersonalizado: 6,
 videoUrl: null,
 features: [],
+highlights: ["Galaxia de partículas rosa que se abre revelando un 'Te Amo' gigante","Termina en una tarjeta especial pensada para el Día de la Novia","Pantalla romántica, lista para enviar ese mismo día"],
 preview: "novia2d"
 },
 {
 id: "buzon-cartas",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "buzon-cartas" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "buzon-cartas" cuando lo tengas
 name: "Buzón de Cartas",
 tag: "Amor",
 dim: "2D",
@@ -219,6 +299,8 @@ preview: "buzon2d"
 },
 {
 id: "capsula-tiempo",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "capsula-tiempo" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "capsula-tiempo" cuando lo tengas
 name: "Cápsula del Tiempo",
 tag: "Amor",
 dim: "2D",
@@ -233,6 +315,8 @@ preview: "capsula2d"
 },
 {
 id: "regalo-caja-carrusel",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "regalo-caja-carrusel" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "regalo-caja-carrusel" cuando lo tengas
 name: "Un Regalo Para Ti",
 tag: "Sorpresa",
 dim: "3D",
@@ -247,6 +331,8 @@ preview: "regalo2d"
 },
 {
 id: "nuestra-historia",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "nuestra-historia" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "nuestra-historia" cuando lo tengas
 name: "Nuestra Historia",
 tag: "Amor",
 dim: "2D",
@@ -261,6 +347,8 @@ preview: "libro2d"
 },
 {
 id: "maquina-amor",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "maquina-amor" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "maquina-amor" cuando lo tengas
 name: "Máquina de Amor",
 tag: "Amor",
 dim: "2D",
@@ -275,6 +363,8 @@ preview: "maquina2d"
 },
 {
 id: "anniversary-times",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "anniversary-times" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "anniversary-times" cuando lo tengas
 name: "The Anniversary Times",
 tag: "Aniversario",
 dim: "2D",
@@ -289,6 +379,8 @@ preview: "periodico2d"
 },
 {
 id: "rama-floreciente",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "rama-floreciente" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "rama-floreciente" cuando lo tengas
 name: "Rama Floreciente para Ti",
 tag: "Amor",
 dim: "3D",
@@ -299,10 +391,13 @@ ordenPersonalizado: 99,
 ordenNoPersonalizado: 5,
 videoUrl: null,
 features: [],
+highlights: ["La ramita crece y florece en tiempo real, frente a tus ojos, en 3D","Luciérnagas y estrellas fugaces de fondo, animación suave y tranquila","También es gratis — perfecta para un primer regalo sin gastar nada"],
 preview: "three-rama"
 },
 {
 id: "flores-amarillas-3d",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "flores-amarillas-3d" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "flores-amarillas-3d" cuando lo tengas
 name: "Flores Amarillas 3D",
 tag: "Amor",
 dim: "3D",
@@ -313,10 +408,13 @@ ordenPersonalizado: 99,
 ordenNoPersonalizado: 3,
 videoUrl: "https://www.tiktok.com/@linkemocional1/video/7687153278211083541",
 features: [],
+highlights: ["Sol de girasoles con un anillo dorado tipo planeta girando alrededor","Ramitos y palabras orbitando, con frases que van cambiando solas en el centro","Pensada especial para el Día de las Flores Amarillas"],
 preview: "three-flores-dorado"
 },
 {
 id: "constelacion",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "constelacion" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "constelacion" cuando lo tengas
 name: "Tu Constelación",
 tag: "Amor",
 dim: "3D",
@@ -331,6 +429,8 @@ preview: "three-constelacion"
 },
 {
 id: "galaxia-rosa-roja",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "galaxia-rosa-roja" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "galaxia-rosa-roja" cuando lo tengas
 name: "Galaxia Espiral del Corazón",
 tag: "Amor",
 dim: "3D",
@@ -345,6 +445,8 @@ preview: "three-galaxia-rosa"
 },
 {
 id: "cielo-farolillos",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "cielo-farolillos" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "cielo-farolillos" cuando lo tengas
 name: "Un Cielo de Farolillos",
 tag: "Amor",
 dim: "2D",
@@ -359,6 +461,8 @@ preview: "farolillos2d"
 },
 {
 id: "frasco-razones",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "frasco-razones" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "frasco-razones" cuando lo tengas
 name: "Un Frasco de Razones",
 tag: "Amor",
 dim: "2D",
@@ -373,6 +477,8 @@ preview: "frasco2d"
 },
 {
 id: "quieres-salir-conmigo",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "quieres-salir-conmigo" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "quieres-salir-conmigo" cuando lo tengas
 name: "¿Quieres Salir Conmigo?",
 tag: "Sorpresa",
 dim: "2D",
@@ -383,6 +489,7 @@ ordenPersonalizado: 99,
 ordenNoPersonalizado: 1,
 videoUrl: "https://www.tiktok.com/@linkemocional1/video/7687292732821261589",
 features: [],
+highlights: ["El botón 'NO' se escapa cada vez que lo tocan — no hay forma de decir que no 😏","Sobre animado que se abre revelando la gran pregunta","Perfecta para pedir salir de una forma tierna y divertida"],
 preview: "citas2d"
 }
 ];
@@ -456,13 +563,13 @@ var isThree = previewKindFor(p).indexOf('three-') === 0;
 var thumbInner = isThree
 ? '<canvas id="' + thumbId + '"></canvas>'
 : '<div class="thumb2d" id="' + thumbId + '"></div>';
-var priceHtml = isFree ? 'Gratis 🎁' : ('$ ' + priceShown.toFixed(2));
+var priceHtml = isFree ? 'Gratis 🎁' : formatPrice(priceShown);
 var pedirLabel = isFree ? 'Escríbenos' : 'Pedir';
 var waMsg = encodeURIComponent('Hola! Me interesa el diseño "' + p.name + '" 💗');
 var waHref = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + waMsg;
 var noEditorHtml = '';
 if (catalogMode === 'personalizado' && p.precioNoPersonalizado != null) {
-noEditorHtml = '<div class="also-noeditor">🔓 Sin editor: $ ' + p.precioNoPersonalizado.toFixed(2) + '</div>';
+noEditorHtml = '<div class="also-noeditor">🔓 Sin editor: ' + formatPrice(p.precioNoPersonalizado) + '</div>';
 }
 var introOverlayHtml = '';
 if (p.id === 'flores-amarillas-3d') {
@@ -501,10 +608,12 @@ introOverlayHtml +
 '<p>' + p.desc + '</p>' +
 '<div class="price' + (isFree ? ' gratis' : '') + '">' + priceHtml + '</div>' +
 noEditorHtml +
+'<button type="button" class="btn btn-details" data-product-id="' + p.id + '">🎁 Ver qué incluye</button>' +
 '<div class="card-actions">' +
 '<button type="button" class="btn btn-video" data-product-id="' + p.id + '">Ver Video</button>' +
-'<a class="btn whatsapp" href="' + waHref + '" target="_blank"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex-shrink:0"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 4.99L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.79 14.1c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.13.11-1.82-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36h.55c.18 0 .42-.07.65.5.24.58.81 2 .88 2.15.07.15.12.32.02.51-.1.19-.15.3-.29.47-.15.17-.31.37-.44.5-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.15.46.13.63-.08.17-.21.72-.85.92-1.14.19-.29.38-.24.64-.14.26.1 1.66.79 1.94.93.29.14.47.22.55.34.07.12.07.7-.17 1.38z"/></svg>' + pedirLabel + '</a>' +
+'<a class="btn whatsapp" href="' + waHref + '" target="_blank">' + WHATSAPP_SVG + pedirLabel + '</a>' +
 '</div>' +
+paymentRowHtml(p, isFree) +
 '</div>'
 };
 }
@@ -513,7 +622,7 @@ var proCls = p.isPro ? ' pro-badge' : '';
 if (catalogMode === 'personalizado') {
 return '<button type="button" class="editor-badge' + proCls + '" data-features="' + p.features.join(';') + '">✎ Con editor</button>';
 } else if (p.precioPersonalizado) {
-return '<button type="button" class="editor-badge also-badge' + proCls + '" data-features="' + p.features.join(';') + '" data-also-price="$ ' + p.precioPersonalizado.toFixed(2) + '">🎨 Hay editor</button>';
+return '<button type="button" class="editor-badge also-badge' + proCls + '" data-features="' + p.features.join(';') + '" data-also-price="' + formatPrice(p.precioPersonalizado) + '">🎨 Hay editor</button>';
 }
 return '';
 }
@@ -568,6 +677,8 @@ appendGridSection(container, list);
 requestAnimationFrame(function(){
 initTooltips();
 initVideoButtons();
+initDetailsButtons();
+initPagoButtons();
 if (gridObserver) { gridObserver.disconnect(); gridObserver = null; }
 var supportsObserver = typeof IntersectionObserver === "function";
 if (supportsObserver) {
@@ -620,6 +731,141 @@ overlayEl.classList.add('hide');
 setTimeout(function(){ overlayEl.classList.add('hide'); }, 3200);
 }
 }
+});
+});
+}
+/* ===================== MODAL "QUE INCLUYE" ===================== */
+/* Arma el contenido del modal segun si, en la vista actual, el producto
+tiene editor disponible o no. Reutiliza p.features (lo que se puede
+personalizar) cuando hay editor; si no hay editor, usa una descripcion
+generica basada en p.desc y p.dim, sin inventar personalizacion que no
+existe. */
+function detailsContentFor(p, isFree){
+/* antes: "editorAqui" se activaba tambien cuando el producto tenia
+version con editor en OTRO lado del catalogo, aunque se lo estuviera
+viendo desde la seccion "sin editor" — por eso mostraba el contenido
+de editor donde no correspondia. Ahora depende solo de la seccion en
+la que el usuario esta parado ahora mismo. */
+var editorAqui = (catalogMode === 'personalizado');
+if (editorAqui && p.features && p.features.length) {
+var nota = (p.precioNoPersonalizado != null)
+? '🔓 ¿Preferís algo ya armado y más barato? También existe sin editor, tal como está, por ' + formatPrice(p.precioNoPersonalizado) + '.'
+: null;
+return {
+intro: 'No es un video armado por otro: es TU regalo, con tu foto y tu frase, abriéndose frente a esa personita especial 💫',
+heading: '✏️ Con el Editor Link Emocional lo hacés 100% tuyo',
+items: p.features,
+closing: 'Lo editás las veces que quieras hasta que quede perfecto. Recién cuando estés conforme, se genera tu HTML final — listo para enviar.',
+note: nota
+};
+}
+var itemsBase = (p.highlights && p.highlights.length) ? p.highlights.slice() : [
+'Animación ' + p.dim + ' profesional, exactamente igual a la vista previa y al video — sin sorpresas',
+'Mensaje y estilo ya armados por nosotros, pensados para emocionar'
+];
+itemsBase.push('Se guarda para siempre — lo puede reabrir todas las veces que quiera, como un recuerdo');
+var notaSinEditor;
+if (isFree) {
+/* los productos gratis no se pagan: en vez de mostrar medios de pago
+o la nota de upgrade, se explica como reclamarlo */
+notaSinEditor = '🎁 Para tenerlo gratis: seguí todas nuestras redes sociales (TikTok, Instagram y Facebook) y mandanos la captura por WhatsApp al pedirlo.';
+} else {
+notaSinEditor = (p.precioPersonalizado != null)
+? '🎨 ¿Querés personalizarlo? Existe la versión CON Editor Link Emocional por ' + formatPrice(p.precioPersonalizado) + ' — elegís colores, fotos y frases antes de enviarlo.'
+: '💌 ¿Querés sumarle un nombre o una fecha especial? Escríbenos por WhatsApp al pedirlo y lo coordinamos.';
+}
+return {
+intro: 'Esta versión ya viene hecha y lista tal cual la ves en la vista previa y el video — no tiene el Editor Link Emocional, no se personaliza.',
+heading: '🎁 Así llega, listo para sorprender',
+items: itemsBase,
+closing: null,
+note: notaSinEditor
+};
+}
+/* ===================== VISTA DE DETALLE (pantalla completa, no popup) ===================== */
+var detalleThumbId = 'detalleThumb';
+var detalleActivePreviewKind = null;
+/* libera el contexto WebGL de la preview 3D de la vista de detalle
+al salir, igual que hace el observer del grid al perder de vista una tarjeta */
+function teardownDetallePreview(){
+if (detalleActivePreviewKind && detalleActivePreviewKind.indexOf('three-') === 0) {
+var el = document.getElementById(detalleThumbId);
+if (el && el.parentNode) {
+var fresh = document.createElement('canvas');
+fresh.id = detalleThumbId;
+el.parentNode.replaceChild(fresh, el);
+}
+}
+detalleActivePreviewKind = null;
+}
+function openDetailsView(p){
+teardownDetallePreview();
+var isFree = catalogMode !== 'personalizado' && p.precioNoPersonalizado === 0;
+var c = detailsContentFor(p, isFree);
+var priceShown = (catalogMode === 'personalizado') ? p.precioPersonalizado : p.precioNoPersonalizado;
+document.getElementById('detalleTag').textContent = p.tag;
+document.getElementById('detalleDim').textContent = (p.dim === '2D' ? '🌼 ' : '🧊 ') + p.dim;
+document.getElementById('detalleTitulo').textContent = p.name;
+document.getElementById('detallePrice').innerHTML = isFree ? 'Gratis 🎁' : formatPrice(priceShown);
+document.getElementById('detallePrice').className = 'detalle-price' + (isFree ? ' gratis' : '');
+document.getElementById('detalleDesc').textContent = p.desc;
+document.getElementById('detalleIntro').textContent = c.intro;
+document.getElementById('detalleHeading').textContent = c.heading;
+var list = document.getElementById('detalleList');
+list.innerHTML = '';
+c.items.forEach(function(f){
+var li = document.createElement('li');
+li.textContent = f;
+list.appendChild(li);
+});
+var closingEl = document.getElementById('detalleClosing');
+if (c.closing) { closingEl.style.display = 'block'; closingEl.textContent = c.closing; }
+else { closingEl.style.display = 'none'; }
+var noteEl = document.getElementById('detalleNote');
+if (c.note) { noteEl.style.display = 'block'; noteEl.textContent = c.note; }
+else { noteEl.style.display = 'none'; }
+var waMsg = encodeURIComponent('Hola! Me interesa el diseño "' + p.name + '" 💗');
+var waHref = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + waMsg;
+var pedirLabel = isFree ? 'Escríbenos' : 'Pedir';
+document.getElementById('detalleActions').innerHTML =
+'<div class="detalle-actions-main">' +
+'<button type="button" class="btn btn-video" data-product-id="' + p.id + '">Ver Video</button>' +
+'<a class="btn whatsapp" href="' + waHref + '" target="_blank">' + WHATSAPP_SVG + pedirLabel + '</a>' +
+'</div>' +
+paymentRowHtml(p, isFree);
+initVideoButtons();
+initPagoButtons();
+/* la vista tiene que estar visible ANTES de armar el preview 3D: si el
+canvas se crea mientras el contenedor esta en display:none, Three.js lo
+mide con ancho/alto 0 y queda todo negro */
+document.getElementById('viewCatalogo').style.display = 'none';
+document.getElementById('viewDetalle').style.display = 'block';
+window.scrollTo(0, 0);
+/* preview en vivo, la misma animacion que ya se usa en la tarjeta */
+var kind = previewKindFor(p);
+var isThree = kind.indexOf('three-') === 0;
+var existing = document.getElementById(detalleThumbId);
+if (existing) existing.remove();
+var el = isThree ? document.createElement('canvas') : document.createElement('div');
+el.id = detalleThumbId;
+if (!isThree) el.className = 'thumb2d';
+document.getElementById('detalleThumbWrap').appendChild(el);
+startPreview(kind, detalleThumbId);
+detalleActivePreviewKind = kind;
+}
+function closeDetailView(){
+teardownDetallePreview();
+document.getElementById('viewDetalle').style.display = 'none';
+document.getElementById('viewCatalogo').style.display = 'block';
+window.scrollTo(0, 0);
+}
+function initDetailsButtons(){
+document.querySelectorAll('.btn-details').forEach(function(btn){
+btn.addEventListener('click', function(e){
+e.stopPropagation();
+var id = btn.getAttribute('data-product-id');
+var product = PRODUCTS.filter(function(p){ return p.id === id; })[0];
+if (product) openDetailsView(product);
 });
 });
 }
