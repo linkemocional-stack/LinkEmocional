@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>[preview] ✨ Nuestro cielo</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#c86bff;--l:rgba(200,107,255,.3);--t:#f6e4ff;--m:#a888c0}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;color:var(--t);font-family:Quicksand,sans-serif;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent;background:radial-gradient(ellipse at 50% 38%,color-mix(in srgb,var(--a) 24%,#07020f),#07020f 74%)}
+canvas{position:fixed;inset:0;width:100%;height:100%}
+#hud{position:fixed;top:16px;left:0;right:0;text-align:center;pointer-events:none;z-index:5}
+#ttl{font:700 2.5rem 'Dancing Script',cursive;margin:0;color:#fff;text-shadow:0 0 18px var(--a)}
+#nm{font-size:.85rem;letter-spacing:.25em;text-transform:uppercase;color:var(--a);font-weight:700}
+#cnt{margin-top:8px;font-size:.8rem;color:var(--m);line-height:1.5}
+#cnt b{display:block;font-size:1.35rem;color:var(--t)}#cnt i{font-style:normal;opacity:.7;letter-spacing:.1em}
+#go{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;cursor:pointer;background:radial-gradient(circle,#26063f,#05010a);transition:opacity 1.2s;font:700 1.9rem 'Dancing Script',cursive;text-shadow:0 0 14px var(--a)}
+#go.hidden{opacity:0;pointer-events:none}#go span{font-size:3rem;animation:p 2s ease-in-out infinite}
+@keyframes p{50%{transform:scale(1.2);filter:brightness(1.4)}}
+#card{position:fixed;left:50%;bottom:22px;width:min(92vw,420px);transform:translate(-50%,30px);opacity:0;pointer-events:none;transition:.45s;z-index:6;background:linear-gradient(160deg,rgba(48,14,74,.93),rgba(12,4,20,.96));border:1px solid var(--l);border-radius:20px;padding:20px 22px;backdrop-filter:blur(10px);box-shadow:0 0 30px var(--l)}
+#card.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#cd{font-size:.75rem;color:var(--a);font-weight:700;letter-spacing:.05em}
+#ct{font:700 1.8rem 'Dancing Script',cursive;margin:4px 0 6px}#cp{margin:0 0 12px;line-height:1.55;font-size:.95rem}
+.nv{display:flex;align-items:center;gap:10px;color:var(--m);font-size:.8rem}.nv span{flex:1;text-align:center}
+.nv button,#pen,.x{background:rgba(255,255,255,.07);border:1px solid var(--l);color:var(--t);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1rem}
+#pen{position:fixed;top:14px;right:14px;z-index:30;width:46px;height:46px;background:rgba(10,8,4,.5);backdrop-filter:blur(8px)}
+.noed #pen,.noed #ed{display:none!important}
+#ed{position:fixed;z-index:40;background:rgba(12,4,22,.95);backdrop-filter:blur(14px);border:1px solid var(--l);transition:transform .45s cubic-bezier(.2,.9,.3,1);left:0;right:0;bottom:0;height:58vh;border-radius:22px 22px 0 0;transform:translateY(105%);display:flex;flex-direction:column}
+#ed.open{transform:none}
+@media(min-width:760px){#ed{left:auto;top:0;height:auto;width:380px;border-radius:0;transform:translateX(105%)}}
+.hd{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--l)}
+.hd b{background:linear-gradient(90deg,#72CBE9,#745FC9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bd{overflow-y:auto;touch-action:pan-y;padding:6px 18px 40px;flex:1}
+.bd label{display:block;font-size:.78rem;font-weight:700;margin:16px 0 6px}
+.bd input:not([type=checkbox]):not([type=color]),.bd textarea{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--l);color:var(--t);border-radius:8px;padding:10px;font:600 .85rem Quicksand,sans-serif;user-select:text}
+.bd textarea{min-height:64px;margin-top:6px;resize:vertical}
+.row{display:flex;gap:8px;align-items:center}.row .x{flex:0 0 34px;width:34px}
+.mc{border:1px solid var(--l);border-radius:12px;padding:10px;margin-bottom:10px;background:rgba(255,255,255,.03)}
+.mc input[type=date]{flex:0 0 130px}
+.b{width:100%;border:1px solid var(--l);background:rgba(200,107,255,.14);color:var(--a);border-radius:9px;padding:11px;font:700 .85rem Quicksand,sans-serif;cursor:pointer}
+.dl{background:var(--a);color:#14001f;margin-top:14px;padding:14px}
+#sw{display:flex;gap:8px;flex-wrap:wrap}#sw i{width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,.2);cursor:pointer}
+.ck{display:flex;gap:9px;font-weight:600;font-size:.78rem;color:var(--m);align-items:flex-start;margin-top:10px}
+</style><script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 1}})}catch(e){}</script>
+<style id="pv-hide">
+/* vista previa: sin editor, sin pantalla de inicio */
+#pen,#ed,#go,#start-screen,.le-edit-toggle,.le-edit-hint,.le-editor-page,#leEditToggle{display:none !important}
+html,body{pointer-events:none !important;-webkit-user-select:none;user-select:none}
+</style>
+</head>
+<body>
+<div id="go"><div id="tap"></div><span>✨</span></div>
+<div id="hud"><h1 id="ttl"></h1><div id="nm"></div><div id="cnt"></div></div>
+<canvas id="c"></canvas><audio id="au" loop></audio>
+<div id="card"><div id="cd"></div><h2 id="ct"></h2><p id="cp"></p><div class="nv"><button id="cpv">‹</button><span id="ci"></span><button id="cnx">›</button><button id="ccl">✕</button></div></div>
+
+<script id="st" type="application/json">{"n1":"Tú","n2":"Yo","titulo":"Nuestro cielo","tap":"Toca para encender el cielo","inicio":"2024-02-14","color":"#c86bff","fugaces":true,"musica":"","mnom":"","mem":[{"f":"2024-02-14","t":"Nos conocimos","d":"Ese día no sabía que mi mundo estaba a punto de cambiar de color."},{"f":"2024-03-02","t":"Nuestra primera cita","d":"Los nervios, las risas y la sensación de que ya te conocía de siempre."},{"f":"2024-05-20","t":"Primer “te quiero”","d":"Lo dije bajito, pero mi corazón lo gritó."},{"f":"2024-09-15","t":"Nuestro primer viaje","d":"Contigo hasta perderse es un buen plan."},{"f":"2025-02-14","t":"Un año juntos","d":"Un año y todavía quiero mil más."}]}</script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var S=JSON.parse($('st').textContent),cv=$('c'),g=cv.getContext('2d'),au=$('au'),W,H,dp,spr,C,M=[],O=[],D=[];
+var ry=0,rx=-.1,drag=0,lx=0,ly=0,mv=0,T=0,rev=0,go=0,sel=null,sh=[],sp=[],ox=0,oy=0,tx=0,ty=0;
+function rs(){dp=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*dp;cv.height=H*dp;g.setTransform(dp,0,0,dp,0,0)}
+addEventListener('resize',rs);rs();
+function save(){$('st').textContent=JSON.stringify(S).replace(/</g,'\\u003c')}
+function pd(s){var a=(s||'').split('-');return a.length==3?new Date(+a[0],a[1]-1,+a[2]):null}
+function mk(){var h=S.color.replace('#','');C=[parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)];
+var r=document.documentElement.style;r.setProperty('--a',S.color);r.setProperty('--l','rgba('+C+',.3)');
+var c=document.createElement('canvas');c.width=c.height=64;var x=c.getContext('2d'),q=x.createRadialGradient(32,32,0,32,32,32);
+q.addColorStop(0,'rgba(255,255,255,1)');q.addColorStop(.16,'rgba(255,255,255,.9)');q.addColorStop(.4,'rgba('+C+',.45)');q.addColorStop(1,'rgba('+C+',0)');
+x.fillStyle=q;x.fillRect(0,0,64,64);spr=c}
+function hp(t){var f=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);return[16*Math.pow(Math.sin(t),3)*9,-f*9-22,Math.sin(t*2)*45]}
+function lay(){var a=S.mem.slice().sort(function(p,q){return p.f<q.f?-1:p.f>q.f?1:0}),n=a.length;
+M=a.map(function(m,i){return{m:m,p:hp(Math.PI+i/n*6.2832)}});O=[];for(var i=0;i<70;i++)O.push(hp(Math.PI+i/70*6.2832))}
+for(var i=0;i<(innerWidth<700?450:750);i++){var u=Math.random()*2-1,a=Math.random()*6.283,r=Math.sqrt(1-u*u),R=480+Math.random()*170;D.push([R*r*Math.cos(a),R*u,R*r*Math.sin(a),Math.random()*6.28,.4+Math.random()*1.2])}
+function P(p){var cy=Math.cos(ry),sy=Math.sin(ry),cx=Math.cos(rx),sx=Math.sin(rx),x=p[0]*cy+p[2]*sy,z=-p[0]*sy+p[2]*cy,y=p[1]*cx-z*sx;z=p[1]*sx+z*cx;
+var s=900/(z+900),k=Math.min(W,H)/430;return[W/2+ox+x*s*k,H*.54+oy+y*s*k,s*k,z]}
+function dot(q,sz,al){g.globalAlpha=al;g.drawImage(spr,q[0]-sz,q[1]-sz,sz*2,sz*2)}
+function fr(ts){T=ts/1000;var i,q,s,n=M.length;
+if(!drag){ry+=(Math.sin(T*.18)*.35-ry)*.02;rx+=(-.1-rx)*.02}
+ox+=(tx-ox)*.08;oy+=(ty-oy)*.08;if(go&&rev<n+1)rev+=.02;
+g.clearRect(0,0,W,H);g.globalCompositeOperation='lighter';
+for(i=0;i<D.length;i++){var p=D[i];q=P(p);dot(q,p[4]*q[2]*3.5,.2+.45*(.5+.5*Math.sin(T*p[4]*2+p[3])))}
+for(i=0;i<O.length;i++){q=P(O[i]);dot(q,3*q[2],Math.min(1,rev/2)*.35)}
+g.lineWidth=1.3;g.strokeStyle='rgba('+C+',.65)';g.globalAlpha=1;
+for(i=0;i<n;i++){if(n<3&&i==n-1)break;var f=Math.max(0,Math.min(1,rev-i));if(!f)continue;var a=P(M[i].p),b=P(M[(i+1)%n].p);
+g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f);g.stroke()}
+for(i=0;i<n;i++){q=P(M[i].p);var al=Math.max(0,Math.min(1,rev-i+1));if(al)dot(q,(M[i].m===sel?30:17+3*Math.sin(T*2.2+i))*q[2],al)}
+if(S.fugaces&&go&&Math.random()<.007)sh.push({x:Math.random()*W*.8,y:Math.random()*H*.4,vx:7+Math.random()*5,vy:3+Math.random()*3,l:1});
+for(i=sh.length-1;i>=0;i--){s=sh[i];g.globalAlpha=s.l;var gr=g.createLinearGradient(s.x,s.y,s.x-s.vx*9,s.y-s.vy*9);gr.addColorStop(0,'#fff');gr.addColorStop(1,'rgba('+C+',0)');
+g.strokeStyle=gr;g.lineWidth=1.8;g.beginPath();g.moveTo(s.x,s.y);g.lineTo(s.x-s.vx*9,s.y-s.vy*9);g.stroke();s.x+=s.vx;s.y+=s.vy;s.l-=.015;if(s.l<=0)sh.splice(i,1)}
+for(i=sp.length-1;i>=0;i--){s=sp[i];dot([s.x,s.y],7*s.l+2,s.l);s.x+=s.vx;s.y+=s.vy;s.vy+=.05;s.l-=.02;if(s.l<=0)sp.splice(i,1)}
+g.globalAlpha=1;requestAnimationFrame(fr)}
+function idx(){return M.map(function(o){return o.m}).indexOf(sel)}
+function show(m){sel=m;var d=pd(m.f),h='';
+if(d){var k=Math.floor((Date.now()-d)/864e5);h=d.toLocaleDateString('es',{day:'numeric',month:'long',year:'numeric'})+(k>0?' · hace '+(k>=730?Math.floor(k/365)+' años':k>=60?Math.floor(k/30)+' meses':k+(k==1?' día':' días')):'')}
+$('cd').textContent=h;$('ct').textContent=m.t;$('cp').textContent=m.d;$('ci').textContent=(idx()+1)+' / '+M.length;$('card').classList.add('on')}
+function hide(){sel=null;$('card').classList.remove('on')}
+function nav(s){if(M.length&&sel)show(M[(idx()+s+M.length)%M.length].m)}
+$('cpv').onclick=function(){nav(-1)};$('cnx').onclick=function(){nav(1)};$('ccl').onclick=hide;
+function tap(x,y){var b=null,bd=38;M.forEach(function(o){var q=P(o.p),d=Math.hypot(q[0]-x,q[1]-y);if(d<bd){bd=d;b=o}});
+if(b)show(b.m);else{hide();for(var i=0;i<16;i++){var a=Math.random()*6.28,v=1+Math.random()*2.5;sp.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1})}}}
+cv.addEventListener('pointerdown',function(e){drag=1;lx=e.clientX;ly=e.clientY;mv=0});
+addEventListener('pointermove',function(e){if(!drag)return;var dx=e.clientX-lx,dy=e.clientY-ly;mv+=Math.abs(dx)+Math.abs(dy);ry+=dx*.006;rx=Math.max(-.6,Math.min(.6,rx+dy*.004));lx=e.clientX;ly=e.clientY});
+addEventListener('pointerup',function(e){if(!drag)return;drag=0;if(mv<8)tap(e.clientX,e.clientY)});
+function cnt(){var d=pd(S.inicio),n=new Date();if(!d||d>n){$('cnt').innerHTML='';return}
+var ms=n-d,dy=Math.floor(ms/864e5),y=n.getFullYear()-d.getFullYear(),m=n.getMonth()-d.getMonth(),e=n.getDate()-d.getDate();
+if(e<0){m--;e+=new Date(n.getFullYear(),n.getMonth(),0).getDate()}if(m<0){y--;m+=12}
+var p=function(v){return(v<10?'0':'')+v};
+$('cnt').innerHTML='<b>'+dy.toLocaleString('es')+(dy==1?' día':' días')+' juntos</b>'+[y&&y+(y>1?' años':' año'),m&&m+(m>1?' meses':' mes'),e+(e==1?' día':' días')].filter(Boolean).join(' · ')+'<br><i>'+p(Math.floor(ms/36e5)%24)+':'+p(Math.floor(ms/6e4)%60)+':'+p(Math.floor(ms/1e3)%60)+'</i>'}
+function txt(){$('ttl').textContent=S.titulo;$('nm').textContent=S.n1&&S.n2?S.n1+' ∞ '+S.n2:(S.n1||S.n2||'');$('tap').textContent=S.tap;document.title='✨ '+S.titulo}
+$('go').addEventListener('click',function(){go=1;var pr=au.play();if(pr&&pr.catch)pr.catch(function(){});$('go').classList.add('hidden')});
+
+/* ---- arranque ---- */
+$('go').classList.remove('hidden');$('card').classList.remove('on');
+mk();lay();txt();cnt();setInterval(cnt,1000);requestAnimationFrame(fr);
+})();
+</script><script>
+(function(){
+  function go(){ var g=document.getElementById('go'); if(g) g.click(); }
+  if (document.readyState === 'complete') setTimeout(go, 60); else window.addEventListener('load', function(){ setTimeout(go, 60); });
+})();
+</script>
+</body></html>

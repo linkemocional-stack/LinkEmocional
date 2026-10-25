@@ -19,14 +19,9 @@ todavia); mas adelante se le puede sumar un link o una imagen de QR igual que
 Takenos/Meru. */
 function paymentRowHtml(p, isFree){
 if (isFree) return '';
-var waMsg = encodeURIComponent('Hola! Quiero pedir el diseño "' + p.name + '" pero tengo otro medio de pago, ¿qué opciones tienen? 💗');
+var waMsg = encodeURIComponent('Hola! Quiero pedir el diseño "' + p.name + '" y coordinar el pago 💗');
 var waHref = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + waMsg;
-return '<div class="pago-row">' +
-'<button type="button" class="btn-pago" data-pago="takenos" data-product-id="' + p.id + '">💳 Takenos</button>' +
-'<button type="button" class="btn-pago" data-pago="meru" data-product-id="' + p.id + '">🪙 Meru</button>' +
-'<button type="button" class="btn-pago" data-pago="qr" data-product-id="' + p.id + '" title="QR — pagos dentro de Bolivia">📱 QR Bolivia</button>' +
-'</div>' +
-'<a class="pago-more" href="' + waHref + '" target="_blank">¿Tenés otro medio de pago? Consultanos por WhatsApp 💬</a>';
+return '<a class="pago-more" href="' + waHref + '" target="_blank" style="font-size:12px;margin-top:10px;">💬 El pago se coordina por WhatsApp</a>';
 }
 function initPagoButtons(){
 document.querySelectorAll('.btn-pago').forEach(function(btn){
@@ -491,6 +486,253 @@ videoUrl: "https://www.tiktok.com/@linkemocional1/video/7687292732821261589",
 features: [],
 highlights: ["El botón 'NO' se escapa cada vez que lo tocan — no hay forma de decir que no 😏","Sobre animado que se abre revelando la gran pregunta","Perfecta para pedir salir de una forma tierna y divertida"],
 preview: "citas2d"
+},
+{
+id: "constelacion-amor-pro",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "constelacion-amor-pro" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "constelacion-amor-pro" cuando lo tengas
+name: "Constelación de Amor PRO",
+tag: "Amor",
+dim: "3D",
+desc: "Un cielo de aurora sobre montañas, con una figura de partículas que se transforma entre estrellas, constelaciones que se trazan y estrellas fugaces.",
+precioPersonalizado: 3.99,
+precioNoPersonalizado: 2.99,
+ordenPersonalizado: 0.5,
+ordenNoPersonalizado: 0,
+videoUrl: null,
+isPro: true,
+features: ["Color principal editable", "6 tipografías", "Frases que orbitan ilimitadas", "Fotos flotando (hasta 10)", "Música de fondo opcional", "Ráfaga y rastro al tocar (4 formas)", "Carta con mensaje personalizado", "Figura que se transforma (6 figuras a elegir)", "Aurora y constelaciones que se trazan", "Cielo estrellado con estrellas fugaces"],
+preview: "frame-constelacion-amor-pro"
+},
+{
+id: "rosa-eterna-ultra",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "rosa-eterna-ultra" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "rosa-eterna-ultra" cuando lo tengas
+name: "Rosa Eterna ULTRA",
+tag: "Amor",
+dim: "3D",
+desc: "Una rosa de partículas que late y se transforma en corazón, anillo, luna y más, con historia por capítulos, contador en vivo y fuegos artificiales.",
+precioPersonalizado: 3.99,
+precioNoPersonalizado: 2.99,
+ordenPersonalizado: 0.55,
+ordenNoPersonalizado: 0,
+videoUrl: null,
+isPro: true,
+features: ["Color principal editable", "6 tipografías", "Frases que orbitan ilimitadas", "Fotos flotando (hasta 10)", "Música de fondo opcional", "Ráfaga y rastro al tocar (4 formas)", "Carta con mensaje personalizado", "Figura que se transforma (8 figuras a elegir)", "Latido y pétalos ajustables", "Modo historia por capítulos con frases que se escriben solas", "Texto 3D y foto convertida en partículas", "Contador en vivo (juntos desde / faltan)", "Temas de un clic", "Fuegos artificiales y música reactiva", "Candado con código opcional"],
+preview: "frame-rosa-eterna-ultra"
+},
+{
+id: "linternas-deseo-pro",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "linternas-deseo-pro" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "linternas-deseo-pro" cuando lo tengas
+name: "Linternas del Deseo PRO",
+tag: "Amor",
+dim: "3D",
+desc: "Un cielo de atardecer lleno de linternas que suben flotando, con una figura de partículas que se transforma, luna, fuegos y corazones.",
+precioPersonalizado: 3.99,
+precioNoPersonalizado: 2.99,
+ordenPersonalizado: 0.6,
+ordenNoPersonalizado: 0,
+videoUrl: null,
+isPro: true,
+features: ["Color principal editable", "6 tipografías", "Frases que orbitan ilimitadas", "Fotos flotando (hasta 10)", "Música de fondo opcional", "Ráfaga y rastro al tocar (4 formas)", "Carta con mensaje personalizado", "Figura que se transforma (6 figuras a elegir)", "Linternas del deseo ajustables", "Fuegos artificiales y corazones", "Cielo con luna y estrellas fugaces"],
+preview: "frame-linternas-deseo-pro"
+},
+{
+id: "medusa-bio",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "medusa-bio" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "medusa-bio" cuando lo tengas
+name: "Medusa Bioluminiscente",
+tag: "Amor",
+dim: "3D",
+desc: "Un océano bioluminiscente con medusas que brillan, cardúmenes de luz y una figura de partículas que se transforma flotando en el agua.",
+precioPersonalizado: 3.49,
+precioNoPersonalizado: 2.49,
+ordenPersonalizado: 0.65,
+ordenNoPersonalizado: 0,
+videoUrl: null,
+isPro: true,
+features: ["Color principal editable", "6 tipografías", "Frases que orbitan ilimitadas", "Fotos flotando (hasta 10)", "Música de fondo opcional", "Ráfaga y rastro al tocar (4 formas)", "Carta con mensaje personalizado", "Figura que se transforma (6 figuras a elegir)", "Medusas ajustables", "Cardumen de peces de luz", "Agua y luz ajustables"],
+preview: "frame-medusa-bio"
+},
+{
+id: "rosa-eterna-pro",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "rosa-eterna-pro" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "rosa-eterna-pro" cuando lo tengas
+name: "Rosa Eterna PRO",
+tag: "Amor",
+dim: "3D",
+desc: "Una rosa de partículas que florece y late sobre un cielo estrellado, con pétalos, estrellas fugaces y tus frases y fotos orbitando.",
+precioPersonalizado: 3.99,
+precioNoPersonalizado: 2.99,
+ordenPersonalizado: 0.7,
+ordenNoPersonalizado: 0,
+videoUrl: null,
+isPro: true,
+features: ["Color principal editable", "6 tipografías", "Frases que orbitan ilimitadas", "Fotos flotando (hasta 10)", "Música de fondo opcional", "Ráfaga y rastro al tocar (4 formas)", "Carta con mensaje personalizado", "Figura que se transforma (8 figuras a elegir)", "Latido y aleteo ajustables", "Pétalos flotando y estrellas fugaces"],
+preview: "frame-rosa-eterna-pro"
+},
+{
+id: "rosa-imperial",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "rosa-imperial" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "rosa-imperial" cuando lo tengas
+name: "Rosa Eterna IMPERIAL",
+tag: "Amor",
+dim: "3D",
+desc: "La versión de cine: una rosa 3D bajo una cúpula de cristal con auroras, reflejo en el suelo de luz, luciérnagas doradas e intro de película.",
+precioPersonalizado: 4.99,
+precioNoPersonalizado: 3.99,
+ordenPersonalizado: -1, destacado: true,
+ordenNoPersonalizado: 0,
+videoUrl: null,
+isPro: true,
+features: ["Color principal editable", "6 tipografías", "Frases que orbitan ilimitadas", "Fotos flotando (hasta 10)", "Música de fondo opcional", "Ráfaga y rastro al tocar (4 formas)", "Carta con mensaje personalizado", "Cúpula de cristal con rosa 3D real", "Brillo cinematográfico, auroras y suelo con reflejo", "Intro de película y cámara que orbita sola", "Carta que se escribe sola", "Modo historia por capítulos con frases que se escriben solas", "Texto 3D y foto convertida en partículas", "Contador en vivo (juntos desde / faltan)", "Temas de un clic", "Fuegos artificiales y música reactiva", "Candado con código opcional"],
+preview: "frame-rosa-imperial"
+},
+{
+id: "cosmos-pro",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "cosmos-pro" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "cosmos-pro" cuando lo tengas
+name: "Cosmos PRO",
+tag: "Amor",
+dim: "3D",
+desc: "Un cosmos de partículas que se transforma entre corazón, anillo, infinito, galaxia y texto, con fotos y frases flotando y un contador de días juntos.",
+precioPersonalizado: 1.99,
+precioNoPersonalizado: 1.0,
+ordenPersonalizado: 1.5,
+ordenNoPersonalizado: 0,
+videoUrl: null,
+isPro: true,
+features: ["5 formas que se transforman (corazón, anillo, infinito, galaxia, texto)", "Texto 3D personalizable", "Paletas y colores principal y secundario", "Contador en vivo de días juntos", "Galería 3D de fotos (hasta 10)", "Frases que flotan alrededor", "Música de fondo y partículas que bailan con el ritmo", "Estrellas, aurora y lluvia de corazones"],
+preview: "frame-cosmos-pro"
+},
+{
+id: "nuestro-aniversario",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "nuestro-aniversario" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "nuestro-aniversario" cuando lo tengas
+name: "Nuestro Aniversario",
+tag: "Aniversario",
+dim: "3D",
+desc: "Un universo con un corazón de partículas, dos planetas con sus nombres y lunas que guardan cada recuerdo, con contador de días juntos.",
+precioPersonalizado: 1.99,
+precioNoPersonalizado: 1.0,
+ordenPersonalizado: 6.5,
+ordenNoPersonalizado: 0,
+videoUrl: null,
+features: ["Nombres de cada planeta", "Título y texto de inicio editables", "Contador en vivo de tiempo juntos", "Color del universo", "Hasta 8 recuerdos (cada uno es una luna)", "Música de fondo opcional"],
+preview: "frame-nuestro-aniversario"
+},
+{
+id: "luciernagas",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "luciernagas" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "luciernagas" cuando lo tengas
+name: "Luciérnagas que Escriben",
+tag: "Amor",
+dim: "2D",
+desc: "Cientos de luciérnagas que escriben tus frases en el cielo nocturno y se dejan guiar por tu dedo.",
+precioPersonalizado: 1.0,
+precioNoPersonalizado: null,
+ordenPersonalizado: 7,
+ordenNoPersonalizado: 99,
+videoUrl: null,
+features: ["Título y texto de inicio editables", "Hasta 12 frases que escriben las luciérnagas", "Color de la luz", "Escritura automática o al tocar", "Música de fondo opcional"],
+preview: "frame-luciernagas"
+},
+{
+id: "tendedero-recuerdos",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "tendedero-recuerdos" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "tendedero-recuerdos" cuando lo tengas
+name: "Tendedero de Recuerdos",
+tag: "Amor",
+dim: "2D",
+desc: "Fotos colgadas de un tendedero con luces: toca una, frótala con el dedo para revelarla y al final se abre un mensaje.",
+precioPersonalizado: 0.99,
+precioNoPersonalizado: null,
+ordenPersonalizado: 16,
+ordenNoPersonalizado: 99,
+videoUrl: null,
+features: ["Título y destinatario editables", "Hasta 10 fotos con frase", "Mensaje final", "Color de las luces", "Música de fondo opcional"],
+preview: "frame-tendedero-recuerdos"
+},
+{
+id: "ventana-magica",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "ventana-magica" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "ventana-magica" cuando lo tengas
+name: "Ventana Mágica",
+tag: "Sorpresa",
+dim: "2D",
+desc: "Mensajes escondidos en el aire: gira el celular a tu alrededor para encontrarlos con la cámara de fondo.",
+precioPersonalizado: 0.99,
+precioNoPersonalizado: null,
+ordenPersonalizado: 17,
+ordenNoPersonalizado: 99,
+videoUrl: null,
+features: ["Título y destinatario editables", "Hasta 8 mensajes escondidos", "Mensaje final al encontrarlos todos", "Cámara del celular como fondo (opcional)", "Color de la magia y música opcional"],
+preview: "frame-ventana-magica"
+},
+{
+id: "arbol-amor",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "arbol-amor" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "arbol-amor" cuando lo tengas
+name: "Nuestro Árbol",
+tag: "Amor",
+dim: "2D",
+desc: "Mantén presionado para que crezca un árbol que se llena de flores brillantes; cada flor guarda un recuerdo.",
+precioPersonalizado: 0.99,
+precioNoPersonalizado: null,
+ordenPersonalizado: 18,
+ordenNoPersonalizado: 99,
+videoUrl: null,
+features: ["Nombres, título y texto de inicio editables", "Hasta 10 recuerdos (cada uno es una flor)", "Color de las flores", "Crece solo o al mantener presionado", "Música de fondo opcional"],
+preview: "frame-arbol-amor"
+},
+{
+id: "nuestro-cielo",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "nuestro-cielo" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "nuestro-cielo" cuando lo tengas
+name: "Nuestro Cielo",
+tag: "Amor",
+dim: "3D",
+desc: "Un cielo donde cada recuerdo es una estrella que se enciende y se une en un corazón de constelación, con contador de días juntos.",
+precioPersonalizado: 1.49,
+precioNoPersonalizado: 1.0,
+ordenPersonalizado: 5.5,
+ordenNoPersonalizado: 0,
+videoUrl: null,
+features: ["Nombres, título y texto de inicio editables", "Hasta 14 recuerdos con fecha", "Contador en vivo de tiempo juntos", "Color del cielo", "Estrellas fugaces y música opcional"],
+preview: "frame-nuestro-cielo"
+},
+{
+id: "cumple-soplar",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "cumple-soplar" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "cumple-soplar" cuando lo tengas
+name: "Sopla y Pide un Deseo",
+tag: "Cumpleaños",
+dim: "2D",
+desc: "Una torta con velas que se apagan al soplar al micrófono o al tocarlas, con confeti y un mensaje de cumpleaños.",
+precioPersonalizado: 0.99,
+precioNoPersonalizado: null,
+ordenPersonalizado: 19,
+ordenNoPersonalizado: 99,
+videoUrl: null,
+features: ["Título y destinatario editables", "De 1 a 12 velas", "Mensaje al apagar las velas", "Color del pastel", "Música de fondo opcional"],
+preview: "frame-cumple-soplar"
+},
+{
+id: "ventana-lluvia",
+pagoTakenos: null, // pega aca tu link de pago Takenos para "ventana-lluvia" cuando lo tengas
+pagoMeru: null, // pega aca tu link de pago Meru para "ventana-lluvia" cuando lo tengas
+name: "Ventana de Lluvia",
+tag: "Amor",
+dim: "2D",
+desc: "Un vidrio empañado con la lluvia de una ciudad de noche: límpialo con el dedo para descubrir frases escondidas y una carta.",
+precioPersonalizado: 1.99,
+precioNoPersonalizado: 1.0,
+ordenPersonalizado: 8.5,
+ordenNoPersonalizado: 0,
+videoUrl: null,
+features: ["Título y destinatario editables", "Hasta 8 frases escondidas en el vidrio", "Carta final", "Color de las luces", "Velocidad del vaho y cantidad de gotas"],
+preview: "frame-ventana-lluvia"
 }
 ];
 var catalogMode = "personalizado";
@@ -665,6 +907,7 @@ var base = PRODUCTS.filter(function(p){ return p.precioNoPersonalizado != null; 
 la vista, asi ningun producto (ni siquiera los PRO) se queda pegado
 siempre arriba quitandole protagonismo al resto. */
 shuffleArray(base);
+base.sort(function(a,b){ return (b.destacado?1:0) - (a.destacado?1:0); });
 if (subTab === 'sinEditor') {
 list = base.filter(function(p){ return p.precioNoPersonalizado > 0; });
 } else if (subTab === 'gratis') {
@@ -686,7 +929,7 @@ gridObserver = new IntersectionObserver(function(entries){
 entries.forEach(function(entry){
 var el = entry.target;
 var kind = el.getAttribute('data-preview-kind');
-var isThree = kind && kind.indexOf('three-') === 0;
+var isThree = kind && (kind.indexOf('three-') === 0 || kind.indexOf('frame-') === 0);
 if (entry.isIntersecting) {
 if (el.getAttribute('data-preview-active') !== '1') {
 startPreview(kind, el.id);
@@ -700,7 +943,8 @@ gridObserver.unobserve(el);
 /* se fue de pantalla: apaga el contexto WebGL reemplazando el canvas por
 uno nuevo y vacio, para liberar memoria en celulares. Al volver a
 entrar en pantalla se vuelve a armar desde cero, mas abajo. */
-var freshCanvas = document.createElement('canvas');
+var freshCanvas = document.createElement(kind.indexOf('frame-') === 0 ? 'div' : 'canvas');
+if (kind.indexOf('frame-') === 0) freshCanvas.className = 'thumb2d';
 freshCanvas.id = el.id;
 freshCanvas.setAttribute('data-preview-kind', kind);
 if (el.parentNode) el.parentNode.replaceChild(freshCanvas, el);
@@ -788,10 +1032,11 @@ var detalleActivePreviewKind = null;
 /* libera el contexto WebGL de la preview 3D de la vista de detalle
 al salir, igual que hace el observer del grid al perder de vista una tarjeta */
 function teardownDetallePreview(){
-if (detalleActivePreviewKind && detalleActivePreviewKind.indexOf('three-') === 0) {
+if (detalleActivePreviewKind && (detalleActivePreviewKind.indexOf('three-') === 0 || detalleActivePreviewKind.indexOf('frame-') === 0)) {
 var el = document.getElementById(detalleThumbId);
 if (el && el.parentNode) {
-var fresh = document.createElement('canvas');
+var fresh = document.createElement(detalleActivePreviewKind.indexOf('frame-') === 0 ? 'div' : 'canvas');
+if (detalleActivePreviewKind.indexOf('frame-') === 0) fresh.className = 'thumb2d';
 fresh.id = detalleThumbId;
 el.parentNode.replaceChild(fresh, el);
 }

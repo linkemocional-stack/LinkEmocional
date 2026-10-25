@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>[preview] 🎂 Sopla y pide un deseo</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#ff8fb8;--l:rgba(255,143,184,.3);--t:#fff0f6;--m:#b898a8}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;color:var(--t);font-family:Quicksand,sans-serif;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent;background:radial-gradient(ellipse at 50% 70%,#2a1630,#07030d 75%)}
+canvas{position:fixed;inset:0;width:100%;height:100%}
+#hud{position:fixed;top:16px;left:0;right:0;text-align:center;z-index:5;pointer-events:none}
+#ttl{font:700 2.4rem 'Dancing Script',cursive;margin:0;color:#fff;text-shadow:0 0 18px var(--a)}
+#sub{font-size:.85rem;letter-spacing:.25em;text-transform:uppercase;color:var(--a);font-weight:700}
+body.edm #hud{display:none}
+#hint{position:fixed;bottom:84px;left:0;right:0;text-align:center;z-index:5;pointer-events:none;font-size:.85rem;color:var(--m)}
+#blow{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:6;padding:14px 26px;border-radius:30px;border:1px solid var(--l);background:rgba(255,255,255,.08);color:var(--t);font:700 .95rem Quicksand,sans-serif;backdrop-filter:blur(8px);cursor:pointer}
+#go{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;cursor:pointer;background:radial-gradient(circle,#2a1033,#05010a);transition:opacity 1.2s;font:700 1.9rem 'Dancing Script',cursive;text-shadow:0 0 14px var(--a);text-align:center;padding:20px}
+#go.hidden{opacity:0;pointer-events:none}#go span{font-size:3rem;animation:p 2s ease-in-out infinite}
+@keyframes p{50%{transform:scale(1.2)}}
+#md{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(4,2,12,.72);backdrop-filter:blur(5px);opacity:0;pointer-events:none;transition:opacity .6s}
+#md.on{opacity:1;pointer-events:auto}
+.cd{max-width:480px;width:100%;max-height:80vh;overflow-y:auto;background:linear-gradient(160deg,rgba(60,20,70,.95),rgba(14,5,22,.97));border:1px solid var(--l);border-radius:22px;padding:30px 26px;box-shadow:0 0 40px var(--l);text-align:center}
+.cd h2{font:700 2.2rem 'Dancing Script',cursive;margin:0;color:#fff;text-shadow:0 0 14px var(--a)}
+#ms{color:var(--a);font-weight:700;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;margin:4px 0 14px}
+#mp{white-space:pre-wrap;line-height:1.65;font-size:1.02rem;margin:0 0 18px;text-align:left;touch-action:pan-y}
+#mb{position:fixed;bottom:22px;right:18px;z-index:6;width:50px;height:50px;border-radius:50%;border:1px solid var(--l);background:rgba(255,255,255,.1);font-size:1.4rem;cursor:pointer;display:none}
+#pen,.x{background:rgba(255,255,255,.07);border:1px solid var(--l);color:var(--t);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1rem}
+#pen{position:fixed;top:14px;right:14px;z-index:30;width:46px;height:46px;background:rgba(10,8,4,.5);backdrop-filter:blur(8px)}
+.noed #pen,.noed #ed{display:none!important}
+#ed{position:fixed;z-index:60;background:rgba(14,6,20,.95);backdrop-filter:blur(14px);border:1px solid var(--l);transition:transform .45s cubic-bezier(.2,.9,.3,1);left:0;right:0;bottom:0;height:58vh;border-radius:22px 22px 0 0;transform:translateY(105%);display:flex;flex-direction:column}
+#ed.open{transform:none}
+@media(min-width:760px){#ed{left:auto;top:0;height:auto;width:380px;border-radius:0;transform:translateX(105%)}}
+.hd{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--l)}
+.hd b{background:linear-gradient(90deg,#72CBE9,#745FC9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bd{overflow-y:auto;touch-action:pan-y;padding:6px 18px 40px;flex:1}
+.bd label{display:block;font-size:.78rem;font-weight:700;margin:16px 0 6px}
+.bd input:not([type=checkbox]):not([type=color]):not([type=range]),.bd textarea{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--l);color:var(--t);border-radius:8px;padding:10px;font:600 .85rem Quicksand,sans-serif;user-select:text}
+.bd textarea{min-height:130px;resize:vertical;line-height:1.5}.bd input[type=range]{width:100%;accent-color:var(--a)}
+.row{display:flex;gap:8px;align-items:center}
+.b{width:100%;border:1px solid var(--l);background:rgba(255,143,184,.13);color:var(--a);border-radius:9px;padding:11px;font:700 .85rem Quicksand,sans-serif;cursor:pointer;margin-top:8px}
+.dl{background:var(--a);color:#240014;margin-top:14px;padding:14px}
+#sw{display:flex;gap:8px;flex-wrap:wrap}#sw i{width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,.2);cursor:pointer}
+.ck{display:flex;gap:9px;font-weight:600;font-size:.78rem;color:var(--m);align-items:flex-start;margin-top:10px}
+</style><script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 1}})}catch(e){}</script>
+<style id="pv-hide">
+/* vista previa: sin editor, sin pantalla de inicio */
+#pen,#ed,#go,#start-screen,.le-edit-toggle,.le-edit-hint,.le-editor-page,#leEditToggle{display:none !important}
+html,body{pointer-events:none !important;-webkit-user-select:none;user-select:none}
+</style>
+</head>
+<body>
+<div id="go"><div id="tap"></div><span>🎂</span></div>
+<div id="hud"><h1 id="ttl"></h1><div id="sub"></div></div>
+<canvas id="c"></canvas><audio id="au" loop></audio>
+<div id="hint">Toca las velas o mantén el botón para soplar</div>
+<button id="blow">💨 Mantén para soplar</button>
+<button id="mb">💌</button>
+<div id="md"><div class="cd"><h2 id="mt"></h2><div id="ms"></div><p id="mp"></p><button class="b" id="mc">Cerrar</button><button class="b" id="mr">Volver a soplar 🕯️</button></div></div>
+
+<script id="st" type="application/json">{"titulo":"¡Feliz cumpleaños!","nombre":"Mi amor","tap":"Toca para encender las velas","velas":5,"color":"#ff8fb8","musica":"","mnom":"","mensaje":"Hoy el mundo celebra que existes, y yo celebro que te tengo.\n\nGracias por cada risa, cada abrazo y cada día a tu lado.\n\nPide un deseo… yo ya sé cuál es el mío: más años contigo. 🎂"}</script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var S=JSON.parse($('st').textContent),cv=$('c'),g=cv.getContext('2d'),au=$('au'),W,H,dp,u,cx,by,spr,K=[],sm=[],cf=[],T=0,go=0,win=0,wt=0,lo=0,dk=.6,L=0,fb=0,an,ad,edo=0,pal=['#ff6b9d','#6bd5ff','#ffd36b','#9dffb0','#c9a0ff'];
+function lay(){var w=innerWidth>=760;cx=edo&&w?(W-380)/2:W/2;if(edo&&!w){by=H*.36;u=Math.min(W/400,H*.3/270)}else{by=H*.72;u=Math.min((edo&&w?W-380:W)/400,H*.6/270)}}
+function rs(){dp=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*dp;cv.height=H*dp;g.setTransform(dp,0,0,dp,0,0);lay()}
+function save(){$('st').textContent=JSON.stringify(S).replace(/</g,'\\u003c')}
+function mk(){document.documentElement.style.setProperty('--a',S.color);var h=S.color.replace('#',''),r=parseInt(h.substr(0,2),16),gg=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);document.documentElement.style.setProperty('--l','rgba('+r+','+gg+','+b+',.3)');
+var c=document.createElement('canvas');c.width=c.height=64;var x=c.getContext('2d'),q=x.createRadialGradient(32,32,0,32,32,32);
+q.addColorStop(0,'rgba(255,200,120,.9)');q.addColorStop(.3,'rgba(255,150,60,.35)');q.addColorStop(1,'rgba(255,120,40,0)');x.fillStyle=q;x.fillRect(0,0,64,64);spr=c}
+function bld(){K=[];for(var i=0;i<S.velas;i++)K.push({out:0,h:1,th:.5+Math.random()*.9,t0:go?T+.4+.25*i:1e9})}
+function cp(i){var n=S.velas;return[n==1?0:-70+140*i/(n-1),-160+(i%2?5:-3)]}
+function ext(c,i){c.out=1;lo=T;var p=cp(i);for(var k=0;k<9;k++)sm.push({x:cx+p[0]*u,y:by+(p[1]-50)*u,vx:(Math.random()-.4)*.5,vy:-.6-Math.random()*.8,l:1})}
+function boom(){var p=[S.color,'#ffd36b','#6bd5ff','#9dffb0','#ff6b9d','#fff'];for(var i=0;i<140;i++){var s=i%2;cf.push({x:s?W+10:-10,y:H*.45+Math.random()*H*.3,vx:(s?-1:1)*(4+Math.random()*7),vy:-6-Math.random()*8,r:0,vr:(Math.random()-.5)*.4,s:5+Math.random()*6,c:p[i%6]})}}
+function rst(){K.forEach(function(c,i){c.out=0;c.h=1;c.t0=T+.4+.25*i});win=0;cf=[];lo=T;$('md').classList.remove('on');$('mb').style.display='none'}
+function ell(x,y,rx,ry,f){g.fillStyle=f;g.beginPath();g.ellipse(cx+x*u,by+y*u,rx*u,ry*u,0,0,6.2832);g.fill()}
+function tier(w,h,yb){var l=cx-w/2*u,t=by+(yb-h)*u,r=l+w*u;ell(0,yb,w/2,14,'#d9b676');
+var gr=g.createLinearGradient(l,0,r,0);gr.addColorStop(0,'#e6c68a');gr.addColorStop(.5,'#f7e0b0');gr.addColorStop(1,'#d9b676');g.fillStyle=gr;g.fillRect(l,t,w*u,h*u);
+g.fillStyle=S.color;g.beginPath();g.moveTo(l,t);g.lineTo(r,t);var n=Math.round(w/26),dw=w*u/n;
+for(var i=n-1;i>=0;i--){var x0=l+(i+1)*dw,dh=(12+((i*7)%3)*8)*u;g.lineTo(x0,t+dh*.6);g.quadraticCurveTo(x0-dw*.5,t+dh*1.6,x0-dw,t+dh*.6)}
+g.closePath();g.fill();ell(0,yb-h,w/2,14,S.color);ell(0,yb-h,w/2-6,10,'rgba(255,255,255,.3)')}
+function fr(ts){T=ts/1000;var i,raw=fb?.7:0,lit=0,k;
+if(an){an.getByteTimeDomainData(ad);var s=0;for(i=0;i<ad.length;i++){var v=(ad[i]-128)/128;s+=v*v}raw=Math.max(raw,Math.min(1,Math.max(0,Math.sqrt(s/ad.length)-.04)*5))}
+L+=(raw-L)*.3;
+K.forEach(function(c,i){c.lit=go&&!c.out&&T>c.t0;if(c.lit){lit++;if(L>.1){c.h-=(L-.1)*.04/c.th;if(c.h<=0)ext(c,i)}else c.h=Math.min(1,c.h+.01)}});
+if(go&&!win&&K.length&&K.every(function(c){return c.out})&&T-lo>.9){win=1;wt=T;boom();$('md').classList.add('on');$('mb').style.display='block'}
+dk+=((win?0:.12+.55*(1-lit/Math.max(1,K.length)))-dk)*.05;
+g.clearRect(0,0,W,H);g.globalCompositeOperation='source-over';g.globalAlpha=1;
+ell(0,6,190,24,'#241a30');ell(0,2,185,22,'#e9e2f2');tier(300,90,0);tier(200,70,-90);
+for(i=0;i<12;i++){ell(-138+i*25,-10-(i%2)*4,3.5,3.5,'rgba(255,255,255,.75)')}
+K.forEach(function(c,i){var p=cp(i),x=cx+(p[0]-3.5)*u,y=by+(p[1]-44)*u;g.fillStyle=pal[i%5];g.fillRect(x,y,7*u,44*u);g.fillStyle='rgba(255,255,255,.35)';g.fillRect(x+1*u,y,1.6*u,44*u);g.fillStyle='#2b2018';g.fillRect(x+3*u,y-3*u,1.2*u,4*u)});
+g.fillStyle='rgba(4,2,12,'+dk+')';g.fillRect(0,0,W,H);
+g.globalCompositeOperation='lighter';
+K.forEach(function(c,i){if(!c.lit)return;var p=cp(i),fx=cx+p[0]*u,fy=by+(p[1]-52)*u,r=(105+8*Math.sin(T*11+i))*u;g.globalAlpha=.55*Math.min(1,c.h+.3);g.drawImage(spr,fx-r,fy-r,r*2,r*2)});
+g.globalCompositeOperation='source-over';g.globalAlpha=1;
+K.forEach(function(c,i){if(!c.lit)return;var p=cp(i),fx=cx+p[0]*u,fy=by+(p[1]-47)*u,f=(1+.12*Math.sin(T*13+i*2)+.08*Math.sin(T*21+i))*(.6+.4*c.h),ln=L*9*u*(.7+.3*Math.sin(T*18+i));
+g.fillStyle='#ff9a2e';g.beginPath();g.moveTo(fx,fy+3*u);g.quadraticCurveTo(fx-6*u,fy-4*u,fx+ln,fy-20*u*f);g.quadraticCurveTo(fx+6*u,fy-4*u,fx,fy+3*u);g.fill();
+g.fillStyle='#fff3b0';g.beginPath();g.moveTo(fx,fy+2.5*u);g.quadraticCurveTo(fx-3*u,fy-2*u,fx+ln*.6,fy-11*u*f);g.quadraticCurveTo(fx+3*u,fy-2*u,fx,fy+2.5*u);g.fill()});
+for(i=sm.length-1;i>=0;i--){k=sm[i];g.fillStyle='rgba(210,210,225,'+k.l*.28+')';g.beginPath();g.arc(k.x,k.y,(4+(1-k.l)*12)*u,0,6.2832);g.fill();k.x+=k.vx+Math.sin(T*3+i)*.3;k.y+=k.vy;k.l-=.012;if(k.l<=0)sm.splice(i,1)}
+if(win&&T-wt<4)for(i=0;i<3;i++)cf.push({x:Math.random()*W,y:-10,vx:(Math.random()-.5)*2,vy:1+Math.random()*2,r:0,vr:(Math.random()-.5)*.4,s:5+Math.random()*6,c:[S.color,'#ffd36b','#6bd5ff','#9dffb0','#fff'][i+(T*10|0)%2]});
+for(i=cf.length-1;i>=0;i--){k=cf[i];g.save();g.translate(k.x,k.y);g.rotate(k.r);g.fillStyle=k.c;g.fillRect(-k.s/2,-k.s/4,k.s,k.s/2);g.restore();k.x+=k.vx;k.y+=k.vy;k.vy=Math.min(5,k.vy+.15);k.vx*=.99;k.r+=k.vr;if(k.y>H+20)cf.splice(i,1)}
+requestAnimationFrame(fr)}
+cv.addEventListener('pointerdown',function(e){K.forEach(function(c,i){if(!c.lit)return;var p=cp(i);if(Math.hypot(e.clientX-(cx+p[0]*u),e.clientY-(by+(p[1]-40)*u))<30*u)ext(c,i)})});
+var bt=$('blow');bt.addEventListener('pointerdown',function(){fb=1});['pointerup','pointerleave','pointercancel'].forEach(function(n){bt.addEventListener(n,function(){fb=0})});
+function mic(){try{navigator.mediaDevices.getUserMedia({audio:{noiseSuppression:false,autoGainControl:false}}).then(function(s){var ac=new(window.AudioContext||window.webkitAudioContext)(),sr=ac.createMediaStreamSource(s);an=ac.createAnalyser();an.fftSize=512;ad=new Uint8Array(an.fftSize);sr.connect(an);$('hint').textContent='Sopla al micrófono 🌬️ o toca las velas'},function(){})}catch(e){}}
+function txt(){$('ttl').textContent=S.titulo;$('sub').textContent=S.nombre;$('tap').textContent=S.tap;$('mt').textContent=S.titulo;$('ms').textContent=S.nombre?'Para '+S.nombre:'';$('mp').textContent=S.mensaje;document.title='🎂 '+S.titulo}
+$('go').addEventListener('click',function(){if(go)return;go=1;K.forEach(function(c,i){c.t0=T+.6+.3*i});$('go').classList.add('hidden')});
+$('mc').onclick=function(){$('md').classList.remove('on')};$('mb').onclick=function(){$('md').classList.add('on')};$('mr').onclick=rst;
+
+addEventListener('resize',rs);
+
+/* ---- arranque ---- */
+$('go').classList.remove('hidden');$('md').classList.remove('on');$('mb').style.display='none';
+rs();mk();bld();txt();requestAnimationFrame(fr);
+})();
+</script><script>
+(function(){
+  function go(){ var g=document.getElementById('go'); if(g) g.click(); }
+  if (document.readyState === 'complete') setTimeout(go, 60); else window.addEventListener('load', function(){ setTimeout(go, 60); });
+})();
+</script><script>
+/* vista previa: dedo fantasma (hace lo que haria el cliente) */
+(function(){
+
+function pe(type,x,y,target){ var ev; try{ ev=new PointerEvent(type,{clientX:x,clientY:y,pointerId:1,bubbles:true,cancelable:true,isPrimary:true,pointerType:'touch'}); }catch(e){ return; } (target||window).dispatchEvent(ev); }
+
+var blow=document.getElementById('blow'), md=document.getElementById('md');
+function cycle(){
+  // sopla ~1.6 s, las velas se apagan; despues vuelve a encenderlas
+  setTimeout(function(){ blow.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true})); },3400);
+  setTimeout(function(){ blow.dispatchEvent(new PointerEvent('pointerup',{bubbles:true})); },3400+1700);
+  setTimeout(function(){ var r=document.getElementById('mr'); if(r) r.click(); },3400+1700+4200);
+  setTimeout(cycle,3400+1700+4200+300);
+}
+var st=document.createElement('style'); st.textContent='#md,#mb{display:none!important}'; document.head.appendChild(st);
+cycle();
+})();
+</script>
+</body></html>

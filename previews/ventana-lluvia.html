@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>[preview] 🌧️ Ventana de lluvia</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#ff9ccf;--l:rgba(255,156,207,.3);--t:#f2f6ff;--m:#a8b4cc}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;color:var(--t);font-family:Quicksand,sans-serif;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent;background:#05030c}
+canvas{position:fixed;inset:0;width:100%;height:100%}
+#hud{position:fixed;top:16px;left:0;right:0;text-align:center;z-index:5;pointer-events:none;text-shadow:0 0 14px rgba(0,0,0,.6)}
+#ttl{font:700 2.3rem 'Dancing Script',cursive;margin:0;color:#fff;opacity:.9}
+#sub{font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--a);font-weight:700}
+#pc{margin-top:6px;font-size:.85rem;color:var(--m);font-weight:700}
+body.edm #hud{display:none}
+#hint{position:fixed;bottom:28px;left:0;right:0;text-align:center;z-index:5;pointer-events:none;font-size:.9rem;padding:0 24px;text-shadow:0 0 10px #000;animation:b 2.4s ease-in-out infinite}
+@keyframes b{50%{opacity:.45}}
+#lb{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:8;display:none;padding:13px 24px;border-radius:30px;border:1px solid var(--l);background:rgba(20,10,40,.8);backdrop-filter:blur(8px);color:#fff;font:700 .95rem Quicksand,sans-serif;cursor:pointer;animation:p 2s ease-in-out infinite;box-shadow:0 0 20px var(--l)}
+#go{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;background:radial-gradient(circle,#1c1840,#05030c);transition:opacity 1.2s;font:700 1.9rem 'Dancing Script',cursive;text-shadow:0 0 14px var(--a);text-align:center;padding:24px}
+#go.hidden{opacity:0;pointer-events:none}#go span{font-size:3rem;animation:p 2s ease-in-out infinite}
+@keyframes p{50%{transform:scale(1.15)}}
+#lb{animation:q 2s ease-in-out infinite}@keyframes q{50%{transform:translateX(-50%) scale(1.07)}}
+#md{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(4,2,12,.74);backdrop-filter:blur(5px);opacity:0;pointer-events:none;transition:opacity .6s}
+#md.on{opacity:1;pointer-events:auto}
+.cd{max-width:480px;width:100%;max-height:80vh;overflow-y:auto;background:linear-gradient(160deg,rgba(40,24,80,.95),rgba(10,5,22,.97));border:1px solid var(--l);border-radius:22px;padding:30px 26px;box-shadow:0 0 40px var(--l);text-align:center}
+.cd h2{font:700 2.2rem 'Dancing Script',cursive;margin:0 0 4px;text-shadow:0 0 14px var(--a)}
+#ms{color:var(--a);font-weight:700;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px}
+#mp{white-space:pre-wrap;line-height:1.65;font-size:1.02rem;margin:0 0 18px;text-align:left;touch-action:pan-y}
+#pen,.x{background:rgba(255,255,255,.08);border:1px solid var(--l);color:var(--t);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1rem}
+#pen{position:fixed;top:14px;right:14px;z-index:30;width:46px;height:46px;background:rgba(10,8,20,.5);backdrop-filter:blur(8px)}
+.noed #pen,.noed #ed{display:none!important}
+#ed{position:fixed;z-index:60;background:rgba(12,8,26,.95);backdrop-filter:blur(14px);border:1px solid var(--l);transition:transform .45s cubic-bezier(.2,.9,.3,1);left:0;right:0;bottom:0;height:58vh;border-radius:22px 22px 0 0;transform:translateY(105%);display:flex;flex-direction:column}
+#ed.open{transform:none}
+@media(min-width:760px){#ed{left:auto;top:0;height:auto;width:380px;border-radius:0;transform:translateX(105%)}}
+.hd{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--l)}
+.hd b{background:linear-gradient(90deg,#72CBE9,#745FC9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bd{overflow-y:auto;touch-action:pan-y;padding:6px 18px 40px;flex:1}
+.bd label{display:block;font-size:.78rem;font-weight:700;margin:16px 0 6px}
+.bd input:not([type=checkbox]):not([type=color]):not([type=range]),.bd textarea{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--l);color:var(--t);border-radius:8px;padding:10px;font:600 .85rem Quicksand,sans-serif;user-select:text}
+.bd textarea{min-height:120px;resize:vertical;line-height:1.5}.bd input[type=range]{width:100%;accent-color:var(--a)}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:8px}.row .x{flex:0 0 34px}
+.b{width:100%;border:1px solid var(--l);background:rgba(255,156,207,.13);color:var(--a);border-radius:9px;padding:11px;font:700 .85rem Quicksand,sans-serif;cursor:pointer;margin-top:8px}
+.dl{background:var(--a);color:#2a0016;margin-top:14px;padding:14px}
+#sw{display:flex;gap:8px;flex-wrap:wrap}#sw i{width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,.2);cursor:pointer}
+.ck{display:flex;gap:9px;font-weight:600;font-size:.78rem;color:var(--m);align-items:flex-start;margin-top:10px}
+</style><script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 1}})}catch(e){}</script>
+<style id="pv-hide">
+/* vista previa: sin editor, sin pantalla de inicio */
+#pen,#ed,#go,#start-screen,.le-edit-toggle,.le-edit-hint,.le-editor-page,#leEditToggle{display:none !important}
+html,body{pointer-events:none !important;-webkit-user-select:none;user-select:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas><audio id="au" loop></audio>
+<div id="go"><div id="tap"></div><span>🌧️</span></div>
+<div id="hud"><h1 id="ttl"></h1><div id="sub"></div><div id="pc"></div></div>
+<div id="hint"></div><button id="lb">💌 Abrir la carta</button>
+<div id="md"><div class="cd"><h2 id="mt">Para ti</h2><div id="ms"></div><p id="mp"></p><button class="b" id="mc">Cerrar</button></div></div>
+
+<script id="st" type="application/json">{"titulo":"Limpia el vidrio","nombre":"Mi amor","tap":"Toca para empañar el vidrio","color":"#ff9ccf","regrow":3,"drops":14,"musica":"","mnom":"","frases":["Hay algo que quiero decirte","Eres mi lugar seguro","Cuando llueve, pienso en ti","Quédate conmigo","Te quiero ♥"],"carta":"Si llegaste hasta aquí limpiando el vidrio con tu dedo, es porque eres de las personas que se toman el tiempo de ver lo que hay detrás.\n\nAsí me siento contigo: en medio de cualquier tormenta, tú eres lo único que se ve claro.\n\nGracias por existir. Te quiero. 💗"}</script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var S=JSON.parse($('st').textContent),cv=$('c'),g=cv.getContext('2d'),au=$('au'),W,H,dp,M,mg,TC,tg,FB,SB,sprs=[],DR=[],T=0,fc=0,go=0,wp=0,lx=0,ly=0,dist=0,F=0,nf=5,edo=0,pc=-1,hs='',seed=11,shown=0,tm;
+function rnd(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}
+function cvs(){var c=document.createElement('canvas');c.width=W*dp;c.height=H*dp;var x=c.getContext('2d');x.setTransform(dp,0,0,dp,0,0);return[c,x]}
+function rs(){dp=Math.min(devicePixelRatio||1,1.5);W=innerWidth;H=innerHeight;cv.width=W*dp;cv.height=H*dp;var a;a=cvs();M=a[0];mg=a[1];a=cvs();TC=a[0];tg=a[1];a=cvs();FB=a[0];a=cvs();SB=a[0];bg()}
+function save(){$('st').textContent=JSON.stringify(S).replace(/</g,'\\u003c')}
+function glow(col){var c=document.createElement('canvas');c.width=c.height=64;var x=c.getContext('2d'),q=x.createRadialGradient(32,32,0,32,32,32);q.addColorStop(0,col);q.addColorStop(.45,col);q.addColorStop(1,'rgba(0,0,0,0)');x.globalAlpha=1;x.fillStyle=q;x.fillRect(0,0,64,64);return c}
+function mk(){var h=S.color.replace('#',''),r=parseInt(h.substr(0,2),16),gg=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16),rt=document.documentElement.style;rt.setProperty('--a',S.color);rt.setProperty('--l','rgba('+r+','+gg+','+b+',.3)');
+sprs=[S.color,'#ffd36b','#8fe8ff','#ff8f6b','#ffffff'].map(glow)}
+function area(){var w=innerWidth>=760,aw=edo&&w?W-380:W;return{cx:aw/2,aw:aw,y0:edo&&!w?H*.08:H*.17,ah:edo&&!w?H*.32:H*.6}}
+function bg(){if(!FB)return;var f=FB.getContext('2d'),s=SB.getContext('2d'),i,k,n=S.frases.length;f.setTransform(dp,0,0,dp,0,0);s.setTransform(dp,0,0,dp,0,0);seed=11;
+[f,s].forEach(function(x){var q=x.createLinearGradient(0,0,0,H);q.addColorStop(0,'#14103a');q.addColorStop(1,'#04030a');x.globalCompositeOperation='source-over';x.fillStyle=q;x.fillRect(0,0,W,H)});
+var L=[];for(i=0;i<46;i++)L.push({x:rnd()*W,y:H*(.3+rnd()*.65),r:8+rnd()*18,c:Math.floor(rnd()*5)});
+f.globalCompositeOperation='lighter';L.forEach(function(l){f.globalAlpha=.7;f.drawImage(sprs[l.c],l.x-l.r*2.4,l.y-l.r*2.4,l.r*4.8,l.r*4.8)});
+f.globalCompositeOperation='source-over';f.globalAlpha=1;f.fillStyle='rgba(185,200,230,.2)';f.fillRect(0,0,W,H);
+var bw=W/12;for(i=0;i<13;i++){var bh=H*(.1+rnd()*.28);s.fillStyle='#06040e';s.fillRect(i*bw-4,H-bh,bw-2,bh);
+for(k=0;k<bh/22;k++)for(var j=0;j<bw/14;j++)if(rnd()<.3){s.fillStyle=rnd()<.5?'rgba(255,211,107,.75)':'rgba(255,156,207,.55)';s.fillRect(i*bw+j*14+2,H-bh+k*22+6,6,9)}}
+s.globalCompositeOperation='lighter';L.forEach(function(l){s.globalAlpha=.55;s.drawImage(sprs[l.c],l.x-l.r*.9,l.y-l.r*.9,l.r*1.8,l.r*1.8);s.globalAlpha=1;s.drawImage(sprs[4],l.x-l.r*.2,l.y-l.r*.2,l.r*.4,l.r*.4)});
+s.globalCompositeOperation='source-over';s.globalAlpha=1;
+var a=area();s.textAlign='center';s.textBaseline='middle';
+S.frases.forEach(function(t,i){var fs=Math.min(a.aw*.095,a.ah/Math.max(n,1)*.62,46);for(;;){s.font='700 '+fs+'px "Dancing Script",cursive';if(s.measureText(t).width<=a.aw*.88||fs<=14)break;fs-=2}
+s.save();s.translate(a.cx+Math.sin(i*5.3)*a.aw*.1,a.y0+a.ah*(i+.5)/Math.max(n,1));s.rotate(Math.sin(i*2.1)*.07);s.shadowColor=S.color;s.shadowBlur=16;s.fillStyle='#fff';s.fillText(t,0,0);s.shadowBlur=4;s.fillText(t,0,0);s.restore()})}
+function drops(){DR=[];for(var i=0;i<S.drops;i++)DR.push({x:Math.random()*W,y:Math.random()*H,r:3.5+Math.random()*5,t:0,v:0})}
+function stroke(x0,y0,x1,y1,w,al){mg.lineCap='round';mg.strokeStyle='rgba(255,255,255,'+al+')';mg.lineWidth=w;mg.beginPath();mg.moveTo(x0,y0);mg.lineTo(x1,y1);mg.stroke()}
+function wipe(x0,y0,x1,y1){var b=Math.min(W,H)*.07;stroke(x0,y0,x1,y1,b*2,.5);stroke(x0,y0,x1,y1,b*1.3,1)}
+function fr(ts){T=ts/1000;fc++;var i,d;
+g.setTransform(dp,0,0,dp,0,0);g.globalCompositeOperation='source-over';g.globalAlpha=1;g.drawImage(FB,0,0,W,H);
+for(i=0;i<DR.length;i++){d=DR[i];if(d.t<=0&&Math.random()<.012){d.t=30+Math.random()*70;d.v=1+Math.random()*2.4}
+if(d.t>0){d.t--;stroke(d.x,d.y-d.v,d.x,d.y,d.r*.9,.9);d.y+=d.v}
+if(d.y>H+20){d.y=-10;d.x=Math.random()*W;d.t=0}
+g.beginPath();g.arc(d.x,d.y,d.r,0,6.2832);g.fillStyle='rgba(255,255,255,.1)';g.fill();g.strokeStyle='rgba(255,255,255,.5)';g.lineWidth=1;g.stroke();g.fillStyle='rgba(255,255,255,.75)';g.beginPath();g.arc(d.x-d.r*.3,d.y-d.r*.3,d.r*.25,0,6.2832);g.fill()}
+if(S.regrow>0&&fc%10==0){mg.globalCompositeOperation='destination-out';mg.fillStyle='rgba(0,0,0,'+S.regrow*.006+')';mg.fillRect(0,0,W,H);mg.globalCompositeOperation='source-over'}
+tg.globalCompositeOperation='source-over';tg.clearRect(0,0,W,H);tg.drawImage(SB,0,0,W,H);tg.globalCompositeOperation='destination-in';tg.drawImage(M,0,0,W,H);g.drawImage(TC,0,0,W,H);
+if(go&&!edo&&T>nf){F=1;nf=T+9+Math.random()*9}F*=.92;if(F>.02){g.globalAlpha=F*.6;g.drawImage(SB,0,0,W,H);g.globalAlpha=1}
+var p=Math.min(100,Math.floor(dist/(W*5)*100));if(p!==pc){pc=p;$('pc').textContent=go&&!edo?'🌫️ '+p+'% despejado':'';if(p>=100&&!shown){shown=1;$('lb').style.display='block'}}
+var h=!go?'':dist<40?'Pasa el dedo por el vidrio para limpiarlo ✨':pc<100?'Hay mensajes escondidos… sigue limpiando':'';if(h!==hs){hs=h;$('hint').textContent=h}
+requestAnimationFrame(fr)}
+cv.addEventListener('pointerdown',function(e){if(!go)return;wp=1;lx=e.clientX;ly=e.clientY;wipe(lx,ly,lx,ly)});
+addEventListener('pointermove',function(e){if(!wp)return;var x=e.clientX,y=e.clientY;wipe(lx,ly,x,y);dist+=Math.hypot(x-lx,y-ly);lx=x;ly=y});
+addEventListener('pointerup',function(){wp=0});
+function txt(){$('ttl').textContent=S.titulo;$('sub').textContent=S.nombre?'Para '+S.nombre:'';$('tap').textContent=S.tap;$('mt').textContent='Para ti';$('ms').textContent=S.nombre||'';$('mp').textContent=S.carta;document.title='🌧️ '+S.titulo}
+function opn(){$('md').classList.add('on')}
+$('lb').onclick=opn;$('mc').onclick=function(){$('md').classList.remove('on')};
+$('go').addEventListener('click',function(){if(go)return;go=1;nf=T+4;au.volume=.7;var pr=au.play();if(pr&&pr.catch)pr.catch(function(){});$('go').classList.add('hidden')});
+
+addEventListener('resize',function(){rs();drops()});
+
+/* ---- arranque ---- */
+$('go').classList.remove('hidden');$('md').classList.remove('on');$('lb').style.display='none';
+mk();rs();txt();drops();
+if(document.fonts&&document.fonts.load)document.fonts.load('700 40px "Dancing Script"').then(bg,function(){});
+requestAnimationFrame(fr);
+})();
+</script><script>
+(function(){
+  function go(){ var g=document.getElementById('go'); if(g) g.click(); }
+  if (document.readyState === 'complete') setTimeout(go, 60); else window.addEventListener('load', function(){ setTimeout(go, 60); });
+})();
+</script><script>
+/* vista previa: dedo fantasma (hace lo que haria el cliente) */
+(function(){
+
+function pe(type,x,y,target){ var ev; try{ ev=new PointerEvent(type,{clientX:x,clientY:y,pointerId:1,bubbles:true,cancelable:true,isPrimary:true,pointerType:'touch'}); }catch(e){ return; } (target||window).dispatchEvent(ev); }
+
+var c=document.getElementById('c');
+function swipe(){
+  var W=innerWidth,H=innerHeight, y0=H*.2, rows=6, i=0, x=W*.1, dir=1, down=false;
+  function step(){
+    if(!down){ pe('pointerdown',x,y0+H*.58*(i/(rows-1)),c); down=true; }
+    x+=dir*W*.045; if(x>W*.92||x<W*.08){ dir=-dir; i=(i+1)%rows; x=Math.max(W*.08,Math.min(W*.92,x)); }
+    pe('pointermove',x,y0+H*.58*(i/(rows-1)),window);
+  }
+  setInterval(step,34);
+}
+setTimeout(swipe,1200);
+})();
+</script>
+</body></html>

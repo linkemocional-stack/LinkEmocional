@@ -1,0 +1,2068 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#12060e">
+<title>[preview] 🏮 Linternas del Deseo 🏮</title>
+<meta name="description" content="Linternas que suben al cielo, fuegos artificiales en forma de corazón y corazones flotando bajo la luna.">
+<meta property="og:title" content="🏮 Linternas del Deseo 🏮">
+<meta property="og:description" content="Linternas, fuegos artificiales de corazón y un cielo lleno de deseos.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏮</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Indie+Flower&family=Montserrat:wght@700;800&family=Pacifico&family=Playfair+Display:wght@600;700;800&family=Quicksand:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html, body {
+    margin:0; height:100%; background:#000; overflow:hidden;
+    font-family:'Dancing Script', cursive;
+    touch-action:none;
+    -webkit-user-select:none; user-select:none; -webkit-tap-highlight-color:transparent;
+  }
+  canvas { display:block; }
+
+  #start-screen{
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background:radial-gradient(ellipse at 50% 75%,#4a1a2c 0%,#1d0a1c 50%,#07020a 100%);
+    display:flex; justify-content:center; align-items:center; flex-direction:column;
+    z-index:3000; color:#ffe1d3; font-size:2rem; font-weight:700; cursor:pointer;
+    transition:opacity 1s ease; text-shadow:0 0 15px #ff7a59;
+  }
+  #start-screen.hidden{ opacity:0; pointer-events:none; }
+  #start-screen > .sbub{ position:absolute; top:0; left:0; right:0; bottom:0; overflow:hidden; pointer-events:none; z-index:0; }
+  .sbub::before{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:55%;
+    background:radial-gradient(ellipse at 50% 100%, rgba(255,122,89,.35), transparent 70%);
+    animation:ltGlow 4s ease-in-out infinite alternate;
+  }
+  @keyframes ltGlow{ from{ opacity:.55; } to{ opacity:1; } }
+  .sbub i{
+    position:absolute; bottom:-30px; border-radius:50%;
+    background:radial-gradient(circle, #ffe9c4 0%, #ff9a5c 45%, rgba(255,122,89,0) 72%);
+    box-shadow:0 0 10px 2px rgba(255,150,90,.55);
+    animation:sbRise linear infinite;
+  }
+  @keyframes sbRise{ 0%{ transform:translate(0,0) scale(1); opacity:0; } 12%{ opacity:1; } 50%{ transform:translate(-14px,-55vh) scale(.8); } 100%{ transform:translate(16px,-112vh) scale(.4); opacity:0; } }
+  .pulse-text{ animation:pulse 1.5s infinite alternate; letter-spacing:.5px; }
+  @keyframes pulse{ 0%{transform:scale(1);opacity:.8} 100%{transform:scale(1.1);opacity:1} }
+  .start-heart{
+    margin-top:26px; font-size:3.6rem; position:relative; display:inline-block;
+    animation: lanternBob 3.6s ease-in-out infinite;
+    filter: drop-shadow(0 0 18px rgba(255,140,70,.8));
+  }
+  @keyframes lanternBob{ 0%,100%{ transform:translateY(4px) rotate(-3deg); } 50%{ transform:translateY(-14px) rotate(3deg); } }
+  .start-heart::before{
+    content:""; position:absolute; left:50%; top:50%; width:110px; height:110px; margin:-55px 0 0 -55px;
+    border-radius:50%; z-index:-1;
+    background:radial-gradient(circle, rgba(255,160,90,.55), rgba(255,122,89,0) 68%);
+    animation: lanternFlame 1.7s ease-in-out infinite;
+  }
+  @keyframes lanternFlame{ 0%,100%{ transform:scale(.85); opacity:.7; } 50%{ transform:scale(1.15); opacity:1; } }
+  @media (max-width:480px){ .start-heart{ font-size:2.8rem; margin-top:16px; } }
+
+  #top-title{
+    position:fixed; top:20px; left:0; width:100%; text-align:center;
+    z-index:1500; pointer-events:none;
+    font-family:'Dancing Script', cursive; font-weight:700; font-size:2.8rem; letter-spacing:1px;
+    background:linear-gradient(90deg,#fff1ea,#ff7a59,#ff4f8b);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 14px rgba(255,122,89,.55));
+    animation:titlePulse 1.8s ease-in-out infinite;
+  }
+  @keyframes titlePulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.035)} }
+  @media (max-width:480px){ #top-title{ font-size:1.9rem; top:14px; } }
+
+  #love-letter-btn{
+    position:fixed; bottom:24px; right:24px; z-index:1800;
+    width:60px; height:60px; border-radius:50%; border:none; cursor:pointer;
+    background:linear-gradient(135deg,#8a2a2a,#ff7a59);
+    box-shadow:0 0 18px rgba(255,122,89,.6), 0 4px 14px rgba(0,0,0,.35);
+    display:flex; align-items:center; justify-content:center; font-size:1.55rem;
+    animation:btnBeat 1.8s ease-in-out infinite; transition:transform .25s ease;
+  }
+  #love-letter-btn:hover{ transform:scale(1.08); }
+  @keyframes btnBeat{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.07)} }
+
+  #love-letter-overlay{
+    position:fixed; inset:0; background:rgba(14,4,10,.84);
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    z-index:2500; display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .4s ease; padding:24px;
+  }
+  #love-letter-overlay.visible{ opacity:1; pointer-events:auto; }
+  #love-letter-card{
+    max-width:620px; width:100%; max-height:82vh; overflow-y:auto;
+    background:linear-gradient(160deg,rgba(40,12,24,.96),rgba(10,3,8,.98));
+    border:1px solid rgba(255,122,89,.35); border-radius:22px;
+    padding:40px 32px; box-shadow:0 0 40px rgba(255,122,89,.35);
+    color:#fff0e8; font-family:'Dancing Script', cursive;
+    transform:translateY(18px) scale(.96); transition:transform .4s ease; position:relative;
+  }
+  #love-letter-overlay.visible #love-letter-card{ transform:translateY(0) scale(1); }
+  #love-letter-card h2{
+    text-align:center; margin:0 0 22px; font-size:2rem; font-weight:700;
+    background:linear-gradient(90deg,#fff1ea,#ff7a59,#ff4f8b);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  #love-letter-card p{ line-height:1.8; font-size:1.25rem; margin:0 0 16px; }
+  #love-letter-close{
+    position:absolute; top:14px; right:16px; background:none; border:none;
+    color:#ffc2a8; font-size:1.35rem; cursor:pointer; line-height:1; padding:4px;
+  }
+  #love-letter-close:hover{ color:#fff; }
+  @media (max-width:480px){
+    #love-letter-btn{ width:52px; height:52px; font-size:1.3rem; bottom:18px; right:18px; }
+    #love-letter-card{ padding:30px 22px; border-radius:18px; }
+    #love-letter-card h2{ font-size:1.6rem; }
+    #love-letter-card p{ font-size:1.1rem; }
+  }
+
+/* ============================================================
+   EDITOR LINK EMOCIONAL  (inyectado)
+   ============================================================ */
+:root{
+  --le-accent: #ff7a59;
+  --le-accent-soft: rgba(255,122,89,0.14);
+  --le-bg: #12060e;
+  --le-panel: rgba(18,6,14,0.92);
+  --le-text: #fff0e8;
+  --le-muted: #c49a8f;
+  --le-line: rgba(255,122,89,0.24);
+}
+
+/* ---- boton lapiz ---- */
+.le-edit-toggle{
+  position:fixed; top:16px; right:16px;
+  width:50px; height:50px; border-radius:50%;
+  background:rgba(10,8,4,0.5);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--le-line);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; z-index:3600;
+  box-shadow:0 0 0 0 rgba(0,0,0,0);
+  transition:transform .15s ease, background .15s ease;
+  animation: leEditIn .6s cubic-bezier(.2,.9,.25,1.2) .3s both, leEditGlow 2.8s ease-in-out 1.1s infinite;
+}
+@keyframes leEditIn{
+  0%{ opacity:0; transform:scale(.4) rotate(-25deg); }
+  100%{ opacity:1; transform:scale(1) rotate(0deg); }
+}
+@keyframes leEditGlow{
+  0%,100%{ box-shadow:0 0 0 0 rgba(0,0,0,0), 0 0 14px 0 var(--le-accent-soft); }
+  50%{ box-shadow:0 0 0 7px rgba(0,0,0,0), 0 0 22px 3px var(--le-accent-soft); }
+}
+.le-edit-toggle::after{
+  content:""; position:absolute; inset:-6px; border-radius:50%;
+  border:1.5px solid var(--le-accent); opacity:.55;
+  animation: leEditRing 2.8s ease-out 1.1s infinite;
+  pointer-events:none;
+}
+@keyframes leEditRing{
+  0%{ transform:scale(.82); opacity:.6; }
+  70%{ opacity:0; }
+  100%{ transform:scale(1.35); opacity:0; }
+}
+.le-edit-toggle:hover{ transform:scale(1.08); background:rgba(10,8,4,0.75); animation-play-state:paused; }
+.le-edit-toggle svg{ width:20px; height:20px; position:relative; z-index:1; }
+.le-edit-hint{
+  position:fixed; top:22px; right:74px; z-index:3599;
+  background:rgba(10,8,4,0.75); border:1px solid var(--le-line); color:var(--le-text);
+  font-family:'Quicksand',sans-serif; font-size:11.5px; font-weight:700;
+  padding:7px 12px; border-radius:999px; white-space:nowrap;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  opacity:0; transform:translateX(6px);
+  animation: leHint 8s ease-in-out 1.6s infinite;
+  pointer-events:none;
+}
+@keyframes leHint{
+  0%,72%{ opacity:0; transform:translateX(6px); }
+  80%,92%{ opacity:1; transform:translateX(0); }
+  100%{ opacity:0; transform:translateX(6px); }
+}
+body.le-no-editor .le-edit-toggle,
+body.le-no-editor .le-edit-hint{ display:none !important; }
+
+/* ---- pagina del editor ---- */
+.le-editor-page{
+  display:none; position:relative; z-index:50; min-height:100%;
+  color:var(--le-text);
+  font-family:'Quicksand','Segoe UI',Arial,sans-serif;
+}
+html.le-editing{ overflow-y:auto !important; overflow-x:hidden !important; height:auto !important; touch-action:auto !important; background:var(--le-bg) !important; }
+body.le-editor{ overflow-y:auto !important; overflow-x:hidden !important; background:var(--le-bg) !important; touch-action:auto !important; height:auto !important; }
+body.le-editor .le-editor-page{ display:block; }
+body.le-editor #start-screen,
+body.le-editor #top-title,
+body.le-editor #love-letter-btn,
+body.le-editor #love-letter-overlay,
+body.le-editor .le-edit-toggle,
+body.le-editor .le-edit-hint{ display:none !important; }
+body.le-no-editor .le-editor-page{ display:none !important; }
+
+#c.le-stage-full{ position:fixed; top:0; left:0; z-index:1; }
+#c.le-stage-preview{ position:relative !important; display:block; width:100% !important; height:100% !important; }
+
+.le-topbar{
+  position:sticky; top:0; display:flex; align-items:center; gap:14px;
+  padding:14px 18px; background:var(--le-panel);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--le-line); z-index:60;
+}
+.le-back{
+  width:40px; height:40px; flex:0 0 auto; border-radius:50%;
+  background:rgba(255,255,255,0.06); border:1px solid var(--le-line);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--le-text);
+}
+.le-back:hover{ background:rgba(255,255,255,0.13); }
+.le-back svg{ width:19px; height:19px; }
+.le-titles{ flex:1 1 auto; min-width:0; }
+.le-titles h1{ font-size:16px; margin:0; font-weight:700; }
+.le-titles p{ font-size:11.5px; margin:2px 0 0; color:var(--le-muted); }
+.le-brand{
+  margin-left:auto; flex:0 0 auto;
+  font-weight:700; font-size:14px; letter-spacing:0.4px; white-space:nowrap;
+  background:linear-gradient(90deg,#72CBE9,#745FC9);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  pointer-events:none; user-select:none;
+}
+
+.le-body{ max-width:640px; margin:0 auto; padding:18px 18px 70px; }
+
+.le-preview{
+  position:relative; width:100%; aspect-ratio:4/3;
+  border-radius:20px; overflow:hidden;
+  border:1px solid var(--le-line); background:#000;
+  box-shadow:0 10px 30px rgba(0,0,0,0.45); margin-bottom:24px;
+}
+.le-preview .le-tag{
+  position:absolute; top:10px; left:12px; font-size:10.5px; font-weight:700;
+  letter-spacing:0.06em; text-transform:uppercase; color:var(--le-accent);
+  background:rgba(0,0,0,0.5); border:1px solid var(--le-line);
+  padding:4px 9px; border-radius:999px; pointer-events:none; z-index:5;
+}
+
+.le-sec{ margin-bottom:26px; }
+.le-sec h3{ font-size:13.5px; font-weight:700; margin:0 0 3px; color:var(--le-text); }
+.le-sec p.le-hint{ font-size:12px; color:var(--le-muted); margin:0 0 12px; line-height:1.5; }
+
+.le-input, .le-area{
+  width:100%; box-sizing:border-box;
+  background:rgba(255,255,255,0.05); border:1px solid var(--le-line);
+  color:var(--le-text); padding:11px; border-radius:8px;
+  font-family:'Quicksand',sans-serif; font-size:14px; font-weight:600;
+}
+.le-area{ min-height:150px; line-height:1.6; font-weight:500; resize:vertical; }
+
+.le-color-row{ display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+.le-color-row input[type=color]{ width:44px; height:44px; border:2px solid var(--le-line); border-radius:11px; background:none; cursor:pointer; padding:0; flex:0 0 auto; }
+.le-color-row input[type=text]{ flex:1 1 140px; min-width:0; }
+.le-swatches{ display:flex; gap:8px; flex-wrap:wrap; }
+.le-sw{ width:28px; height:28px; border-radius:8px; border:2px solid rgba(255,255,255,0.15); cursor:pointer; transition:transform .12s ease; flex-shrink:0; }
+.le-sw:hover{ transform:scale(1.12); }
+.le-sw.active{ border-color:#fff; }
+
+.le-opts{ display:flex; flex-wrap:wrap; gap:8px; }
+.le-opt{
+  flex:1 1 95px; background:rgba(255,255,255,0.04); border:1px solid var(--le-line);
+  border-radius:9px; padding:11px 8px; cursor:pointer; font-size:15px;
+  color:var(--le-text); text-align:center; line-height:1.2;
+}
+.le-opt small{ display:block; font-size:9.5px; font-weight:700; color:var(--le-muted); margin-top:3px; font-family:'Quicksand',sans-serif; }
+.le-opt.active{ border-color:var(--le-accent); color:var(--le-accent); background:var(--le-accent-soft); }
+.le-opt.active small{ color:var(--le-accent); opacity:.85; }
+
+.le-chips{ display:flex; flex-direction:column; gap:7px; margin-bottom:10px; max-height:280px; overflow-y:auto; }
+.le-chip{ display:flex; align-items:center; gap:9px; background:rgba(255,255,255,0.045); border:1px solid var(--le-line); border-radius:8px; padding:10px 9px 10px 13px; }
+.le-chip span{ flex:1; font-size:13.5px; font-weight:600; word-break:break-word; }
+.le-chip button{ background:none; border:none; color:var(--le-muted); font-size:16px; cursor:pointer; padding:3px 6px; border-radius:5px; }
+.le-chip button:hover{ color:#ff9fc8; }
+.le-empty{ font-size:12px; color:var(--le-muted); font-style:italic; padding:5px 2px; opacity:.8; }
+
+.le-add-row{ display:flex; gap:8px; flex-wrap:wrap; }
+.le-add-row input[type=text]{ flex:1 1 160px; min-width:0; }
+.le-btn{ border:none; border-radius:8px; padding:11px 16px; font-family:'Quicksand',sans-serif; font-weight:700; font-size:13px; cursor:pointer; }
+.le-btn-add{ background:var(--le-accent-soft); color:var(--le-accent); border:1px solid var(--le-line); flex:0 0 auto; }
+.le-btn-clear{ background:none; color:var(--le-muted); border:1px solid var(--le-line); font-size:11.5px; padding:8px 12px; margin-top:8px; }
+.le-btn-clear:hover{ color:#ff9fc8; border-color:#ff9fc8; }
+
+.le-grid{ display:flex; flex-wrap:wrap; gap:9px; margin-bottom:10px; }
+.le-thumb{ width:60px; height:60px; border-radius:14px; background-size:cover; background-position:center; position:relative; border:1px solid var(--le-line); }
+.le-thumb button{ position:absolute; top:-6px; right:-6px; width:21px; height:21px; border-radius:50%; background:#1a1208; border:1px solid var(--le-line); color:var(--le-text); font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+.le-add-tile{ width:60px; height:60px; border-radius:14px; border:1.5px dashed var(--le-line); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--le-muted); font-size:24px; flex-shrink:0; }
+.le-add-tile.disabled{ opacity:.35; pointer-events:none; }
+.le-add-tile input{ display:none; }
+.le-note{ font-size:11px; color:var(--le-muted); margin-top:2px; }
+
+.le-switch{ display:flex; align-items:center; gap:10px; padding:11px 12px; background:rgba(255,255,255,0.04); border:1px solid var(--le-line); border-radius:9px; margin-bottom:8px; cursor:pointer; }
+.le-switch input{ width:18px; height:18px; accent-color:var(--le-accent); flex:0 0 auto; }
+.le-switch span{ font-size:13px; font-weight:600; }
+
+.le-range .le-label{ font-size:12px; color:var(--le-muted); margin-bottom:6px; }
+.le-range input[type=range]{ width:100%; accent-color:var(--le-accent); }
+
+.le-footer{ margin-top:6px; padding-top:20px; border-top:1px solid var(--le-line); }
+.le-check{ display:flex; align-items:flex-start; gap:9px; margin-bottom:14px; }
+.le-check input{ margin-top:3px; flex:0 0 auto; accent-color:var(--le-accent); }
+.le-check label{ font-size:12px; color:var(--le-muted); line-height:1.5; }
+.le-btn-dl{ width:100%; background:var(--le-accent); color:#1a1200; padding:15px 16px; font-size:14.5px; border-radius:10px; }
+.le-btn-dl:hover{ filter:brightness(1.08); }
+.le-file-row{ margin-top:12px; }
+.le-save-note{ font-size:11.5px; color:var(--le-muted); line-height:1.5; margin-top:14px; }
+
+/* ============================================================
+   PANTALLA DE INICIO (mejora compartida entre plantillas)
+   ============================================================ */
+#start-screen{ overflow:hidden; }
+#start-screen::before{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background-image:
+    radial-gradient(1.6px 1.6px at 12% 22%, #fff, transparent 60%),
+    radial-gradient(1.3px 1.3px at 28% 68%, #fff, transparent 60%),
+    radial-gradient(1.8px 1.8px at 42% 15%, #fff, transparent 60%),
+    radial-gradient(1.2px 1.2px at 58% 78%, #fff, transparent 60%),
+    radial-gradient(1.6px 1.6px at 74% 32%, #fff, transparent 60%),
+    radial-gradient(1.3px 1.3px at 86% 62%, #fff, transparent 60%),
+    radial-gradient(1.5px 1.5px at 20% 85%, #fff, transparent 60%),
+    radial-gradient(1.4px 1.4px at 92% 20%, #fff, transparent 60%),
+    radial-gradient(1.3px 1.3px at 65% 90%, #fff, transparent 60%),
+    radial-gradient(1.7px 1.7px at 8% 50%, #fff, transparent 60%);
+  opacity:.65;
+  animation: leStarsTwinkle 3.2s ease-in-out infinite alternate;
+}
+@keyframes leStarsTwinkle{ 0%{ opacity:.32; } 100%{ opacity:.85; } }
+#start-screen::after{
+  content:""; position:absolute; left:50%; top:50%; z-index:0; pointer-events:none;
+  width:70vmax; height:70vmax; border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle, var(--le-accent-soft) 0%, transparent 68%);
+  animation: leAuraPulse 4.6s ease-in-out infinite;
+}
+@keyframes leAuraPulse{ 0%,100%{ opacity:.5; transform:translate(-50%,-50%) scale(0.92); } 50%{ opacity:1; transform:translate(-50%,-50%) scale(1.08); } }
+#start-screen > *{ position:relative; z-index:1; }
+.pulse-text{
+  animation: leTextIn .8s cubic-bezier(.2,.85,.3,1.1) both, leTextGlow 2.6s ease-in-out 1s infinite alternate;
+  letter-spacing:.5px;
+  padding:13px 28px; border-radius:999px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(0,0,0,0.22));
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  box-shadow:
+    0 6px 26px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    0 0 0 1px var(--le-accent-soft);
+}
+@keyframes leTextIn{
+  0%{ opacity:0; transform:translateY(14px) scale(.94); letter-spacing:2px; }
+  100%{ opacity:1; transform:translateY(0) scale(1); letter-spacing:.5px; }
+}
+@keyframes leTextGlow{ 0%{ filter:brightness(1); } 100%{ filter:brightness(1.22); } }
+.start-heart::after{
+  content:""; position:absolute; left:50%; top:50%; z-index:-2;
+  width:34px; height:34px; margin:-17px 0 0 -17px; border-radius:50%;
+  border:1.5px solid var(--le-accent);
+  opacity:0;
+  animation: leTapRipple 2.6s ease-out .9s infinite;
+}
+@keyframes leTapRipple{
+  0%{ width:34px; height:34px; margin:-17px 0 0 -17px; opacity:.65; }
+  100%{ width:150px; height:150px; margin:-75px 0 0 -75px; opacity:0; }
+}
+@media (max-width:480px){
+  #start-screen::after{ width:120vmax; height:120vmax; }
+  .pulse-text{ padding:8px 16px; }
+}
+
+/* ============================================================
+   CARTA (mejora compartida entre plantillas)
+   ============================================================ */
+#love-letter-card{ overflow:hidden; }
+#love-letter-card::before{
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background-image:
+    radial-gradient(1.6px 1.6px at 10% 15%, #fff, transparent 60%),
+    radial-gradient(1.3px 1.3px at 85% 12%, #fff, transparent 60%),
+    radial-gradient(1.5px 1.5px at 92% 70%, #fff, transparent 60%),
+    radial-gradient(1.3px 1.3px at 15% 82%, #fff, transparent 60%),
+    radial-gradient(1.4px 1.4px at 50% 92%, #fff, transparent 60%),
+    radial-gradient(1.2px 1.2px at 70% 40%, #fff, transparent 60%),
+    radial-gradient(1.5px 1.5px at 25% 45%, #fff, transparent 60%);
+  opacity:.35;
+  animation: leStarsTwinkle 4s ease-in-out infinite alternate;
+}
+#love-letter-card h2{ position:relative; padding-bottom:16px; }
+#love-letter-card h2::after{
+  content:"\2726"; position:absolute; left:50%; bottom:-3px; transform:translateX(-50%);
+  font-size:13px; color:var(--le-accent); -webkit-text-fill-color:var(--le-accent);
+  background:none;
+}
+#love-letter-card h2::before{
+  content:""; position:absolute; left:50%; bottom:8px; transform:translateX(-50%);
+  width:64px; height:1px; background:linear-gradient(90deg, transparent, var(--le-accent), transparent);
+  opacity:.7;
+}
+#love-letter-close{
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(255,255,255,0.06); border:1px solid var(--le-line);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform .15s ease, background .15s ease;
+  font-size:1.05rem;
+}
+#love-letter-close:hover{ transform:scale(1.1) rotate(90deg); background:rgba(255,255,255,0.14); }
+.le-letter-p{
+  opacity:0; transform:translateY(10px);
+  animation: leLetterPIn .6s ease forwards;
+}
+@keyframes leLetterPIn{ to{ opacity:1; transform:translateY(0); } }
+
+/* ---- carta de las linternas ---- */
+#love-letter-overlay #love-letter-card{ overflow-x:hidden; overflow-y:auto; }
+#love-letter-overlay #love-letter-card::before{
+  opacity:.8;
+  background-image:
+    radial-gradient(circle at 12% 20%, rgba(255,200,140,.95) 0, rgba(255,140,80,.5) 2px, transparent 3.5px),
+    radial-gradient(circle at 80% 35%, rgba(255,200,140,.9) 0, rgba(255,140,80,.5) 2.5px, transparent 4px),
+    radial-gradient(circle at 32% 62%, rgba(255,200,140,.9) 0, rgba(255,140,80,.5) 1.8px, transparent 3px),
+    radial-gradient(circle at 90% 80%, rgba(255,200,140,.9) 0, rgba(255,140,80,.5) 2.2px, transparent 3.6px),
+    radial-gradient(circle at 56% 92%, rgba(255,200,140,.9) 0, rgba(255,140,80,.5) 2px, transparent 3.4px),
+    radial-gradient(circle at 68% 8%, rgba(255,200,140,.9) 0, rgba(255,140,80,.5) 1.8px, transparent 3px);
+  background-repeat:repeat-y; background-size:100% 100%;
+  animation: leEmberRise 12s linear infinite;
+}
+@keyframes leEmberRise{ from{ background-position:0 0; } to{ background-position:0 -100%; } }
+</style>
+<script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 1}})}catch(e){}</script>
+<style id="pv-hide">
+/* vista previa: sin editor, sin pantalla de inicio */
+#pen,#ed,#go,#start-screen,.le-edit-toggle,.le-edit-hint,.le-editor-page,#leEditToggle{display:none !important}
+html,body{pointer-events:none !important;-webkit-user-select:none;user-select:none}
+</style>
+</head>
+<body class="le-no-editor">
+
+<div id="start-screen">
+  <div class="sbub" aria-hidden="true"><i style="left:70%;width:6px;height:6px;animation-duration:6.5s;animation-delay:-0.4s"></i><i style="left:33%;width:8px;height:8px;animation-duration:10.8s;animation-delay:-9.3s"></i><i style="left:44%;width:6px;height:6px;animation-duration:9.5s;animation-delay:-10.1s"></i><i style="left:69%;width:6px;height:6px;animation-duration:7.9s;animation-delay:-3.5s"></i><i style="left:3%;width:8px;height:8px;animation-duration:11.3s;animation-delay:-5.5s"></i><i style="left:38%;width:8px;height:8px;animation-duration:9.3s;animation-delay:-6.6s"></i><i style="left:13%;width:4px;height:4px;animation-duration:11.7s;animation-delay:-3.8s"></i><i style="left:32%;width:4px;height:4px;animation-duration:10.1s;animation-delay:-0.4s"></i><i style="left:75%;width:8px;height:8px;animation-duration:12.1s;animation-delay:-4.8s"></i><i style="left:40%;width:6px;height:6px;animation-duration:9.1s;animation-delay:-11.5s"></i><i style="left:90%;width:8px;height:8px;animation-duration:6.0s;animation-delay:-2.5s"></i><i style="left:9%;width:4px;height:4px;animation-duration:9.8s;animation-delay:-11.8s"></i><i style="left:53%;width:3px;height:3px;animation-duration:9.4s;animation-delay:-6.8s"></i><i style="left:28%;width:6px;height:6px;animation-duration:12.2s;animation-delay:-3.2s"></i><i style="left:14%;width:5px;height:5px;animation-duration:8.5s;animation-delay:-0.2s"></i><i style="left:55%;width:4px;height:4px;animation-duration:12.1s;animation-delay:-1.4s"></i><i style="left:34%;width:3px;height:3px;animation-duration:11.7s;animation-delay:-0.1s"></i><i style="left:62%;width:8px;height:8px;animation-duration:12.4s;animation-delay:-2.1s"></i><i style="left:74%;width:3px;height:3px;animation-duration:7.5s;animation-delay:-6.1s"></i><i style="left:96%;width:8px;height:8px;animation-duration:12.2s;animation-delay:-5.0s"></i><i style="left:52%;width:6px;height:6px;animation-duration:6.9s;animation-delay:-5.0s"></i><i style="left:30%;width:6px;height:6px;animation-duration:6.0s;animation-delay:-10.4s"></i><i style="left:78%;width:8px;height:8px;animation-duration:8.4s;animation-delay:-10.6s"></i><i style="left:29%;width:4px;height:4px;animation-duration:7.5s;animation-delay:-12.0s"></i><i style="left:80%;width:8px;height:8px;animation-duration:11.1s;animation-delay:-1.2s"></i><i style="left:21%;width:3px;height:3px;animation-duration:7.7s;animation-delay:-3.1s"></i></div>
+  <div class="pulse-text" id="tap-text">Toca para iniciar</div>
+  <div class="start-heart" aria-hidden="true">🏮</div>
+</div>
+
+<div id="top-title"></div>
+
+<button id="love-letter-btn" aria-label="Leer mensaje">💌</button>
+
+<div id="love-letter-overlay">
+  <div id="love-letter-card">
+    <button id="love-letter-close" aria-label="Cerrar mensaje">✕</button>
+    <h2>Para ti 🏮</h2>
+    <div id="love-letter-body"></div>
+  </div>
+</div>
+
+<canvas id="c"></canvas>
+<audio id="audio" loop></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
+<script>if (typeof THREE === "undefined") { document.write('<script src="https://unpkg.com/three@0.148.0/build/three.min.js"><\/script>'); }</script>
+<script>if (typeof THREE === "undefined") { document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"><\/script>'); }</script>
+<script id="le-initial-state" type="application/json">{"color": "#ff7a59", "font": "dancing", "shape": "heart", "burst": true, "trail": true, "burstCount": 75, "extra": {"figuraA": "corazon", "figuraB": "anillos", "linternasOn": true, "linternas": 26, "fuegos": true, "corazones": true, "fugaces": true}}</script>
+<script>
+(function(){
+  var el = document.getElementById("le-initial-state");
+  var s = {};
+  try { s = JSON.parse(el.textContent || "{}") || {}; } catch(e){ s = {}; }
+  window.LE_STATE = {
+    state: s,
+    applyTo: function(cfg){
+      if (!cfg) return;
+      window.LE_BASE = {
+        titulo: cfg.titulo, mensaje: cfg.mensaje, tapTexto: cfg.tapTexto,
+        frases: Array.isArray(cfg.frases) ? cfg.frases.slice() : [],
+        fotos:  Array.isArray(cfg.fotos)  ? cfg.fotos.slice()  : [],
+        musica: cfg.musica
+      };
+      if (s.titulo   != null) cfg.titulo   = s.titulo;
+      if (s.mensaje  != null) cfg.mensaje  = s.mensaje;
+      if (s.tapTexto != null) cfg.tapTexto = s.tapTexto;
+      if (s.color    != null) cfg.color    = s.color;
+      if (Array.isArray(s.frases)) cfg.frases = s.frases;
+      if (Array.isArray(s.fotos))  cfg.fotos  = s.fotos;
+      if (typeof s.musica === "string") cfg.musica = s.musica;
+      if (s.extra && typeof s.extra === "object"){
+        for (var k in s.extra){ if (Object.prototype.hasOwnProperty.call(s.extra,k)) cfg[k] = s.extra[k]; }
+      }
+    }
+  };
+})();
+</script>
+<script>
+const DEFAULTS = {
+  "titulo": "Mi deseo eres tú 🏮",
+  "tapTexto": "Toca para encender",
+  "mensaje": "Dicen que si pides un deseo mientras una linterna sube al cielo, se cumple.\n\nYo ya sé cuál es el mío: que sigas a mi lado, hoy y todos los días que vengan.\n\nGracias por ser mi luz cuando todo está oscuro, mi calma cuando todo se agita y mi mejor razón para sonreír.\n\nEste cielo lleno de luces es para ti. Pide un deseo conmigo.",
+  "frases": [
+    "Mi deseo eres tú",
+    "Contigo todo brilla",
+    "Te elegiría mil veces",
+    "Eres mi lugar favorito",
+    "Mi corazón late por ti",
+    "Gracias por quedarte",
+    "Cada día me enamoro más",
+    "Eres mi suerte",
+    "Contigo hasta el cielo es más bonito",
+    "Te quiero más que ayer",
+    "Mi para siempre",
+    "Pediría el mismo deseo otra vez",
+    "Eres mi hogar",
+    "Tu sonrisa enciende mi mundo",
+    "Siempre contigo",
+    "Eres lo mejor que me pasó",
+    "Nuestro amor no se apaga",
+    "Cuenta conmigo, siempre",
+    "Tú y yo, contra todo",
+    "Te amo 🏮"
+  ],
+  "fotos": [],
+  "musica": "",
+  "color": "#ff7a59",
+  "figuraA": "corazon",
+  "figuraB": "anillos",
+  "linternasOn": true,
+  "linternas": 26,
+  "fuegos": true,
+  "corazones": true,
+  "fugaces": true
+};
+const CONFIG = Object.assign({}, DEFAULTS);
+if (window.LE_STATE && window.LE_STATE.applyTo) window.LE_STATE.applyTo(CONFIG);
+</script>
+
+<script>
+/* ============================================================
+   LINTERNAS DEL DESEO — escena 3D (linternas, fuegos artificiales, cielo nocturno)
+   ============================================================ */
+const isMobile = /Android|iPhone|iPad|iPod|Mobi/i.test(navigator.userAgent) || window.innerWidth <= 820;
+
+/* ---------- inicio / audio ---------- */
+const startScreen = document.getElementById('start-screen');
+const audio = document.getElementById('audio');
+if (CONFIG.musica) { audio.src = CONFIG.musica; }
+audio.preload = 'auto';
+try { audio.load(); } catch(e){}
+
+let experienceStarted = false;
+function unlockAudioAndStart(){
+  if (experienceStarted) return;
+  experienceStarted = true;
+  const pp = audio.play();
+  if (pp && typeof pp.catch === 'function') pp.catch(function(){});
+  startScreen.classList.add('hidden');
+}
+startScreen.addEventListener('touchend', function(e){ e.preventDefault(); unlockAudioAndStart(); }, {passive:false});
+startScreen.addEventListener('click', unlockAudioAndStart);
+
+/* ---------- carta ---------- */
+document.getElementById('top-title').textContent = CONFIG.titulo;
+const letterBody = document.getElementById('love-letter-body');
+String(CONFIG.mensaje || '').split(/\n\s*\n/).forEach(function(par){
+  const p = document.createElement('p');
+  p.textContent = par.trim();
+  letterBody.appendChild(p);
+});
+const letterBtn = document.getElementById('love-letter-btn');
+const letterOverlay = document.getElementById('love-letter-overlay');
+const letterClose = document.getElementById('love-letter-close');
+letterBtn.addEventListener('click', function(){ letterOverlay.classList.add('visible'); });
+letterClose.addEventListener('click', function(){ letterOverlay.classList.remove('visible'); });
+letterOverlay.addEventListener('click', function(e){ if (e.target === letterOverlay) letterOverlay.classList.remove('visible'); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') letterOverlay.classList.remove('visible'); });
+
+/* ---------- renderer ---------- */
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: !isMobile});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
+renderer.setSize(innerWidth, innerHeight);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 6000);
+
+let targetDist = 430, currentDist = 430;
+let rotX = 0.18, rotY = 0;
+
+/* ---------- texturas base ---------- */
+function makeDotTexture(){
+  const size = 64;
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(size/2,size/2,0,size/2,size/2,size/2);
+  g.addColorStop(0.0,'rgba(255,255,255,1)');
+  g.addColorStop(0.55,'rgba(255,255,255,1)');
+  g.addColorStop(0.85,'rgba(255,255,255,0.55)');
+  g.addColorStop(1.0,'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0,0,size,size);
+  return new THREE.CanvasTexture(c);
+}
+const dotTexture = makeDotTexture();
+
+function petalTexture(){
+  const size = 128;
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  ctx.translate(size/2, size/2);
+  const g = ctx.createRadialGradient(0,-size*0.12,2,0,0,size*0.46);
+  g.addColorStop(0,'rgba(255,255,255,1)');
+  g.addColorStop(0.55,'rgba(255,255,255,0.75)');
+  g.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, size*0.22, size*0.44, 0, 0, Math.PI*2);
+  ctx.fill();
+  return new THREE.CanvasTexture(c);
+}
+const petalTex = petalTexture();
+
+function makeAurora(size, hex){
+  size = size || 1024;
+  const rgb = function(h){ h=h.replace('#',''); return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]; };
+  const mul = function(h,k,a){ const c=rgb(h); return 'rgba('+Math.min(255,Math.round(c[0]*k))+','+Math.min(255,Math.round(c[1]*k))+','+Math.min(255,Math.round(c[2]*k))+','+(a==null?1:a)+')'; };
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  /* cielo de noche: índigo arriba, resplandor cálido en el horizonte */
+  const g = ctx.createLinearGradient(0,0,0,size);
+  g.addColorStop(0, '#07040f');
+  g.addColorStop(0.55, '#150a22');
+  g.addColorStop(0.85, mul(hex,0.28));
+  g.addColorStop(1, mul(hex,0.5));
+  ctx.fillStyle = g; ctx.fillRect(0,0,size,size);
+  /* luna con halo */
+  const mx = size*0.74, my = size*0.2;
+  const halo = ctx.createRadialGradient(mx,my,size*0.02,mx,my,size*0.3);
+  halo.addColorStop(0,'rgba(255,236,214,0.55)'); halo.addColorStop(0.35,'rgba(255,200,170,0.14)'); halo.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle = halo; ctx.fillRect(0,0,size,size);
+  ctx.fillStyle = 'rgba(255,244,230,0.92)';
+  ctx.beginPath(); ctx.arc(mx,my,size*0.045,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = 'rgba(210,180,170,0.28)';
+  ctx.beginPath(); ctx.arc(mx-size*0.012,my-size*0.008,size*0.011,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(mx+size*0.014,my+size*0.014,size*0.007,0,Math.PI*2); ctx.fill();
+  /* siluetas lejanas de colinas */
+  ctx.fillStyle = 'rgba(8,3,12,0.85)';
+  ctx.beginPath(); ctx.moveTo(0,size);
+  for (let x=0;x<=size;x+=16){ ctx.lineTo(x, size*0.9 + Math.sin(x*0.011)*size*0.025 + Math.sin(x*0.031)*size*0.01); }
+  ctx.lineTo(size,size); ctx.closePath(); ctx.fill();
+  /* estrellitas */
+  for (let i=0;i<200;i++){
+    ctx.fillStyle = 'rgba(255,240,225,'+(Math.random()*0.5)+')';
+    const s = Math.random()*1.5;
+    ctx.fillRect(Math.random()*size, Math.random()*size*0.8, s, s);
+  }
+  const vig = ctx.createRadialGradient(size*0.5,size*0.5,size*0.35,size*0.5,size*0.5,size*0.75);
+  vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.5)');
+  ctx.fillStyle = vig; ctx.fillRect(0,0,size,size);
+  return new THREE.CanvasTexture(c);
+}
+scene.background = makeAurora(1024, CONFIG.color || '#ff7a59');
+
+/* ---------- estrellas de fondo ---------- */
+(function makeStars(count, spread){
+  count = count || (isMobile ? 1600 : 2600); spread = spread || 3200;
+  const g = new THREE.BufferGeometry();
+  const pos = new Float32Array(count*3);
+  for (let i=0;i<count;i++){
+    const r = spread*(0.3 + Math.random()*0.7);
+    const th = Math.random()*Math.PI*2;
+    const ph = Math.acos(2*Math.random()-1);
+    pos[i*3]   = r*Math.sin(ph)*Math.cos(th);
+    pos[i*3+1] = r*Math.cos(ph);
+    pos[i*3+2] = r*Math.sin(ph)*Math.sin(th);
+  }
+  g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({
+    size: 2.2, sizeAttenuation:false, map: dotTexture, transparent:true,
+    alphaTest:0.01, depthWrite:false, opacity:0.9, color:0xffe9d6
+  })));
+})();
+
+/* ---------- lluvia de destellos (cae despacio por todo el universo) ---------- */
+const FALL_COUNT = isMobile ? 200 : 340;
+const FALL_SPREAD = 1300;
+const fallPos = new Float32Array(FALL_COUNT*3);
+const fallData = [];
+for (let i=0;i<FALL_COUNT;i++){
+  fallPos[i*3]   = (Math.random()-0.5)*FALL_SPREAD*2;
+  fallPos[i*3+1] = (Math.random()-0.5)*FALL_SPREAD*1.1;
+  fallPos[i*3+2] = (Math.random()-0.5)*FALL_SPREAD*2;
+  fallData.push({ speed: 5 + Math.random()*13, flick: Math.random()*Math.PI*2, flickSpeed: 1 + Math.random()*2.2 });
+}
+const fallGeom = new THREE.BufferGeometry();
+fallGeom.setAttribute('position', new THREE.BufferAttribute(fallPos,3));
+const fallMat = new THREE.PointsMaterial({
+  size: 2.4, sizeAttenuation:true, map: dotTexture, transparent:true,
+  alphaTest:0.01, depthWrite:false, opacity:0.8, color:0xffffff, blending: THREE.AdditiveBlending
+});
+const fallStars = new THREE.Points(fallGeom, fallMat);
+scene.add(fallStars);
+
+
+/* ============================================================
+   FIGURA CENTRAL DE PARTÍCULAS (morph entre dos formas)
+   ============================================================ */
+function curveFor(kind, t){
+  if (kind === 'anillos'){
+    const cx = (t < Math.PI*2) ? -19 : 19;
+    return { x: cx + 33*Math.cos(t), y: 33*Math.sin(t) };
+  }
+  if (kind === 'medusa'){
+    if (t < Math.PI) return { x: 46*Math.cos(t), y: 44*Math.sin(t) + 2 };
+    const u = (t - Math.PI)/Math.PI;
+    return { x: -46 + 92*u, y: -8 - 17*Math.abs(Math.sin(u*Math.PI*6)) };
+  }
+  if (kind === 'caracola'){
+    const r = 5.5*Math.exp(0.2*t);
+    return { x: r*Math.cos(t) + 6, y: r*Math.sin(t) };
+  }
+  if (kind === 'capullo'){
+    const r = 10*(1 + 0.20*Math.cos(6*t));
+    return { x: r*Math.cos(t), y: r*Math.sin(t) };
+  }
+  if (kind === 'rosaAbierta'){
+    let r = (0.55 + 0.45*Math.cos(5*t)) * 58;
+    r *= (1 + 0.09*Math.cos(15*t));
+    return { x: r*Math.cos(t), y: r*Math.sin(t) };
+  }
+  if (kind === 'mariposa'){
+    const r = Math.exp(Math.cos(t)) - 2*Math.cos(4*t) - Math.pow(Math.sin(t/12),5);
+    return { x: Math.sin(t)*r*11.5, y: Math.cos(t)*r*11.5 - 6 };
+  }
+  if (kind === 'infinito'){
+    const d = 1 + Math.sin(t)*Math.sin(t);
+    return { x: (Math.cos(t)/d)*56, y: (Math.sin(t)*Math.cos(t)/d)*56 };
+  }
+  if (kind === 'flor'){
+    const r = Math.cos(5*t)*52;
+    return { x: r*Math.cos(t), y: r*Math.sin(t) };
+  }
+  if (kind === 'estrella'){
+    const tot = 10, va = Math.PI*2/tot;
+    const u = (t % (Math.PI*2)) / va;
+    const k = Math.floor(u), f = u - k;
+    const r0 = (k%2===0) ? 52 : 23, r1 = ((k+1)%2===0) ? 52 : 23;
+    const a0 = -Math.PI/2 + k*va, a1 = -Math.PI/2 + (k+1)*va;
+    const r = r0 + (r1-r0)*f, a = a0 + (a1-a0)*f;
+    return { x: r*Math.cos(a), y: r*Math.sin(a) };
+  }
+  if (kind === 'luna'){
+    return { x: Math.cos(t)*52, y: Math.sin(t)*52 };
+  }
+  /* corazon */
+  const x = 16*Math.pow(Math.sin(t),3);
+  const y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+  return { x: x*3.3, y: y*3.3 + 20 };
+}
+
+const SHAPE_TMAX = { anillos: Math.PI*4, medusa: Math.PI*2, caracola: Math.PI*4, capullo: Math.PI*2, rosaAbierta: Math.PI*2, mariposa: 12*Math.PI, infinito: Math.PI*2, flor: Math.PI*2, estrella: Math.PI*2, luna: Math.PI*2, corazon: Math.PI*2 };
+
+function cupHeight(kind, r){
+  if (kind === 'capullo')     return 15 * (1 - Math.min(1, r/13));
+  if (kind === 'rosaAbierta') return 22 * (1 - Math.min(1, r/58));
+  return 0;
+}
+
+function buildShape(kind, count, seeds){
+  const arr = new Float32Array(count*3);
+  const tmax = SHAPE_TMAX[kind] || Math.PI*2;
+
+  /* la luna se muestrea por relleno: disco grande menos disco desplazado */
+  if (kind === 'luna'){
+    const R = 56, r2 = 47, dx = 21;
+    for (let i=0;i<count;i++){
+      let x = 0, y = 0, tries = 0;
+      do {
+        const rr = Math.sqrt(Math.random())*R;
+        const aa = Math.random()*Math.PI*2;
+        x = rr*Math.cos(aa); y = rr*Math.sin(aa);
+        tries++;
+      } while (Math.hypot(x-dx, y) < r2 && tries < 60);
+      arr[i*3] = x; arr[i*3+1] = y; arr[i*3+2] = (Math.random()-0.5)*9;
+    }
+    return arr;
+  }
+
+  for (let i=0;i<count;i++){
+    const t = seeds[i]*tmax;
+    const p0 = curveFor(kind, t);
+    const p1 = curveFor(kind, t + 0.002);
+    let tx = p1.x-p0.x, ty = p1.y-p0.y;
+    const len = Math.hypot(tx,ty) || 1;
+    const nx = -ty/len, ny = tx/len;
+    const off = (seeds[(i+7)%count]-0.5) * 5.5;
+    const px = p0.x + nx*off, py = p0.y + ny*off;
+    arr[i*3]   = px;
+    arr[i*3+1] = py;
+    arr[i*3+2] = (seeds[(i+13)%count]-0.5) * 9 + cupHeight(kind, Math.hypot(px,py));
+  }
+  return arr;
+}
+
+const FIG_COUNT = isMobile ? 5200 : 7200;
+const seeds = new Float32Array(FIG_COUNT);
+for (let i=0;i<FIG_COUNT;i++) seeds[i] = Math.random();
+
+let shapeA = buildShape(CONFIG.figuraA || 'flor', FIG_COUNT, seeds);
+let shapeB = buildShape(CONFIG.figuraB || 'estrella', FIG_COUNT, seeds);
+const livePos = new Float32Array(shapeA);
+
+const heartGeom = new THREE.BufferGeometry();
+heartGeom.setAttribute('position', new THREE.BufferAttribute(livePos, 3));
+const heartMat = new THREE.PointsMaterial({
+  color: 0xff7a59, size: 1.25, map: dotTexture, transparent:true,
+  alphaTest:0.01, depthWrite:false, opacity:0.96, blending: THREE.AdditiveBlending
+});
+const heart = new THREE.Points(heartGeom, heartMat);
+scene.add(heart);
+
+function rebuildShapes(a, b){
+  shapeA = buildShape(a, FIG_COUNT, seeds);
+  shapeB = buildShape(b, FIG_COUNT, seeds);
+}
+
+const HOLD = 6, MORPH = 2.6;
+const CYCLE = (HOLD + MORPH) * 2;
+function easeInOutCubic(x){ return x < 0.5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2; }
+function mixAt(sec){
+  const p = sec % CYCLE;
+  if (p < HOLD) return 0;
+  if (p < HOLD + MORPH) return easeInOutCubic((p-HOLD)/MORPH);
+  if (p < HOLD*2 + MORPH) return 1;
+  return 1 - easeInOutCubic((p - HOLD*2 - MORPH)/MORPH);
+}
+const sceneStart = performance.now();
+
+/* ============================================================
+   CORAZONES FLOTANDO (suben despacio, con vaivén)
+   ============================================================ */
+function miniHeartTexture(){
+  const size = 64;
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  ctx.translate(size/2, size/2 + 3);
+  const g = ctx.createRadialGradient(0,-4,2,0,0,size*0.42);
+  g.addColorStop(0,'rgba(255,255,255,1)'); g.addColorStop(0.7,'rgba(255,255,255,0.85)'); g.addColorStop(1,'rgba(255,255,255,0.2)');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  for (let i=0;i<=40;i++){
+    const t = (i/40)*Math.PI*2;
+    const x = 16*Math.pow(Math.sin(t),3), y = -(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
+    if (i===0) ctx.moveTo(x*1.55,y*1.55); else ctx.lineTo(x*1.55,y*1.55);
+  }
+  ctx.closePath(); ctx.fill();
+  return new THREE.CanvasTexture(c);
+}
+const heartTex = miniHeartTexture();
+const PETAL_COUNT = isMobile ? 80 : 130;
+const petalPos = new Float32Array(PETAL_COUNT*3);
+const petalData = [];
+for (let i=0;i<PETAL_COUNT;i++){
+  const r = 40 + Math.random()*320;
+  const a = Math.random()*Math.PI*2;
+  petalPos[i*3]   = Math.cos(a)*r;
+  petalPos[i*3+1] = -240 + Math.random()*480;
+  petalPos[i*3+2] = Math.sin(a)*r;
+  petalData.push({ speed: 9 + Math.random()*18, sway: Math.random()*Math.PI*2, swayAmp: 5 + Math.random()*9 });
+}
+const petalGeom = new THREE.BufferGeometry();
+petalGeom.setAttribute('position', new THREE.BufferAttribute(petalPos,3));
+const spiralMat = new THREE.PointsMaterial({
+  color: 0xff8fb0, size: 11, map: heartTex, transparent:true,
+  alphaTest:0.01, depthWrite:false, opacity:0.75, blending: THREE.AdditiveBlending
+});
+const spiral = new THREE.Points(petalGeom, spiralMat);
+spiral.visible = (CONFIG.corazones !== false);
+scene.add(spiral);
+
+/* ============================================================
+   LINTERNAS DEL DESEO (suben flotando, titilan)
+   ============================================================ */
+function lanternTexture(){
+  const w = 128, h = 160;
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.beginPath();
+  ctx.moveTo(34,24); ctx.lineTo(94,24); ctx.quadraticCurveTo(116,70,100,128); ctx.lineTo(28,128); ctx.quadraticCurveTo(12,70,34,24);
+  ctx.closePath();
+  const g = ctx.createLinearGradient(0,24,0,128);
+  g.addColorStop(0,'rgba(255,214,150,1)'); g.addColorStop(0.5,'rgba(255,255,255,1)'); g.addColorStop(1,'rgba(255,190,110,1)');
+  ctx.fillStyle = g; ctx.fill();
+  const gh = ctx.createLinearGradient(0,0,w,0);
+  gh.addColorStop(0,'rgba(0,0,0,0.45)'); gh.addColorStop(0.35,'rgba(0,0,0,0)'); gh.addColorStop(0.65,'rgba(0,0,0,0)'); gh.addColorStop(1,'rgba(0,0,0,0.45)');
+  ctx.fillStyle = gh; ctx.fill();
+  ctx.strokeStyle = 'rgba(140,50,20,0.5)'; ctx.lineWidth = 1.4;
+  for (let i=-2;i<=2;i++){ ctx.beginPath(); ctx.moveTo(64+i*7,24); ctx.quadraticCurveTo(64+i*20,76,64+i*18,128); ctx.stroke(); }
+  ctx.fillStyle = 'rgba(120,40,20,0.9)';
+  ctx.fillRect(32,20,64,8); ctx.fillRect(26,126,76,8);
+  ctx.fillStyle = 'rgba(255,255,255,1)';
+  ctx.beginPath(); ctx.ellipse(64,132,7,10,0,0,Math.PI*2); ctx.fill();
+  return new THREE.CanvasTexture(c);
+}
+const lanternTex = lanternTexture();
+const lanternGlowTex = makeGlow(256, '255,160,80', '255,110,60');
+const lanternMax = isMobile ? 26 : 42;
+const lanternGroup = new THREE.Group();
+const lanterns = [];
+try {
+  for (let i=0;i<lanternMax;i++){
+    const g = new THREE.Group();
+    const glowS = new THREE.Sprite(new THREE.SpriteMaterial({ map: lanternGlowTex, transparent:true, depthWrite:false, opacity:0.6, blending: THREE.AdditiveBlending }));
+    const sz = 26 + Math.random()*20;
+    glowS.scale.set(sz*3.2, sz*3.2, 1);
+    const body = new THREE.Sprite(new THREE.SpriteMaterial({ map: lanternTex, color: 0xffb070, transparent:true, depthWrite:false, opacity:0.95 }));
+    body.scale.set(sz, sz*1.25, 1);
+    g.add(glowS); g.add(body);
+    const r = 50 + Math.random()*330, a = Math.random()*Math.PI*2;
+    g.position.set(Math.cos(a)*r, -260 + Math.random()*540, Math.sin(a)*r);
+    lanterns.push({ g: g, glow: glowS, body: body, speed: 7 + Math.random()*11, sway: Math.random()*6.28, amp: 4 + Math.random()*8, ph: Math.random()*6.28, bx: g.position.x, bz: g.position.z });
+    lanternGroup.add(g);
+  }
+} catch(e){ console.warn('linternas: no se pudieron construir', e); }
+scene.add(lanternGroup);
+function updateLanterns(ot, dt){
+  for (let i=0;i<lanterns.length;i++){
+    const L = lanterns[i];
+    if (!L.g.visible) continue;
+    L.g.position.y += L.speed*dt;
+    L.sway += dt*0.9;
+    L.g.position.x = L.bx + Math.sin(L.sway)*L.amp;
+    L.g.position.z = L.bz + Math.cos(L.sway*0.8)*L.amp;
+    L.glow.material.opacity = 0.5 + 0.2*Math.sin(ot*6 + L.ph) + 0.08*Math.sin(ot*13 + L.ph*2);
+    if (L.g.position.y > 290){
+      const r = 50 + Math.random()*330, a = Math.random()*Math.PI*2;
+      L.bx = Math.cos(a)*r; L.bz = Math.sin(a)*r; L.g.position.y = -280;
+    }
+  }
+}
+function setLanternCount(n){
+  const on = (CONFIG.linternasOn !== false);
+  lanternGroup.visible = on;
+  for (let i=0;i<lanterns.length;i++) lanterns[i].g.visible = on && i < n;
+}
+
+/* ============================================================
+   FUEGOS ARTIFICIALES (estallan en corazones o en esferas)
+   ============================================================ */
+const FW_N = isMobile ? 4 : 6, FW_P = isMobile ? 110 : 170;
+const FW_COLS = [0xff7a59, 0xff8fb0, 0xffd27a, 0xff5c8a, 0xffb98a];
+const fireworks = [];
+try {
+  for (let i=0;i<FW_N;i++){
+    const geom = new THREE.BufferGeometry();
+    geom.setAttribute('position', new THREE.BufferAttribute(new Float32Array(FW_P*3), 3));
+    const mat = new THREE.PointsMaterial({ color: 0xff7a59, size: 5.5, map: dotTexture, transparent:true, alphaTest:0.01, depthWrite:false, opacity:0, blending: THREE.AdditiveBlending });
+    const pts = new THREE.Points(geom, mat);
+    pts.visible = false; pts.frustumCulled = false;
+    scene.add(pts);
+    fireworks.push({ pts: pts, geom: geom, mat: mat, alive:false, age:0, life:3, origin:new THREE.Vector3(), vel:new Float32Array(FW_P*3) });
+  }
+} catch(e){ console.warn('fuegos artificiales: no se pudieron construir', e); }
+let fwTimer = 2.2;
+let fwMainColor = 0xff7a59;
+function launchFirework(){
+  const f = fireworks.find(function(x){ return !x.alive; });
+  if (!f) return;
+  const camA = Math.atan2(camera.position.z, camera.position.x);
+  const ang = camA + Math.PI + (Math.random()-0.5)*1.9;
+  const rad = 120 + Math.random()*170;
+  f.origin.set(Math.cos(ang)*rad, 30 + Math.random()*140, Math.sin(ang)*rad);
+  const cx = camera.position.x, cz = camera.position.z, len = Math.hypot(cx,cz) || 1;
+  const rx = cz/len, rz = -cx/len;
+  const heart = Math.random() < 0.6;
+  for (let k=0;k<FW_P;k++){
+    let vx, vy, vz;
+    if (heart){
+      const t = (k/FW_P)*Math.PI*2;
+      const hx = Math.pow(Math.sin(t),3);
+      const hy = (13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t))/16;
+      const sp = 78;
+      vx = rx*hx*sp; vz = rz*hx*sp; vy = hy*sp;
+      vx += (Math.random()-0.5)*3; vy += (Math.random()-0.5)*3; vz += (Math.random()-0.5)*3;
+    } else {
+      const th = Math.random()*Math.PI*2, ph = Math.acos(2*Math.random()-1), sp = 38 + Math.random()*42;
+      vx = sp*Math.sin(ph)*Math.cos(th); vy = sp*Math.cos(ph); vz = sp*Math.sin(ph)*Math.sin(th);
+    }
+    f.vel[k*3] = vx; f.vel[k*3+1] = vy; f.vel[k*3+2] = vz;
+  }
+  f.alive = true; f.age = 0; f.life = heart ? 3.4 : 2.6;
+  f.mat.color.set(Math.random() < 0.45 ? fwMainColor : FW_COLS[Math.floor(Math.random()*FW_COLS.length)]);
+  f.mat.opacity = 1; f.pts.visible = true;
+}
+function updateFireworks(dt){
+  if (CONFIG.fuegos !== false){
+    fwTimer -= dt;
+    if (fwTimer <= 0){ launchFirework(); fwTimer = 1.8 + Math.random()*2.6; }
+  }
+  for (let i=0;i<fireworks.length;i++){
+    const f = fireworks[i];
+    if (!f.alive) continue;
+    f.age += dt;
+    if (f.age >= f.life){ f.alive = false; f.pts.visible = false; continue; }
+    const d = (1 - Math.exp(-1.7*f.age))/1.7;
+    const arr = f.geom.attributes.position.array;
+    for (let k=0;k<FW_P;k++){
+      arr[k*3]   = f.origin.x + f.vel[k*3]*d;
+      arr[k*3+1] = f.origin.y + f.vel[k*3+1]*d - 7*f.age*f.age;
+      arr[k*3+2] = f.origin.z + f.vel[k*3+2]*d;
+    }
+    f.geom.attributes.position.needsUpdate = true;
+    const lf = 1 - f.age/f.life;
+    f.mat.opacity = Math.max(0, Math.pow(lf, 1.1))*(0.85 + 0.15*Math.sin(f.age*40));
+  }
+}
+
+/* ---------- estado (lo usa el editor) ---------- */
+let oceanTime = 0;
+window.applyLoveState = function(ex){
+  try {
+    ex = ex || CONFIG;
+    CONFIG.linternasOn = ex.linternasOn; CONFIG.fuegos = ex.fuegos; CONFIG.fugaces = ex.fugaces;
+    spiral.visible = (ex.corazones !== false);
+    setLanternCount(typeof ex.linternas === 'number' ? ex.linternas : 26);
+  } catch(e){ console.warn('estado linternas', e); }
+};
+window.oceanRecolor = function(hex){
+  try {
+    fwMainColor = new THREE.Color(hex).getHex();
+    const main = new THREE.Color(hex).lerp(new THREE.Color(0xffffff), 0.3);
+    lanterns.forEach(function(L, i){ if (i % 2 === 0) L.body.material.color.copy(main); });
+  } catch(e){}
+};
+window.applyLoveState(CONFIG);
+
+
+/* ============================================================
+   POLVO ESFÉRICO
+   ============================================================ */
+const DUST_INNER_R = 150;
+const DUST_OUTER_R = 390;
+const dustPts = [];
+const DUST_COUNT = isMobile ? 7000 : 13000;
+for (let i=0;i<DUST_COUNT;i++){
+  const r = DUST_INNER_R + Math.random()*(DUST_OUTER_R-DUST_INNER_R);
+  const th = Math.random()*Math.PI*2;
+  const ph = Math.acos(2*Math.random()-1);
+  dustPts.push(new THREE.Vector3(r*Math.sin(ph)*Math.cos(th), r*Math.cos(ph), r*Math.sin(ph)*Math.sin(th)));
+}
+const dustGeom = new THREE.BufferGeometry().setFromPoints(dustPts);
+const dustMat = new THREE.PointsMaterial({
+  color: 0xffe9d6, size: 1.0, map: dotTexture, transparent:true,
+  alphaTest:0.01, depthWrite:false, opacity:0.4, blending: THREE.AdditiveBlending
+});
+const dust = new THREE.Points(dustGeom, dustMat);
+scene.add(dust);
+
+/* ============================================================
+   RESPLANDOR + ANILLOS
+   ============================================================ */
+function makeGlow(size, c1, c2){
+  size = size || 768; c1 = c1 || '255,150,90'; c2 = c2 || '255,200,140';
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d');
+  const gr = g.createRadialGradient(size/2,size/2,size*0.05,size/2,size/2,size*0.5);
+  gr.addColorStop(0,'rgba('+c1+',0.7)');
+  gr.addColorStop(0.5,'rgba('+c2+',0.2)');
+  gr.addColorStop(1,'rgba(0,0,0,0)');
+  g.fillStyle = gr; g.fillRect(0,0,size,size);
+  return new THREE.CanvasTexture(c);
+}
+const glow = new THREE.Sprite(new THREE.SpriteMaterial({map: makeGlow(), transparent:true, depthWrite:false, blending: THREE.AdditiveBlending}));
+glow.scale.set(470,470,1);
+glow.material.opacity = 0.55;
+scene.add(glow);
+
+function ringTexture(size){
+  size = size || 768;
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d'); g.translate(size/2,size/2);
+  const r1 = size*0.35, r2 = size*0.48;
+  const gr = g.createRadialGradient(0,0,r1*0.6,0,0,r2);
+  gr.addColorStop(0.0,'rgba(255,245,235,1)');
+  gr.addColorStop(0.3,'rgba(255,122,89,1)');
+  gr.addColorStop(0.7,'rgba(120,30,40,0.8)');
+  gr.addColorStop(1.0,'rgba(0,0,0,0)');
+  g.fillStyle = gr;
+  g.beginPath(); g.arc(0,0,r2,0,Math.PI*2); g.arc(0,0,r1,0,Math.PI*2,true); g.closePath(); g.fill();
+  return new THREE.CanvasTexture(c);
+}
+const ring1 = new THREE.Mesh(new THREE.RingGeometry(86,118,128), new THREE.MeshBasicMaterial({map:ringTexture(), transparent:true, side:THREE.DoubleSide, opacity:0.3, blending:THREE.AdditiveBlending}));
+const ring2 = new THREE.Mesh(new THREE.RingGeometry(132,160,128), new THREE.MeshBasicMaterial({map:ringTexture(), transparent:true, side:THREE.DoubleSide, opacity:0.18, blending:THREE.AdditiveBlending}));
+ring1.rotation.x = Math.PI/2;
+ring2.rotation.x = Math.PI/2;
+ring2.rotation.z = 0.6;
+scene.add(ring1); scene.add(ring2);
+
+/* ============================================================
+   ESTRELLAS FUGACES
+   ============================================================ */
+const shootTex = (function(){
+  const w = 256, h = 16;
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0,0,w,0);
+  g.addColorStop(0,'rgba(255,255,255,0)');
+  g.addColorStop(0.75,'rgba(255,255,255,0.65)');
+  g.addColorStop(1,'rgba(255,255,255,1)');
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.ellipse(w/2,h/2,w/2,h/2.6,0,0,Math.PI*2); ctx.fill();
+  return new THREE.CanvasTexture(c);
+})();
+const shootPool = [];
+for (let i=0;i<6;i++){
+  const m = new THREE.SpriteMaterial({map: shootTex, transparent:true, depthWrite:false, blending: THREE.AdditiveBlending, opacity:0});
+  const s = new THREE.Sprite(m);
+  s.visible = false;
+  s.userData = { alive:false, vel:new THREE.Vector3(), life:0 };
+  scene.add(s);
+  shootPool.push(s);
+}
+let shootTimer = 2;
+function launchShoot(){
+  const s = shootPool.find(function(x){ return !x.userData.alive; });
+  if (!s) return;
+  const ph = Math.acos(2*Math.random()-1), th = Math.random()*Math.PI*2;
+  const r = 700 + Math.random()*500;
+  s.position.set(r*Math.sin(ph)*Math.cos(th), r*Math.cos(ph), r*Math.sin(ph)*Math.sin(th));
+  const dir = new THREE.Vector3(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+  s.userData.vel = dir.multiplyScalar(420 + Math.random()*300);
+  s.userData.life = 1;
+  s.userData.alive = true;
+  s.material.opacity = 1;
+  s.material.color.copy(heartMat.color).lerp(new THREE.Color(0xffffff), 0.6);
+  s.scale.set(130, 8, 1);
+  s.visible = true;
+}
+
+/* ============================================================
+   FRASES ORBITANDO
+   ============================================================ */
+const WORDS = [];
+const baseWords = Array.isArray(CONFIG.frases) ? CONFIG.frases : [];
+const PHRASE_REPEAT = isMobile ? 4 : 6;
+for (let i=0;i<PHRASE_REPEAT;i++) WORDS.push.apply(WORDS, baseWords);
+
+function makeTextTexture(text, color){
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 128;
+  const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  let fs = 50;
+  ctx.font = '700 '+fs+'px "Dancing Script", cursive';
+  while (ctx.measureText(text).width > c.width-50 && fs > 24){ fs -= 2; ctx.font = '700 '+fs+'px "Dancing Script", cursive'; }
+  ctx.fillStyle = '#fff7f2'; ctx.shadowColor = color; ctx.shadowBlur = 26;
+  ctx.fillText(text, c.width/2, c.height/2);
+  return new THREE.CanvasTexture(c);
+}
+const COLORS = ['#ff7a59','#5effd0','#7ab8ff','#b6f6ff','#3aa0ff','#9af7e6','#66e0ff','#c8f2ff','#a6a0ff'];
+const textGroup = new THREE.Group(); scene.add(textGroup);
+
+document.fonts.ready.then(function(){
+  for (let i=0;i<WORDS.length;i++){
+    const tex = makeTextTexture(WORDS[i], COLORS[i%COLORS.length]);
+    const mat = new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false, alphaTest:0.01});
+    const sp = new THREE.Sprite(mat);
+    sp.scale.set(98, 12.25, 1);
+    const phi = Math.acos(2*Math.random()-1), theta = Math.random()*Math.PI*2;
+    const r = DUST_INNER_R + Math.random()*(DUST_OUTER_R-DUST_INNER_R-30);
+    sp.position.set(r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+    sp.userData = {phi:phi, theta:theta, radius:r, speed: 0.001 + Math.random()*0.001};
+    textGroup.add(sp);
+  }
+});
+
+/* ============================================================
+   FOTOS ORBITANDO
+   ============================================================ */
+const photoGroup = new THREE.Group(); scene.add(photoGroup);
+const photoGlowTex = makeGlow(512, '255,225,200', '255,150,90');
+const loader = new THREE.TextureLoader();
+const PHOTO_PATHS = Array.isArray(CONFIG.fotos) ? CONFIG.fotos : [];
+const PHOTO_REPEAT = isMobile ? 6 : 10;
+const PHOTO_INSTANCES = [];
+for (let rep=0; rep<PHOTO_REPEAT; rep++) PHOTO_INSTANCES.push.apply(PHOTO_INSTANCES, PHOTO_PATHS);
+
+PHOTO_INSTANCES.forEach(function(path){
+  const phi = Math.acos(2*Math.random()-1);
+  const theta = Math.random()*Math.PI*2;
+  const r = DUST_INNER_R + Math.random()*(DUST_OUTER_R-DUST_INNER_R-30);
+  const speed = 0.0007 + Math.random()*0.0009;
+  const base = isMobile ? 32 : 44;
+
+  const gm = new THREE.SpriteMaterial({map: photoGlowTex, transparent:true, depthWrite:false, opacity:0.55, blending: THREE.AdditiveBlending});
+  const gs = new THREE.Sprite(gm);
+  gs.scale.set(base*1.6, base*1.6, 1);
+  gs.position.set(r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+  gs.renderOrder = -1;
+  gs.userData = {phi:phi, theta:theta, radius:r, speed:speed, isGlow:true};
+  photoGroup.add(gs);
+
+  loader.load(path, function(tex){
+    const iw = (tex.image && tex.image.width) || 1;
+    const ih = (tex.image && tex.image.height) || 1;
+    const ratio = iw/ih;
+    const mat = new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false, opacity:0.95});
+    const sp = new THREE.Sprite(mat);
+    if (ratio >= 1) sp.scale.set(base*ratio, base, 1); else sp.scale.set(base, base/ratio, 1);
+    sp.position.set(r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+    sp.userData = {phi:phi, theta:theta, radius:r, speed:speed, isPhoto:true};
+    photoGroup.add(sp);
+  }, undefined, function(){});
+});
+
+/* ============================================================
+   CONTROLES
+   ============================================================ */
+let isPointerDown = false, startX = 0, startY = 0;
+let targetRotX = 0.18, targetRotY = 0, velX = 0, velY = 0;
+
+function onDown(e){
+  isPointerDown = true; velX = 0; velY = 0;
+  const t = e.touches ? e.touches[0] : e;
+  startX = t.clientX; startY = t.clientY;
+}
+function onMove(e){
+  if (!isPointerDown) return;
+  if (e.touches && e.touches.length > 1) return;
+  const t = e.touches ? e.touches[0] : e;
+  const dx = t.clientX - startX, dy = t.clientY - startY;
+  if (Math.abs(dx) > 2 || Math.abs(dy) > 2){
+    const sensX = (Math.PI*1.5)/innerWidth, sensY = (Math.PI*0.8)/innerHeight;
+    velY = -dx*sensX; velX = dy*sensY;
+    targetRotY += velY;
+    targetRotX = Math.max(-1.25, Math.min(1.25, targetRotX + velX));
+    startX = t.clientX; startY = t.clientY;
+  }
+}
+function onUp(){ isPointerDown = false; }
+
+const dom = renderer.domElement;
+dom.addEventListener('mousedown', onDown);
+dom.addEventListener('mousemove', onMove);
+window.addEventListener('mouseup', onUp);
+dom.addEventListener('touchstart', onDown, {passive:true});
+dom.addEventListener('touchmove', onMove, {passive:true});
+window.addEventListener('touchend', function(e){
+  if (!e.touches || e.touches.length === 0) onUp();
+  else { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }
+}, {passive:true});
+
+addEventListener('wheel', function(e){
+  targetDist = Math.max(190, Math.min(1150, targetDist + e.deltaY*0.25));
+}, {passive:true});
+
+let pinchDist = null;
+function getPinch(t){ return Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY); }
+addEventListener('touchstart', function(e){
+  if (e.touches.length === 2){ pinchDist = getPinch(e.touches); isPointerDown = false; }
+}, {passive:true});
+addEventListener('touchmove', function(e){
+  if (e.touches.length === 2){
+    const nd = getPinch(e.touches);
+    if (pinchDist !== null){
+      targetDist = Math.max(190, Math.min(1150, targetDist + (pinchDist-nd)*0.85));
+    }
+    pinchDist = nd;
+  } else if (pinchDist !== null){
+    pinchDist = null;
+    if (e.touches.length === 1){ startX = e.touches[0].clientX; startY = e.touches[0].clientY; isPointerDown = true; }
+  }
+}, {passive:true});
+addEventListener('touchend', function(e){ if (e.touches.length < 2) pinchDist = null; }, {passive:true});
+
+/* ============================================================
+   ANIMACIÓN
+   ============================================================ */
+let t = 0;
+let lastMs = performance.now();
+const INERTIA = 0.88;
+
+function tick(){
+  requestAnimationFrame(tick);
+  const now = performance.now();
+  const dt = Math.min(0.05, (now-lastMs)/1000);
+  lastMs = now;
+  t += 0.01;
+
+  try {
+
+  if (!isPointerDown){
+    velX *= INERTIA; velY *= INERTIA;
+    targetRotX = Math.max(-1.25, Math.min(1.25, targetRotX + velX));
+    targetRotY += velY;
+  }
+  rotX += (targetRotX - rotX)*0.12;
+  rotY += (targetRotY - rotY)*0.12;
+
+  ring1.rotation.z += 0.0022;
+  ring2.rotation.z -= 0.0016;
+  dust.rotation.y  += 0.0006;
+
+  const gs = 470*(1 + Math.sin(t*0.4)*0.035);
+  glow.scale.set(gs, gs, 1);
+
+  const beat = 1.0 + 0.045*Math.sin(t*3.4);
+  heart.scale.set(beat, beat, beat);
+
+  /* morph de apertura (capullo <-> flor abierta, o lo que elijas) */
+  const elapsed = (now - sceneStart)/1000;
+  const mix = mixAt(elapsed);
+  const arr = heartGeom.attributes.position.array;
+  for (let i=0;i<FIG_COUNT;i++){
+    const ix = i*3;
+    arr[ix]   = shapeA[ix]   + (shapeB[ix]   - shapeA[ix])*mix;
+    arr[ix+1] = shapeA[ix+1] + (shapeB[ix+1] - shapeA[ix+1])*mix;
+    arr[ix+2] = shapeA[ix+2] + (shapeB[ix+2] - shapeA[ix+2])*mix;
+  }
+  heartGeom.attributes.position.needsUpdate = true;
+  heart.rotation.y += 0.0011;
+
+  /* ---- linternas, fuegos artificiales, corazones ---- */
+  oceanTime += dt;
+  if (lanternGroup.visible) updateLanterns(oceanTime, dt);
+  updateFireworks(dt);
+  if (spiral.visible){
+    const pp = petalGeom.attributes.position.array;
+    for (let i=0;i<PETAL_COUNT;i++){
+      const d = petalData[i];
+      const ix = i*3;
+      pp[ix+1] += d.speed*dt;
+      d.sway += dt*1.1;
+      pp[ix]   += Math.cos(d.sway)*d.swayAmp*dt;
+      pp[ix+2] += Math.sin(d.sway*0.8)*d.swayAmp*dt;
+      if (pp[ix+1] > 250){
+        const r = 40 + Math.random()*320, a = Math.random()*Math.PI*2;
+        pp[ix] = Math.cos(a)*r; pp[ix+1] = -250; pp[ix+2] = Math.sin(a)*r;
+      }
+    }
+    petalGeom.attributes.position.needsUpdate = true;
+  }
+
+  /* estrellas fugaces */
+  if (CONFIG.fugaces !== false){
+    shootTimer -= dt;
+    if (shootTimer <= 0){ launchShoot(); shootTimer = 2.5 + Math.random()*4; }
+  }
+  for (let i=0;i<shootPool.length;i++){
+    const s = shootPool[i];
+    if (!s.userData.alive) continue;
+    s.userData.life -= dt/2.2;
+    if (s.userData.life <= 0){ s.userData.alive = false; s.visible = false; continue; }
+    s.position.addScaledVector(s.userData.vel, dt);
+    s.material.opacity = Math.sin(s.userData.life*Math.PI)*0.9;
+  }
+
+  /* frases y fotos orbitando */
+  textGroup.children.forEach(function(sp){
+    sp.material.opacity = 0.8 + 0.2*Math.sin(t*2);
+    sp.userData.theta += sp.userData.speed;
+    sp.position.x = sp.userData.radius*Math.sin(sp.userData.phi)*Math.cos(sp.userData.theta);
+    sp.position.z = sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
+  });
+  photoGroup.children.forEach(function(sp){
+    sp.userData.theta += sp.userData.speed;
+    sp.position.x = sp.userData.radius*Math.sin(sp.userData.phi)*Math.cos(sp.userData.theta);
+    sp.position.z = sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
+    if (sp.userData.isPhoto) sp.material.opacity = 0.82 + 0.14*Math.sin(t*1.6 + sp.userData.radius);
+  });
+
+  currentDist += (targetDist - currentDist)*0.06;
+  camera.position.set(
+    currentDist*Math.cos(rotX)*Math.sin(rotY),
+    currentDist*Math.sin(rotX),
+    currentDist*Math.cos(rotX)*Math.cos(rotY)
+  );
+
+  /* lluvia de destellos cayendo */
+  {
+    const fp = fallGeom.attributes.position.array;
+    for (let i=0;i<FALL_COUNT;i++){
+      const d = fallData[i];
+      const ix = i*3;
+      fp[ix+1] -= d.speed*dt*7;
+      d.flick += dt*d.flickSpeed;
+      if (fp[ix+1] < -FALL_SPREAD*0.55){
+        fp[ix]   = (Math.random()-0.5)*FALL_SPREAD*2;
+        fp[ix+1] = FALL_SPREAD*0.55;
+        fp[ix+2] = (Math.random()-0.5)*FALL_SPREAD*2;
+      }
+    }
+    fallGeom.attributes.position.needsUpdate = true;
+    fallMat.opacity = 0.6 + 0.25*Math.sin(t*2.1);
+  }
+
+  camera.lookAt(0,0,0);
+  } catch(e){ console.warn('tick error', e); }
+  renderer.render(scene, camera);
+}
+tick();
+
+window.addEventListener('resize', function(){
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+</script>
+
+
+<script>window.LE_APP = {"defaultColor": "#ff7a59", "defaultFont": "dancing", "filename": "mis-linternas-del-deseo.html", "nebula": true, "photoGlow": true, "photoRepeatM": 6, "photoRepeatD": 10, "maxImg": 10};</script>
+<script>
+
+/* ============================================================
+   LINK EMOCIONAL — Editor integrado + efectos de puntero
+   Este bloque NO toca la animación original: sólo la lee,
+   la repinta cuando cambias algo y le suma los efectos.
+   ============================================================ */
+(function(){
+"use strict";
+if (typeof THREE === "undefined") { return; }
+
+var APP   = window.LE_APP || {};
+var LE    = window.LE_STATE || { state:{} };
+var state = LE.state;
+var BASE  = window.LE_BASE || {};
+var stateEl = document.getElementById("le-initial-state");
+
+function persist(){ try { stateEl.textContent = JSON.stringify(state); } catch(e){} }
+
+/* ---------- referencias a la escena original ---------- */
+var S_scene   = (typeof scene   !== "undefined") ? scene   : null;
+var S_camera  = (typeof camera  !== "undefined") ? camera  : null;
+var S_rend    = (typeof renderer!== "undefined") ? renderer: null;
+var S_canvas  = (typeof canvas  !== "undefined") ? canvas  : document.getElementById("c");
+var S_dot     = (typeof dotTexture !== "undefined") ? dotTexture : null;
+var S_mobile  = (typeof isMobile !== "undefined") ? isMobile : false;
+var S_textG   = (typeof textGroup  !== "undefined") ? textGroup  : null;
+var S_photoG  = (typeof photoGroup !== "undefined") ? photoGroup : null;
+var S_heartM  = (typeof heartMat  !== "undefined") ? heartMat  : null;
+var S_spiralM = (typeof spiralMat !== "undefined") ? spiralMat : null;
+var S_dustM   = (typeof dustMat   !== "undefined") ? dustMat   : null;
+var S_glow    = (typeof glow  !== "undefined") ? glow  : null;
+var S_ring1   = (typeof ring1 !== "undefined") ? ring1 : null;
+var S_ring2   = (typeof ring2 !== "undefined") ? ring2 : null;
+var S_ring3   = (typeof ring3 !== "undefined") ? ring3 : null;
+var S_planetRing = (typeof planetRing !== "undefined") ? planetRing : null;
+var S_audio   = (typeof audio !== "undefined") ? audio : document.getElementById("audio");
+var S_rIn     = (typeof DUST_INNER_R !== "undefined") ? DUST_INNER_R : 150;
+var S_rOut    = (typeof DUST_OUTER_R !== "undefined") ? DUST_OUTER_R : 380;
+
+if (!S_scene || !S_camera || !S_canvas) { return; }
+if (!S_dot) { S_dot = null; }
+
+/* ---------- fuentes disponibles ---------- */
+var FONTS = [
+  { id:"indie",      label:"Manuscrita", css:"'Indie Flower', cursive",        w:"700" },
+  { id:"playfair",   label:"Elegante",   css:"'Playfair Display', serif",      w:"800" },
+  { id:"dancing",    label:"Romántica",  css:"'Dancing Script', cursive",      w:"700" },
+  { id:"pacifico",   label:"Divertida",  css:"'Pacifico', cursive",            w:"400" },
+  { id:"quicksand",  label:"Redonda",    css:"'Quicksand', sans-serif",        w:"700" },
+  { id:"montserrat", label:"Bold",       css:"'Montserrat', sans-serif",       w:"800" }
+];
+function fontById(id){ for (var i=0;i<FONTS.length;i++) if (FONTS[i].id===id) return FONTS[i]; return FONTS[0]; }
+
+var PRESETS = [
+  "#ffc93d","#ff3399","#ff6fa5","#ff5757","#ff9f4a",
+  "#ffe066","#c9ff4e","#6bffb0","#26e0c8","#7cf5ff",
+  "#5ec2ff","#a06bff","#d4a5ff","#ff4ecb","#ffffff",
+  "#f78fb3","#a8e6cf","#ffd3a5","#00c2a8","#e6a817"
+];
+var MAX_IMG = APP.maxImg || 10;
+
+/* ---------- helpers de color ---------- */
+function hx(h){ h=(h||"#ffffff").replace("#",""); if(h.length===3){h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];} return {r:parseInt(h.substr(0,2),16)||0,g:parseInt(h.substr(2,2),16)||0,b:parseInt(h.substr(4,2),16)||0}; }
+function toHex(c){ function p(n){ n=Math.max(0,Math.min(255,Math.round(n))).toString(16); return n.length<2?"0"+n:n; } return "#"+p(c.r)+p(c.g)+p(c.b); }
+function lighten(hex,a){ var c=hx(hex); return toHex({r:c.r+(255-c.r)*a, g:c.g+(255-c.g)*a, b:c.b+(255-c.b)*a}); }
+function darken(hex,a){ var c=hx(hex); return toHex({r:c.r*(1-a), g:c.g*(1-a), b:c.b*(1-a)}); }
+function rgbTrip(hex){ var c=hx(hex); return c.r+","+c.g+","+c.b; }
+function palette(hex){
+  return [ hex, lighten(hex,0.25), lighten(hex,0.5), lighten(hex,0.7),
+           darken(hex,0.15), lighten(hex,0.35), lighten(hex,0.6), hex, lighten(hex,0.45) ];
+}
+
+/* ---------- valores efectivos ---------- */
+function eff(key, fallback){
+  if (state[key] !== undefined && state[key] !== null) return state[key];
+  if (BASE[key] !== undefined && BASE[key] !== null) return BASE[key];
+  return fallback;
+}
+function effFrases(){ return Array.isArray(state.frases) ? state.frases : (BASE.frases || []).slice(); }
+function effFotos(){  return Array.isArray(state.fotos)  ? state.fotos  : (BASE.fotos  || []).slice(); }
+function effMusica(){ return (typeof state.musica === "string") ? state.musica : (BASE.musica || ""); }
+
+state.color = state.color || APP.defaultColor || "#ffc93d";
+state.font  = state.font  || APP.defaultFont  || "indie";
+state.shape = state.shape || "heart";
+if (state.burst === undefined) state.burst = true;
+if (state.trail === undefined) state.trail = true;
+if (state.burstCount === undefined) state.burstCount = 70;
+
+/* ============================================================
+   TEXTURAS PROPIAS (color configurable)
+   ============================================================ */
+function glowTex(hex, size){
+  size = size || 768;
+  var c1 = rgbTrip(lighten(hex,0.25)), c2 = rgbTrip(hex);
+  var c = document.createElement("canvas"); c.width=c.height=size;
+  var g = c.getContext("2d");
+  var gr = g.createRadialGradient(size/2,size/2,size*0.05,size/2,size/2,size*0.5);
+  gr.addColorStop(0,"rgba("+c1+",0.7)");
+  gr.addColorStop(0.5,"rgba("+c2+",0.2)");
+  gr.addColorStop(1,"rgba(0,0,0,0)");
+  g.fillStyle=gr; g.fillRect(0,0,size,size);
+  return new THREE.CanvasTexture(c);
+}
+function ringTex(hex, size){
+  size = size || 768;
+  var c = document.createElement("canvas"); c.width=c.height=size;
+  var g = c.getContext("2d"); g.translate(size/2,size/2);
+  var r1=size*0.35, r2=size*0.48;
+  var gr = g.createRadialGradient(0,0,r1*0.6,0,0,r2);
+  gr.addColorStop(0.0,"rgba("+rgbTrip(lighten(hex,0.75))+",1)");
+  gr.addColorStop(0.3,"rgba("+rgbTrip(hex)+",1)");
+  gr.addColorStop(0.7,"rgba("+rgbTrip(darken(hex,0.35))+",0.8)");
+  gr.addColorStop(1.0,"rgba(0,0,0,0)");
+  g.fillStyle=gr;
+  g.beginPath(); g.arc(0,0,r2,0,Math.PI*2); g.arc(0,0,r1,0,Math.PI*2,true); g.closePath(); g.fill();
+  return new THREE.CanvasTexture(c);
+}
+function nebulaTexFor(hex, size){
+  size = size || 1024;
+  var c = document.createElement("canvas"); c.width=c.height=size;
+  var ctx = c.getContext("2d");
+  ctx.fillStyle = darken(hex,0.94); ctx.fillRect(0,0,size,size);
+  var blobs = [
+    { x:0.3, y:0.35, r:0.55, c:"rgba("+rgbTrip(darken(hex,0.55))+",0.55)" },
+    { x:0.7, y:0.60, r:0.50, c:"rgba("+rgbTrip(darken(hex,0.7))+",0.5)" },
+    { x:0.5, y:0.50, r:0.70, c:"rgba("+rgbTrip(darken(hex,0.82))+",0.4)" }
+  ];
+  blobs.forEach(function(b){
+    var gr = ctx.createRadialGradient(size*b.x,size*b.y,0,size*b.x,size*b.y,size*b.r);
+    gr.addColorStop(0,b.c); gr.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle=gr; ctx.fillRect(0,0,size,size);
+  });
+  for (var i=0;i<300;i++){
+    ctx.fillStyle = "rgba(255,255,255,"+(Math.random()*0.5)+")";
+    var s = Math.random()*1.4;
+    ctx.fillRect(Math.random()*size, Math.random()*size, s, s);
+  }
+  return new THREE.CanvasTexture(c);
+}
+function textTex(text, shadow, fontCss, weight){
+  var c = document.createElement("canvas"); c.width=1024; c.height=128;
+  var ctx = c.getContext("2d"); ctx.clearRect(0,0,c.width,c.height);
+  ctx.textAlign="center"; ctx.textBaseline="middle";
+  var fs = 50;
+  ctx.font = weight+" "+fs+"px "+fontCss;
+  while (ctx.measureText(text).width > c.width-50 && fs > 22){ fs -= 2; ctx.font = weight+" "+fs+"px "+fontCss; }
+  ctx.fillStyle="#fffdf5"; ctx.shadowColor=shadow; ctx.shadowBlur=25;
+  ctx.fillText(text, c.width/2, c.height/2);
+  return new THREE.CanvasTexture(c);
+}
+
+/* ============================================================
+   APLICAR TEMA (color + tipografía) SIN ROMPER LA ESCENA
+   ============================================================ */
+var themeStyle = document.getElementById("le-theme-style");
+if (!themeStyle){
+  themeStyle = document.createElement("style");
+  themeStyle.id = "le-theme-style";
+  document.head.appendChild(themeStyle);
+}
+
+function applyTheme(){
+  var hex = state.color;
+  var f = fontById(state.font);
+  var c1 = lighten(hex,0.55), c2 = hex, c3 = lighten(hex,0.75);
+
+  themeStyle.textContent =
+    "#top-title{font-family:" + f.css + " !important;font-weight:" + f.w + " !important;" +
+      "background-image:linear-gradient(90deg," + c1 + "," + c2 + "," + c3 + ") !important;" +
+      "filter:drop-shadow(0 0 14px rgba(" + rgbTrip(hex) + ",0.55)) !important;}" +
+    "#start-screen{color:" + c1 + " !important;text-shadow:0 0 15px " + hex + " !important;" +
+      "background:radial-gradient(circle at center," + darken(hex,0.82) + " 0%,#000 100%) !important;}" +
+    "#love-letter-btn{background:linear-gradient(135deg," + darken(hex,0.2) + "," + hex + ") !important;" +
+      "box-shadow:0 0 18px rgba(" + rgbTrip(hex) + ",0.6),0 4px 14px rgba(0,0,0,.35) !important;}" +
+    "#love-letter-card{border-color:rgba(" + rgbTrip(hex) + ",0.35) !important;" +
+      "box-shadow:0 0 40px rgba(" + rgbTrip(hex) + ",0.35) !important;" +
+      "background:linear-gradient(160deg," + darken(hex,0.78) + "," + darken(hex,0.94) + ") !important;" +
+      "font-family:" + f.css + " !important;color:" + lighten(hex,0.82) + " !important;}" +
+    "#love-letter-card h2{font-family:" + f.css + " !important;" +
+      "background-image:linear-gradient(90deg," + c1 + "," + c2 + "," + c3 + ") !important;}" +
+    "#love-letter-close{color:" + lighten(hex,0.6) + " !important;}" +
+    "html,body{font-family:" + f.css + ";}";
+
+  var col = new THREE.Color(hex);
+  try { if (S_heartM)  S_heartM.color.set(col); } catch(e){}
+  try { if (S_spiralM) S_spiralM.color.set(new THREE.Color(lighten(hex,0.25))); } catch(e){}
+  try { if (S_dustM)   S_dustM.color.set(new THREE.Color(lighten(hex,0.6))); } catch(e){}
+
+  try {
+    if (S_glow && S_glow.material){
+      if (S_glow.material.map) S_glow.material.map.dispose();
+      S_glow.material.map = glowTex(hex);
+      S_glow.material.needsUpdate = true;
+    }
+  } catch(e){}
+
+  try {
+    var rt = ringTex(hex);
+    [S_ring1,S_ring2].forEach(function(r){
+      if (r && r.material){
+        if (r.material.map) r.material.map.dispose();
+        r.material.map = rt;
+        r.material.needsUpdate = true;
+      }
+    });
+  } catch(e){}
+
+  try { if (S_ring3 && S_ring3.material) S_ring3.material.color.set(new THREE.Color(lighten(hex,0.35))); } catch(e){}
+  try { if (S_planetRing && S_planetRing.material) S_planetRing.material.color.set(new THREE.Color(lighten(hex,0.45))); } catch(e){}
+  try {
+    if (typeof gemEdges !== "undefined" && gemEdges && gemEdges.material) gemEdges.material.color.set(new THREE.Color(lighten(hex,0.35)));
+    if (typeof gemFill  !== "undefined" && gemFill  && gemFill.material)  gemFill.material.color.set(new THREE.Color(lighten(hex,0.55)));
+    if (typeof ribbonMat !== "undefined" && ribbonMat) ribbonMat.color.set(new THREE.Color(lighten(hex,0.6)));
+  } catch(e){}
+
+  if (APP.nebula){
+    try {
+      if (S_scene.background && S_scene.background.dispose) S_scene.background.dispose();
+      S_scene.background = (typeof makeAurora === "function") ? makeAurora(1024, hex) : nebulaTexFor(hex);
+    } catch(e){}
+  }
+
+  // halos de las fotos
+  try {
+    if (S_photoG){
+      var pg = glowTex(hex, 512);
+      S_photoG.children.forEach(function(sp){
+        if (sp.userData && sp.userData.isGlow && sp.material){ sp.material.map = pg; sp.material.needsUpdate = true; }
+      });
+    }
+  } catch(e){}
+
+  try { if (typeof regenWreath === "function") regenWreath(hex); } catch(e){}
+  try { if (typeof oceanRecolor === "function") oceanRecolor(hex); } catch(e){}
+
+  // colores de las partículas de efectos
+  EFFECT_COLORS = palette(hex);
+}
+
+/* ============================================================
+   RECONSTRUIR FRASES Y FOTOS (vista previa en vivo)
+   ============================================================ */
+function clearGroup(grp){
+  if (!grp) return;
+  for (var i = grp.children.length - 1; i >= 0; i--){
+    var ch = grp.children[i];
+    grp.remove(ch);
+    if (ch.material){
+      if (ch.material.map && ch.material.map.dispose) ch.material.map.dispose();
+      ch.material.dispose();
+    }
+  }
+}
+
+function rebuildFrases(){
+  if (!S_textG) return;
+  clearGroup(S_textG);
+  var list = effFrases();
+  if (!list.length) return;
+  var f = fontById(state.font);
+  var cols = palette(state.color);
+  var rep = S_mobile ? 4 : 6;
+  var all = [];
+  for (var r=0;r<rep;r++) all = all.concat(list);
+  for (var i=0;i<all.length;i++){
+    var tex = textTex(all[i], cols[i % cols.length], f.css, f.w);
+    var mat = new THREE.SpriteMaterial({ map:tex, transparent:true, depthWrite:false, alphaTest:0.01 });
+    var sp  = new THREE.Sprite(mat);
+    sp.scale.set(98, 12.25, 1);
+    var phi = Math.acos(2*Math.random()-1), theta = Math.random()*Math.PI*2;
+    var rad = S_rIn + Math.random()*(S_rOut - S_rIn - 30);
+    sp.position.set(rad*Math.sin(phi)*Math.cos(theta), rad*Math.cos(phi), rad*Math.sin(phi)*Math.sin(theta));
+    sp.userData = { phi:phi, theta:theta, radius:rad, speed:0.001 + Math.random()*0.001 };
+    S_textG.add(sp);
+  }
+}
+
+var photoLoaderLE = new THREE.TextureLoader();
+var photoBuildToken = 0;
+function rebuildFotos(){
+  if (!S_photoG) return;
+  photoBuildToken++;
+  var token = photoBuildToken;
+  clearGroup(S_photoG);
+  var list = effFotos();
+  if (!list.length) return;
+  var rep = S_mobile ? (APP.photoRepeatM||6) : (APP.photoRepeatD||10);
+  var base = S_mobile ? 32 : 44;
+  var pg = glowTex(state.color, 512);
+  var inst = [];
+  for (var r=0;r<rep;r++) inst = inst.concat(list);
+  inst.forEach(function(src){
+    var phi = Math.acos(2*Math.random()-1), theta = Math.random()*Math.PI*2;
+    var rad = S_rIn + Math.random()*(S_rOut - S_rIn - 30);
+    var speed = 0.0007 + Math.random()*0.0009;
+
+    if (APP.photoGlow){
+      var gmat = new THREE.SpriteMaterial({ map:pg, transparent:true, depthWrite:false, opacity:0.6, blending:THREE.AdditiveBlending });
+      var gs = new THREE.Sprite(gmat);
+      gs.scale.set(base*1.6, base*1.6, 1);
+      gs.position.set(rad*Math.sin(phi)*Math.cos(theta), rad*Math.cos(phi), rad*Math.sin(phi)*Math.sin(theta));
+      gs.renderOrder = -1;
+      gs.userData = { phi:phi, theta:theta, radius:rad, speed:speed, isGlow:true };
+      S_photoG.add(gs);
+    }
+
+    photoLoaderLE.load(src, function(tex){
+      if (token !== photoBuildToken) return;
+      var iw = (tex.image && tex.image.width) || 1;
+      var ih = (tex.image && tex.image.height) || 1;
+      var ratio = iw/ih;
+      var mat = new THREE.SpriteMaterial({ map:tex, transparent:true, depthWrite:false, opacity:0.95 });
+      var sp = new THREE.Sprite(mat);
+      if (ratio >= 1) sp.scale.set(base*ratio, base, 1); else sp.scale.set(base, base/ratio, 1);
+      sp.position.set(rad*Math.sin(phi)*Math.cos(theta), rad*Math.cos(phi), rad*Math.sin(phi)*Math.sin(theta));
+      sp.userData = { phi:phi, theta:theta, radius:rad, speed:speed, isPhoto:true };
+      S_photoG.add(sp);
+    }, undefined, function(){});
+  });
+}
+
+function applyTitulo(){
+  var el = document.getElementById("top-title");
+  if (el) el.textContent = eff("titulo", "");
+}
+function applyTapText(){
+  var el = document.getElementById("tap-text");
+  if (!el) el = document.querySelector("#start-screen .pulse-text");
+  if (el) el.textContent = eff("tapTexto", "Toca para iniciar");
+}
+function applyMensaje(){
+  var body = document.getElementById("love-letter-body");
+  if (!body) return;
+  body.innerHTML = "";
+  var txt = eff("mensaje", "");
+  String(txt).split(/\n\s*\n/).forEach(function(par, i){
+    var p = document.createElement("p");
+    p.textContent = par.trim();
+    p.className = "le-letter-p";
+    p.style.animationDelay = (0.15 + i*0.16) + "s";
+    body.appendChild(p);
+  });
+}
+function applyMusica(){
+  if (!S_audio) return;
+  var m = effMusica();
+  if (m){ if (S_audio.src !== m) { S_audio.src = m; S_audio.load(); } }
+  else { try { S_audio.pause(); } catch(e){} S_audio.removeAttribute("src"); try{S_audio.load();}catch(e){} }
+}
+
+/* ============================================================
+   EFECTOS: RÁFAGA AL TOCAR + RASTRO DEL PUNTERO
+   ============================================================ */
+var EFFECT_COLORS = palette(state.color);
+
+function dustTex(){
+  var size = 128;
+  var c = document.createElement("canvas"); c.width=c.height=size;
+  var ctx = c.getContext("2d");
+  var gr = ctx.createRadialGradient(size/2,size/2,0,size/2,size/2,size/2);
+  gr.addColorStop(0,"rgba(255,255,255,1)");
+  gr.addColorStop(0.35,"rgba(255,255,255,0.85)");
+  gr.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=gr; ctx.fillRect(0,0,size,size);
+  return new THREE.CanvasTexture(c);
+}
+var fxTex = S_dot || dustTex();
+
+var BURST_POOL = S_mobile ? 260 : 420;
+var TRAIL_POOL = S_mobile ? 140 : 220;
+var burstPool = [], trailPool = [], burstCursor = 0, trailCursor = 0;
+
+function makePool(arr, n){
+  for (var i=0;i<n;i++){
+    var m = new THREE.SpriteMaterial({ map:fxTex, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, opacity:0 });
+    var s = new THREE.Sprite(m);
+    s.visible = false;
+    s.userData = { alive:false, vel:new THREE.Vector3(), life:0, maxLife:1, baseScale:1 };
+    S_scene.add(s);
+    arr.push(s);
+  }
+}
+makePool(burstPool, BURST_POOL);
+makePool(trailPool, TRAIL_POOL);
+
+function shapePoint(scale){
+  var sh = state.shape || "heart";
+  var t = Math.random()*Math.PI*2, x, y, j = 0.06;
+  if (sh === "star"){
+    var tot=10, va=Math.PI*2/tot, k=Math.floor(Math.random()*tot), f=Math.random();
+    var r0=(k%2===0)?1:0.45, r1=((k+1)%2===0)?1:0.45;
+    var a0=-Math.PI/2+k*va, a1=-Math.PI/2+(k+1)*va;
+    var rr=r0+(r1-r0)*f, aa=a0+(a1-a0)*f;
+    x=rr*Math.cos(aa); y=rr*Math.sin(aa);
+  } else if (sh === "flower"){
+    var rf = Math.cos(4*t);
+    x = rf*Math.cos(t); y = rf*Math.sin(t);
+  } else if (sh === "burst"){
+    var rb = Math.sqrt(Math.random());
+    x = rb*Math.cos(t); y = rb*Math.sin(t); j = 0.02;
+  } else {
+    x = Math.pow(Math.sin(t),3);
+    y = (13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t)) / 16;
+  }
+  return { x:(x+(Math.random()-0.5)*j)*scale, y:(y+(Math.random()-0.5)*j)*scale };
+}
+
+function worldFromPointer(cx, cy, dist){
+  var rect = S_canvas.getBoundingClientRect();
+  if (!rect.width || !rect.height) return null;
+  var nx = ((cx - rect.left)/rect.width)*2 - 1;
+  var ny = -((cy - rect.top)/rect.height)*2 + 1;
+  var v = new THREE.Vector3(nx, ny, 0.5).unproject(S_camera);
+  var dir = v.sub(S_camera.position).normalize();
+  return S_camera.position.clone().add(dir.multiplyScalar(dist));
+}
+function camDist(){ return (typeof currentDist !== "undefined") ? currentDist : 400; }
+
+function spawnBurst(cx, cy){
+  if (!state.burst) return;
+  var pos = worldFromPointer(cx, cy, camDist()*0.5);
+  if (!pos) return;
+  var count = Math.max(10, Math.min(BURST_POOL, state.burstCount|0));
+  var scale = camDist()*0.085;
+  for (var n=0;n<count;n++){
+    var s = burstPool[burstCursor];
+    burstCursor = (burstCursor+1) % BURST_POOL;
+    var p = shapePoint(scale);
+    var off = new THREE.Vector3(p.x, p.y, (Math.random()-0.5)*scale*0.35);
+    s.position.copy(pos).add(off);
+    var out = off.lengthSq() > 0.0001 ? off.clone().normalize() : new THREE.Vector3(0,1,0);
+    out.multiplyScalar(26 + Math.random()*34);
+    s.userData.vel = out;
+    s.userData.life = 1;
+    s.userData.maxLife = 1.1 + Math.random()*0.7;
+    s.userData.baseScale = (camDist()*0.011) * (0.7 + Math.random()*0.9);
+    s.userData.alive = true;
+    s.material.color.setStyle(EFFECT_COLORS[n % EFFECT_COLORS.length]);
+    s.material.opacity = 1;
+    s.visible = true;
+    s.scale.set(1,1,1);
+  }
+}
+
+var lastTX = null, lastTY = null;
+function spawnTrail(cx, cy){
+  var pos = worldFromPointer(cx, cy, camDist()*0.5);
+  if (!pos) return;
+  var s = trailPool[trailCursor];
+  trailCursor = (trailCursor+1) % TRAIL_POOL;
+  s.position.copy(pos);
+  s.userData.vel = new THREE.Vector3((Math.random()-0.5)*7,(Math.random()-0.5)*7+2,(Math.random()-0.5)*7);
+  s.userData.life = 1;
+  s.userData.maxLife = 0.55 + Math.random()*0.45;
+  s.userData.baseScale = (camDist()*0.008) * (0.6 + Math.random()*0.9);
+  s.userData.alive = true;
+  s.material.color.setStyle(EFFECT_COLORS[Math.floor(Math.random()*EFFECT_COLORS.length)]);
+  s.material.opacity = 1;
+  s.visible = true;
+  s.scale.set(1,1,1);
+}
+function handleTrail(cx, cy){
+  if (!state.trail) return;
+  if (lastTX === null){ lastTX = cx; lastTY = cy; return; }
+  if (Math.hypot(cx-lastTX, cy-lastTY) > 8){
+    spawnTrail(cx, cy);
+    lastTX = cx; lastTY = cy;
+  }
+}
+
+function stepPool(arr, dt, drag){
+  for (var i=0;i<arr.length;i++){
+    var s = arr[i];
+    if (!s.userData.alive) continue;
+    s.userData.life -= dt / s.userData.maxLife;
+    if (s.userData.life <= 0){ s.userData.alive = false; s.visible = false; s.material.opacity = 0; continue; }
+    s.position.addScaledVector(s.userData.vel, dt);
+    s.userData.vel.multiplyScalar(drag);
+    var k = s.userData.life;
+    s.material.opacity = k*k;
+    var sc = s.userData.baseScale * (0.5 + k*0.9);
+    s.scale.set(sc, sc, 1);
+  }
+}
+
+var lastFrame = performance.now();
+(function fxLoop(){
+  requestAnimationFrame(fxLoop);
+  var now = performance.now();
+  var dt = Math.min(0.05, (now - lastFrame)/1000);
+  lastFrame = now;
+  stepPool(burstPool, dt, 0.94);
+  stepPool(trailPool, dt, 0.92);
+})();
+
+/* ---------- entrada del puntero ---------- */
+var downX=0, downY=0, downT=0, moved=0, isDown=false;
+function started(){ return (typeof experienceStarted === "undefined") ? true : experienceStarted; }
+
+function evXY(e){ var t = (e.touches && e.touches[0]) ? e.touches[0] : e; return { x:t.clientX, y:t.clientY }; }
+
+function fxDown(e){
+  if (mode !== "full" || !started()) return;
+  if (e.target && e.target.closest && e.target.closest(".le-edit-toggle,#love-letter-btn,#love-letter-overlay")) return;
+  var p = evXY(e); isDown = true; moved = 0; downX=p.x; downY=p.y; downT=performance.now();
+}
+function fxMove(e){
+  if (mode !== "full" || !started()) return;
+  var p = evXY(e);
+  if (isDown) moved += Math.abs(p.x-downX)+Math.abs(p.y-downY);
+  handleTrail(p.x, p.y);
+}
+function fxUp(e){
+  if (mode !== "full" || !started()) return;
+  if (!isDown) return;
+  isDown = false;
+  if (moved < 16 && (performance.now()-downT) < 550) spawnBurst(downX, downY);
+}
+window.addEventListener("mousedown", fxDown);
+window.addEventListener("mousemove", fxMove);
+window.addEventListener("mouseup", fxUp);
+window.addEventListener("touchstart", fxDown, {passive:true});
+window.addEventListener("touchmove", fxMove, {passive:true});
+window.addEventListener("touchend", function(e){
+  if (mode !== "full" || !started()) return;
+  if (!isDown) return;
+  isDown = false;
+  if (moved < 16 && (performance.now()-downT) < 550) spawnBurst(downX, downY);
+}, {passive:true});
+
+var mode = "full";
+S_canvas.classList.add("le-stage-full");
+
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
+applyTitulo();
+applyTapText();
+applyMensaje();
+applyMusica();
+applyTheme();
+(function(){
+  var btn = document.getElementById("love-letter-btn");
+  if (btn) btn.addEventListener("click", function(){ applyMensaje(); });
+})();
+
+function needsRebuild(){
+  return (state.font !== (APP.defaultFont||"indie")) || (state.color !== (APP.defaultColor||""));
+}
+if (document.fonts && document.fonts.ready){
+  document.fonts.ready.then(function(){
+    setTimeout(function(){ if (needsRebuild()) rebuildFrases(); }, 120);
+  });
+} else {
+  setTimeout(function(){ if (needsRebuild()) rebuildFrases(); }, 600);
+}
+
+})();
+
+</script>
+<script>
+/* ---- controles propios del Linternas del Deseo ---- */
+(function(){
+  "use strict";
+  var LE = window.LE_STATE; if (!LE) return;
+  var st = LE.state;
+  st.extra = st.extra || {};
+  var ex = st.extra;
+  var el = document.getElementById("le-initial-state");
+  function persist(){ try { el.textContent = JSON.stringify(st); } catch(e){} }
+
+  var FIGS = [
+    {id:"corazon",  label:"Corazón",  icon:"\u2665"},
+    {id:"anillos",  label:"Anillos",  icon:"\u25EF\u25EF"},
+    {id:"infinito", label:"Infinito", icon:"\u221E"},
+    {id:"estrella", label:"Estrella", icon:"\u2726"},
+    {id:"flor",     label:"Flor",     icon:"\u2740"},
+    {id:"luna",     label:"Luna",     icon:"\u263D"}
+  ];
+  ex.figuraA = ex.figuraA || "corazon";
+  ex.figuraB = ex.figuraB || "anillos";
+  if (ex.linternasOn === undefined) ex.linternasOn = true;
+  if (ex.linternas   === undefined) ex.linternas = (window.innerWidth <= 820 ? 16 : 26);
+  if (ex.fuegos      === undefined) ex.fuegos = true;
+  if (ex.corazones   === undefined) ex.corazones = true;
+  if (ex.fugaces     === undefined) ex.fugaces = true;
+
+  function applyShapes(){ try { rebuildShapes(ex.figuraA, ex.figuraB); } catch(e){} }
+  function applyRest(){
+    try { if (typeof window.applyLoveState === "function") window.applyLoveState(ex); } catch(e){}
+  }
+
+  function buildRow(id, key){
+    var row = document.getElementById(id);
+    if (!row) return;
+    FIGS.forEach(function(f){
+      var d = document.createElement("div");
+      d.className = "le-opt";
+      d.setAttribute("data-fig", f.id);
+      d.innerHTML = f.icon + "<small>" + f.label + "</small>";
+      d.addEventListener("click", function(){
+        ex[key] = f.id;
+        refresh(row, key);
+        applyShapes();
+        persist();
+      });
+      row.appendChild(d);
+    });
+    refresh(row, key);
+  }
+  function refresh(row, key){
+    Array.prototype.forEach.call(row.children, function(d){
+      d.classList.toggle("active", d.getAttribute("data-fig") === ex[key]);
+    });
+  }
+  buildRow("leFigA", "figuraA");
+  buildRow("leFigB", "figuraB");
+
+  function wireSwitch(id, key){
+    var c = document.getElementById(id);
+    if (!c) return;
+    c.checked = !!ex[key];
+    c.addEventListener("change", function(){ ex[key] = c.checked; applyRest(); persist(); });
+  }
+  wireSwitch("leLanternOn", "linternasOn");
+  wireSwitch("leFireOn", "fuegos");
+  wireSwitch("leHeartsOn", "corazones");
+  wireSwitch("leShootOn", "fugaces");
+
+  function wireRange(rid, vid, key){
+    var r = document.getElementById(rid), v = document.getElementById(vid);
+    if (!r) return;
+    r.value = ex[key]; v.textContent = ex[key];
+    r.addEventListener("input", function(){
+      ex[key] = parseInt(r.value, 10); v.textContent = ex[key];
+      applyRest(); persist();
+    });
+  }
+  wireRange("leLanternRange", "leLanternVal", "linternas");
+
+  applyRest();
+  persist();
+})();
+
+</script>
+<script>
+/* vista previa: arranca sola, como si el cliente ya hubiera tocado la pantalla */
+(function(){
+  function go(){ try{ unlockAudioAndStart(); }catch(e){ try{ document.getElementById('start-screen').click(); }catch(e2){} } }
+  if (document.readyState === 'complete') setTimeout(go, 60); else window.addEventListener('load', function(){ setTimeout(go, 60); });
+})();
+</script>
+</body>
+</html>

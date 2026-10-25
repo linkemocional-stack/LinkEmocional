@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>[preview] ✨ Luciérnagas</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#ffd36b;--l:rgba(255,211,107,.3);--t:#fff6e0;--m:#b8a47a}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;color:var(--t);font-family:Quicksand,sans-serif;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent;background:radial-gradient(ellipse at 50% 30%,color-mix(in srgb,var(--a) 10%,#07121c),#02060a 78%)}
+canvas{position:fixed;inset:0;width:100%;height:100%}
+#hl{position:fixed;left:0;bottom:0;width:100%;height:17vh;z-index:2;pointer-events:none}
+#ttl{position:fixed;top:16px;left:0;right:0;text-align:center;z-index:5;pointer-events:none;font:700 2.4rem 'Dancing Script',cursive;margin:0;color:#fff;text-shadow:0 0 18px var(--a)}
+#hint{position:fixed;bottom:3vh;left:0;right:0;text-align:center;z-index:5;pointer-events:none;font-size:.85rem;color:var(--m);animation:b 2.4s ease-in-out infinite;transition:opacity .6s}
+#hint.off{opacity:0}@keyframes b{50%{opacity:.35}}
+#go{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;cursor:pointer;background:radial-gradient(circle,#10261f,#02060a);transition:opacity 1.2s;font:700 1.9rem 'Dancing Script',cursive;text-shadow:0 0 14px var(--a);text-align:center;padding:20px}
+#go.hidden{opacity:0;pointer-events:none}#go span{font-size:3rem;animation:p 2s ease-in-out infinite}
+@keyframes p{50%{transform:scale(1.2);filter:brightness(1.4)}}
+#pen,.x{background:rgba(255,255,255,.07);border:1px solid var(--l);color:var(--t);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1rem}
+#pen{position:fixed;top:14px;right:14px;z-index:30;width:46px;height:46px;background:rgba(10,8,4,.5);backdrop-filter:blur(8px)}
+.noed #pen,.noed #ed{display:none!important}
+#ed{position:fixed;z-index:40;background:rgba(8,14,12,.95);backdrop-filter:blur(14px);border:1px solid var(--l);transition:transform .45s cubic-bezier(.2,.9,.3,1);left:0;right:0;bottom:0;height:58vh;border-radius:22px 22px 0 0;transform:translateY(105%);display:flex;flex-direction:column}
+#ed.open{transform:none}
+@media(min-width:760px){#ed{left:auto;top:0;height:auto;width:380px;border-radius:0;transform:translateX(105%)}}
+.hd{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--l)}
+.hd b{background:linear-gradient(90deg,#72CBE9,#745FC9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bd{overflow-y:auto;touch-action:pan-y;padding:6px 18px 40px;flex:1}
+.bd label{display:block;font-size:.78rem;font-weight:700;margin:16px 0 6px}
+.bd input:not([type=checkbox]):not([type=color]){width:100%;background:rgba(255,255,255,.06);border:1px solid var(--l);color:var(--t);border-radius:8px;padding:10px;font:600 .85rem Quicksand,sans-serif;user-select:text}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:8px}.row .x{flex:0 0 34px}
+.b{width:100%;border:1px solid var(--l);background:rgba(255,211,107,.12);color:var(--a);border-radius:9px;padding:11px;font:700 .85rem Quicksand,sans-serif;cursor:pointer}
+.dl{background:var(--a);color:#1a1200;margin-top:14px;padding:14px}
+#sw{display:flex;gap:8px;flex-wrap:wrap}#sw i{width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,.2);cursor:pointer}
+.ck{display:flex;gap:9px;font-weight:600;font-size:.78rem;color:var(--m);align-items:flex-start;margin-top:10px}
+</style><script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 1}})}catch(e){}</script>
+<style id="pv-hide">
+/* vista previa: sin editor, sin pantalla de inicio */
+#pen,#ed,#go,#start-screen,.le-edit-toggle,.le-edit-hint,.le-editor-page,#leEditToggle{display:none !important}
+html,body{pointer-events:none !important;-webkit-user-select:none;user-select:none}
+</style>
+</head>
+<body>
+<div id="go"><div id="tap"></div><span>✨</span></div>
+<h1 id="ttl"></h1><canvas id="c"></canvas><audio id="au" loop></audio>
+<svg id="hl" viewBox="0 0 100 20" preserveAspectRatio="none"><path d="M0 20V9Q15 3 30 8T60 7T100 6V20Z" fill="#030806"/><path d="M0 20V14Q20 9 40 13T75 11T100 13V20Z" fill="#010403"/></svg>
+<div id="hint">Toca el cielo para que las luciérnagas escriban · mueve el dedo para guiarlas</div>
+
+<script id="st" type="application/json">{"titulo":"Para ti","tap":"Toca para despertar las luciérnagas","color":"#ffd36b","auto":true,"musica":"","mnom":"","frases":["Hola, mi amor","Eres mi lugar favorito","Contigo, siempre","Te quiero ♥"]}</script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var S=JSON.parse($('st').textContent),cv=$('c'),g=cv.getContext('2d'),au=$('au'),W,H,dp,spr,C,P=[],T=0,go=0,ph='free',pt=0,cur=-1,ptr={x:0,y:0,on:0},mv=0,edo=0,tm;
+function rs(){dp=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*dp;cv.height=H*dp;g.setTransform(dp,0,0,dp,0,0)}
+function save(){$('st').textContent=JSON.stringify(S).replace(/</g,'\\u003c')}
+function mk(){var h=S.color.replace('#','');C=[parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)];
+var r=document.documentElement.style;r.setProperty('--a',S.color);r.setProperty('--l','rgba('+C+',.3)');
+var c=document.createElement('canvas');c.width=c.height=64;var x=c.getContext('2d'),q=x.createRadialGradient(32,32,0,32,32,32);
+q.addColorStop(0,'rgba(255,255,255,1)');q.addColorStop(.15,'rgba(255,255,255,.9)');q.addColorStop(.4,'rgba('+C+',.5)');q.addColorStop(1,'rgba('+C+',0)');x.fillStyle=q;x.fillRect(0,0,64,64);spr=c}
+function area(){var w=innerWidth>=760;return{cx:edo&&w?(W-380)/2:W/2,cy:edo&&!w?H*.2:H*.48,w:edo&&w?W-380:W}}
+function wrap(x,t,mw){var L=[],c='';t.split(' ').forEach(function(s){var n=c?c+' '+s:s;if(c&&x.measureText(n).width>mw){L.push(c);c=s}else c=n});L.push(c);return L}
+function form(i){var t=S.frases[i];if(!t){rel();return}cur=i;ph='form';pt=T;
+var a=area(),mw=a.w*.86,sz=Math.min(a.w*.17,130),ln,o=document.createElement('canvas'),x=o.getContext('2d');o.width=W;o.height=H;
+for(;;){x.font='700 '+sz+'px "Dancing Script",cursive';ln=wrap(x,t,mw);var wm=Math.max.apply(0,ln.map(function(l){return x.measureText(l).width}));if((wm<=mw&&ln.length*sz*1.2<=H*.45)||sz<=16)break;sz-=4}
+x.fillStyle='#fff';x.textAlign='center';x.textBaseline='middle';
+ln.forEach(function(l,k){x.fillText(l,a.cx,a.cy+(k-(ln.length-1)/2)*sz*1.2)});
+var d=x.getImageData(0,0,W,H).data,pts=[],st=Math.max(3,Math.floor(sz/20)),X,Y;
+for(Y=0;Y<H;Y+=st)for(X=0;X<W;X+=st)if(d[(Y*W+X)*4+3]>128)pts.push([X,Y]);
+for(var k=pts.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1)),s=pts[k];pts[k]=pts[j];pts[j]=s}
+if(!pts.length){rel();return}
+P.forEach(function(p,k){var q=pts[k%pts.length];p.tx=q[0]+(Math.random()-.5)*st;p.ty=q[1]+(Math.random()-.5)*st})}
+function rel(){ph='free';pt=T}
+function nxt(){var n=S.frases.length;if(n)form((cur+1)%n);else rel()}
+function init(){P=[];var n=innerWidth<700?650:1000;for(var i=0;i<n;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:0,vy:0,tx:0,ty:0,a:Math.random()*6.28})}
+function fr(ts){T=ts/1000;var i,p;
+if(go&&S.auto&&!edo){if(ph=='free'&&T-pt>2.8)nxt();else if(ph=='form'&&T-pt>5.5)rel()}
+g.clearRect(0,0,W,H);g.globalCompositeOperation='lighter';
+for(i=0;i<P.length;i++){p=P[i];
+if(ph=='form'){p.vx+=(p.tx-p.x)*.035+Math.sin(T*3+p.a)*.03;p.vy+=(p.ty-p.y)*.035+Math.cos(T*2.6+p.a)*.03;p.vx*=.82;p.vy*=.82}
+else{p.vx+=Math.cos(T*.6+p.a*3)*.02+(Math.random()-.5)*.07;p.vy+=Math.sin(T*.5+p.a*2)*.02+(Math.random()-.5)*.07-.002;
+if(ptr.on){var dx=ptr.x-p.x,dy=ptr.y-p.y,d=Math.hypot(dx,dy)+1;if(d<280){var f=1-d/280;p.vx+=dx/d*.09*f-dy/d*.05*f;p.vy+=dy/d*.09*f+dx/d*.05*f}}
+var s=Math.hypot(p.vx,p.vy);if(s>1.8){p.vx*=1.8/s;p.vy*=1.8/s}}
+p.x+=p.vx;p.y+=p.vy;if(p.x<-20)p.x=W+20;else if(p.x>W+20)p.x=-20;if(p.y<-20)p.y=H+20;else if(p.y>H+20)p.y=-20;
+var f2=ph=='form',sz=f2?4.5+Math.sin(T*3+p.a):6+4*(.5+.5*Math.sin(T*1.7+p.a*4));
+g.globalAlpha=f2?.7+.3*Math.sin(T*4+p.a):.2+.8*(.5+.5*Math.sin(T*1.3+p.a*5));
+g.drawImage(spr,p.x-sz,p.y-sz,sz*2,sz*2)}
+g.globalAlpha=1;requestAnimationFrame(fr)}
+cv.addEventListener('pointerdown',function(e){ptr.on=1;ptr.x=e.clientX;ptr.y=e.clientY;mv=0});
+addEventListener('pointermove',function(e){if(!ptr.on)return;mv+=Math.abs(e.clientX-ptr.x)+Math.abs(e.clientY-ptr.y);ptr.x=e.clientX;ptr.y=e.clientY});
+addEventListener('pointerup',function(){if(!ptr.on)return;ptr.on=0;if(mv<10&&go){$('hint').classList.add('off');nxt()}});
+function txt(){$('ttl').textContent=S.titulo;$('tap').textContent=S.tap;document.title='✨ '+S.titulo}
+$('go').addEventListener('click',function(){go=1;pt=T;var pr=au.play();if(pr&&pr.catch)pr.catch(function(){});$('go').classList.add('hidden')});
+
+addEventListener('resize',function(){rs();if(ph=='form')form(cur)});
+
+/* ---- arranque ---- */
+$('go').classList.remove('hidden');$('hint').classList.remove('off');
+rs();mk();init();txt();
+(document.fonts&&document.fonts.load?document.fonts.load('700 60px "Dancing Script"'):Promise.resolve()).then(function(){},function(){});
+requestAnimationFrame(fr);
+})();
+</script><script>
+(function(){
+  function go(){ var g=document.getElementById('go'); if(g) g.click(); }
+  if (document.readyState === 'complete') setTimeout(go, 60); else window.addEventListener('load', function(){ setTimeout(go, 60); });
+})();
+</script>
+</body></html>

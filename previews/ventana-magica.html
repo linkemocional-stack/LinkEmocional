@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>[preview] 💌 Ventana mágica</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#ff9ccf;--l:rgba(255,156,207,.3);--t:#fff0f6;--m:#b8a0c8}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;color:var(--t);font-family:Quicksand,sans-serif;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent;background:radial-gradient(ellipse at 50% 40%,#2a1450,#05030f 78%)}
+#v{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+canvas{position:fixed;inset:0;width:100%;height:100%}
+#hud{position:fixed;top:16px;left:0;right:0;text-align:center;z-index:5;pointer-events:none;text-shadow:0 0 12px #000}
+#ttl{font:700 2.3rem 'Dancing Script',cursive;margin:0;color:#fff}
+#sub{font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--a);font-weight:700}
+#cnt{margin-top:6px;font-weight:700;font-size:1.1rem}
+body.edm #hud{display:none}
+#hint{position:fixed;bottom:28px;left:0;right:0;text-align:center;z-index:5;pointer-events:none;font-size:.9rem;padding:0 24px;text-shadow:0 0 10px #000;animation:b 2.4s ease-in-out infinite}
+@keyframes b{50%{opacity:.45}}
+#go{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;background:radial-gradient(circle,#2a1450,#05030f);transition:opacity 1s;font:700 1.9rem 'Dancing Script',cursive;text-shadow:0 0 14px var(--a);text-align:center;padding:24px}
+#go small{font:500 .8rem Quicksand,sans-serif;color:var(--m);max-width:290px;text-shadow:none}
+#go.hidden{opacity:0;pointer-events:none}#go span{font-size:3rem;animation:p 2s ease-in-out infinite}
+@keyframes p{50%{transform:scale(1.2)}}
+#card,#fm{position:fixed;z-index:25;background:linear-gradient(160deg,rgba(60,20,80,.95),rgba(12,5,24,.97));border:1px solid var(--l);border-radius:20px;padding:20px 22px;backdrop-filter:blur(10px);box-shadow:0 0 30px var(--l);transition:.45s;opacity:0;pointer-events:none}
+#card{left:50%;bottom:22px;width:min(92vw,420px);transform:translate(-50%,30px)}
+#card.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#fm{left:50%;top:50%;width:min(90vw,440px);transform:translate(-50%,-46%) scale(.94);text-align:center;padding:30px 24px}
+#fm.on{opacity:1;transform:translate(-50%,-50%);pointer-events:auto}
+#ct,#ft{font:700 1.8rem 'Dancing Script',cursive;margin:4px 0 6px}#ft{font-size:2.3rem;text-shadow:0 0 14px var(--a)}
+#cp,#fp{margin:0 0 12px;line-height:1.6;font-size:.98rem;white-space:pre-wrap}#fp{text-align:left}
+#cd2{font-size:.75rem;color:var(--a);font-weight:700}
+#cc,#fc,#pen,.x{background:rgba(255,255,255,.08);border:1px solid var(--l);color:var(--t);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1rem}
+#fc{width:auto;border-radius:20px;padding:0 18px;height:38px;font:700 .85rem Quicksand,sans-serif}
+#pen{position:fixed;top:14px;right:14px;z-index:30;width:46px;height:46px;background:rgba(10,8,4,.5);backdrop-filter:blur(8px)}
+.noed #pen,.noed #ed{display:none!important}
+#ed{position:fixed;z-index:60;background:rgba(14,8,26,.95);backdrop-filter:blur(14px);border:1px solid var(--l);transition:transform .45s cubic-bezier(.2,.9,.3,1);left:0;right:0;bottom:0;height:58vh;border-radius:22px 22px 0 0;transform:translateY(105%);display:flex;flex-direction:column}
+#ed.open{transform:none}
+@media(min-width:760px){#ed{left:auto;top:0;height:auto;width:380px;border-radius:0;transform:translateX(105%)}}
+.hd{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--l)}
+.hd b{background:linear-gradient(90deg,#72CBE9,#745FC9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bd{overflow-y:auto;touch-action:pan-y;padding:6px 18px 40px;flex:1}
+.bd label{display:block;font-size:.78rem;font-weight:700;margin:16px 0 6px}
+.bd input:not([type=checkbox]):not([type=color]),.bd textarea{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--l);color:var(--t);border-radius:8px;padding:10px;font:600 .85rem Quicksand,sans-serif;user-select:text}
+.bd textarea{min-height:64px;margin-top:6px;resize:vertical}
+.row{display:flex;gap:8px;align-items:center}.row .x{flex:0 0 34px}
+.mc{border:1px solid var(--l);border-radius:12px;padding:10px;margin-bottom:10px;background:rgba(255,255,255,.03)}
+.b{width:100%;border:1px solid var(--l);background:rgba(255,156,207,.13);color:var(--a);border-radius:9px;padding:11px;font:700 .85rem Quicksand,sans-serif;cursor:pointer;margin-top:8px}
+.dl{background:var(--a);color:#2a0016;margin-top:14px;padding:14px}
+#sw{display:flex;gap:8px;flex-wrap:wrap}#sw i{width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,.2);cursor:pointer}
+.ck{display:flex;gap:9px;font-weight:600;font-size:.78rem;color:var(--m);align-items:flex-start;margin-top:10px}
+</style><script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 1}})}catch(e){}</script>
+<style id="pv-hide">
+/* vista previa: sin editor, sin pantalla de inicio */
+#pen,#ed,#go,#start-screen,.le-edit-toggle,.le-edit-hint,.le-editor-page,#leEditToggle{display:none !important}
+html,body{pointer-events:none !important;-webkit-user-select:none;user-select:none}
+</style>
+</head>
+<body>
+<video id="v" playsinline muted autoplay></video><canvas id="c"></canvas><audio id="au" loop></audio>
+<div id="go"><div id="tap"></div><span>💌</span><small>Se te pedirá usar la cámara y el movimiento del celular. Gira a tu alrededor: hay mensajes escondidos en el aire.</small></div>
+<div id="hud"><h1 id="ttl"></h1><div id="sub"></div><div id="cnt"></div></div>
+<div id="hint"></div>
+<div id="card"><div id="cd2"></div><h2 id="ct"></h2><p id="cp"></p><button id="cc">✕</button></div>
+<div id="fm"><h2 id="ft">¡Los encontraste todos!</h2><p id="fp"></p><button id="fc">Cerrar 💗</button></div>
+
+<script id="st" type="application/json">{"titulo":"Ventana mágica","nombre":"Mi amor","tap":"Toca para abrir la ventana","color":"#ff9ccf","cam":false,"musica":"","mnom":"","final":"Los encontraste todos… igual que me encontraste a mí.\n\nGracias por estar. Te quiero muchísimo. 💗","msgs":[{"t":"Lo que más me gusta de ti","d":"Tu sonrisa. Siempre tu sonrisa."},{"t":"Mi recuerdo favorito","d":"Cualquier día, si estabas tú."},{"t":"Una promesa","d":"Elegirte hoy, mañana y todos los días que vengan."},{"t":"Lo que pienso cuando no estás","d":"Que ya falta menos para verte."},{"t":"Gracias","d":"Por quedarte, por cuidarme, por ser tú."}]}</script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var S=JSON.parse($('st').textContent),v=$('v'),cv=$('c'),g=cv.getContext('2d'),au=$('au'),W,H,dp,sp,yaw=0,pitch=0,ty=0,tp=0,y0=null,mx=0,my=0,has=0,cam=0,st=0,t0=0,fd=[],Pz=[],AM=[],HB=[],FP=[],T=0,sel=-1,fin=0,oy=0,toy=0,drag=0,lx=0,ly=0,mv=0,hs='';
+function wr(a){a%=360;if(a>180)a-=360;if(a<-180)a+=360;return a}
+function rs(){dp=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*dp;cv.height=H*dp;g.setTransform(dp,0,0,dp,0,0)}
+function save(){$('st').textContent=JSON.stringify(S).replace(/</g,'\\u003c')}
+function pl(){var n=S.msgs.length;Pz=S.msgs.map(function(m,i){return{az:35+i*360/n+Math.sin(i*7.1)*12,el:Math.sin(i*3.3+1)*14+6}});fd=S.msgs.map(function(){return 0});fin=0;cnt()}
+function cnt(){var n=fd.reduce(function(a,b){return a+b},0);$('cnt').textContent=S.msgs.length?'💗 '+n+' / '+S.msgs.length:''}
+function mk(){var h=S.color.replace('#',''),r=parseInt(h.substr(0,2),16),gg=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16),rt=document.documentElement.style;rt.setProperty('--a',S.color);rt.setProperty('--l','rgba('+r+','+gg+','+b+',.3)');
+var c=document.createElement('canvas');c.width=c.height=64;var x=c.getContext('2d'),q=x.createRadialGradient(32,32,0,32,32,32);
+q.addColorStop(0,'rgba(255,255,255,.95)');q.addColorStop(.2,'rgba('+r+','+gg+','+b+',.6)');q.addColorStop(1,'rgba('+r+','+gg+','+b+',0)');x.fillStyle=q;x.fillRect(0,0,64,64);sp=c}
+function pr(az,el){var d=wr(az-yaw),k=Math.max(W,H)/70;if(Math.abs(d)>W/(2*k)+25)return null;return[W/2+d*k,H/2+oy-(el-pitch)*k,k]}
+function fr(ts){T=ts/1000;var i,k,q;yaw+=wr(ty+mx-yaw)*.2;pitch+=(tp+my-pitch)*.2;oy+=(toy-oy)*.1;
+g.clearRect(0,0,W,H);g.globalAlpha=1;if(cam){g.fillStyle='rgba(0,0,0,.22)';g.fillRect(0,0,W,H)}
+g.globalCompositeOperation='lighter';
+for(i=0;i<AM.length;i++){k=AM[i];q=pr(k[0],k[1]);if(!q)continue;g.globalAlpha=.2+.5*Math.abs(Math.sin(T*1.3+k[2]));var s=k[3]*q[2]*.3;g.drawImage(sp,q[0]-s,q[1]-s,s*2,s*2)}
+HB=[];var near=-1,nd=999;
+for(i=0;i<Pz.length;i++){var d=Math.abs(wr(Pz[i].az-yaw));if(!fd[i]&&d<nd){nd=d;near=i}q=pr(Pz[i].az,Pz[i].el);if(!q)continue;
+var dist=Math.hypot(q[0]-W/2,q[1]-H/2-oy),px=Math.max(0,1-dist/220)*.6,r=(46+6*Math.sin(T*3+i))*(1+px);
+g.globalAlpha=fd[i]?.5:.95;g.drawImage(sp,q[0]-r,q[1]-r,r*2,r*2);HB.push([q[0],q[1],i])}
+g.globalCompositeOperation='source-over';g.textAlign='center';g.textBaseline='middle';
+for(i=0;i<HB.length;i++){k=HB[i];dist=Math.hypot(k[0]-W/2,k[1]-H/2-oy);g.globalAlpha=1;g.font=(30+Math.max(0,1-dist/220)*14)+'px sans-serif';g.fillText(fd[k[2]]?'💗':'💌',k[0],k[1]+Math.sin(T*2+k[2])*3)}
+if(near>=0&&st&&!pr(Pz[near].az,Pz[near].el)){var sg=wr(Pz[near].az-yaw)>0?1:-1,ax=sg>0?W-28:28,ay=H/2+oy,pu=.6+.4*Math.sin(T*5);g.globalAlpha=pu;g.fillStyle=S.color;g.beginPath();g.moveTo(ax+sg*12,ay);g.lineTo(ax-sg*8,ay-14);g.lineTo(ax-sg*8,ay+14);g.fill()}
+for(i=FP.length-1;i>=0;i--){k=FP[i];g.globalAlpha=Math.min(1,k.l);g.font=k.s+'px sans-serif';g.fillText(k.e,k.x,k.y);k.x+=k.vx;k.y+=k.vy;k.vy+=.12;k.l-=.006;if(k.l<=0||k.y>H+40)FP.splice(i,1)}
+g.globalAlpha=1;
+var h=!st?'':fd.length&&fd.every(function(x){return x})?'':(!has&&T-t0>2.5?'Arrastra el dedo para mirar a tu alrededor 👆':fd.some(function(x){return x})?'Sigue buscando… quedan mensajes escondidos ✨':'Gira lentamente a tu alrededor y busca los 💌');if(h!==hs){hs=h;$('hint').textContent=h}
+requestAnimationFrame(fr)}
+function oh(e){if(e.alpha==null||e.beta==null)return;has=1;var hd=360-e.alpha;if(y0==null)y0=hd;ty=wr(hd-y0);tp=Math.max(-80,Math.min(80,e.beta-90))}
+cv.addEventListener('pointerdown',function(e){drag=1;lx=e.clientX;ly=e.clientY;mv=0});
+addEventListener('pointermove',function(e){if(!drag)return;var dx=e.clientX-lx,dy=e.clientY-ly;mv+=Math.abs(dx)+Math.abs(dy);mx-=dx*.12;my+=dy*.12;lx=e.clientX;ly=e.clientY});
+addEventListener('pointerup',function(e){if(!drag)return;drag=0;if(mv<8){var b=-1,bd=52;HB.forEach(function(o){var d=Math.hypot(o[0]-e.clientX,o[1]-e.clientY);if(d<bd){bd=d;b=o[2]}});if(b>=0)opn(b)}});
+function opn(i){var m=S.msgs[i];if(!m)return;fd[i]=1;sel=i;cnt();$('cd2').textContent='💌 Mensaje '+(i+1)+' de '+S.msgs.length;$('ct').textContent=m.t;$('cp').textContent=m.d;$('card').classList.add('on');try{navigator.vibrate&&navigator.vibrate(40)}catch(e){}}
+function cls(){sel=-1;$('card').classList.remove('on');if(!fin&&fd.length&&fd.every(function(x){return x})){fin=1;setTimeout(finale,450)}}
+function finale(){$('fm').classList.add('on');var em=['💗','✨','💜','🌸'];for(var i=0;i<90;i++)FP.push({x:Math.random()*W,y:H+10,vx:(Math.random()-.5)*3,vy:-8-Math.random()*9,s:18+Math.random()*22,e:em[i%4],l:1.6})}
+$('cc').onclick=cls;$('fc').onclick=function(){$('fm').classList.remove('on')};
+function txt(){$('ttl').textContent=S.titulo;$('sub').textContent=S.nombre?'Para '+S.nombre:'';$('tap').textContent=S.tap;$('fp').textContent=S.final;document.title='💌 '+S.titulo}
+$('go').addEventListener('click',function(){if(st)return;st=1;t0=T;$('go').classList.add('hidden')});
+
+addEventListener('resize',rs);
+
+/* ---- arranque ---- */
+$('go').classList.remove('hidden');$('card').classList.remove('on');$('fm').classList.remove('on');v.style.display='none';
+for(var i=0;i<150;i++)AM.push([Math.random()*360-180,Math.random()*100-35,Math.random()*6.28,1+Math.random()*2]);
+rs();mk();pl();txt();requestAnimationFrame(fr);
+})();
+</script><script>
+(function(){
+  function go(){ var g=document.getElementById('go'); if(g) g.click(); }
+  if (document.readyState === 'complete') setTimeout(go, 60); else window.addEventListener('load', function(){ setTimeout(go, 60); });
+})();
+</script><script>
+/* vista previa: dedo fantasma (hace lo que haria el cliente) */
+(function(){
+
+function pe(type,x,y,target){ var ev; try{ ev=new PointerEvent(type,{clientX:x,clientY:y,pointerId:1,bubbles:true,cancelable:true,isPrimary:true,pointerType:'touch'}); }catch(e){ return; } (target||window).dispatchEvent(ev); }
+
+var c=document.getElementById('c');
+setTimeout(function(){
+  var W=innerWidth,H=innerHeight, x=W*.5, y=H*.55;
+  pe('pointerdown',x,y,c);
+  setInterval(function(){ x-=1.6; pe('pointermove',x,y+Math.sin(Date.now()/1400)*0.6,window); },30);   // gira lentamente buscando los mensajes
+},900);
+})();
+</script>
+</body></html>

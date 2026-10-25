@@ -28,7 +28,25 @@ startFarolillos2dPreview(containerId);
 startFrasco2dPreview(containerId);
 } else if (kind === 'citas2d') {
 startCitas2dPreview(containerId);
+} else if (kind.indexOf('frame-') === 0) {
+startFramePreview(kind.replace('frame-',''), containerId);
 }
+}
+/* Vista previa "real": carga previews/<producto>.html, que es el producto original
+   (misma escena, sin editor y con arranque automatico), dentro de un marco escalado
+   para que se vea como una miniatura de la pantalla del celular. */
+function startFramePreview(slug, containerId){
+var box = document.getElementById(containerId);
+if (!box || box.querySelector('iframe')) return;
+box.style.position = 'relative'; box.style.overflow = 'hidden'; box.style.background = '#000';
+var w = box.clientWidth || 260, h = box.clientHeight || 180;
+var VW = 420, scale = w / VW, VH = h / scale;
+var f = document.createElement('iframe');
+f.setAttribute('scrolling','no'); f.setAttribute('tabindex','-1'); f.setAttribute('aria-hidden','true');
+f.setAttribute('title','Vista previa');
+f.style.cssText = 'position:absolute;left:0;top:0;border:0;background:#000;pointer-events:none;transform-origin:0 0;width:'+VW+'px;height:'+VH+'px;transform:scale('+scale+')';
+f.src = 'previews/' + slug + '.html';
+box.appendChild(f);
 }
 function heartPoint(t, scale){
 var x = 16 * Math.pow(Math.sin(t), 3);
