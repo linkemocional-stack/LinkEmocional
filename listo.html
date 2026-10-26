@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>¡Tu página está lista! | Link Emocional</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/jpeg" href="og-image.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<canvas id="stars"></canvas>
+<header id="top"></header>
+<main class="page" id="main"><div class="spin"></div></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  LE.header('');
+  var $ = function (i) { return document.getElementById(i); };
+  var qs = new URLSearchParams(location.search);
+  var id = (qs.get('id') || LE.lastId() || '').toLowerCase();
+  var info, url, timer, qr;
+  var HEART = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#ff4d79" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+  var PAL = [
+    { n: 'Violeta', dots: '#241a4a', c: '#6f5bc0', d: '#ff4d79' },
+    { n: 'Rosa', dots: '#6d1040', c: '#ff4d79', d: '#c2185b' },
+    { n: 'Cielo', dots: '#0f3d4d', c: '#2a8fae', d: '#1c8fb0' },
+    { n: 'Negro', dots: '#111111', c: '#111111', d: '#111111' }
+  ];
+
+  function fail(msg) {
+    $('main').innerHTML = '<h1 class="t">No encontramos <em>tu página</em></h1><p class="sub">' + LE.esc(msg || 'Revisá el enlace o creá una nueva.') + '</p>' +
+      '<a class="btn" href="crear.html">Crear una página</a>';
+  }
+  if (!/^[a-f0-9]{6,32}$/.test(id)) return fail('Todavía no creaste ninguna página en este dispositivo.');
+
+  function load() {
+    return fetch('/api/info?id=' + id, { cache: 'no-store' }).then(function (r) {
+      if (!r.ok) throw new Error('No existe una página con ese ID.'); return r.json();
+    }).then(function (d) { info = d; LE.setNow(d.now); url = location.origin + '/p/' + d.id; });
+  }
+
+  function render() {
+    var perm = info.state === 'permanent', exp = info.state === 'expired';
+    var P = LE.price(LE.cfg.PRECIO_ENLACE_USD || 0.99);
+    var customUrl = info.slug ? location.origin + '/s/' + info.slug : null;
+    $('main').innerHTML =
+      '<div class="hero-gift"><div class="g">🎁</div><h1>' + (exp ? 'Tu página <span style="color:var(--bad)">expiró</span>' : '¡Tu página está lista!') + '</h1></div>' +
+      '<p class="sub" style="margin-top:8px">' + (exp ? 'Reactivala para que vuelva a abrirse con tu enlace.' : 'Compartí el enlace con esa persona especial.') + '</p>' +
+
+      '<section class="card"><div class="qrbox"><div class="qr" id="qr"></div><div style="flex:1;min-width:0">' +
+        '<h2>Tu código QR</h2><p class="hint" style="margin-bottom:10px">Personalizalo y descargalo para imprimirlo o mandarlo.</p>' +
+        '<div class="colors" id="pal"></div></div></div>' +
+        '<div class="row" style="margin-top:14px"><select class="in" id="qrStyle"><option value="rounded">Puntos suaves</option><option value="dots">Círculos</option><option value="classy-rounded">Elegante</option><option value="square">Clásico</option></select>' +
+        '<button class="btn ghost sm" id="bQr" style="flex:0 0 auto">⬇ Descargar QR</button></div></section>' +
+
+      '<section class="card"><div class="linkrow"><input class="in" id="lnk" readonly value="' + LE.esc(customUrl || url) + '"><button class="btn sm" id="bCopy" style="flex:none">Copiar</button></div>' +
+        (customUrl ? '<p class="hint" style="margin:10px 0 0">Enlace original: <span class="mono">' + LE.esc(url) + '</span></p>' : '') + '</section>' +
+
+      '<div class="stack" style="margin-bottom:14px">' +
+        '<a class="btn" id="bView" href="' + LE.esc(customUrl || url) + '" target="_blank" rel="noopener">👁 Ver página</a>' +
+        '<a class="btn wa" id="bWa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent('Mirá lo que preparé para vos 💗 ' + (customUrl || url)) + '">Enviar por WhatsApp</a>' +
+        '<div class="row"><a class="btn ghost" href="crear.html?edit=' + id + '">✏️ Editar</a><a class="btn ghost" href="mis-paginas.html">📂 Mis páginas</a></div></div>' +
+
+      '<section class="card center" id="cdCard"></section>' +
+
+      '<section class="card"><h2>🔗 Enlace personalizado <span class="chip">PREMIUM</span></h2>' +
+        (customUrl
+          ? '<p class="hint">Tu enlace personalizado está activo.</p>'
+          : '<p class="hint">Elegí un nombre fácil de recordar, por ejemplo <span class="mono">/s/ParaMiAmor</span>.</p>' +
+            '<div class="linkrow"><span class="mono muted" style="flex:none">/s/</span><input class="in" id="slug" maxlength="32" placeholder="tu-nombre" autocapitalize="off" autocomplete="off"></div>' +
+            '<p class="hint" style="margin:8px 0 12px">Se activa por WhatsApp · ' + P.usd + ' · ' + P.bob + '</p>' +
+            '<button class="btn ghost" id="bSlug">Lo quiero</button>') + '</section>';
+
+    // QR
+    var qrEl = $('qr');
+    qr = new QRCodeStyling({
+      width: 600, height: 600, type: 'canvas', data: customUrl || url, margin: 8,
+      qrOptions: { errorCorrectionLevel: 'H' },
+      dotsOptions: { type: 'rounded', color: PAL[0].dots },
+      backgroundOptions: { color: '#ffffff' },
+      cornersSquareOptions: { type: 'extra-rounded', color: PAL[0].c },
+      cornersDotOptions: { type: 'dot', color: PAL[0].d },
+      image: HEART, imageOptions: { margin: 4, imageSize: 0.3, hideBackgroundDots: true }
+    });
+    qr.append(qrEl);
+    var cur = PAL[0];
+    PAL.forEach(function (p, i) {
+      var s = document.createElement('i'); s.style.background = 'linear-gradient(135deg,' + p.c + ',' + p.d + ')'; s.title = p.n;
+      if (!i) s.className = 'on';
+      s.onclick = function () {
+        cur = p; Array.prototype.forEach.call($('pal').children, function (x) { x.classList.remove('on'); }); s.classList.add('on');
+        qr.update({ dotsOptions: { color: p.dots }, cornersSquareOptions: { color: p.c }, cornersDotOptions: { color: p.d } });
+      };
+      $('pal').appendChild(s);
+    });
+    $('qrStyle').onchange = function () { qr.update({ dotsOptions: { type: this.value, color: cur.dots } }); };
+    $('bQr').onclick = function () { qr.download({ name: 'link-emocional-qr', extension: 'png' }); };
+    $('bCopy').onclick = function () { LE.copy($('lnk').value); };
+    $('lnk').onclick = function () { this.select(); };
+
+    // enlace personalizado
+    if ($('slug')) {
+      $('slug').oninput = function () { this.value = this.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''); };
+      $('bSlug').onclick = function () {
+        var s = $('slug').value;
+        if (s.length < 3) return LE.toast('Usá al menos 3 letras o números', true);
+        window.open(LE.wa('Hola! Quiero el enlace personalizado /s/' + s + ' 💗\nID de mi página: ' + id + '\n' + url), '_blank');
+      };
+    }
+    renderCountdown();
+  }
+
+  function renderCountdown() {
+    clearInterval(timer);
+    var c = $('cdCard');
+    var st = info.state, total = (info.free_hours || 12) * 3600 * 1000, expAt = new Date(info.expires_at).getTime();
+    if (st === 'permanent') {
+      c.innerHTML = '<div class="state-ok" style="justify-content:center;font-size:17px">✅ Tu página es permanente</div><p class="hint" style="margin:8px 0 0">No expira nunca y no lleva la etiqueta de Link Emocional.</p>';
+      return;
+    }
+    if (st === 'expired') {
+      c.innerHTML = '<div style="font-weight:800;color:var(--bad);font-size:17px;margin-bottom:6px">⛔ Esta página expiró</div><p class="hint">Quien abra el enlace verá una pantalla de “página expirada”.</p><button class="btn" id="bPerm">🔁 Reactivar mi página</button>';
+      $('bPerm').onclick = function () { LE.openPermanent({ id: id, url: url, expired: true }); };
+      return;
+    }
+    c.innerHTML = '<div class="ring" id="ring"><svg viewBox="0 0 160 160"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6fd6e8"/><stop offset=".6" stop-color="#8b6ff0"/><stop offset="1" stop-color="#ff7ab8"/></linearGradient></defs>' +
+      '<circle class="tr" cx="80" cy="80" r="70" fill="none" stroke-width="9"/><circle class="pg" id="pg" cx="80" cy="80" r="70" fill="none" stroke-width="9" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="0"/></svg>' +
+      '<div class="mid"><small>Expira en</small><b id="hms">--:--:--</b></div></div>' +
+      '<p class="hint" style="margin:0 0 14px">Después de ese tiempo, quien abra el enlace verá una página expirada. Hacela permanente y se queda para siempre.</p>' +
+      '<button class="btn" id="bPerm">💫 Hacer permanente</button>';
+    $('bPerm').onclick = function () { LE.openPermanent({ id: id, url: url, expired: false }); };
+    function tick() {
+      var left = expAt - LE.now();
+      if (left <= 0) { clearInterval(timer); load().then(function () { render(); }); return; }
+      $('hms').textContent = LE.hms(left);
+      var frac = Math.max(0, Math.min(1, left / total));
+      $('pg').style.strokeDashoffset = String(439.8 * (1 - frac));
+      $('ring').classList.toggle('low', left < 3600 * 1000);
+    }
+    tick(); timer = setInterval(tick, 1000);
+  }
+
+  load().then(function () { render(); }, function (e) { fail(e.message); });
+})();
+</script>
+</body>
+</html>

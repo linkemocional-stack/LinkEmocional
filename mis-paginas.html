@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mis páginas | Link Emocional</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/jpeg" href="og-image.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<canvas id="stars"></canvas>
+<header id="top"></header>
+<main class="page">
+  <h1 class="t">Mis <em>páginas</em></h1>
+  <p class="sub" id="sub">Todas tus dedicatorias en un solo lugar.</p>
+  <div id="msg"></div>
+  <div id="list"><div class="spin"></div></div>
+  <a class="btn" href="crear.html" style="margin-top:6px">＋ Crear una página nueva</a>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  LE.header('mis');
+  var $ = function (i) { return document.getElementById(i); };
+  var E = LE.esc, pages = [], logged = false;
+
+  function stateChip(p) {
+    if (p.state === 'permanent') return '<span class="chip ok">PERMANENTE</span>';
+    if (p.state === 'expired') return '<span class="chip bad">EXPIRADA</span>';
+    return '<span class="chip warn">ACTIVA · <span class="cd" data-exp="' + new Date(p.expires_at).getTime() + '">--</span></span>';
+  }
+  function card(p) {
+    var url = location.origin + (p.slug ? '/s/' + p.slug : '/p/' + p.id);
+    var perm = p.state === 'permanent', exp = p.state === 'expired';
+    return '<article class="card pg-card" data-id="' + p.id + '">' +
+      '<div class="hd"><div class="em">' + E(p.emoji) + '</div><div style="flex:1;min-width:0"><h3>' + E(p.titulo || p.template_name) + '</h3>' +
+      '<small>' + E(p.template_name) + ' · creada ' + new Date(p.created_at).toLocaleDateString('es', { day: 'numeric', month: 'short' }) + '</small></div></div>' +
+      '<div>' + stateChip(p) + (p.slug ? ' <span class="chip">/s/' + E(p.slug) + '</span>' : '') + '</div>' +
+      '<div class="actions">' +
+        (exp ? '' : '<a class="btn ghost sm" href="' + E(url) + '" target="_blank" rel="noopener">👁 Ver</a>') +
+        '<button class="btn ghost sm" data-a="copy" data-u="' + E(url) + '">🔗 Copiar</button>' +
+        '<a class="btn ghost sm" href="crear.html?edit=' + p.id + '">✏️ Editar</a>' +
+        '<a class="btn ghost sm" href="listo.html?id=' + p.id + '">📱 QR</a>' +
+      '</div>' +
+      '<div class="actions">' +
+        (perm ? '' : '<button class="btn sm" data-a="perm" data-exp="' + (exp ? 1 : 0) + '">' + (exp ? '🔁 Reactivar' : '💫 Hacer permanente') + '</button>') +
+        '<button class="btn danger sm" data-a="del">🗑 Eliminar</button>' +
+      '</div></article>';
+  }
+  function draw() {
+    if (!pages.length) {
+      $('list').innerHTML = '<div class="card center"><div style="font-size:42px">🎁</div><h2 style="margin-top:8px">Todavía no creaste ninguna página</h2><p class="hint">Elegí un diseño y en minutos tenés tu enlace.</p></div>';
+      return;
+    }
+    $('list').innerHTML = pages.map(card).join('');
+  }
+  setInterval(function () {
+    Array.prototype.forEach.call(document.querySelectorAll('.cd'), function (el) {
+      var left = Number(el.dataset.exp) - LE.now();
+      if (left <= 0) { el.textContent = '00:00:00'; if (!el.dataset.r) { el.dataset.r = 1; setTimeout(boot, 1200); } } else el.textContent = LE.hms(left);
+    });
+  }, 1000);
+
+  $('list').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-a]'); if (!b) return;
+    var c = b.closest('.pg-card'), id = c.dataset.id, a = b.dataset.a;
+    if (a === 'copy') return LE.copy(b.dataset.u);
+    if (a === 'perm') return LE.openPermanent({ id: id, url: location.origin + '/p/' + id, expired: b.dataset.exp === '1' });
+    if (a === 'del') {
+      if (!confirm('¿Eliminar esta página? El enlace dejará de funcionar y no se puede deshacer.')) return;
+      LE.api('/api/page?id=' + id, { method: 'DELETE', editKey: LE.editKey(id) }).then(function () {
+        pages = pages.filter(function (p) { return p.id !== id; }); draw(); LE.toast('Página eliminada');
+      }, function (er) { LE.toast(er.message, true); });
+    }
+  });
+
+  // Paginas creadas en este dispositivo antes de iniciar sesion -> pasan a tu cuenta
+  function claimLocal() {
+    return Promise.all(LE.myIds().map(function (id) {
+      var k = LE.editKey(id); if (!k) return null;
+      return LE.api('/api/page?id=' + id, { method: 'POST', body: { edit_key: k } }).catch(function () { });
+    }));
+  }
+
+  function bootGuest() {
+    $('sub').textContent = 'Estas son las páginas creadas en este dispositivo.';
+    $('msg').innerHTML = '<div class="alert info">Iniciá sesión para guardar tus páginas en tu cuenta y verlas desde cualquier celular. <a href="login.html?next=mis-paginas.html" style="font-weight:800">Entrar</a></div>';
+    var ids = LE.myIds();
+    if (!ids.length) { pages = []; return draw(); }
+    Promise.all(ids.map(function (id) {
+      return fetch('/api/info?id=' + id, { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
+    })).then(function (rs) {
+      pages = rs.filter(Boolean).map(function (d) { LE.setNow(d.now); return { id: d.id, titulo: d.titulo, template_name: d.template_name, emoji: d.emoji, slug: d.slug, created_at: d.created_at, expires_at: d.expires_at, state: d.state }; });
+      draw();
+    });
+  }
+
+  function boot() {
+    LE.session().then(function (s) {
+      logged = !!s;
+      if (!s) return bootGuest();
+      return claimLocal().then(function () { return LE.api('/api/mine'); }).then(function (d) {
+        LE.setNow(d.now); pages = d.pages; draw();
+      });
+    }).catch(function (e) { $('list').innerHTML = '<div class="alert bad">' + E(e.message) + '</div>'; });
+  }
+  boot();
+})();
+</script>
+</body>
+</html>

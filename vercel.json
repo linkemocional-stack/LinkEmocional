@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "api/*.js": { "includeFiles": "templates/**", "maxDuration": 15 }
+  },
+  "rewrites": [
+    { "source": "/p/:id", "destination": "/api/p?id=:id" },
+    { "source": "/s/:slug", "destination": "/api/p?slug=:slug" }
+  ],
+  "redirects": [
+    { "source": "/templates/:path*", "destination": "/", "permanent": false }
+  ]
+}

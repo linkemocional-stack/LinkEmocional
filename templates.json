@@ -1,0 +1,2809 @@
+{
+ "templates": [
+  {
+   "slug": "arbol-amor",
+   "name": "Nuestro Árbol",
+   "emoji": "🌸",
+   "tag": "Amor",
+   "dim": "2D",
+   "desc": "Mantén presionado para que crezca un árbol que se llena de flores brillantes; cada flor guarda un recuerdo.",
+   "kind": "st",
+   "defaults": {
+    "n1": "Tú",
+    "n2": "Yo",
+    "titulo": "Nuestro árbol",
+    "tap": "Toca para plantar la semilla",
+    "color": "#ffb3d1",
+    "auto": false,
+    "musica": "",
+    "mnom": "",
+    "mem": [
+     {
+      "t": "Donde empezó todo",
+      "d": "Ese día sembraste algo en mí sin saberlo."
+     },
+     {
+      "t": "Tu risa",
+      "d": "Mi sonido favorito en todo el universo."
+     },
+     {
+      "t": "Nuestro primer abrazo",
+      "d": "El mundo se calló y solo quedamos tú y yo."
+     },
+     {
+      "t": "Lo que viene",
+      "d": "Mil primaveras más a tu lado. Yo ya las quiero."
+     }
+    ]
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tap",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "n1",
+       "label": "Tu nombre",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "n2",
+       "label": "Su nombre",
+       "type": "text",
+       "max": 80
+      }
+     ]
+    },
+    {
+     "title": "Recuerdos y mensajes",
+     "fields": [
+      {
+       "key": "mem",
+       "label": "Recuerdos",
+       "type": "cards",
+       "of": [
+        {
+         "key": "t",
+         "label": "Título",
+         "type": "text",
+         "max": 40
+        },
+        {
+         "key": "d",
+         "label": "Mensaje",
+         "type": "textarea",
+         "max": 300,
+         "rows": 3
+        }
+       ],
+       "max": 12,
+       "min": 1,
+       "itemLabel": "Recuerdo",
+       "addLabel": "Agregar recuerdo"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "auto",
+       "label": "Que el árbol crezca solo",
+       "type": "switch"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "constelacion-amor-pro",
+   "name": "Constelación de Amor PRO",
+   "emoji": "🌠",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Un cielo de aurora sobre montañas, con una figura de partículas que se transforma entre estrellas, constelaciones que se trazan y estrellas fugaces.",
+   "kind": "le",
+   "defaults": {
+    "titulo": "Entre millones de estrellas, tú ✨",
+    "tapTexto": "Toca para mirar el cielo",
+    "mensaje": "Hay millones de estrellas en el cielo, y aun así mis ojos siempre te buscan a ti.\n\nDicen que las constelaciones son historias que alguien dibujó uniendo puntos de luz. La nuestra la estamos dibujando juntos, día a día.\n\nGracias por ser mi norte cuando me pierdo, mi calma cuando todo se agita y mi mejor razón para mirar hacia arriba.\n\nToca el cielo y dibuja tus propias estrellas: cada una es un 'te quiero' que guardo para ti.",
+    "frases": [
+     "Entre millones de estrellas, tú",
+     "Eres mi constelación favorita",
+     "Contigo el cielo es más grande",
+     "Te encontré entre tantas luces",
+     "Mi estrella eres tú",
+     "Cada noche pienso en ti",
+     "Contigo todo tiene sentido",
+     "Eres mi norte",
+     "Brillas más que cualquier aurora",
+     "Escribiría tu nombre en el cielo",
+     "Mi universo tiene tu forma",
+     "Gracias por existir",
+     "Eres mi deseo cumplido",
+     "Te elijo en todas las galaxias",
+     "Mi corazón te dibuja en cada estrella",
+     "Siempre bajo el mismo cielo",
+     "Eres lo más bonito de mi mundo",
+     "Tú y yo, contra el infinito",
+     "Mi para siempre",
+     "Te amo más allá de las estrellas ✨"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#6ef0c8",
+    "figuraA": "corazon",
+    "figuraB": "estrella",
+    "aurora": true,
+    "constelaciones": true,
+    "trazar": true,
+    "brillos": true,
+    "fugaces": true,
+    "font": "dancing",
+    "shape": "star",
+    "burst": true,
+    "trail": true,
+    "burstCount": 75
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases",
+       "type": "list",
+       "max": 20,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "figuraA",
+       "label": "Primera figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "anillos",
+         "l": "Anillos"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "figuraB",
+       "label": "Segunda figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "anillos",
+         "l": "Anillos"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Explosión"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "aurora",
+       "label": "Aurora",
+       "type": "switch"
+      },
+      {
+       "key": "constelaciones",
+       "label": "Líneas de constelación",
+       "type": "switch"
+      },
+      {
+       "key": "trazar",
+       "label": "Trazar constelaciones al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "brillos",
+       "label": "Brillos",
+       "type": "switch"
+      },
+      {
+       "key": "fugaces",
+       "label": "Estrellas fugaces",
+       "type": "switch"
+      },
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Partículas de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 150,
+       "step": 5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "cosmos-pro",
+   "name": "Cosmos PRO",
+   "emoji": "🪐",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Un cosmos de partículas que se transforma entre corazón, anillo, infinito, galaxia y texto, con fotos y frases flotando y un contador de días juntos.",
+   "kind": "st",
+   "defaults": {
+    "titulo": "Cosmos PRO",
+    "n1": "Tú",
+    "n2": "Yo",
+    "tap": "Toca para entrar a nuestro cosmos",
+    "inicio": "2024-02-14",
+    "c1": "#ff7ab8",
+    "c2": "#7ab8ff",
+    "formas": {
+     "corazon": 1,
+     "anillo": 1,
+     "infinito": 1,
+     "galaxia": 1,
+     "texto": 1
+    },
+    "texto": "TE AMO",
+    "auto": true,
+    "ciclo": 7,
+    "reac": true,
+    "estrellas": true,
+    "aurora": true,
+    "lluvia": true,
+    "rot": true,
+    "q": 1,
+    "musica": "",
+    "mnom": "",
+    "frases": [
+     "Te quiero",
+     "Eres mi universo",
+     "Siempre tú",
+     "Mi lugar favorito"
+    ],
+    "fotos": [
+     {
+      "src": "",
+      "cap": "Donde todo empezó"
+     },
+     {
+      "src": "",
+      "cap": "Nuestro mejor día"
+     },
+     {
+      "src": "",
+      "cap": "Contigo a cualquier lugar"
+     },
+     {
+      "src": "",
+      "cap": "Nuestra canción"
+     }
+    ]
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tap",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "n1",
+       "label": "Tu nombre",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "n2",
+       "label": "Su nombre",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "inicio",
+       "label": "Fecha en que empezó todo",
+       "type": "date"
+      },
+      {
+       "key": "texto",
+       "label": "Texto que forman las partículas",
+       "type": "text",
+       "max": 80
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases",
+       "type": "list",
+       "max": 20,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos",
+       "type": "photocards",
+       "max": 8,
+       "addLabel": "Agregar foto"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "c1",
+       "label": "Color 1",
+       "type": "color"
+      },
+      {
+       "key": "c2",
+       "label": "Color 2",
+       "type": "color"
+      },
+      {
+       "key": "formas",
+       "label": "Figuras que aparecen",
+       "type": "flags",
+       "flags": [
+        {
+         "key": "corazon",
+         "label": "Corazón"
+        },
+        {
+         "key": "anillo",
+         "label": "Anillo"
+        },
+        {
+         "key": "infinito",
+         "label": "Infinito"
+        },
+        {
+         "key": "galaxia",
+         "label": "Galaxia"
+        },
+        {
+         "key": "texto",
+         "label": "Texto"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "auto",
+       "label": "Cambiar de figura automáticamente",
+       "type": "switch"
+      },
+      {
+       "key": "ciclo",
+       "label": "Segundos entre figuras",
+       "type": "range",
+       "min": 4,
+       "max": 20,
+       "step": 1
+      },
+      {
+       "key": "reac",
+       "label": "Reaccionar al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "estrellas",
+       "label": "Estrellas de fondo",
+       "type": "switch"
+      },
+      {
+       "key": "aurora",
+       "label": "Aurora",
+       "type": "switch"
+      },
+      {
+       "key": "lluvia",
+       "label": "Lluvia de estrellas",
+       "type": "switch"
+      },
+      {
+       "key": "rot",
+       "label": "Giro automático",
+       "type": "switch"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "cumple-soplar",
+   "name": "Sopla y Pide un Deseo",
+   "emoji": "🎂",
+   "tag": "Cumpleaños",
+   "dim": "2D",
+   "desc": "Una torta con velas que se apagan al soplar al micrófono o al tocarlas, con confeti y un mensaje de cumpleaños.",
+   "kind": "st",
+   "defaults": {
+    "titulo": "¡Feliz cumpleaños!",
+    "nombre": "Mi amor",
+    "tap": "Toca para encender las velas",
+    "velas": 5,
+    "color": "#ff8fb8",
+    "musica": "",
+    "mnom": "",
+    "mensaje": "Hoy el mundo celebra que existes, y yo celebro que te tengo.\n\nGracias por cada risa, cada abrazo y cada día a tu lado.\n\nPide un deseo… yo ya sé cuál es el mío: más años contigo. 🎂"
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tap",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "nombre",
+       "label": "Nombre de quien lo recibe",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "velas",
+       "label": "Cantidad de velas",
+       "type": "range",
+       "min": 1,
+       "max": 9,
+       "step": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "linternas-deseo-pro",
+   "name": "Linternas del Deseo PRO",
+   "emoji": "🏮",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Un cielo de atardecer lleno de linternas que suben flotando, con una figura de partículas que se transforma, luna, fuegos y corazones.",
+   "kind": "le",
+   "defaults": {
+    "titulo": "Mi deseo eres tú 🏮",
+    "tapTexto": "Toca para encender",
+    "mensaje": "Dicen que si pides un deseo mientras una linterna sube al cielo, se cumple.\n\nYo ya sé cuál es el mío: que sigas a mi lado, hoy y todos los días que vengan.\n\nGracias por ser mi luz cuando todo está oscuro, mi calma cuando todo se agita y mi mejor razón para sonreír.\n\nEste cielo lleno de luces es para ti. Pide un deseo conmigo.",
+    "frases": [
+     "Mi deseo eres tú",
+     "Contigo todo brilla",
+     "Te elegiría mil veces",
+     "Eres mi lugar favorito",
+     "Mi corazón late por ti",
+     "Gracias por quedarte",
+     "Cada día me enamoro más",
+     "Eres mi suerte",
+     "Contigo hasta el cielo es más bonito",
+     "Te quiero más que ayer",
+     "Mi para siempre",
+     "Pediría el mismo deseo otra vez",
+     "Eres mi hogar",
+     "Tu sonrisa enciende mi mundo",
+     "Siempre contigo",
+     "Eres lo mejor que me pasó",
+     "Nuestro amor no se apaga",
+     "Cuenta conmigo, siempre",
+     "Tú y yo, contra todo",
+     "Te amo 🏮"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#ff7a59",
+    "figuraA": "corazon",
+    "figuraB": "anillos",
+    "linternasOn": true,
+    "linternas": 26,
+    "fuegos": true,
+    "corazones": true,
+    "fugaces": true,
+    "font": "dancing",
+    "shape": "heart",
+    "burst": true,
+    "trail": true,
+    "burstCount": 75
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases",
+       "type": "list",
+       "max": 20,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "figuraA",
+       "label": "Primera figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "anillos",
+         "l": "Anillos"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "figuraB",
+       "label": "Segunda figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "anillos",
+         "l": "Anillos"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Explosión"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "linternasOn",
+       "label": "Linternas",
+       "type": "switch"
+      },
+      {
+       "key": "linternas",
+       "label": "Cantidad de linternas",
+       "type": "range",
+       "min": 6,
+       "max": 60,
+       "step": 1
+      },
+      {
+       "key": "fuegos",
+       "label": "Fuegos artificiales",
+       "type": "switch"
+      },
+      {
+       "key": "corazones",
+       "label": "Corazones flotando",
+       "type": "switch"
+      },
+      {
+       "key": "fugaces",
+       "label": "Estrellas fugaces",
+       "type": "switch"
+      },
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Partículas de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 150,
+       "step": 5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "luciernagas",
+   "name": "Luciérnagas que Escriben",
+   "emoji": "✨",
+   "tag": "Amor",
+   "dim": "2D",
+   "desc": "Cientos de luciérnagas que escriben tus frases en el cielo nocturno y se dejan guiar por tu dedo.",
+   "kind": "st",
+   "defaults": {
+    "titulo": "Para ti",
+    "tap": "Toca para despertar las luciérnagas",
+    "color": "#ffd36b",
+    "auto": true,
+    "musica": "",
+    "mnom": "",
+    "frases": [
+     "Hola, mi amor",
+     "Eres mi lugar favorito",
+     "Contigo, siempre",
+     "Te quiero ♥"
+    ]
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tap",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases",
+       "type": "list",
+       "max": 20,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "auto",
+       "label": "Que las luciérnagas escriban solas",
+       "type": "switch"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "medusa-bio",
+   "name": "Medusa Bioluminiscente",
+   "emoji": "🪼",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Un océano bioluminiscente con medusas que brillan, cardúmenes de luz y una figura de partículas que se transforma flotando en el agua.",
+   "kind": "le",
+   "defaults": {
+    "titulo": "Contigo todo fluye 🌊",
+    "tapTexto": "Toca para sumergirte",
+    "mensaje": "Hay cosas que no se explican, se sienten: como la calma de estar bajo el agua cuando todo el ruido queda arriba.\n\nAsí me pasa contigo. Eres esa luz que aparece en lo más profundo y hace que todo tenga sentido.\n\nGracias por ser mi calma, mi refugio y mi lugar favorito en el mundo.\n\nSigamos nadando juntos, a donde sea.",
+    "frases": [
+     "Eres mi calma",
+     "Contigo todo fluye",
+     "Gracias por quedarte",
+     "Tu luz me encuentra siempre",
+     "Nadaría contra la corriente por ti",
+     "Eres mi lugar favorito",
+     "Contigo no temo a lo profundo",
+     "Mi refugio eres tú",
+     "Brillas hasta en la oscuridad",
+     "Gracias por tanto",
+     "Eres de lo mejor que me pasó",
+     "Siempre vuelvo a ti",
+     "Contigo el mundo se siente suave",
+     "Nunca dejes de brillar",
+     "Qué bueno que existes",
+     "Eres mi marea favorita",
+     "Cuenta conmigo, siempre",
+     "Hay mucho mar por recorrer juntos",
+     "Tu sonrisa ilumina mi mundo",
+     "Lo mejor de mí, contigo 🌊"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#19d3ff",
+    "figuraA": "medusa",
+    "figuraB": "corazon",
+    "medusasOn": true,
+    "medusas": 9,
+    "cardumen": true,
+    "peces": 48,
+    "rayos": true,
+    "burbujas": true,
+    "fugaces": true,
+    "font": "quicksand",
+    "shape": "burst",
+    "burst": true,
+    "trail": true,
+    "burstCount": 75
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases",
+       "type": "list",
+       "max": 20,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "figuraA",
+       "label": "Primera figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "medusa",
+         "l": "Medusa"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "caracola",
+         "l": "Caracola"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "figuraB",
+       "label": "Segunda figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "medusa",
+         "l": "Medusa"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "caracola",
+         "l": "Caracola"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Explosión"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "medusasOn",
+       "label": "Medusas",
+       "type": "switch"
+      },
+      {
+       "key": "medusas",
+       "label": "Cantidad de medusas",
+       "type": "range",
+       "min": 3,
+       "max": 20,
+       "step": 1
+      },
+      {
+       "key": "cardumen",
+       "label": "Cardumen de peces",
+       "type": "switch"
+      },
+      {
+       "key": "peces",
+       "label": "Cantidad de peces",
+       "type": "range",
+       "min": 10,
+       "max": 100,
+       "step": 1
+      },
+      {
+       "key": "rayos",
+       "label": "Rayos de luz",
+       "type": "switch"
+      },
+      {
+       "key": "burbujas",
+       "label": "Burbujas",
+       "type": "switch"
+      },
+      {
+       "key": "fugaces",
+       "label": "Estrellas fugaces",
+       "type": "switch"
+      },
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Partículas de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 150,
+       "step": 5
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "nuestro-aniversario",
+   "name": "Nuestro Aniversario",
+   "emoji": "💞",
+   "tag": "Aniversario",
+   "dim": "3D",
+   "desc": "Un universo con un corazón de partículas, dos planetas con sus nombres y lunas que guardan cada recuerdo, con contador de días juntos.",
+   "kind": "st",
+   "defaults": {
+    "n1": "Tú",
+    "n2": "Yo",
+    "titulo": "Nuestro universo",
+    "tap": "Toca para entrar a nuestro universo",
+    "inicio": "2024-02-14",
+    "color": "#ff7ab8",
+    "musica": "",
+    "mnom": "",
+    "mem": [
+     {
+      "t": "Nos conocimos",
+      "d": "Ese día mi universo cambió de órbita sin avisar."
+     },
+     {
+      "t": "Nuestra primera cita",
+      "d": "Los nervios, las risas y la sensación de que ya te conocía."
+     },
+     {
+      "t": "Primer “te quiero”",
+      "d": "Lo dije bajito, pero mi corazón lo gritó."
+     },
+     {
+      "t": "Nuestro primer viaje",
+      "d": "Contigo hasta perderse es un buen plan."
+     },
+     {
+      "t": "Un año juntos",
+      "d": "Un año y todavía quiero mil más."
+     }
+    ]
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tap",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "n1",
+       "label": "Tu nombre",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "n2",
+       "label": "Su nombre",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "inicio",
+       "label": "Fecha en que empezó todo",
+       "type": "date"
+      }
+     ]
+    },
+    {
+     "title": "Recuerdos y mensajes",
+     "fields": [
+      {
+       "key": "mem",
+       "label": "Recuerdos",
+       "type": "cards",
+       "of": [
+        {
+         "key": "t",
+         "label": "Título",
+         "type": "text",
+         "max": 40
+        },
+        {
+         "key": "d",
+         "label": "Mensaje",
+         "type": "textarea",
+         "max": 300,
+         "rows": 3
+        }
+       ],
+       "max": 12,
+       "min": 1,
+       "itemLabel": "Recuerdo",
+       "addLabel": "Agregar recuerdo"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "nuestro-cielo",
+   "name": "Nuestro Cielo",
+   "emoji": "🌌",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Un cielo donde cada recuerdo es una estrella que se enciende y se une en un corazón de constelación, con contador de días juntos.",
+   "kind": "st",
+   "defaults": {
+    "n1": "Tú",
+    "n2": "Yo",
+    "titulo": "Nuestro cielo",
+    "tap": "Toca para encender el cielo",
+    "inicio": "2024-02-14",
+    "color": "#c86bff",
+    "fugaces": true,
+    "musica": "",
+    "mnom": "",
+    "mem": [
+     {
+      "f": "2024-02-14",
+      "t": "Nos conocimos",
+      "d": "Ese día no sabía que mi mundo estaba a punto de cambiar de color."
+     },
+     {
+      "f": "2024-03-02",
+      "t": "Nuestra primera cita",
+      "d": "Los nervios, las risas y la sensación de que ya te conocía de siempre."
+     },
+     {
+      "f": "2024-05-20",
+      "t": "Primer “te quiero”",
+      "d": "Lo dije bajito, pero mi corazón lo gritó."
+     },
+     {
+      "f": "2024-09-15",
+      "t": "Nuestro primer viaje",
+      "d": "Contigo hasta perderse es un buen plan."
+     },
+     {
+      "f": "2025-02-14",
+      "t": "Un año juntos",
+      "d": "Un año y todavía quiero mil más."
+     }
+    ]
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tap",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "n1",
+       "label": "Tu nombre",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "n2",
+       "label": "Su nombre",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "inicio",
+       "label": "Fecha en que empezó todo",
+       "type": "date"
+      }
+     ]
+    },
+    {
+     "title": "Recuerdos y mensajes",
+     "fields": [
+      {
+       "key": "mem",
+       "label": "Recuerdos",
+       "type": "cards",
+       "of": [
+        {
+         "key": "f",
+         "label": "Fecha",
+         "type": "date"
+        },
+        {
+         "key": "t",
+         "label": "Título",
+         "type": "text",
+         "max": 40
+        },
+        {
+         "key": "d",
+         "label": "Mensaje",
+         "type": "textarea",
+         "max": 300,
+         "rows": 3
+        }
+       ],
+       "max": 12,
+       "min": 1,
+       "itemLabel": "Recuerdo",
+       "addLabel": "Agregar recuerdo"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "fugaces",
+       "label": "Estrellas fugaces",
+       "type": "switch"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "rosa-eterna-pro",
+   "name": "Rosa Eterna PRO",
+   "emoji": "🌹",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Una rosa de partículas que florece y late sobre un cielo estrellado, con pétalos, estrellas fugaces y tus frases y fotos orbitando.",
+   "kind": "le",
+   "defaults": {
+    "titulo": "Eterna como tú 🌹",
+    "tapTexto": "Toca para florecer",
+    "mensaje": "Hay flores que duran una estación, y hay personas que florecen para siempre en la memoria de quien las ama. Tú eres de las segundas.\n\nGracias por cada pétalo de este camino: los días fáciles, los difíciles y todos los que aún nos faltan por vivir.\n\nSi pudiera regalarte algo eterno, sería esta rosa. Pero como no existe flor que dure tanto como lo que siento por ti, te la regalo hecha de luz. 🌹\n\nTe quiero. Hoy, mañana y siempre.",
+    "frases": [
+     "Eres mi rosa favorita 🌹",
+     "Contigo todo florece",
+     "Mi jardín eres tú",
+     "Cada día te quiero más",
+     "Mi flor eterna",
+     "Tu amor me hace florecer",
+     "Contigo es primavera siempre",
+     "Eres mi rincón de paz",
+     "Para siempre contigo",
+     "Te elijo hoy y siempre",
+     "Mi corazón late por ti ❤️",
+     "Eres mi mejor regalo",
+     "Nunca dejes de florecer",
+     "Mi historia favorita eres tú",
+     "Gracias por quedarte",
+     "Amor del que es de verdad",
+     "Mi lugar seguro",
+     "Contigo, siempre",
+     "Eterna como lo que siento",
+     "Te quiero, hoy y siempre 🌹"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#ff3b6b",
+    "figuraA": "rosa",
+    "figuraB": "corazon",
+    "aleteo": 1.6,
+    "aleteoAmp": 0.42,
+    "fugaces": true,
+    "font": "dancing",
+    "shape": "heart",
+    "burst": true,
+    "trail": true,
+    "burstCount": 80,
+    "petalos": true
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases",
+       "type": "list",
+       "max": 20,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "figuraA",
+       "label": "Primera figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "rosa",
+         "l": "Rosa"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "anillo",
+         "l": "Anillo"
+        },
+        {
+         "v": "saturno",
+         "l": "Saturno"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "figuraB",
+       "label": "Segunda figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "rosa",
+         "l": "Rosa"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "anillo",
+         "l": "Anillo"
+        },
+        {
+         "v": "saturno",
+         "l": "Saturno"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Explosión"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "aleteo",
+       "label": "Velocidad del aleteo",
+       "type": "range",
+       "min": 0.5,
+       "max": 3,
+       "step": 0.1
+      },
+      {
+       "key": "aleteoAmp",
+       "label": "Amplitud del aleteo",
+       "type": "range",
+       "min": 0.1,
+       "max": 0.8,
+       "step": 0.01
+      },
+      {
+       "key": "fugaces",
+       "label": "Estrellas fugaces",
+       "type": "switch"
+      },
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Partículas de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 150,
+       "step": 5
+      },
+      {
+       "key": "petalos",
+       "label": "Pétalos flotando",
+       "type": "switch"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "rosa-eterna-ultra",
+   "name": "Rosa Eterna ULTRA",
+   "emoji": "🌹",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Una rosa de partículas que late y se transforma en corazón, anillo, luna y más, con historia por capítulos, contador en vivo y fuegos artificiales.",
+   "kind": "le",
+   "defaults": {
+    "titulo": "Eterna como tú 🌹",
+    "tapTexto": "Toca para florecer",
+    "mensaje": "Hay flores que duran una estación, y hay personas que florecen para siempre en la memoria de quien las ama. Tú eres de las segundas.\n\nGracias por cada pétalo de este camino: los días fáciles, los difíciles y todos los que aún nos faltan por vivir.\n\nSi pudiera regalarte algo eterno, sería esta rosa. Pero como no existe flor que dure tanto como lo que siento por ti, te la regalo hecha de luz. 🌹\n\nTe quiero. Hoy, mañana y siempre.",
+    "frases": [
+     "Eres mi rosa favorita 🌹",
+     "Contigo todo florece",
+     "Mi jardín eres tú",
+     "Cada día te quiero más",
+     "Mi flor eterna",
+     "Tu amor me hace florecer",
+     "Contigo es primavera siempre",
+     "Eres mi rincón de paz",
+     "Para siempre contigo",
+     "Te elijo hoy y siempre",
+     "Mi corazón late por ti ❤️",
+     "Eres mi mejor regalo",
+     "Nunca dejes de florecer",
+     "Mi historia favorita eres tú",
+     "Gracias por quedarte",
+     "Amor del que es de verdad",
+     "Mi lugar seguro",
+     "Contigo, siempre",
+     "Eterna como lo que siento",
+     "Te quiero, hoy y siempre 🌹"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#ff3b6b",
+    "figuraA": "rosa",
+    "figuraB": "corazon",
+    "aleteo": 1.6,
+    "aleteoAmp": 0.42,
+    "fugaces": true,
+    "font": "dancing",
+    "shape": "heart",
+    "burst": true,
+    "trail": true,
+    "burstCount": 80,
+    "petalos": true
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases",
+       "type": "list",
+       "max": 20,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "figuraA",
+       "label": "Primera figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "rosa",
+         "l": "Rosa"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "anillo",
+         "l": "Anillo"
+        },
+        {
+         "v": "saturno",
+         "l": "Saturno"
+        },
+        {
+         "v": "texto",
+         "l": "Texto 3D"
+        },
+        {
+         "v": "foto",
+         "l": "Tu foto"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "figuraB",
+       "label": "Segunda figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "rosa",
+         "l": "Rosa"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "anillo",
+         "l": "Anillo"
+        },
+        {
+         "v": "saturno",
+         "l": "Saturno"
+        },
+        {
+         "v": "texto",
+         "l": "Texto 3D"
+        },
+        {
+         "v": "foto",
+         "l": "Tu foto"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Explosión"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "aleteo",
+       "label": "Velocidad del aleteo",
+       "type": "range",
+       "min": 0.5,
+       "max": 3,
+       "step": 0.1
+      },
+      {
+       "key": "aleteoAmp",
+       "label": "Amplitud del aleteo",
+       "type": "range",
+       "min": 0.1,
+       "max": 0.8,
+       "step": 0.01
+      },
+      {
+       "key": "fugaces",
+       "label": "Estrellas fugaces",
+       "type": "switch"
+      },
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Partículas de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 150,
+       "step": 5
+      },
+      {
+       "key": "petalos",
+       "label": "Pétalos flotando",
+       "type": "switch"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "rosa-imperial",
+   "name": "Rosa Eterna IMPERIAL",
+   "emoji": "👑",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "La versión de cine: una rosa 3D bajo una cúpula de cristal con auroras, reflejo en el suelo de luz, luciérnagas doradas e intro de película.",
+   "kind": "le",
+   "defaults": {
+    "titulo": "Eterna como tú 🌹",
+    "tapTexto": "Toca para florecer",
+    "mensaje": "Hay flores que duran una estación, y hay personas que florecen para siempre en la memoria de quien las ama. Tú eres de las segundas.\n\nGracias por cada pétalo de este camino: los días fáciles, los difíciles y todos los que aún nos faltan por vivir.\n\nSi pudiera regalarte algo eterno, sería esta rosa. Pero como no existe flor que dure tanto como lo que siento por ti, te la regalo hecha de luz. 🌹\n\nTe quiero. Hoy, mañana y siempre.",
+    "frases": [
+     "Eres mi rosa favorita 🌹",
+     "Contigo todo florece",
+     "Mi jardín eres tú",
+     "Cada día te quiero más",
+     "Mi flor eterna",
+     "Tu amor me hace florecer",
+     "Contigo es primavera siempre",
+     "Eres mi rincón de paz",
+     "Para siempre contigo",
+     "Te elijo hoy y siempre",
+     "Mi corazón late por ti ❤️",
+     "Eres mi mejor regalo",
+     "Nunca dejes de florecer",
+     "Mi historia favorita eres tú",
+     "Gracias por quedarte",
+     "Amor del que es de verdad",
+     "Mi lugar seguro",
+     "Contigo, siempre",
+     "Eterna como lo que siento",
+     "Te quiero, hoy y siempre 🌹"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#ff3b6b",
+    "figuraA": "rosa",
+    "figuraB": "corazon",
+    "aleteo": 1.6,
+    "aleteoAmp": 0.42,
+    "fugaces": true,
+    "font": "dancing",
+    "shape": "heart",
+    "burst": true,
+    "trail": true,
+    "burstCount": 80,
+    "petalos": true
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases",
+       "type": "list",
+       "max": 20,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "figuraA",
+       "label": "Primera figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "rosa",
+         "l": "Rosa"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "anillo",
+         "l": "Anillo"
+        },
+        {
+         "v": "saturno",
+         "l": "Saturno"
+        },
+        {
+         "v": "texto",
+         "l": "Texto 3D"
+        },
+        {
+         "v": "foto",
+         "l": "Tu foto"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "figuraB",
+       "label": "Segunda figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "rosa",
+         "l": "Rosa"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "anillo",
+         "l": "Anillo"
+        },
+        {
+         "v": "saturno",
+         "l": "Saturno"
+        },
+        {
+         "v": "texto",
+         "l": "Texto 3D"
+        },
+        {
+         "v": "foto",
+         "l": "Tu foto"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Explosión"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "aleteo",
+       "label": "Velocidad del aleteo",
+       "type": "range",
+       "min": 0.5,
+       "max": 3,
+       "step": 0.1
+      },
+      {
+       "key": "aleteoAmp",
+       "label": "Amplitud del aleteo",
+       "type": "range",
+       "min": 0.1,
+       "max": 0.8,
+       "step": 0.01
+      },
+      {
+       "key": "fugaces",
+       "label": "Estrellas fugaces",
+       "type": "switch"
+      },
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Partículas de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 150,
+       "step": 5
+      },
+      {
+       "key": "petalos",
+       "label": "Pétalos flotando",
+       "type": "switch"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "tendedero-recuerdos",
+   "name": "Tendedero de Recuerdos",
+   "emoji": "📸",
+   "tag": "Amor",
+   "dim": "2D",
+   "desc": "Fotos colgadas de un tendedero con luces: toca una, frótala con el dedo para revelarla y al final se abre un mensaje.",
+   "kind": "st",
+   "defaults": {
+    "titulo": "Nuestros recuerdos",
+    "nombre": "Mi amor",
+    "tap": "Toca para encender las luces",
+    "color": "#ffcf7a",
+    "musica": "",
+    "mnom": "",
+    "final": "Cada foto es un pedacito de nuestra historia, y todavía nos faltan muchas por tomar.\n\nGracias por cada momento. Te quiero. 💗",
+    "fotos": [
+     {
+      "src": "",
+      "cap": "Donde todo empezó"
+     },
+     {
+      "src": "",
+      "cap": "Nuestro mejor día"
+     },
+     {
+      "src": "",
+      "cap": "Antojos de media noche"
+     },
+     {
+      "src": "",
+      "cap": "Contigo a cualquier lugar"
+     },
+     {
+      "src": "",
+      "cap": "Nuestra canción"
+     }
+    ]
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tap",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "nombre",
+       "label": "Nombre de quien lo recibe",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "final",
+       "label": "Mensaje final",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos",
+       "type": "photocards",
+       "max": 8,
+       "addLabel": "Agregar foto"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "ventana-lluvia",
+   "name": "Ventana de Lluvia",
+   "emoji": "🌧️",
+   "tag": "Amor",
+   "dim": "2D",
+   "desc": "Un vidrio empañado con la lluvia de una ciudad de noche: límpialo con el dedo para descubrir frases escondidas y una carta.",
+   "kind": "st",
+   "defaults": {
+    "titulo": "Limpia el vidrio",
+    "nombre": "Mi amor",
+    "tap": "Toca para empañar el vidrio",
+    "color": "#ff9ccf",
+    "regrow": 3,
+    "drops": 14,
+    "musica": "",
+    "mnom": "",
+    "frases": [
+     "Hay algo que quiero decirte",
+     "Eres mi lugar seguro",
+     "Cuando llueve, pienso en ti",
+     "Quédate conmigo",
+     "Te quiero ♥"
+    ],
+    "carta": "Si llegaste hasta aquí limpiando el vidrio con tu dedo, es porque eres de las personas que se toman el tiempo de ver lo que hay detrás.\n\nAsí me siento contigo: en medio de cualquier tormenta, tú eres lo único que se ve claro.\n\nGracias por existir. Te quiero. 💗"
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tap",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "nombre",
+       "label": "Nombre de quien lo recibe",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "carta",
+       "label": "Carta",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases",
+       "type": "list",
+       "max": 20,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "regrow",
+       "label": "Rapidez con que se empaña de nuevo",
+       "type": "range",
+       "min": 0,
+       "max": 10,
+       "step": 1
+      },
+      {
+       "key": "drops",
+       "label": "Gotas en el vidrio",
+       "type": "range",
+       "min": 4,
+       "max": 40,
+       "step": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "ventana-magica",
+   "name": "Ventana Mágica",
+   "emoji": "💌",
+   "tag": "Sorpresa",
+   "dim": "2D",
+   "desc": "Mensajes escondidos en el aire: gira el celular a tu alrededor para encontrarlos con la cámara de fondo.",
+   "kind": "st",
+   "defaults": {
+    "titulo": "Ventana mágica",
+    "nombre": "Mi amor",
+    "tap": "Toca para abrir la ventana",
+    "color": "#ff9ccf",
+    "cam": false,
+    "musica": "",
+    "mnom": "",
+    "final": "Los encontraste todos… igual que me encontraste a mí.\n\nGracias por estar. Te quiero muchísimo. 💗",
+    "msgs": [
+     {
+      "t": "Lo que más me gusta de ti",
+      "d": "Tu sonrisa. Siempre tu sonrisa."
+     },
+     {
+      "t": "Mi recuerdo favorito",
+      "d": "Cualquier día, si estabas tú."
+     },
+     {
+      "t": "Una promesa",
+      "d": "Elegirte hoy, mañana y todos los días que vengan."
+     },
+     {
+      "t": "Lo que pienso cuando no estás",
+      "d": "Que ya falta menos para verte."
+     },
+     {
+      "t": "Gracias",
+      "d": "Por quedarte, por cuidarme, por ser tú."
+     }
+    ]
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "tap",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "nombre",
+       "label": "Nombre de quien lo recibe",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "final",
+       "label": "Mensaje final",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Recuerdos y mensajes",
+     "fields": [
+      {
+       "key": "msgs",
+       "label": "Mensajes escondidos",
+       "type": "cards",
+       "of": [
+        {
+         "key": "t",
+         "label": "Título",
+         "type": "text",
+         "max": 40
+        },
+        {
+         "key": "d",
+         "label": "Mensaje",
+         "type": "textarea",
+         "max": 300,
+         "rows": 3
+        }
+       ],
+       "max": 12,
+       "min": 1,
+       "itemLabel": "Mensaje",
+       "addLabel": "Agregar mensaje"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

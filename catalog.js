@@ -1,3 +1,6 @@
+/* ===== Link Emocional: sistema de paginas (crear.html) ===== */
+window.LE_TEMPLATE_SLUGS = ["arbol-amor", "constelacion-amor-pro", "cosmos-pro", "cumple-soplar", "linternas-deseo-pro", "luciernagas", "medusa-bio", "nuestro-aniversario", "nuestro-cielo", "rosa-eterna-pro", "rosa-eterna-ultra", "rosa-imperial", "tendedero-recuerdos", "ventana-lluvia", "ventana-magica"];
+(function(){var st=document.createElement('style');st.textContent='.le-crear{display:block;width:100%;box-sizing:border-box;text-align:center;margin-bottom:12px;padding:15px 18px;border-radius:16px;font-weight:800;font-size:15px;text-decoration:none;color:#0d0a1e;background:linear-gradient(120deg,#6fd6e8 0%,#8b6ff0 55%,#6f5bc0 100%);box-shadow:0 10px 26px rgba(139,111,240,.28)}.le-crear:active{transform:scale(.97)}';document.head.appendChild(st);})();
 /* ===================== DATOS DE PRODUCTOS ===================== */
 var WHATSAPP_NUMBER = "59178550176";
 var WHATSAPP_SVG = '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" style="flex-shrink:0"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 4.99L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.79 14.1c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.13.11-1.82-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36h.55c.18 0 .42-.07.65.5.24.58.81 2 .88 2.15.07.15.12.32.02.51-.1.19-.15.3-.29.47-.15.17-.31.37-.44.5-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.15.46.13.63-.08.17-.21.72-.85.92-1.14.19-.29.38-.24.64-.14.26.1 1.66.79 1.94.93.29.14.47.22.55.34.07.12.07.7-.17 1.38z"/></svg>';
@@ -1072,7 +1075,11 @@ else { noteEl.style.display = 'none'; }
 var waMsg = encodeURIComponent('Hola! Me interesa el diseño "' + p.name + '" 💗');
 var waHref = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + waMsg;
 var pedirLabel = isFree ? 'Escríbenos' : 'Pedir';
-document.getElementById('detalleActions').innerHTML =
+/* --- Link Emocional: boton "Crear mi pagina" (sistema de paginas con vencimiento) --- */
+var leSlug = (p.preview && p.preview.indexOf('frame-') === 0) ? p.preview.slice(6) : null;
+var leCrear = (leSlug && catalogMode === 'personalizado' && window.LE_TEMPLATE_SLUGS && window.LE_TEMPLATE_SLUGS.indexOf(leSlug) >= 0)
+? '<a class="le-crear" href="crear.html?t=' + leSlug + '">✨ Crear mi página gratis · 12 h</a>' : '';
+document.getElementById('detalleActions').innerHTML = leCrear +
 '<div class="detalle-actions-main">' +
 '<button type="button" class="btn btn-video" data-product-id="' + p.id + '">Ver Video</button>' +
 '<a class="btn whatsapp" href="' + waHref + '" target="_blank">' + WHATSAPP_SVG + pedirLabel + '</a>' +

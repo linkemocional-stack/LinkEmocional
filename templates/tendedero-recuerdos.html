@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>📸 Tendedero de recuerdos</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#ffcf7a;--l:rgba(255,207,122,.3);--t:#fff6e8;--m:#c0aa90}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;color:var(--t);font-family:Quicksand,sans-serif;touch-action:none;user-select:none;-webkit-tap-highlight-color:transparent;background:radial-gradient(ellipse at 50% 20%,#3a2040,#0e0714 80%)}
+canvas{position:fixed;inset:0;width:100%;height:100%}
+#hud{position:fixed;bottom:62px;left:0;right:0;text-align:center;z-index:5;pointer-events:none;text-shadow:0 0 14px #000}
+#ttl{font:700 2.1rem 'Dancing Script',cursive;margin:0;color:#fff}
+#sub{font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--a);font-weight:700}
+#pc{margin-top:4px;font-size:.85rem;color:var(--m);font-weight:700}
+body.edm #hud{display:none}
+#hint{position:fixed;bottom:22px;left:0;right:0;text-align:center;z-index:5;pointer-events:none;font-size:.88rem;padding:0 24px;text-shadow:0 0 10px #000;animation:b 2.4s ease-in-out infinite}
+@keyframes b{50%{opacity:.45}}
+#lb{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:8;display:none;padding:12px 22px;border-radius:30px;border:1px solid var(--l);background:rgba(30,14,40,.85);backdrop-filter:blur(8px);color:#fff;font:700 .92rem Quicksand,sans-serif;cursor:pointer;animation:q 2s ease-in-out infinite;box-shadow:0 0 20px var(--l)}
+@keyframes q{50%{transform:translateX(-50%) scale(1.07)}}
+#go{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;background:radial-gradient(circle,#2a1830,#07030a);transition:opacity 1.2s;font:700 1.9rem 'Dancing Script',cursive;text-shadow:0 0 14px var(--a);text-align:center;padding:24px}
+#go.hidden{opacity:0;pointer-events:none}#go span{font-size:3rem;animation:p 2s ease-in-out infinite}
+@keyframes p{50%{transform:scale(1.15)}}
+#md{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(6,2,10,.76);backdrop-filter:blur(5px);opacity:0;pointer-events:none;transition:opacity .6s}
+#md.on{opacity:1;pointer-events:auto}
+.cd{max-width:480px;width:100%;max-height:80vh;overflow-y:auto;background:linear-gradient(160deg,rgba(60,32,70,.96),rgba(14,6,20,.98));border:1px solid var(--l);border-radius:22px;padding:30px 26px;box-shadow:0 0 40px var(--l);text-align:center}
+.cd h2{font:700 2.2rem 'Dancing Script',cursive;margin:0 0 4px;text-shadow:0 0 14px var(--a)}
+#ms{color:var(--a);font-weight:700;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px}
+#mp{white-space:pre-wrap;line-height:1.65;font-size:1.02rem;margin:0 0 18px;text-align:left;touch-action:pan-y}
+#pen,.x{background:rgba(255,255,255,.08);border:1px solid var(--l);color:var(--t);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1rem}
+#pen{position:fixed;top:14px;right:14px;z-index:30;width:46px;height:46px;background:rgba(10,8,20,.5);backdrop-filter:blur(8px)}
+.noed #pen,.noed #ed{display:none!important}
+#ed{position:fixed;z-index:60;background:rgba(18,8,26,.96);backdrop-filter:blur(14px);border:1px solid var(--l);transition:transform .45s cubic-bezier(.2,.9,.3,1);left:0;right:0;bottom:0;height:58vh;border-radius:22px 22px 0 0;transform:translateY(105%);display:flex;flex-direction:column}
+#ed.open{transform:none}
+@media(min-width:760px){#ed{left:auto;top:0;height:auto;width:380px;border-radius:0;transform:translateX(105%)}}
+.hd{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--l)}
+.hd b{background:linear-gradient(90deg,#72CBE9,#745FC9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bd{overflow-y:auto;touch-action:pan-y;padding:6px 18px 40px;flex:1}
+.bd label{display:block;font-size:.78rem;font-weight:700;margin:16px 0 6px}
+.bd input:not([type=checkbox]):not([type=color]):not([type=file]),.bd textarea{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--l);color:var(--t);border-radius:8px;padding:10px;font:600 .85rem Quicksand,sans-serif;user-select:text}
+.bd textarea{min-height:110px;resize:vertical;line-height:1.5}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:8px}.row .x{flex:0 0 34px}
+.bd .row label.x{display:grid;place-items:center;margin:0;font-size:1rem;font-weight:400}
+.th{flex:0 0 38px;height:46px;border-radius:5px;background:#555 center/cover;border:2px solid #f7f3ea;display:grid;place-items:center;font-size:1.2rem}
+.b{width:100%;border:1px solid var(--l);background:rgba(255,207,122,.13);color:var(--a);border-radius:9px;padding:11px;font:700 .85rem Quicksand,sans-serif;cursor:pointer;margin-top:8px;display:block;text-align:center}
+.dl{background:var(--a);color:#2a1800;margin-top:14px;padding:14px}
+#sw{display:flex;gap:8px;flex-wrap:wrap}#sw i{width:28px;height:28px;border-radius:8px;border:2px solid rgba(255,255,255,.2);cursor:pointer}
+.ck{display:flex;gap:9px;font-weight:600;font-size:.78rem;color:var(--m);align-items:flex-start;margin-top:10px}
+</style>
+
+</head>
+<body>
+<canvas id="c"></canvas><audio id="au" loop></audio>
+<div id="go"><div id="tap"></div><span>📸</span></div>
+<div id="hud"><h1 id="ttl"></h1><div id="sub"></div><div id="pc"></div></div>
+<div id="hint"></div><button id="lb">💌 Abrir el mensaje final</button>
+<div id="md"><div class="cd"><h2 id="mt">Para ti</h2><div id="ms"></div><p id="mp"></p><button class="b" id="mc">Cerrar</button></div></div>
+
+<script id="st" type="application/json">{"titulo":"Nuestros recuerdos","nombre":"Mi amor","tap":"Toca para encender las luces","color":"#ffcf7a","musica":"","mnom":"","final":"Cada foto es un pedacito de nuestra historia, y todavía nos faltan muchas por tomar.\n\nGracias por cada momento. Te quiero. 💗","fotos":[{"src":"","cap":"Donde todo empezó"},{"src":"","cap":"Nuestro mejor día"},{"src":"","cap":"Antojos de media noche"},{"src":"","cap":"Contigo a cualquier lugar"},{"src":"","cap":"Nuestra canción"}]}</script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var S=JSON.parse($('st').textContent),cv=$('c'),g=cv.getContext('2d'),au=$('au'),W,H,dp,aw,pw=140,ph=170,pr=2,rows=1,LN=[],POS=[],TF=[],IM=[],A=[],V=[],DV=[],RV=[],fi=-1,fp=-1,fz=0,lamp=0,go=0,T=0,wp=0,lx=0,ly=0,mv=0,edo=0,FP=[],hs='',pc=-1,tm,pal,spr,lm=0;
+var PH=[['#ff9a9e','#fad0c4','💗'],['#a1c4fd','#c2e9fb','🌅'],['#fbc2eb','#a6c1ee','🍕'],['#84fab0','#8fd3f4','✈️'],['#ffecd2','#fcb69f','🎶']];
+function rs(){dp=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*dp;cv.height=H*dp;g.setTransform(dp,0,0,dp,0,0);lay()}
+function save(){$('st').textContent=JSON.stringify(S).replace(/</g,'\\u003c')}
+function mk(){var h=S.color.replace('#',''),r=parseInt(h.substr(0,2),16),gg=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16),rt=document.documentElement.style;rt.setProperty('--a',S.color);rt.setProperty('--l','rgba('+r+','+gg+','+b+',.3)');
+pal=[S.color,'#ff9ccf','#8fe8ff','#ffffff','#ffd36b'];spr=pal.map(function(col){var c=document.createElement('canvas');c.width=c.height=48;var x=c.getContext('2d'),q=x.createRadialGradient(24,24,0,24,24,24);q.addColorStop(0,'#fff');q.addColorStop(.2,col);q.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=q;x.fillRect(0,0,48,48);return c})}
+function ims(){IM=S.fotos.map(function(f){if(!f.src)return null;var im=new Image();im.src=f.src;return im})}
+function sy(){var n=S.fotos.length;while(DV.length<n){DV.push(0);A.push(0);V.push(0);RV.push(0)}DV.length=A.length=V.length=RV.length=n;ims();lay();cntu()}
+function lay(){var w=innerWidth>=760,n=S.fotos.length,m=edo&&!w,top=m?H*.07:H*.13,av=m?H*.33:H*.7;aw=edo&&w?W-380:W;
+pr=Math.max(1,Math.min(n,w?5:2));rows=Math.max(1,Math.ceil(n/pr));pw=Math.min(w?190:165,aw/(pr+.35),av/rows/1.5);ph=pw*1.22;var rh=Math.min(av/rows,ph+26);LN=[];POS=[];
+for(var r=0;r<rows;r++){var yr=top+r*rh+10,sl=(r%2?-1:1)*Math.min(24,aw*.04);LN.push({x0:-10,y0:yr-sl*.5,xc:aw/2,yc:yr+30,x1:aw+10,y1:yr+sl*.5})}
+for(var i=0;i<n;i++){var r2=Math.floor(i/pr),k=i%pr,cn=Math.min(pr,n-r2*pr),t=.5+(k-(cn-1)/2)/pr,L=LN[r2],u=1-t,x=u*u*L.x0+2*u*t*L.xc+t*t*L.x1,y=u*u*L.y0+2*u*t*L.yc+t*t*L.y1,dx=2*u*(L.xc-L.x0)+2*t*(L.x1-L.xc),dy=2*u*(L.yc-L.y0)+2*t*(L.y1-L.yc);POS.push({x:x,y:y,a:Math.atan2(dy,dx)})}}
+function pol(i,x,y,a,s,dv,pin){var f=S.fotos[i],p=pw,h=ph,ix=-p/2+p*.06,iy=p*.06,iw=p*.88;TF[i]={x:x,y:y,a:a,s:s};g.save();g.translate(x,y);g.rotate(a);g.scale(s,s);
+g.shadowColor='rgba(0,0,0,.55)';g.shadowBlur=14;g.shadowOffsetY=6;g.fillStyle='#f7f3ea';g.fillRect(-p/2,0,p,h);g.shadowColor='transparent';g.shadowBlur=0;g.shadowOffsetY=0;
+g.save();g.beginPath();g.rect(ix,iy,iw,iw);g.clip();var im=IM[i];
+if(im&&im.complete&&im.naturalWidth){var m=Math.min(im.naturalWidth,im.naturalHeight);g.drawImage(im,(im.naturalWidth-m)/2,(im.naturalHeight-m)/2,m,m,ix,iy,iw,iw)}
+else{var c=PH[i%5],q=g.createLinearGradient(ix,iy,ix+iw,iy+iw);q.addColorStop(0,c[0]);q.addColorStop(1,c[1]);g.fillStyle=q;g.fillRect(ix,iy,iw,iw);g.font=iw*.4+'px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillStyle='#000';g.fillText(c[2],0,iy+iw/2)}
+if(dv<1){g.fillStyle='rgba(60,68,64,'+(.94*(1-dv))+')';g.fillRect(ix,iy,iw,iw)}g.restore();
+var cap=f.cap||'',n=Math.ceil(cap.length*Math.max(0,Math.min(1,(dv-.55)/.45)));
+if(n>0){var fs=p*.1;g.font='700 '+fs+'px "Dancing Script",cursive';while(g.measureText(cap).width>p*.86&&fs>6){fs--;g.font='700 '+fs+'px "Dancing Script",cursive'}g.fillStyle='#3a2f2a';g.textAlign='center';g.textBaseline='middle';g.fillText(cap.slice(0,n),0,iy+iw+(h-iy-iw)/2)}
+if(pin){g.fillStyle='#b98a5a';g.fillRect(-5,-8,10,20);g.fillStyle='#8a6038';g.fillRect(-5,2,10,2)}g.restore()}
+function bz(L,t){var u=1-t;return[u*u*L.x0+2*u*t*L.xc+t*t*L.x1,u*u*L.y0+2*u*t*L.yc+t*t*L.y1]}
+function fr(ts){T=ts/1000;var i,n=S.fotos.length,e;if(go)lamp=Math.min(1,lamp+.012);
+g.clearRect(0,0,W,H);
+LN.forEach(function(L,r){g.strokeStyle='rgba(210,190,150,.75)';g.lineWidth=1.5;g.beginPath();g.moveTo(L.x0,L.y0);g.quadraticCurveTo(L.xc,L.yc,L.x1,L.y1);g.stroke();
+g.globalCompositeOperation='lighter';var nb=Math.round(aw/36);for(var j=1;j<nb;j++){var q=bz(L,j/nb),c=(j+r)%5,tw=.55+.45*Math.sin(T*2+j*1.7+r);g.globalAlpha=tw*lamp;g.drawImage(spr[c],q[0]-11,q[1]+1,22,22)}g.globalCompositeOperation='source-over';g.globalAlpha=1});
+for(i=0;i<n;i++){V[i]+=-A[i]*.035-V[i]*.03+.0006*Math.sin(T*.8+i*1.3)+.0003*Math.sin(T*2.3+i);A[i]=Math.max(-.5,Math.min(.5,A[i]+V[i]))}
+fz=Math.max(0,Math.min(1,fz+(fp>=0?.07:-.07)));if(fz==0&&fp<0)fi=-1;e=fz*fz*(3-2*fz);
+for(i=0;i<n;i++){if(i==fi)continue;var P=POS[i];if(P)pol(i,P.x,P.y,P.a*.4+A[i],1,edo?1:DV[i],1)}
+if(fi>=0&&POS[fi]){g.fillStyle='rgba(6,2,10,'+.78*e+')';g.fillRect(0,0,W,H);var s1=Math.min(aw*.82,H*.62/1.22,440)/pw,P2=POS[fi],ty=H*.5-ph*s1/2-10;
+pol(fi,P2.x+(aw/2-P2.x)*e,P2.y+(ty-P2.y)*e,(P2.a*.4+A[fi])*(1-e),1+(s1-1)*e,edo?1:DV[fi],e<.5);
+if(fp>=0&&fz>.9&&DV[fp]<1){bump(.0008)}}
+for(i=FP.length-1;i>=0;i--){var k=FP[i];g.globalAlpha=Math.min(1,k.l);g.font=k.s+'px sans-serif';g.textAlign='center';g.fillText(k.e,k.x,k.y);k.x+=k.vx;k.y+=k.vy;k.vy+=.1;k.l-=.012;if(k.l<=0)FP.splice(i,1)}
+g.globalAlpha=1;if(lamp<1){g.fillStyle='rgba(6,2,10,'+(1-lamp)*.65+')';g.fillRect(0,0,W,H)}
+var h=!go||edo?'':fp>=0?(DV[fp]<1?'Frota la foto con el dedo para revelarla ✨':'Toca fuera de la foto para volver'):cntR()?'':'Toca una foto 📸 · desliza el dedo para hacerlas bailar';if(h!==hs){hs=h;$('hint').textContent=h}
+requestAnimationFrame(fr)}
+function cntR(){return RV.reduce(function(a,b){return a+b},0)}
+function cntu(){var c=cntR(),n=S.fotos.length;$('pc').textContent=go&&!edo&&n?'📸 '+c+' / '+n+' reveladas':'';if(n&&c==n&&!edo)setTimeout(function(){$('lb').style.display='block'},1200);else $('lb').style.display='none'}
+function bump(d){if(fp<0||DV[fp]>=1)return;DV[fp]=Math.min(1,DV[fp]+d);if(DV[fp]>=1&&!RV[fp]){RV[fp]=1;try{navigator.vibrate&&navigator.vibrate(50)}catch(x){}var em=['💗','✨','📸','🌸'];for(var i=0;i<26;i++)FP.push({x:W/2+(Math.random()-.5)*W*.5,y:H*.5,vx:(Math.random()-.5)*5,vy:-3-Math.random()*5,s:16+Math.random()*16,e:em[i%4],l:1.2});cntu()}}
+function hit(i,x,y){var t=TF[i];if(!t)return false;var dx=x-t.x,dy=y-t.y,c=Math.cos(t.a),s=Math.sin(t.a),lx2=(dx*c+dy*s)/t.s,ly2=(-dx*s+dy*c)/t.s;return Math.abs(lx2)<pw/2&&ly2>-10&&ly2<ph}
+cv.addEventListener('pointerdown',function(e){if(!go)return;wp=1;lx=e.clientX;ly=e.clientY;mv=0});
+addEventListener('pointermove',function(e){if(!wp)return;var x=e.clientX,y=e.clientY,dx=x-lx,d=Math.hypot(dx,y-ly);mv+=d;
+if(fp>=0)bump(d*.003);else for(var i=0;i<S.fotos.length;i++)if(hit(i,x,y))V[i]+=Math.max(-.1,Math.min(.1,dx*.0025));lx=x;ly=y});
+addEventListener('pointerup',function(e){if(!wp)return;wp=0;if(mv<8){var x=e.clientX,y=e.clientY;if(fp>=0){if(!hit(fp,x,y))fp=-1}else for(var i=S.fotos.length-1;i>=0;i--)if(hit(i,x,y)){fp=fi=i;break}}});
+var la=0;addEventListener('devicemotion',function(e){var a=e.accelerationIncludingGravity;if(!a||fp<0)return;var m=Math.abs(a.x||0)+Math.abs(a.y||0)+Math.abs(a.z||0);if(Math.abs(m-la)>22)bump(.12);la=m});
+function txt(){$('ttl').textContent=S.titulo;$('sub').textContent=S.nombre?'Para '+S.nombre:'';$('tap').textContent=S.tap;$('ms').textContent=S.nombre||'';$('mp').textContent=S.final;document.title='📸 '+S.titulo}
+function opn(){$('md').classList.add('on')}$('lb').onclick=opn;$('mc').onclick=function(){$('md').classList.remove('on')};
+$('go').addEventListener('click',function(){if(go)return;go=1;au.volume=.7;var pr2=au.play();if(pr2&&pr2.catch)pr2.catch(function(){});$('go').classList.add('hidden');cntu()});
+
+addEventListener('resize',rs);
+
+/* ---- arranque ---- */
+$('go').classList.remove('hidden');$('md').classList.remove('on');$('lb').style.display='none';
+mk();sy();rs();txt();requestAnimationFrame(fr);
+window.__pv={hit:hit,TF:function(){return TF},POS:function(){return POS},n:function(){return S.fotos.length}};
+})();
+</script>
+</body></html>

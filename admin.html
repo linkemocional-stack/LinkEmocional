@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel | Link Emocional</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/jpeg" href="og-image.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<canvas id="stars"></canvas>
+<header id="top"></header>
+<main class="page wide">
+  <h1 class="t">Panel de <em>control</em></h1>
+  <p class="sub">Cuando alguien te pague, pegá su ID y activala en un toque.</p>
+  <div id="msg"></div>
+
+  <section class="card" id="quick">
+    <h2>⚡ Activar por ID</h2>
+    <p class="hint">El cliente te manda el ID por WhatsApp. Pegalo acá.</p>
+    <div class="row"><input class="in" id="qid" placeholder="ID de la página" autocapitalize="off" autocomplete="off" style="flex:2"></div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn wa" id="qPerm">✅ Hacer permanente</button>
+      <button class="btn ghost" id="qExt">🔁 Reactivar +12 h</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="row" style="gap:8px;flex-wrap:wrap">
+      <input class="in" id="search" placeholder="Buscar por ID, correo o enlace…" style="flex:3;min-width:180px">
+      <select class="in" id="filter" style="flex:1;min-width:130px"><option value="all">Todas</option><option value="active">Activas</option><option value="expired">Expiradas</option><option value="permanent">Permanentes</option></select>
+    </div>
+  </section>
+  <div id="list"><div class="spin"></div></div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  LE.header('');
+  var $ = function (i) { return document.getElementById(i); }, E = LE.esc, tS;
+
+  function cleanId(v) {
+    v = String(v || '').trim();
+    var m = /\/p\/([a-f0-9]{6,32})/i.exec(v) || /(?:^|[^a-f0-9])([a-f0-9]{14})(?:[^a-f0-9]|$)/i.exec(v) || /^([a-f0-9]{6,32})$/i.exec(v);
+    return m ? m[1].toLowerCase() : v.toLowerCase();
+  }
+  function act(body, okMsg) {
+    return LE.api('/api/admin', { method: 'POST', body: body }).then(function () { LE.toast(okMsg || 'Listo ✓'); load(); }, function (e) { LE.toast(e.message, true); });
+  }
+  function row(p) {
+    var chip = p.state === 'permanent' ? '<span class="chip ok">PERMANENTE</span>' : p.state === 'expired' ? '<span class="chip bad">EXPIRADA</span>' : '<span class="chip warn">ACTIVA</span>';
+    return '<article class="card pg-card" data-id="' + p.id + '"><div class="hd"><div style="flex:1;min-width:0"><h3>' + E(p.titulo || p.plantilla) + '</h3>' +
+      '<small class="mono">' + p.id + '</small><br><small>' + E(p.owner_email || 'sin cuenta') + ' · ' + E(p.plantilla) + ' · ' + new Date(p.created_at).toLocaleString('es', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) + '</small></div>' + chip + '</div>' +
+      (p.slug ? '<div><span class="chip">/s/' + E(p.slug) + '</span></div>' : '') +
+      '<div class="actions"><a class="btn ghost sm" target="_blank" rel="noopener" href="/p/' + p.id + '">👁 Ver</a>' +
+      '<button class="btn sm" data-a="perm" data-v="' + (p.state === 'permanent' ? 0 : 1) + '">' + (p.state === 'permanent' ? 'Quitar permanente' : '✅ Permanente') + '</button>' +
+      '<button class="btn ghost sm" data-a="ext">🔁 +horas</button><button class="btn ghost sm" data-a="slug">🔗 Enlace</button>' +
+      '<button class="btn danger sm" data-a="del">🗑</button></div></article>';
+  }
+  function load() {
+    var q = new URLSearchParams({ filter: $('filter').value, search: $('search').value.trim() });
+    return LE.api('/api/admin?' + q).then(function (d) {
+      $('list').innerHTML = d.pages.length ? d.pages.map(row).join('') : '<div class="card center muted">No hay páginas con ese filtro.</div>';
+    }, function (e) {
+      $('quick').classList.add('hidden');
+      $('list').innerHTML = '';
+      $('msg').innerHTML = '<div class="alert bad">' + E(e.status === 401 ? 'Iniciá sesión con tu cuenta de administrador.' : e.message) + (e.status === 401 ? ' <a href="login.html?next=admin.html" style="font-weight:800">Entrar</a>' : '') + '</div>';
+    });
+  }
+  $('search').oninput = function () { clearTimeout(tS); tS = setTimeout(load, 350); };
+  $('filter').onchange = load;
+  $('qPerm').onclick = function () { var id = cleanId($('qid').value); if (!id) return LE.toast('Pegá el ID', true); act({ action: 'permanent', id: id, value: true }, 'Página permanente ✓').then(function () { $('qid').value = ''; }); };
+  $('qExt').onclick = function () { var id = cleanId($('qid').value); if (!id) return LE.toast('Pegá el ID', true); act({ action: 'extend', id: id, hours: 12 }, 'Reactivada 12 h ✓'); };
+  $('list').onclick = function (e) {
+    var b = e.target.closest('button[data-a]'); if (!b) return;
+    var id = b.closest('.pg-card').dataset.id, a = b.dataset.a;
+    if (a === 'perm') act({ action: 'permanent', id: id, value: b.dataset.v === '1' });
+    else if (a === 'ext') { var h = prompt('¿Cuántas horas sumar?', '12'); if (h) act({ action: 'extend', id: id, hours: Number(h) }); }
+    else if (a === 'slug') { var s = prompt('Enlace personalizado (solo letras, números, - y _). Vacío para quitarlo:', ''); if (s !== null) act({ action: 'slug', id: id, slug: s }); }
+    else if (a === 'del') { if (confirm('¿Eliminar definitivamente?')) act({ action: 'delete', id: id }); }
+  };
+  load();
+})();
+</script>
+</body>
+</html>
