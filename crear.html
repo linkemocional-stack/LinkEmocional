@@ -8,6 +8,7 @@
 <link rel="icon" type="image/jpeg" href="og-image.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="thumbs.css">
 </head>
 <body>
 <canvas id="stars"></canvas>
@@ -50,6 +51,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
+<script src="thumbs.js"></script>
 <script src="app.js"></script>
 <script src="render-core.js"></script>
 <script>
@@ -330,12 +332,13 @@
     var g = $('grid'); g.innerHTML = '';
     TPLS.forEach(function (t) {
       var w = h('div', 'tpw');
-      var b = h('button', 'tp', '<span class="em">' + t.emoji + '</span><b>' + E(t.name) + '</b><small>' + E(t.desc) + '</small>' +
+      var b = h('button', 'tp', '<span class="lt" data-thumb="' + t.slug + '"></span><b>' + E(t.name) + '</b><small>' + E(t.desc) + '</small>' +
         '<span class="tags"><span class="chip">' + E(t.tag) + '</span><span class="chip">' + E(t.dim) + '</span><span class="chip ok">' + LE.price(t.price).usd + '</span></span>');
       b.type = 'button'; b.onclick = function () { openEditor(t.slug); };
       var d = h('button', 'demo', '▶ Demo'); d.type = 'button'; d.onclick = function () { fullscreen('previews/' + t.slug + '.html'); };
       w.appendChild(b); w.appendChild(d); g.appendChild(w);
     });
+    if (window.LEThumbs) LEThumbs.scan(g);
     history.replaceState(null, '', 'crear.html'); window.scrollTo(0, 0);
   }
 

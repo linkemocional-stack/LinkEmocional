@@ -23,6 +23,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="thumbs.css">
 <meta name="google-site-verification" content="a3fdMdk76daRucAahfs-ZkE6D0emZtWKUegQTFXFVjk" />
 </head>
 <body>
@@ -145,6 +146,32 @@
 .lp-feat i{display:grid;place-items:center;width:48px;height:48px;border-radius:15px;background:rgba(139,111,240,.14);border:1px solid var(--border-soft);margin-bottom:14px}
 .lp-feat i .ic{width:24px;height:24px}
 @media(max-width:860px){.lp-ways,.lp-try{grid-template-columns:1fr}.lp-way{padding:24px}}
+
+.lp-card .lt{margin:-6px -6px 6px;width:calc(100% + 12px);aspect-ratio:4/3;border-radius:16px;border-color:rgba(var(--c),.35)}
+.lp-card{min-height:0}
+.lp-about{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+.lp-about p{color:var(--muted);line-height:1.7;margin:0 0 14px;font-size:16px}
+.lp-about p b{color:var(--ink)}
+.lp-by{display:flex;align-items:center;gap:14px;margin-top:22px;padding:16px 18px;border-radius:20px;background:var(--glass);border:1px solid var(--border-soft)}
+.lp-by img{width:52px;height:52px;border-radius:50%;border:1px solid var(--border-soft);flex:none}
+.lp-by b{display:block;font-size:16px}.lp-by span{color:var(--muted);font-size:13.5px}
+.lp-why{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lp-why div{padding:20px;border-radius:20px;background:var(--glass);border:1px solid var(--border-soft)}
+.lp-why i{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:rgba(139,111,240,.14);border:1px solid var(--border-soft);margin-bottom:12px}
+.lp-why b{display:block;margin-bottom:4px;font-size:16px}.lp-why span{color:var(--muted);font-size:14px;line-height:1.5}
+.lp-price{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
+.lp-pc{position:relative;display:flex;flex-direction:column;gap:8px;padding:28px 24px;border-radius:26px;background:var(--glass);border:1px solid var(--border-soft)}
+.lp-pc.hot{background:radial-gradient(110% 90% at 50% 0,rgba(139,111,240,.38),transparent 65%),var(--glass-strong);border-color:rgba(139,111,240,.7);box-shadow:0 18px 50px rgba(139,111,240,.25)}
+.lp-pc em{position:absolute;top:-12px;left:24px;font-style:normal;font-weight:800;font-size:12px;padding:5px 12px;border-radius:99px;background:var(--grad-brand);color:#0d0a1e}
+.lp-pc h3{margin:0;font-size:17px;color:var(--muted)}
+.lp-pc .big{font-size:42px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.lp-pc .big small{font-size:15px;color:var(--muted);font-weight:700;margin-left:4px}
+.lp-pc .bs{color:var(--muted-2);font-size:13px;font-weight:700}
+.lp-pc ul{list-style:none;margin:8px 0 12px;padding:0;display:grid;gap:8px;color:var(--muted);font-size:14.5px;line-height:1.45}
+.lp-pc li::before{content:"✓";color:var(--blue-light);font-weight:800;margin-right:8px}
+.lp-pc .lp-btn{margin-top:auto;text-align:center}
+.lp-note{margin:18px 0 0;color:var(--muted-2);font-size:13.5px;line-height:1.6}
+@media(max-width:860px){.lp-about,.lp-why,.lp-price{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.lp-float,.lp-aur,.lp-mq div{animation:none}}
 </style>
 <div class="view view-home" id="viewHome">
@@ -166,7 +193,7 @@
 </defs></svg>
 <div class="lp-top"><div class="lp-in"><nav class="lp-nav">
 <a class="lp-brand" href="index.html"><img src="logo.jpg" alt="">Link Emocional</a>
-<div class="lp-links"><a href="#formas">Con y sin editor</a><a href="#disenos">Diseños</a><a href="#faq">Preguntas</a><a href="mis-paginas.html">Mis páginas</a><a class="lp-login" href="login.html">Iniciar sesión</a></div>
+<div class="lp-links"><a href="#formas">Con y sin editor</a><a href="#disenos">Diseños</a><a href="#precios">Precios</a><a href="#nosotros">Nosotros</a><a href="#faq">Preguntas</a><a href="mis-paginas.html">Mis páginas</a><a class="lp-login" href="login.html">Iniciar sesión</a></div>
 </nav></div></div>
 <div class="lp-in">
 <header class="lp-hero">
@@ -192,7 +219,7 @@
 </div>
 </header>
 </div>
-<div class="lp-mq" aria-hidden="true"><div><span>Dedicale a tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu mamá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu papá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a quien más querés<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu mamá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu papá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a quien más querés<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span></div></div>
+<div class="lp-mq" aria-hidden="true"><div><span>Dedicale a esa personita especial<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu mamá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a quien te hace sonreír<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su aniversario<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu papá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para sorprender a quien más querés<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en minutos<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a esa personita especial<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu mamá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a quien te hace sonreír<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su aniversario<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu papá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para sorprender a quien más querés<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedicale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en minutos<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span></div></div>
 <section class="lp-sec" id="formas" style="border-top:0"><div class="lp-in">
 <h2>Dos formas de regalar</h2>
 <p class="lp-sub">Personalizá todo vos misma o mismo, o elegí un diseño ya armado.</p>
@@ -205,6 +232,22 @@
 <p class="lp-sub">Los de esta lista se personalizan con tu mensaje y tus fotos. El precio es para dejarlos permanentes.</p>
 <div class="lp-filter" id="lpFilter" role="group" aria-label="Filtrar por ocasión"></div>
 <div class="lp-grid" id="lpGrid"></div>
+</div></section>
+<section class="lp-sec" id="precios"><div class="lp-in">
+<h2>Precios que no te duelen</h2>
+<p class="lp-sub">Probás gratis, y si te encanta lo dejás para siempre con un pago único. Sin suscripciones ni letra chica.</p>
+<div class="lp-price">
+<div class="lp-pc"><h3>Prueba</h3><div class="big">$0</div><div class="bs">Bs 0</div>
+<ul><li>12 horas gratis con tu enlace</li><li>Editor completo con fotos y mensaje</li><li>Sin tarjeta</li></ul>
+<a class="lp-btn ghost" href="crear.html">Probar gratis</a></div>
+<div class="lp-pc hot"><em>Recomendado</em><h3>Regalo permanente</h3><div class="big">desde $<span id="lpMin">0.99</span><small>pago único</small></div><div class="bs" id="lpMinBs">≈ Bs 9.90</div>
+<ul><li>No vence nunca</li><li>Hay diseños desde $<span id="lpMin2">0.99</span> hasta $<span id="lpMax">4.99</span>, según la animación</li><li>Enlace y QR para compartir</li><li>Lo editás cuando quieras desde Mis páginas</li></ul>
+<a class="lp-btn main" href="#disenos">Ver precios por diseño</a></div>
+<div class="lp-pc"><h3>Enlace con tu nombre</h3><div class="big">$<span id="lpLink">0.99</span><small>opcional</small></div><div class="bs" id="lpLinkBs">≈ Bs 9.90</div>
+<ul><li>link-emocional.vercel.app/s/tu-nombre</li><li>Fácil de recordar y de decir</li><li>Se suma a cualquier diseño</li></ul>
+<a class="lp-btn ghost" href="crear.html">Crear mi página</a></div>
+</div>
+<p class="lp-note">Pagás por QR si estás en Bolivia, o con tarjeta si escribís desde otro país. Escribinos por WhatsApp y te guiamos en el pago. El tipo de cambio que mostramos es de referencia (1 USD = 10 Bs).</p>
 </div></section>
 <section class="lp-sec"><div class="lp-in">
 <h2>Probalo ahora mismo</h2>
@@ -234,6 +277,23 @@
 <div><i><svg class="ic " aria-hidden="true"><use href="#i-link"/></svg></i><b>Enlace con tu nombre</b><span>Opcional: link-emocional.vercel.app/s/tu-nombre.</span></div>
 <div><i><svg class="ic " aria-hidden="true"><use href="#i-folder"/></svg></i><b>Mis páginas</b><span>Con tu cuenta las ves, editás y reactivás desde cualquier celular.</span></div>
 </div></div></section>
+<section class="lp-sec" id="nosotros"><div class="lp-in">
+<h2>Sobre nosotros</h2>
+<p class="lp-sub">Una persona, muchas ganas de que regalar un mensaje se sienta como algo de verdad.</p>
+<div class="lp-about">
+<div>
+<p><b>Link Emocional nació para algo simple:</b> que decir "te quiero", "feliz cumple" o "gracias por estar" no quede en un texto más del chat. Cada diseño es una pequeña escena animada que se abre en el celular de esa persona y se siente como un regalo.</p>
+<p>Los diseños los programamos y animamos nosotros mismos, en 2D y en 3D, y los hacemos accesibles para que cualquiera pueda regalar algo hermoso sin gastar de más.</p>
+<div class="lp-by"><img src="logo.jpg" alt=""><div><b>Adrian Marcelo Carrillo Mayta</b><span>Creador de Link Emocional · Bolivia</span></div></div>
+</div>
+<div class="lp-why">
+<div><i><svg class="ic" aria-hidden="true"><use href="#i-heart"/></svg></i><b>Hecho con cariño</b><span>Cada animación está pensada para emocionar, no para llenar espacio.</span></div>
+<div><i><svg class="ic" aria-hidden="true"><use href="#i-spark"/></svg></i><b>2D y 3D reales</b><span>Rosas, cielos estrellados, linternas, medusas y más, que se mueven con el dedo.</span></div>
+<div><i><svg class="ic" aria-hidden="true"><use href="#i-gift"/></svg></i><b>Precio justo</b><span>Desde $0.99 y con 12 horas gratis para probar antes de pagar.</span></div>
+<div><i><svg class="ic" aria-hidden="true"><use href="#i-pen"/></svg></i><b>Es tuyo de verdad</b><span>Tus frases, tus fotos, tu música y tus colores. Nada de plantillas genéricas.</span></div>
+<div><i><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></i><b>Se manda en segundos</b><span>Enlace y QR listos para WhatsApp, sin que la otra persona instale nada.</span></div>
+<div><i><svg class="ic" aria-hidden="true"><use href="#i-link"/></svg></i><b>Pagás fácil</b><span>QR en Bolivia o tarjeta desde afuera, y te acompañamos por WhatsApp.</span></div>
+</div></div></div></section>
 <section class="lp-sec" id="faq"><div class="lp-in lp-faq">
 <h2>Preguntas frecuentes</h2>
 <details class="lp-q"><summary>¿Es gratis?</summary><p>Podés crear tu página y compartirla gratis durante 12 horas. Si querés que se quede para siempre, la hacés permanente con un pago único.</p></details>
@@ -279,9 +339,13 @@ function draw(){
 fl.innerHTML=tags.map(function(t){var n=t==='Todos'?T.length:T.filter(function(x){return x.tag===t}).length;
 return '<button type="button" class="lp-chip" aria-pressed="'+(t===cur)+'" data-t="'+t+'">'+t+' ('+n+')</button>'}).join('');
 g.innerHTML=T.filter(function(t){return cur==='Todos'||t.tag===cur}).map(function(t){
-return '<a class="lp-card t-'+t.tag+'" href="crear.html?t='+encodeURIComponent(t.slug)+'"><span class="ib"><svg class="ic" aria-hidden="true"><use href="#i-'+(IC[t.tag]||'gift')+'"/></svg></span><b>'+t.name+'</b><small>'+t.tag+' · '+t.dim+'</small><span class="p">$'+Number(t.price).toFixed(2)+'<i>Elegir</i></span></a>'}).join('');}
+return '<a class="lp-card t-'+t.tag+'" href="crear.html?t='+encodeURIComponent(t.slug)+'"><div class="lt" data-thumb="'+t.slug+'"></div><b>'+t.name+'</b><small>'+t.tag+' · '+t.dim+'</small><span class="p">$'+Number(t.price).toFixed(2)+'<i>Elegir</i></span></a>'}).join('');if(window.LEThumbs)LEThumbs.scan(g);}
 fl.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;cur=b.dataset.t;draw();});
 draw();
+var pr=T.map(function(t){return Number(t.price)}),mn=Math.min.apply(null,pr),mx=Math.max.apply(null,pr),C=window.LE_CONFIG||{},fx=C.USD_BOB||10,lk=C.PRECIO_ENLACE_USD||0.99;
+function set(i,v){var e=document.getElementById(i);if(e)e.textContent=v}
+set('lpMin',mn.toFixed(2));set('lpMin2',mn.toFixed(2));set('lpMax',mx.toFixed(2));set('lpMinBs','≈ Bs '+(mn*fx).toFixed(2));
+set('lpLink',Number(lk).toFixed(2));set('lpLinkBs','≈ Bs '+(lk*fx).toFixed(2));
 }).catch(function(){});
 })();
 </script>
@@ -358,6 +422,8 @@ draw();
 </symbol>
 </defs>
 </svg>
+<script src="config.js"></script>
+<script src="thumbs.js"></script>
 <script src="catalog.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
 <script src="previews.js"></script>

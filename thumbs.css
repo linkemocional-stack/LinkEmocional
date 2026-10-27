@@ -1,0 +1,8 @@
+/* miniatura animada: iframe de 360x640 reducido para que entre en el cuadro */
+.lt{position:relative;overflow:hidden;border-radius:16px;background:#08051a;border:1px solid rgba(255,255,255,.12);aspect-ratio:4/3;isolation:isolate}
+.lt::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 45%,rgba(139,111,240,.35),transparent 70%);animation:ltp 1.8s ease-in-out infinite}
+.lt.ok::before{display:none}
+@keyframes ltp{50%{opacity:.4}}
+.lt iframe{position:absolute;left:50%;top:50%;width:360px;height:640px;border:0;pointer-events:none;transform:translate(-50%,-50%) scale(var(--s,.55));transform-origin:center;background:#000}
+@media(prefers-reduced-motion:reduce){.lt::before{animation:none}}
+.tp .lt{display:block;width:100%;margin-bottom:6px}
