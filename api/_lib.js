@@ -56,7 +56,7 @@ function wrap(handler) {
     } catch (e) {
       if (e instanceof HttpError) return send(res, e.status, Object.assign({ error: e.code, message: e.message }, e.extra));
       console.error(e);
-      send(res, 500, { error: 'server', message: 'Ocurrió un error. Probá de nuevo en un momento.' });
+      send(res, 500, { error: 'server', message: 'Ocurrió un error. Prueba de nuevo en un momento.' });
     }
   };
 }
@@ -256,7 +256,7 @@ function san(def, v, key, specs, depth) {
 }
 function sanitizeConfig(tpl, cfg) {
   if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) throw new HttpError(400, 'bad_config', 'Configuración inválida.');
-  if (JSON.stringify(cfg).length > MAX_BODY_CHARS) throw new HttpError(413, 'too_big', 'La página pesa demasiado. Probá con menos fotos.');
+  if (JSON.stringify(cfg).length > MAX_BODY_CHARS) throw new HttpError(413, 'too_big', 'La página pesa demasiado. Prueba con menos fotos.');
   const specs = collectSpecs(tpl);
   const out = san(tpl.defaults, cfg, '', specs, 0);
   HIDDEN.forEach(k => { if (k in tpl.defaults) out[k] = tpl.defaults[k]; });

@@ -16,12 +16,12 @@ module.exports = L.wrap(async function (req, res) {
   const qt = await L.quota(req, user);
   if (qt.remaining !== null && qt.remaining <= 0) {
     if (!user) {
-      throw new L.HttpError(429, 'limit', 'Ya usaste tu página de prueba. Iniciá sesión para seguir creando más páginas.',
+      throw new L.HttpError(429, 'limit', 'Ya usaste tu página de prueba. Inicia sesión para seguir creando más páginas.',
         { needLogin: true });
     }
     const left = qt.resetAt ? L.humanLeft(new Date(qt.resetAt).getTime() - Date.now()) : null;
-    throw new L.HttpError(429, 'limit', 'Ya usaste tu página gratis.' + (left ? ' Podés crear otra en ' + left + '.' : '') +
-      ' Mientras tanto podés hacer permanente alguna de las tuyas.', { needLogin: false, resetAt: qt.resetAt });
+    throw new L.HttpError(429, 'limit', 'Ya usaste tu página gratis.' + (left ? ' Puedes crear otra en ' + left + '.' : '') +
+      ' Mientras tanto puedes hacer permanente alguna de las tuyas.', { needLogin: false, resetAt: qt.resetAt });
   }
 
   const row = {

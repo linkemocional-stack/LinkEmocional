@@ -5,7 +5,7 @@ const L = require('./_lib');
 module.exports = L.wrap(async function (req, res) {
   if (req.method !== 'GET') throw new L.HttpError(405, 'method', 'Método no permitido.');
   const user = await L.getUser(req);
-  if (!user) throw new L.HttpError(401, 'auth', 'Iniciá sesión para ver tus páginas.');
+  if (!user) throw new L.HttpError(401, 'auth', 'Inicia sesión para ver tus páginas.');
   const rows = await L.db('GET', 'paginas?select=id,plantilla,slug,is_permanent,created_at,expires_at,titulo:config->>titulo' +
     '&owner=eq.' + user.id + '&order=created_at.desc&limit=100');
   const now = Date.now();

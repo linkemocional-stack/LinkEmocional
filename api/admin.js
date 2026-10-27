@@ -9,7 +9,7 @@ const L = require('./_lib');
         {action:'delete', id} */
 module.exports = L.wrap(async function (req, res) {
   const user = await L.getUser(req);
-  if (!user) throw new L.HttpError(401, 'auth', 'Iniciá sesión.');
+  if (!user) throw new L.HttpError(401, 'auth', 'Inicia sesión.');
   if (!L.isAdmin(user)) throw new L.HttpError(403, 'forbidden', 'Esta cuenta no es administradora.');
 
   if (req.method === 'GET') {
@@ -45,7 +45,7 @@ module.exports = L.wrap(async function (req, res) {
     await L.db('PATCH', where, { expires_at: new Date(from + h * 3600 * 1000).toISOString() });
   } else if (b.action === 'slug') {
     const slug = String(b.slug || '').toLowerCase().trim();
-    if (slug && !/^[a-z0-9_-]{3,32}$/.test(slug)) throw new L.HttpError(400, 'bad_slug', 'Usá 3 a 32 letras minúsculas, números, guion o guion bajo.');
+    if (slug && !/^[a-z0-9_-]{3,32}$/.test(slug)) throw new L.HttpError(400, 'bad_slug', 'Usa 3 a 32 letras minúsculas, números, guion o guion bajo.');
     try {
       await L.db('PATCH', where, { slug: slug || null });
     } catch (e) {

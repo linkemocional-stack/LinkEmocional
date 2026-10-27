@@ -16,7 +16,7 @@ module.exports = L.wrap(async function (req, res) {
   const body = L.readBody(req);
 
   if (req.method === 'POST') {
-    if (!user) throw new L.HttpError(401, 'auth', 'Iniciá sesión.');
+    if (!user) throw new L.HttpError(401, 'auth', 'Inicia sesión.');
     if (row.owner && row.owner !== user.id) throw new L.HttpError(403, 'forbidden', 'Esta página es de otra cuenta.');
     if (!row.owner) {
       if (!L.safeEq(body.edit_key, row.edit_key)) throw new L.HttpError(403, 'forbidden', 'Clave inválida.');
@@ -27,7 +27,7 @@ module.exports = L.wrap(async function (req, res) {
 
   const byKey = L.safeEq(req.headers['x-edit-key'], row.edit_key);
   const isOwner = !!(user && row.owner && row.owner === user.id);
-  if (!(isOwner || byKey || L.isAdmin(user))) throw new L.HttpError(403, 'forbidden', 'No tenés permiso para esto.');
+  if (!(isOwner || byKey || L.isAdmin(user))) throw new L.HttpError(403, 'forbidden', 'No tienes permiso para esto.');
 
   if (req.method === 'GET') {
     const tpl = L.templateBySlug(row.plantilla);
