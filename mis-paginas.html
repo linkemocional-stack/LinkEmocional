@@ -8,6 +8,7 @@
 <link rel="icon" type="image/jpeg" href="og-image.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
+<script src="protection.js"></script>
 </head>
 <body>
 <canvas id="stars"></canvas>
@@ -54,7 +55,7 @@
   }
   function draw() {
     if (!pages.length) {
-      $('list').innerHTML = '<div class="card center"><div style="font-size:42px">🎁</div><h2 style="margin-top:8px">Todavía no creaste ninguna página</h2><p class="hint">Elegí un diseño y en minutos tenés tu enlace.</p></div>';
+      $('list').innerHTML = '<div class="card center"><div style="font-size:42px">🎁</div><h2 style="margin-top:8px">Todavía no creaste ninguna página</h2><p class="hint">Elige un diseño y en minutos tienes tu enlace.</p></div>';
       return;
     }
     $('list').innerHTML = pages.map(card).join('');
@@ -89,7 +90,7 @@
 
   function bootGuest() {
     $('sub').textContent = 'Estas son las páginas creadas en este dispositivo.';
-    $('msg').innerHTML = '<div class="alert info">Iniciá sesión para guardar tus páginas en tu cuenta y verlas desde cualquier celular. <a href="login.html?next=mis-paginas.html" style="font-weight:800">Entrar</a></div>';
+    $('msg').innerHTML = '<div class="alert info">Inicia sesión para guardar tus páginas en tu cuenta y verlas desde cualquier celular. <a href="login.html?next=mis-paginas.html" style="font-weight:800">Entrar</a></div>';
     var ids = LE.myIds();
     if (!ids.length) { pages = []; return draw(); }
     Promise.all(ids.map(function (id) {
@@ -112,5 +113,6 @@
   boot();
 })();
 </script>
+<script src="brand-icons.js"></script>
 </body>
 </html>

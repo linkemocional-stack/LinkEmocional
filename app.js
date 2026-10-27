@@ -187,21 +187,21 @@
     var accion = o.expired ? 'reactivar' : 'hacer permanente';
     var wa = LE.wa('Hola! Quiero ' + accion + ' mi página 💗\nID: ' + o.id + '\n' + url);
     var tk = C.TIKTOK ? '@' + C.TIKTOK : 'nuestro TikTok';
-    var html = '<h2>' + (o.expired ? '🔁 Reactivá tu página' : '💫 Hacé tu página permanente') + '</h2>' +
+    var html = '<h2>' + (o.expired ? '🔁 Reactiva tu página' : '💫 Haz tu página permanente') + '</h2>' +
       '<p class="muted" style="margin:0 0 12px">Se queda online para siempre, sin cuenta regresiva y sin la etiqueta de Link Emocional.</p>' +
       '<div class="price">' + P.usd + ' <small>· ' + P.bob + ' · pago único</small></div>' +
-      (o.name ? '<p class="hint" style="margin:-4px 0 0">Es el mismo precio de <b>' + LE.esc(o.name) + '</b> en el catálogo. Pagás una sola vez.</p>' : '') +
-      '<ul class="ticks"><li>Nunca expira</li><li>Podés seguir editándola</li><li>Sin marca de Link Emocional</li><li>Activación en minutos por WhatsApp</li></ul>' +
-      (C.QR_PAGO ? '<div class="card center" style="padding:14px"><img src="' + LE.esc(C.QR_PAGO) + '" alt="QR de pago" style="max-width:220px;width:100%;border-radius:14px;background:#fff"><p class="hint" style="margin:10px 0 0">Pagá por QR y mandanos el comprobante con el ID <b>' + LE.esc(o.id) + '</b>.</p></div>' : '') +
+      (o.name ? '<p class="hint" style="margin:-4px 0 0">Es el mismo precio de <b>' + LE.esc(o.name) + '</b> en el catálogo. Pagas una sola vez.</p>' : '') +
+      '<ul class="ticks"><li>Nunca expira</li><li>Puedes seguir editándola</li><li>Sin marca de Link Emocional</li><li>Activación en minutos por WhatsApp</li></ul>' +
+      (C.QR_PAGO ? '<div class="card center" style="padding:14px"><img src="' + LE.esc(C.QR_PAGO) + '" alt="QR de pago" style="max-width:220px;width:100%;border-radius:14px;background:#fff"><p class="hint" style="margin:10px 0 0">Paga por QR y mándanos el comprobante con el ID <b>' + LE.esc(o.id) + '</b>.</p></div>' : '') +
       '<a class="btn wa" target="_blank" rel="noopener" href="' + LE.esc(wa) + '">Pedirla por WhatsApp</a>' +
       '<p class="muted center" style="margin:10px 0 0">QR bancario, transferencia y otros medios. Desde otro país también te ayudamos.</p>';
     if (C.PROMO_TIKTOK) {
-      var w1 = LE.wa('Hola! Subí mi página a TikTok 🎬\nID: ' + o.id + '\nMi video: (pegá el link acá)');
-      var w2 = LE.wa('Hola! Grabé cómo creo mi página en Link Emocional 🎬\nID: ' + o.id + '\nMi video: (pegá el link acá)');
-      html += '<div class="sep">o conseguila más barata</div>' +
-        '<div class="promo"><b>📱 Subí tu página a TikTok <span class="chip">50% OFF</span></b><p>Grabá un video con tu página, subilo a TikTok con “Hecho en Link Emocional” y mencioná ' + LE.esc(tk) + '. Mandanos el link y te hacemos el 50%: pagás ' + P50.usd + ' · ' + P50.bob + '.</p>' +
+      var w1 = LE.wa('Hola! Sube mi página a TikTok 🎬\nID: ' + o.id + '\nMi video: (pega el link aquí)');
+      var w2 = LE.wa('Hola! Grabé cómo creo mi página en Link Emocional 🎬\nID: ' + o.id + '\nMi video: (pega el link aquí)');
+      html += '<div class="sep">o consíguela más barata</div>' +
+        '<div class="promo"><b>📱 Sube tu página a TikTok <span class="chip">50% OFF</span></b><p>Graba un video con tu página, súbelo a TikTok con “Hecho en Link Emocional” y menciona ' + LE.esc(tk) + '. Mándanos el link y te hacemos el 50%: pagas ' + P50.usd + ' · ' + P50.bob + '.</p>' +
         '<a class="btn ghost sm" target="_blank" rel="noopener" href="' + LE.esc(w1) + '">Enviar mi TikTok por WhatsApp</a></div>' +
-        '<div class="promo"><b>🎬 Grabá cómo creás tu página <span class="chip ok">GRATIS</span></b><p>Mostrá en video cómo creás tu página en Link Emocional y subilo a TikTok mencionando ' + LE.esc(tk) + '. Mandanos el link y te la dejamos permanente gratis.</p>' +
+        '<div class="promo"><b>🎬 Graba cómo creas tu página <span class="chip ok">GRATIS</span></b><p>Muestra en video cómo creas tu página en Link Emocional y súbelo a TikTok mencionando ' + LE.esc(tk) + '. Mándanos el link y te la dejamos permanente gratis.</p>' +
         '<a class="btn ghost sm" target="_blank" rel="noopener" href="' + LE.esc(w2) + '">Enviar mi TikTok por WhatsApp</a></div>';
     }
     return LE.modal(html);

@@ -36,13 +36,13 @@ var product = PRODUCTS.filter(function(p){ return p.id === id; })[0];
 if (!product) return;
 if (metodo === 'takenos') {
 if (product.pagoTakenos) { window.open(product.pagoTakenos, '_blank'); }
-else { showToast('Muy pronto vas a poder pagar con Takenos aquí 💳 — mientras tanto, coordinalo por WhatsApp.', '💳'); }
+else { showToast('Muy pronto vas a poder pagar con Takenos aquí 💳 — mientras tanto, coordínalo por WhatsApp.', '💳'); }
 } else if (metodo === 'meru') {
 if (product.pagoMeru) { window.open(product.pagoMeru, '_blank'); }
-else { showToast('Muy pronto vas a poder pagar con Meru aquí 🪙 — mientras tanto, coordinalo por WhatsApp.', '🪙'); }
+else { showToast('Muy pronto vas a poder pagar con Meru aquí 🪙 — mientras tanto, coordínalo por WhatsApp.', '🪙'); }
 } else if (metodo === 'qr') {
 if (product.pagoQR) { window.open(product.pagoQR, '_blank'); }
-else { showToast('Muy pronto vas a poder pagar por QR (Bolivia) aquí 📱 — mientras tanto, coordinalo por WhatsApp.', '📱'); }
+else { showToast('Muy pronto vas a poder pagar por QR (Bolivia) aquí 📱 — mientras tanto, coordínalo por WhatsApp.', '📱'); }
 }
 });
 });
@@ -769,7 +769,7 @@ var note = document.getElementById('catNote');
 if (mode === 'personalizado') {
 tabs.style.display = 'none';
 document.getElementById('catalogoTitulo').textContent = 'Con Editor';
-document.getElementById('catalogoSubtitulo').textContent = 'Elegí un diseño, hazlo tuyo y pedilo por WhatsApp';
+document.getElementById('catalogoSubtitulo').textContent = 'Elige un diseño, hazlo tuyo y pídelo por WhatsApp';
 note.style.display = 'block';
 note.textContent = 'Todos vienen con editor: puedes cambiar frases, fotos, colores y más.';
 renderGrid();
@@ -790,7 +790,7 @@ note.style.display = 'block';
 if (tab === 'todos') {
 note.textContent = 'Todos los diseños sin editor: gratis y con costo, listos tal como están.';
 } else if (tab === 'sinEditor') {
-note.textContent = 'Sin editor y a menor precio. Si un diseño te gusta pero quieres personalizarlo, mirá el botón celeste de su tarjeta.';
+note.textContent = 'Sin editor y a menor precio. Si un diseño te gusta pero quieres personalizarlo, mira el botón celeste de su tarjeta.';
 } else {
 note.textContent = 'Gratis — escríbenos por WhatsApp para obtenerlo 💌';
 }
@@ -908,7 +908,7 @@ return av - bv;
 var base = PRODUCTS.filter(function(p){ return p.precioNoPersonalizado != null; });
 /* en "sin editor" no fijamos el orden: se mezcla cada vez que se abre
 la vista, asi ningun producto (ni siquiera los PRO) se queda pegado
-siempre arriba quitandole protagonismo al resto. */
+siempre arriba quitándole protagonismo al resto. */
 shuffleArray(base);
 base.sort(function(a,b){ return (b.destacado?1:0) - (a.destacado?1:0); });
 if (subTab === 'sinEditor') {
@@ -996,13 +996,13 @@ la que el usuario esta parado ahora mismo. */
 var editorAqui = (catalogMode === 'personalizado');
 if (editorAqui && p.features && p.features.length) {
 var nota = (p.precioNoPersonalizado != null)
-? '🔓 ¿Preferís algo ya armado y más barato? También existe sin editor, tal como está, por ' + formatPrice(p.precioNoPersonalizado) + '.'
+? '🔓 ¿Prefieres algo ya armado y más barato? También existe sin editor, tal como está, por ' + formatPrice(p.precioNoPersonalizado) + '.'
 : null;
 return {
 intro: 'No es un video armado por otro: es TU regalo, con tu foto y tu frase, abriéndose frente a esa personita especial 💫',
-heading: '✏️ Con el Editor Link Emocional lo hacés 100% tuyo',
+heading: '✏️ Con el Editor Link Emocional lo haces 100% tuyo',
 items: p.features,
-closing: 'Lo editás las veces que quieras hasta que quede perfecto. Recién cuando estés conforme, se genera tu HTML final — listo para enviar.',
+closing: 'Lo editas las veces que quieras hasta que quede perfecto. Recién cuando estés conforme, se genera tu HTML final — listo para enviar.',
 note: nota
 };
 }
@@ -1015,11 +1015,11 @@ var notaSinEditor;
 if (isFree) {
 /* los productos gratis no se pagan: en vez de mostrar medios de pago
 o la nota de upgrade, se explica como reclamarlo */
-notaSinEditor = '🎁 Para tenerlo gratis: seguí todas nuestras redes sociales (TikTok, Instagram y Facebook) y mandanos la captura por WhatsApp al pedirlo.';
+notaSinEditor = '🎁 Para tenerlo gratis: sigue todas nuestras redes sociales (TikTok, Instagram y Facebook) y mándanos la captura por WhatsApp al pedirlo.';
 } else {
 notaSinEditor = (p.precioPersonalizado != null)
-? '🎨 ¿Querés personalizarlo? Existe la versión CON Editor Link Emocional por ' + formatPrice(p.precioPersonalizado) + ' — elegís colores, fotos y frases antes de enviarlo.'
-: '💌 ¿Querés sumarle un nombre o una fecha especial? Escríbenos por WhatsApp al pedirlo y lo coordinamos.';
+? '🎨 ¿Quieres personalizarlo? Existe la versión CON Editor Link Emocional por ' + formatPrice(p.precioPersonalizado) + ' — eliges colores, fotos y frases antes de enviarlo.'
+: '💌 ¿Quieres sumarle un nombre o una fecha especial? Escríbenos por WhatsApp al pedirlo y lo coordinamos.';
 }
 return {
 intro: 'Esta versión ya viene hecha y lista tal cual la ves en la vista previa y el video — no tiene el Editor Link Emocional, no se personaliza.',

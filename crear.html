@@ -4,11 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Crear mi página | Link Emocional</title>
-<meta name="description" content="Elegí un diseño, escribí tu mensaje y obtené tu enlace en minutos. 12 horas gratis.">
+<meta name="description" content="Elige un diseño, escribe tu mensaje y obtén tu enlace en minutos. 12 horas gratis.">
 <link rel="icon" type="image/jpeg" href="og-image.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="thumbs.css">
+<script src="protection.js"></script>
 </head>
 <body>
 <canvas id="stars"></canvas>
@@ -18,8 +19,8 @@
   <div id="qbanner" style="margin-top:18px"></div>
   <!-- PASO 1: elegir diseño -->
   <section id="stepPick">
-    <h1 class="t">Elegí tu <em>diseño</em></h1>
-    <p class="sub">Escribí tu mensaje, subí tus fotos y recibí tu enlace en minutos. Es <b>gratis por 12 horas</b> y después la podés hacer permanente.</p>
+    <h1 class="t">Elige tu <em>diseño</em></h1>
+    <p class="sub">Escribe tu mensaje, sube tus fotos y recibe tu enlace en minutos. Es <b>gratis por 12 horas</b> y después la puedes hacer permanente.</p>
     <div class="grid" id="grid"><div class="spin"></div></div>
   </section>
 
@@ -34,11 +35,11 @@
     <div class="ed" id="ed">
       <div class="pane-edit" id="form"></div>
       <div class="pane-prev">
-        <div class="phone" id="phone"><div class="ph">La vista previa aparece acá</div></div>
+        <div class="phone" id="phone"><div class="ph">La vista previa aparece aquí</div></div>
         <div class="row" style="margin-top:14px;max-width:360px;margin-left:auto;margin-right:auto">
           <button class="btn ghost sm" id="bFull">⛶ Probar en pantalla completa</button>
         </div>
-        <p class="muted center" style="margin:10px 0 0">Tocá la pantalla para empezar, igual que lo verá esa persona 👆</p>
+        <p class="muted center" style="margin:10px 0 0">Toca la pantalla para empezar, igual que lo verá esa persona 👆</p>
       </div>
     </div>
   </section>
@@ -299,7 +300,7 @@
     $('ed').classList.toggle('show-prev', t === 'prev');
     Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', b.dataset.t === t); });
     if (t === 'prev') { if (dirty || !$('phone').querySelector('iframe')) buildPreview(); }
-    else if (!desktop()) { $('phone').innerHTML = '<div class="ph">La vista previa aparece acá</div>'; dirty = true; }
+    else if (!desktop()) { $('phone').innerHTML = '<div class="ph">La vista previa aparece aquí</div>'; dirty = true; }
     window.scrollTo(0, 0);
   }
   $('tabs').onclick = function (e) { var b = e.target.closest('button'); if (b) setTab(b.dataset.t); };
@@ -350,10 +351,10 @@
     editId = existingId || null; dirty = true; tab = 'edit';
     $('stepPick').classList.add('hidden'); $('stepEdit').classList.remove('hidden'); $('bar').classList.remove('hidden');
     $('ed').classList.remove('show-prev'); setTab('edit');
-    $('edTitle').innerHTML = (editId ? 'Editá tu <em>página</em>' : tpl.emoji + ' ' + E(tpl.name));
+    $('edTitle').innerHTML = (editId ? 'Edita tu <em>página</em>' : tpl.emoji + ' ' + E(tpl.name));
     $('edSub').innerHTML = editId
       ? 'Los cambios se guardan en el mismo enlace.'
-      : 'Completá tus datos y mirá cómo queda. Es gratis por ' + (LE.cfg.FREE_HOURS || 12) + ' horas; para dejarla para siempre cuesta <b>' +
+      : 'Completa tus datos y mira cómo queda. Es gratis por ' + (LE.cfg.FREE_HOURS || 12) + ' horas; para dejarla para siempre cuesta <b>' +
         LE.price(tpl.price).usd + ' · ' + LE.price(tpl.price).bob + '</b>, el mismo precio del catálogo.';
     $('bCreate').textContent = editId ? '💾 Guardar cambios' : '✨ Crear mi página';
     $('bBack').textContent = editId ? '← Volver' : '← Diseños';
@@ -382,7 +383,7 @@
         location.href = 'login.html?reason=limit&next=' + encodeURIComponent('crear.html?resume=1');
         return;
       }
-      LE.toast(e.message || 'No se pudo crear. Probá de nuevo.', true);
+      LE.toast(e.message || 'No se pudo crear. Prueba de nuevo.', true);
       b.disabled = false; b.textContent = txt;
     });
   };
@@ -399,12 +400,12 @@
       var cadaCuenta = ud === 1 ? 'cada día' : 'cada ' + ud + ' días';
       if (!q.loggedIn) {
         h = q.remaining > 0
-          ? '<div class="banner">🎁 Sin cuenta podés crear <b>' + q.limit + ' página de prueba</b>. Con una cuenta gratis tenés una página más ' + cadaCuenta + '.<div class="r2">' + login + '</div></div>'
-          : '<div class="banner bad">Ya usaste tu página de prueba. <b>Iniciá sesión</b> y tenés una página gratis más ' + cadaCuenta + '.<div class="r2">' + login + '</div></div>';
+          ? '<div class="banner">🎁 Sin cuenta puedes crear <b>' + q.limit + ' página de prueba</b>. Con una cuenta gratis tienes una página más ' + cadaCuenta + '.<div class="r2">' + login + '</div></div>'
+          : '<div class="banner bad">Ya usaste tu página de prueba. <b>Inicia sesión</b> y tienes una página gratis más ' + cadaCuenta + '.<div class="r2">' + login + '</div></div>';
       } else {
         h = q.remaining > 0
-          ? '<div class="banner">👤 Sesión iniciada. Tenés <b>' + q.remaining + ' página gratis</b> disponible (' + q.limit + ' ' + cada + ').</div>'
-          : '<div class="banner bad">Ya usaste tu página gratis. Podés crear otra en <b>' + (q.resetAt ? LE.left(q.resetAt) : 'unos días') + '</b>. Mientras tanto, podés hacer permanente alguna de las tuyas.</div>';
+          ? '<div class="banner">👤 Sesión iniciada. Tienes <b>' + q.remaining + ' página gratis</b> disponible (' + q.limit + ' ' + cada + ').</div>'
+          : '<div class="banner bad">Ya usaste tu página gratis. Puedes crear otra en <b>' + (q.resetAt ? LE.left(q.resetAt) : 'unos días') + '</b>. Mientras tanto, puedes hacer permanente alguna de las tuyas.</div>';
       }
       b.innerHTML = h;
       var ql = $('qLogin');
@@ -421,7 +422,7 @@
       return LE.api('/api/page?id=' + encodeURIComponent(editParam), { editKey: LE.editKey(editParam) }).then(function (p) {
         openEditor(p.plantilla, p.config, editParam);
       }, function (e) {
-        LE.toast(e.status === 403 ? 'Iniciá sesión con la cuenta que la creó para editarla.' : e.message, true);
+        LE.toast(e.status === 403 ? 'Inicia sesión con la cuenta que la creó para editarla.' : e.message, true);
         setTimeout(function () { location.href = e.status === 403 ? 'login.html?next=' + encodeURIComponent('crear.html?edit=' + editParam) : 'crear.html'; }, 1600);
       });
     }
@@ -430,8 +431,9 @@
     var t = qs.get('t');
     if (t && TPLS.some(function (x) { return x.slug === t; })) return openEditor(t);
     showPick();
-  }).catch(function () { $('grid').innerHTML = '<div class="alert bad">No se pudieron cargar los diseños. Recargá la página.</div>'; });
+  }).catch(function () { $('grid').innerHTML = '<div class="alert bad">No se pudieron cargar los diseños. Recarga la página.</div>'; });
 })();
 </script>
+<script src="brand-icons.js"></script>
 </body>
 </html>

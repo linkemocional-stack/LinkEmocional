@@ -8,13 +8,14 @@
 <link rel="icon" type="image/jpeg" href="og-image.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
+<script src="protection.js"></script>
 </head>
 <body>
 <canvas id="stars"></canvas>
 <header id="top"></header>
 <main class="page">
-  <h1 class="t" id="ttl">Entrá a tu <em>cuenta</em></h1>
-  <p class="sub" id="sub">Guardá tus páginas, editalas cuando quieras y creá todas las que necesites.</p>
+  <h1 class="t" id="ttl">Entra a tu <em>cuenta</em></h1>
+  <p class="sub" id="sub">Guarda tus páginas, edítalas cuando quieras y crea todas las que necesites.</p>
 
   <div id="msg"></div>
 
@@ -29,7 +30,7 @@
 
     <div id="nameWrap" class="hidden">
       <label class="l" for="name">Tu nombre</label>
-      <input class="in" id="name" autocomplete="name" maxlength="60" placeholder="Cómo te llamás">
+      <input class="in" id="name" autocomplete="name" maxlength="60" placeholder="Cómo te llamas">
     </div>
     <label class="l" for="email">Correo electrónico</label>
     <input class="in" id="email" type="email" autocomplete="email" inputmode="email" placeholder="tucorreo@gmail.com">
@@ -37,11 +38,11 @@
     <input class="in" id="pass" type="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres">
     <p style="margin:12px 0 16px"><a href="#" id="forgot" style="font-size:13px;font-weight:700">¿Olvidaste tu contraseña?</a></p>
     <button class="btn" id="bGo">Iniciar sesión</button>
-    <p class="muted center" style="margin:16px 0 0"><span id="swTxt">¿No tenés cuenta?</span> <a href="#" id="swBtn" style="font-weight:800">Registrate</a></p>
+    <p class="muted center" style="margin:16px 0 0"><span id="swTxt">¿No tienes cuenta?</span> <a href="#" id="swBtn" style="font-weight:800">Regístrate</a></p>
   </section>
 
   <section class="card hidden" id="boxReset">
-    <h2>Elegí tu nueva contraseña</h2>
+    <h2>Elige tu nueva contraseña</h2>
     <label class="l" for="np">Nueva contraseña</label>
     <input class="in" id="np" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
     <div style="height:14px"></div>
@@ -66,37 +67,37 @@
   function human(m) {
     m = String(m || '');
     if (/Invalid login/i.test(m)) return 'Correo o contraseña incorrectos.';
-    if (/already registered/i.test(m)) return 'Ese correo ya tiene cuenta. Iniciá sesión.';
+    if (/already registered/i.test(m)) return 'Ese correo ya tiene cuenta. Inicia sesión.';
     if (/at least 6/i.test(m)) return 'La contraseña debe tener al menos 6 caracteres.';
-    if (/valid email|invalid.*email/i.test(m)) return 'Revisá que el correo esté bien escrito.';
-    if (/not confirmed/i.test(m)) return 'Primero confirmá tu correo (te enviamos un enlace).';
-    if (/rate limit|too many/i.test(m)) return 'Demasiados intentos. Esperá unos minutos.';
+    if (/valid email|invalid.*email/i.test(m)) return 'Revisa que el correo esté bien escrito.';
+    if (/not confirmed/i.test(m)) return 'Primero confirma tu correo (te enviamos un enlace).';
+    if (/rate limit|too many/i.test(m)) return 'Demasiados intentos. Espera unos minutos.';
     if (/provider is not enabled/i.test(m)) return 'El ingreso con Google todavía no está activado.';
-    return m || 'No se pudo completar. Probá de nuevo.';
+    return m || 'No se pudo completar. Prueba de nuevo.';
   }
   function setMode(m) {
     mode = m;
     var reg = m === 'register';
     $('nameWrap').classList.toggle('hidden', !reg);
     $('bGo').textContent = reg ? 'Crear mi cuenta' : 'Iniciar sesión';
-    $('swTxt').textContent = reg ? '¿Ya tenés cuenta?' : '¿No tenés cuenta?';
-    $('swBtn').textContent = reg ? 'Iniciá sesión' : 'Registrate';
+    $('swTxt').textContent = reg ? '¿Ya tienes cuenta?' : '¿No tienes cuenta?';
+    $('swBtn').textContent = reg ? 'Inicia sesión' : 'Regístrate';
     $('pass').autocomplete = reg ? 'new-password' : 'current-password';
-    $('ttl').innerHTML = reg ? 'Creá tu <em>cuenta</em>' : 'Entrá a tu <em>cuenta</em>';
+    $('ttl').innerHTML = reg ? 'Crea tu <em>cuenta</em>' : 'Entra a tu <em>cuenta</em>';
     $('forgot').parentNode.classList.toggle('hidden', reg);
   }
   function go() { if (went) return; went = true; location.href = next; }
 
-  if (qs.get('reason') === 'limit') say('bad', 'Has alcanzado el límite de páginas sin cuenta. Iniciá sesión para seguir creando más páginas.');
+  if (qs.get('reason') === 'limit') say('bad', 'Has alcanzado el límite de páginas sin cuenta. Inicia sesión para seguir creando más páginas.');
   if (!LE.configured) {
-    say('bad', 'Falta configurar Supabase en config.js (SUPABASE_URL y SUPABASE_ANON_KEY). Mirá el LEEME.');
+    say('bad', 'Falta configurar Supabase en config.js (SUPABASE_URL y SUPABASE_ANON_KEY). Mira el LEEME.');
     ['bGoogle', 'bGo'].forEach(function (i) { $(i).disabled = true; });
   }
   if (!LE.cfg.GOOGLE_LOGIN) $('googleBox').classList.add('hidden');   // activar con GOOGLE_LOGIN: true en config.js
   setMode(mode);
   $('swBtn').onclick = function (e) { e.preventDefault(); say('', ''); setMode(mode === 'login' ? 'register' : 'login'); };
 
-  function showReset() { $('boxLogin').classList.add('hidden'); $('boxReset').classList.remove('hidden'); $('ttl').innerHTML = 'Nueva <em>contraseña</em>'; $('sub').textContent = 'Casi listo: elegí una contraseña nueva.'; }
+  function showReset() { $('boxLogin').classList.add('hidden'); $('boxReset').classList.remove('hidden'); $('ttl').innerHTML = 'Nueva <em>contraseña</em>'; $('sub').textContent = 'Casi listo: elige una contraseña nueva.'; }
   if (recovering) showReset();
 
   if (LE.sb) {
@@ -117,14 +118,14 @@
 
   $('bGo').onclick = function () {
     var email = $('email').value.trim(), pass = $('pass').value;
-    if (!email || !pass) return say('bad', 'Escribí tu correo y tu contraseña.');
+    if (!email || !pass) return say('bad', 'Escribe tu correo y tu contraseña.');
     say('', ''); $('bGo').disabled = true; $('bGo').textContent = mode === 'register' ? 'Creando tu cuenta…' : 'Entrando…';
     var p;
     if (mode === 'register') {
       p = LE.sb.auth.signUp({ email: email, password: pass, options: { data: { name: $('name').value.trim() }, emailRedirectTo: new URL('login.html?next=' + encodeURIComponent(next), location.href).href } })
         .then(function (r) {
           if (r.error) throw r.error;
-          if (!r.data.session) { say('ok', 'Te enviamos un correo para confirmar tu cuenta. Revisá también la carpeta de spam.'); $('bGo').disabled = false; setMode(mode); }
+          if (!r.data.session) { say('ok', 'Te enviamos un correo para confirmar tu cuenta. Revisa también la carpeta de spam.'); $('bGo').disabled = false; setMode(mode); }
         });
     } else {
       p = LE.sb.auth.signInWithPassword({ email: email, password: pass }).then(function (r) {
@@ -139,7 +140,7 @@
   $('forgot').onclick = function (e) {
     e.preventDefault();
     var email = $('email').value.trim();
-    if (!email) return say('bad', 'Escribí tu correo arriba y tocá de nuevo “¿Olvidaste tu contraseña?”.');
+    if (!email) return say('bad', 'Escribe tu correo arriba y toca de nuevo “¿Olvidaste tu contraseña?”.');
     LE.sb.auth.resetPasswordForEmail(email, { redirectTo: new URL('login.html?reset=1', location.href).href })
       .then(function (r) { if (r.error) say('bad', human(r.error.message)); else say('ok', 'Listo. Te enviamos un correo con el enlace para crear una nueva contraseña.'); });
   };
@@ -154,5 +155,6 @@
   };
 })();
 </script>
+<script src="brand-icons.js"></script>
 </body>
 </html>

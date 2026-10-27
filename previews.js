@@ -1574,7 +1574,7 @@ if (name === "corazon-cristal-pro") {
    cristal cayendo, estrellas fugaces y frases en Dancing Script), en miniatura. */
 makeMiniPreview(canvasId, function(scene, camera, THREE, dustTex){
 var HEX = "#ff3d78";
-var FRASES = ["Mi joya más preciada 💎", "Nada vale más que vos", "Te guardo como un tesoro", "Mi para siempre", "Contigo todo brilla más", "Eres irremplazable", "Mi lugar favorito eres tú", "Cada día te elijo", "Gracias por quedarte", "Mi tesoro más grande", "Nunca dejes de brillar", "Mi mejor hallazgo", "Contigo el tiempo se detiene", "Mi corazón es tuyo", "Eres mi milagro diario", "Te cuido como cristal fino", "Mi alma te reconoce", "Un amor sin fecha de vencimiento", "Contigo hasta lo simple es precioso", "Para toda la vida 💎"];
+var FRASES = ["Mi joya más preciada 💎", "Nada vale más que tú", "Te guardo como un tesoro", "Mi para siempre", "Contigo todo brilla más", "Eres irremplazable", "Mi lugar favorito eres tú", "Cada día te elijo", "Gracias por quedarte", "Mi tesoro más grande", "Nunca dejes de brillar", "Mi mejor hallazgo", "Contigo el tiempo se detiene", "Mi corazón es tuyo", "Eres mi milagro diario", "Te cuido como cristal fino", "Mi alma te reconoce", "Un amor sin fecha de vencimiento", "Contigo hasta lo simple es precioso", "Para toda la vida 💎"];
 
 function hx(h){ h = h.replace("#",""); return { r: parseInt(h.substr(0,2),16), g: parseInt(h.substr(2,2),16), b: parseInt(h.substr(4,2),16) }; }
 function darkStr(h,a){ var c = hx(h); return "rgb("+Math.round(c.r*(1-a))+","+Math.round(c.g*(1-a))+","+Math.round(c.b*(1-a))+")"; }

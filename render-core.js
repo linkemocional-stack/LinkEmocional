@@ -32,9 +32,13 @@
   }
 
   // kind: "st" (cosmos, arbol...) | "le" (rosa eterna, medusa...)
+  function protect(out) {
+    var tag = '<script src="/protection.js"></script>';
+    return /<\/head>/i.test(out) ? out.replace(/<\/head>/i, function () { return tag + '</head>'; }) : tag + out;
+  }
   function render(html, kind, cfg) {
-    if (kind === 'le') return replaceScript(html, 'le-initial-state', jsonForScript(leState(cfg)));
-    return replaceScript(html, 'st', jsonForScript(cfg));
+    if (kind === 'le') return protect(replaceScript(html, 'le-initial-state', jsonForScript(leState(cfg))));
+    return protect(replaceScript(html, 'st', jsonForScript(cfg)));
   }
 
   return { render: render, leState: leState, jsonForScript: jsonForScript };

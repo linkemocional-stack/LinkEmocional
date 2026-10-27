@@ -8,6 +8,7 @@
 <link rel="icon" type="image/jpeg" href="og-image.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
+<script src="protection.js"></script>
 </head>
 <body>
 <canvas id="stars"></canvas>
@@ -34,7 +35,7 @@
   ];
 
   function fail(msg) {
-    $('main').innerHTML = '<h1 class="t">No encontramos <em>tu página</em></h1><p class="sub">' + LE.esc(msg || 'Revisá el enlace o creá una nueva.') + '</p>' +
+    $('main').innerHTML = '<h1 class="t">No encontramos <em>tu página</em></h1><p class="sub">' + LE.esc(msg || 'Revisa el enlace o crea una nueva.') + '</p>' +
       '<a class="btn" href="crear.html">Crear una página</a>';
   }
   if (!/^[a-f0-9]{6,32}$/.test(id)) return fail('Todavía no creaste ninguna página en este dispositivo.');
@@ -51,7 +52,7 @@
     var customUrl = info.slug ? location.origin + '/s/' + info.slug : null;
     $('main').innerHTML =
       '<div class="hero-gift"><div class="g">🎁</div><h1>' + (exp ? 'Tu página <span style="color:var(--bad)">expiró</span>' : '¡Tu página está lista!') + '</h1></div>' +
-      '<p class="sub" style="margin-top:8px">' + (exp ? 'Reactivala para que vuelva a abrirse con tu enlace.' : 'Compartí el enlace con esa persona especial.') + '</p>' +
+      '<p class="sub" style="margin-top:8px">' + (exp ? 'Reactivala para que vuelva a abrirse con tu enlace.' : 'Comparte el enlace con esa persona especial.') + '</p>' +
 
       '<section class="card"><div class="qrbox"><div class="qr" id="qr"></div><div style="flex:1;min-width:0">' +
         '<h2>Tu código QR</h2><p class="hint" style="margin-bottom:10px">Personalizalo y descargalo para imprimirlo o mandarlo.</p>' +
@@ -64,7 +65,7 @@
 
       '<div class="stack" style="margin-bottom:14px">' +
         '<a class="btn" id="bView" href="' + LE.esc(customUrl || url) + '" target="_blank" rel="noopener">👁 Ver página</a>' +
-        '<a class="btn wa" id="bWa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent('Mirá lo que preparé para vos 💗 ' + (customUrl || url)) + '">Enviar por WhatsApp</a>' +
+        '<a class="btn wa" id="bWa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent('Mira lo que preparé para ti 💗 ' + (customUrl || url)) + '">Enviar por WhatsApp</a>' +
         '<div class="row"><a class="btn ghost" href="crear.html?edit=' + id + '">✏️ Editar</a><a class="btn ghost" href="mis-paginas.html">📂 Mis páginas</a></div></div>' +
 
       '<section class="card center" id="cdCard"></section>' +
@@ -72,7 +73,7 @@
       '<section class="card"><h2>🔗 Enlace personalizado <span class="chip">PREMIUM</span></h2>' +
         (customUrl
           ? '<p class="hint">Tu enlace personalizado está activo.</p>'
-          : '<p class="hint">Elegí un nombre fácil de recordar, por ejemplo <span class="mono">/s/ParaMiAmor</span>.</p>' +
+          : '<p class="hint">Elige un nombre fácil de recordar, por ejemplo <span class="mono">/s/ParaMiAmor</span>.</p>' +
             '<div class="linkrow"><span class="mono muted" style="flex:none">/s/</span><input class="in" id="slug" maxlength="32" placeholder="tu-nombre" autocapitalize="off" autocomplete="off"></div>' +
             '<p class="hint" style="margin:8px 0 12px">Se activa por WhatsApp · ' + P.usd + ' · ' + P.bob + '</p>' +
             '<button class="btn ghost" id="bSlug">Lo quiero</button>') + '</section>';
@@ -109,7 +110,7 @@
       $('slug').oninput = function () { this.value = this.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''); };
       $('bSlug').onclick = function () {
         var s = $('slug').value;
-        if (s.length < 3) return LE.toast('Usá al menos 3 letras o números', true);
+        if (s.length < 3) return LE.toast('Usa al menos 3 letras o números', true);
         window.open(LE.wa('Hola! Quiero el enlace personalizado /s/' + s + ' 💗\nID de mi página: ' + id + '\n' + url), '_blank');
       };
     }
@@ -149,5 +150,6 @@
   load().then(function () { render(); }, function (e) { fail(e.message); });
 })();
 </script>
+<script src="brand-icons.js"></script>
 </body>
 </html>

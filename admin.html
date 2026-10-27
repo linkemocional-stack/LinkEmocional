@@ -8,18 +8,19 @@
 <link rel="icon" type="image/jpeg" href="og-image.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
+<script src="protection.js"></script>
 </head>
 <body>
 <canvas id="stars"></canvas>
 <header id="top"></header>
 <main class="page wide">
   <h1 class="t">Panel de <em>control</em></h1>
-  <p class="sub">Cuando alguien te pague, pegá su ID y activala en un toque.</p>
+  <p class="sub">Cuando alguien te pague, pega su ID y actívala en un toque.</p>
   <div id="msg"></div>
 
   <section class="card" id="quick">
     <h2>⚡ Activar por ID</h2>
-    <p class="hint">El cliente te manda el ID por WhatsApp. Pegalo acá.</p>
+    <p class="hint">El cliente te manda el ID por WhatsApp. Pégalo aquí.</p>
     <div class="row"><input class="in" id="qid" placeholder="ID de la página" autocapitalize="off" autocomplete="off" style="flex:2"></div>
     <div class="row" style="margin-top:10px">
       <button class="btn wa" id="qPerm">✅ Hacer permanente</button>
@@ -69,13 +70,13 @@
     }, function (e) {
       $('quick').classList.add('hidden');
       $('list').innerHTML = '';
-      $('msg').innerHTML = '<div class="alert bad">' + E(e.status === 401 ? 'Iniciá sesión con tu cuenta de administrador.' : e.message) + (e.status === 401 ? ' <a href="login.html?next=admin.html" style="font-weight:800">Entrar</a>' : '') + '</div>';
+      $('msg').innerHTML = '<div class="alert bad">' + E(e.status === 401 ? 'Inicia sesión con tu cuenta de administrador.' : e.message) + (e.status === 401 ? ' <a href="login.html?next=admin.html" style="font-weight:800">Entrar</a>' : '') + '</div>';
     });
   }
   $('search').oninput = function () { clearTimeout(tS); tS = setTimeout(load, 350); };
   $('filter').onchange = load;
-  $('qPerm').onclick = function () { var id = cleanId($('qid').value); if (!id) return LE.toast('Pegá el ID', true); act({ action: 'permanent', id: id, value: true }, 'Página permanente ✓').then(function () { $('qid').value = ''; }); };
-  $('qExt').onclick = function () { var id = cleanId($('qid').value); if (!id) return LE.toast('Pegá el ID', true); act({ action: 'extend', id: id, hours: 12 }, 'Reactivada 12 h ✓'); };
+  $('qPerm').onclick = function () { var id = cleanId($('qid').value); if (!id) return LE.toast('Pega el ID', true); act({ action: 'permanent', id: id, value: true }, 'Página permanente ✓').then(function () { $('qid').value = ''; }); };
+  $('qExt').onclick = function () { var id = cleanId($('qid').value); if (!id) return LE.toast('Pega el ID', true); act({ action: 'extend', id: id, hours: 12 }, 'Reactivada 12 h ✓'); };
   $('list').onclick = function (e) {
     var b = e.target.closest('button[data-a]'); if (!b) return;
     var id = b.closest('.pg-card').dataset.id, a = b.dataset.a;
@@ -87,5 +88,6 @@
   load();
 })();
 </script>
+<script src="brand-icons.js"></script>
 </body>
 </html>
