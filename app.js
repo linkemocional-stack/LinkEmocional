@@ -47,8 +47,19 @@
     });
     var wait = new Promise(function (r) { setTimeout(r, 2500); });
     return Promise.race([Promise.all(claims), wait])
-      .then(function () { return sb ? sb.auth.signOut() : null; })
-      .then(function () { LE.clearLocal(); });
+      .then(function () { return sb ? sb.auth.signOut().catch(function () { }) : null; })
+      .then(function () {
+        LE.clearLocal();
+        // por si no hubo internet y el servidor no pudo cerrar la sesión: se borra igual en este dispositivo
+        try {
+          var rm = [];
+          for (var i = 0; i < localStorage.length; i++) {
+            var k = localStorage.key(i);
+            if (k && /^sb-.+-auth-token(-code-verifier)?$/.test(k)) rm.push(k);
+          }
+          rm.forEach(function (k) { localStorage.removeItem(k); });
+        } catch (e) { }
+      });
   };
   LE.signOut = LE.logout;
   LE.userName = function (s) {

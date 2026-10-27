@@ -42,6 +42,20 @@
 .lp-links a{padding:8px 12px;border-radius:10px;color:var(--muted)}
 .lp-links a:hover{color:var(--ink);background:var(--glass)}
 .lp-links .lp-login{background:var(--grad-brand);color:#0d0a1e;margin-left:4px}
+#lpAuthBox{position:relative;display:inline-flex;align-items:center;margin-left:4px}
+#lpAuthBox .lp-login{margin-left:0}
+.lu-btn{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border:1px solid var(--border-soft);background:var(--glass-strong);color:var(--ink);border-radius:99px;font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+.lu-av{width:30px;height:30px;border-radius:50%;background:var(--grad-brand);color:#0d0a1e;font-weight:800;display:grid;place-items:center;font-size:14px}
+.lu-nm{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lu-menu{position:absolute;right:0;top:calc(100% + 8px);min-width:260px;background:#17122e;border:1px solid var(--border-soft);border-radius:16px;padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.5);z-index:40;display:grid;gap:2px}
+.lu-menu[hidden]{display:none}
+.lu-who{padding:10px 12px;border-bottom:1px solid var(--border-soft);margin-bottom:4px}
+.lu-who b{display:block;font-size:14px;color:var(--ink)}
+.lu-who small{display:block;font-size:12px;color:var(--muted);overflow-wrap:anywhere;margin-top:2px}
+.lu-menu a,.lu-menu button{display:block!important;width:100%;text-align:left;padding:11px 12px;border-radius:10px;font:inherit;font-weight:700;font-size:14px;color:var(--ink)!important;background:none;border:0;cursor:pointer}
+.lu-menu a:hover,.lu-menu button:hover{background:var(--glass-strong)}
+.lp-legal{flex-basis:100%;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px}
+.lp-legal a:hover{color:var(--ink)}
 .lp-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;padding:56px 0 84px}
 #viewHome .lp-hero h1{font-size:clamp(32px,4.4vw,52px);line-height:1.08;margin:0 0 20px;letter-spacing:-.02em;font-weight:800;background:none;color:var(--ink);-webkit-text-fill-color:var(--ink);text-align:left;animation:none}
 .lp-hero h1 em{display:block;font-family:'Cormorant Garamond',serif;font-weight:600;font-style:italic;letter-spacing:0;font-size:1.18em;line-height:1.1;margin-top:4px;background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
@@ -194,7 +208,7 @@
 </defs></svg>
 <div class="lp-top"><div class="lp-in"><nav class="lp-nav">
 <a class="lp-brand" href="index.html"><img src="logo.jpg" alt=""><span>Link Emocional</span></a>
-<div class="lp-links"><a href="#formas">Con y sin editor</a><a href="#disenos">Diseños</a><a href="#precios">Precios</a><a href="#nosotros">Nosotros</a><a href="#faq">Preguntas</a><a href="mis-paginas.html">Mis páginas</a><a class="lp-login" href="login.html">Iniciar sesión</a></div>
+<div class="lp-links"><a href="#formas">Con y sin editor</a><a href="#disenos">Diseños</a><a href="#precios">Precios</a><a href="#nosotros">Nosotros</a><a href="#faq">Preguntas</a><a href="mis-paginas.html">Mis páginas</a><span id="lpAuthBox"><a class="lp-login" href="login.html">Iniciar sesión</a></span></div>
 </nav></div></div>
 <div class="lp-in">
 <header class="lp-hero">
@@ -321,6 +335,7 @@
 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 4.99L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.79 14.1c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.13.11-1.82-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36h.55c.18 0 .42-.07.65.5.24.58.81 2 .88 2.15.07.15.12.32.02.51-.1.19-.15.3-.29.47-.15.17-.31.37-.44.5-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.15.46.13.63-.08.17-.21.72-.85.92-1.14.19-.29.38-.24.64-.14.26.1 1.66.79 1.94.93.29.14.47.22.55.34.07.12.07.7-.17 1.38z"/></svg>
 </a>
 </div>
+<div class="lp-legal"><a href="privacidad.html">Política de Privacidad</a><a href="terminos.html">Términos y Condiciones</a><a href="uso-aceptable.html">Política de Uso Aceptable</a><a href="reembolsos.html">Política de Reembolsos</a></div>
 </footer>
 </div>
 <script>
@@ -423,7 +438,39 @@ set('lpLink',Number(lk).toFixed(2));set('lpLinkBs','≈ Bs '+(lk*fx).toFixed(2))
 </symbol>
 </defs>
 </svg>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
+<script src="app.js"></script>
+<script>
+/* Sesión en la portada: si ya iniciaste sesión, muestra tu cuenta en vez de "Iniciar sesión" */
+(function () {
+  if (!window.LE || !LE.sb) return;
+  LE.stars = function () {};   // la portada ya tiene su propio fondo de estrellas
+  var box = document.getElementById('lpAuthBox'); if (!box) return;
+  var loginHtml = box.innerHTML, menu = null;
+  function guest() { menu = null; box.innerHTML = loginHtml; }
+  function render(s) {
+    if (!s) return guest();
+    var name = LE.userName(s), email = (s.user && s.user.email) || '';
+    box.innerHTML = '<button type="button" class="lu-btn" id="luBtn" aria-haspopup="true" aria-expanded="false"><span class="lu-av">' + LE.esc(name.charAt(0).toUpperCase()) + '</span><span class="lu-nm">' + LE.esc(name) + '</span><span aria-hidden="true">▾</span></button>' +
+      '<div class="lu-menu" id="luMenu" hidden><div class="lu-who"><b>' + LE.esc(name) + '</b><small>' + LE.esc(email) + '</small></div>' +
+      '<a href="mis-paginas.html">Mis páginas</a><button type="button" id="luOut">Cerrar sesión</button></div>';
+    menu = document.getElementById('luMenu');
+    var btn = document.getElementById('luBtn');
+    btn.onclick = function (e) { e.stopPropagation(); menu.hidden = !menu.hidden; btn.setAttribute('aria-expanded', String(!menu.hidden)); };
+    document.getElementById('luOut').onclick = function () {
+      this.disabled = true; this.textContent = 'Cerrando…';
+      LE.logout().then(function () { guest(); }, function () { guest(); });
+    };
+  }
+  document.addEventListener('click', function () { if (menu) menu.hidden = true; });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && menu) menu.hidden = true; });
+  function check() { LE.session().then(render); }
+  check();
+  LE.sb.auth.onAuthStateChange(function (ev, s) { if (ev === 'SIGNED_OUT') guest(); else if (ev === 'SIGNED_IN' || ev === 'TOKEN_REFRESHED' || ev === 'INITIAL_SESSION') render(s); });
+  window.addEventListener('pageshow', function (e) { if (e.persisted) check(); });   // al volver con el botón "atrás"
+})();
+</script>
 <script src="thumbs.js"></script>
 <script src="catalog.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
