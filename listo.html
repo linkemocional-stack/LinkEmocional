@@ -120,7 +120,7 @@
   function renderCountdown() {
     clearInterval(timer);
     var c = $('cdCard');
-    var st = info.state, total = (info.free_hours || 12) * 3600 * 1000, expAt = new Date(info.expires_at).getTime();
+    var st = info.state, total = (info.free_hours || 16) * 3600 * 1000, expAt = new Date(info.expires_at).getTime();
     if (st === 'permanent') {
       c.innerHTML = '<div class="state-ok" style="justify-content:center;font-size:17px">✅ Tu página es permanente</div><p class="hint" style="margin:8px 0 0">No expira nunca y no lleva la etiqueta de Link Emocional.</p>';
       return;
@@ -133,7 +133,7 @@
     c.innerHTML = '<div class="ring" id="ring"><svg viewBox="0 0 160 160"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6fd6e8"/><stop offset=".6" stop-color="#8b6ff0"/><stop offset="1" stop-color="#ff7ab8"/></linearGradient></defs>' +
       '<circle class="tr" cx="80" cy="80" r="70" fill="none" stroke-width="9"/><circle class="pg" id="pg" cx="80" cy="80" r="70" fill="none" stroke-width="9" stroke-linecap="round" stroke-dasharray="439.8" stroke-dashoffset="0"/></svg>' +
       '<div class="mid"><small>Expira en</small><b id="hms">--:--:--</b></div></div>' +
-      '<p class="hint" style="margin:0 0 14px">Después de ese tiempo, quien abra el enlace verá una página expirada. Hacela permanente y se queda para siempre.</p>' +
+      '<p class="hint" style="margin:0 0 14px">Después de ese tiempo, quien abra el enlace verá una página expirada. Hazla permanente y se queda para siempre.</p>' +
       '<button class="btn" id="bPerm">💫 Hacer permanente</button>';
     $('bPerm').onclick = function () { LE.openPermanent({ id: id, url: url, expired: false, price: info.price, name: info.template_name }); };
     function tick() {

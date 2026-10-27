@@ -189,20 +189,14 @@
 @media(max-width:860px){.lp-about,.lp-why,.lp-price{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.lp-float,.lp-aur,.lp-mq div{animation:none}}
 .lp-stats{padding:56px 0 8px}
-.lp-stats .lp-in{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.lp-sp{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:18px;border-radius:28px;background:linear-gradient(120deg,rgba(139,111,240,.22),rgba(42,143,174,.28)),var(--glass);border:1px solid var(--border-soft);box-shadow:0 18px 50px rgba(0,0,0,.25)}
-.lp-sp>div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:20px 8px;border-radius:20px;background:rgba(13,10,30,.62);border:1px solid var(--border-soft);text-align:center}
+.lp-stats .lp-in{display:block}
+.lp-sp{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;overflow:hidden;max-width:980px;margin:0 auto;border-radius:26px;background:linear-gradient(180deg,rgba(139,111,240,.14),rgba(13,10,30,.55)),var(--glass);border:1px solid var(--border-soft);box-shadow:0 18px 50px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.lp-sp>div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:26px 10px;text-align:center;margin:0 -1px -1px 0;border-right:1px solid var(--border-soft);border-bottom:1px solid transparent;transition:background .25s}
+.lp-sp>div:hover{background:rgba(139,111,240,.10)}
 .lp-sp>div[hidden]{display:none}
-.lp-sp strong{white-space:nowrap;font-size:clamp(24px,2.9vw,36px);font-weight:800;letter-spacing:-.01em;line-height:1.1;font-variant-numeric:tabular-nums}
-.lp-sp span{font-size:13.5px;font-weight:700;color:var(--ink);opacity:.92}
-.lp-sp>div:nth-child(1) strong{color:#7ff0e8}
-.lp-sp>div:nth-child(2) strong{color:#ffb3d1}
-.lp-sp>div:nth-child(3) strong{color:#b9c2ff}
-.lp-sp.b>div:nth-child(1) strong{color:#a9b8ff}
-.lp-sp.b>div:nth-child(2) strong{color:#d4b8ff}
-.lp-sp.b>div:nth-child(3) strong{color:#ffd48a}
-@media(max-width:860px){.lp-stats .lp-in{grid-template-columns:1fr}.lp-sp{padding:12px;gap:10px;border-radius:24px}.lp-sp>div{padding:16px 4px}.lp-sp span{font-size:12px}}
-@media(max-width:860px){.lp-sp strong{font-size:clamp(20px,6vw,30px)}}
+.lp-sp strong{white-space:nowrap;font-size:clamp(24px,2.7vw,34px);font-weight:800;letter-spacing:-.01em;line-height:1.1;font-variant-numeric:tabular-nums;background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.lp-sp span{font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+@media(max-width:860px){.lp-sp{grid-auto-flow:row;grid-template-columns:repeat(3,1fr);border-radius:22px}.lp-sp>div{padding:18px 4px;border-bottom:1px solid var(--border-soft)}.lp-sp span{font-size:10px;letter-spacing:.06em}.lp-sp strong{font-size:clamp(20px,6vw,28px)}}
 </style>
 <div class="view view-home" id="viewHome">
 <svg style="position:absolute;width:0;height:0" aria-hidden="true"><defs>
@@ -235,7 +229,7 @@
 <a class="lp-btn main" href="crear.html">Crear mi página</a>
 <button class="lp-btn ghost" type="button" onclick="showView('catalogo','personalizado')">Ver catálogo completo</button>
 </div>
-<div class="lp-chips"><span>12 horas gratis</span><span>Editor incluido</span><span>Se comparte por WhatsApp</span></div>
+<div class="lp-chips"><span>16 horas gratis</span><span>Editor incluido</span><span>Se comparte por WhatsApp</span></div>
 </div>
 <div class="lp-stage">
 <span class="lp-float a"><svg class="ic f" aria-hidden="true"><use href="#i-heart"/></svg></span><span class="lp-float b"><svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span class="lp-float c"><svg class="ic " aria-hidden="true"><use href="#i-heart"/></svg></span><span class="lp-float d"><svg class="ic " aria-hidden="true"><use href="#i-spark"/></svg></span>
@@ -249,14 +243,12 @@
 </div>
 </header>
 </div>
-<div class="lp-mq" aria-hidden="true"><div><span>Dedícale a esa personita especial<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mamá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a quien te hace sonreír<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su aniversario<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu papá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para sorprender a quien más quieres<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en minutos<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a esa personita especial<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mamá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a quien te hace sonreír<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su aniversario<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu papá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para sorprender a quien más quieres<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en minutos<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span></div></div>
+<div class="lp-mq" aria-hidden="true"><div><span>Dedícale a esa personita especial<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a quien te hace sonreír<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su aniversario<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para sorprender a quien más quieres<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en minutos<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a esa personita especial<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a quien te hace sonreír<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su aniversario<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para sorprender a quien más quieres<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en minutos<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span></div></div>
 <section class="lp-stats" aria-label="Link Emocional en números"><div class="lp-in">
 <div class="lp-sp">
 <div id="stPagesBox" hidden><strong id="stPages" data-to="0">0</strong><span>Páginas creadas</span></div>
-<div><strong data-to="12" data-suf=" h">12 h</strong><span>De prueba gratis</span></div>
+<div><strong data-to="16" data-suf=" h">16 h</strong><span>De prueba gratis</span></div>
 <div><strong id="stFrom">$0.99</strong><span>Permanente desde</span></div>
-</div>
-<div class="lp-sp b">
 <div><strong data-to="30" data-suf="+">30+</strong><span>Plantillas</span></div>
 <div><strong data-to="100" data-suf="%">100%</strong><span>Personalizable</span></div>
 <div><strong>2D y 3D</strong><span>Animaciones reales</span></div>
@@ -280,7 +272,7 @@
 <p class="lp-sub">Pruebas gratis, y si te encanta lo dejas para siempre con un pago único. Sin suscripciones ni letra chica.</p>
 <div class="lp-price">
 <div class="lp-pc"><h3>Prueba</h3><div class="big">$0</div><div class="bs">Bs 0</div>
-<ul><li>12 horas gratis con tu enlace</li><li>Editor completo con fotos y mensaje</li><li>Sin tarjeta</li></ul>
+<ul><li>16 horas gratis con tu enlace</li><li>Editor completo con fotos y mensaje</li><li>Sin tarjeta</li></ul>
 <a class="lp-btn ghost" href="crear.html">Probar gratis</a></div>
 <div class="lp-pc hot"><em>Recomendado</em><h3>Regalo permanente</h3><div class="big">desde $<span id="lpMin">0.99</span><small>pago único</small></div><div class="bs" id="lpMinBs">≈ Bs 9.90</div>
 <ul><li>No vence nunca</li><li>Hay diseños desde $<span id="lpMin2">0.99</span> hasta $<span id="lpMax">4.99</span>, según la animación</li><li>Enlace y QR para compartir</li><li>Lo editas cuando quieras desde Mis páginas</li></ul>
@@ -306,7 +298,7 @@
 <div class="lp-steps">
 <div class="lp-step"><b>Elige un diseño</b><span>Mira la demo, tócala y decide cuál le va a gustar más.</span></div>
 <div class="lp-step"><b>Pon tu mensaje</b><span>Cambia frases, nombres, colores y fotos desde el editor, sin instalar nada.</span></div>
-<div class="lp-step"><b>Comparte el enlace</b><span>Por WhatsApp o con un código QR. Dura 12 horas gratis y después lo haces permanente.</span></div>
+<div class="lp-step"><b>Comparte el enlace</b><span>Por WhatsApp o con un código QR. Dura 16 horas gratis y después lo haces permanente.</span></div>
 </div></div></section>
 <section class="lp-sec"><div class="lp-in">
 <h2>Todo lo que incluye</h2>
@@ -331,15 +323,15 @@
 <div class="lp-why">
 <div><i><svg class="ic" aria-hidden="true"><use href="#i-heart"/></svg></i><b>Hecho con cariño</b><span>Cada animación está pensada para emocionar, no para llenar espacio.</span></div>
 <div><i><svg class="ic" aria-hidden="true"><use href="#i-spark"/></svg></i><b>2D y 3D reales</b><span>Rosas, cielos estrellados, linternas, medusas y más, que se mueven con el dedo.</span></div>
-<div><i><svg class="ic" aria-hidden="true"><use href="#i-gift"/></svg></i><b>Precio justo</b><span>Desde $0.99 y con 12 horas gratis para probar antes de pagar.</span></div>
+<div><i><svg class="ic" aria-hidden="true"><use href="#i-gift"/></svg></i><b>Precio justo</b><span>Desde $0.99 y con 16 horas gratis para probar antes de pagar.</span></div>
 <div><i><svg class="ic" aria-hidden="true"><use href="#i-pen"/></svg></i><b>Es tuyo de verdad</b><span>Tus frases, tus fotos, tu música y tus colores. Nada de plantillas genéricas.</span></div>
 <div><i><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></i><b>Se manda en segundos</b><span>Enlace y QR listos para WhatsApp, sin que la otra persona instale nada.</span></div>
 <div><i><svg class="ic" aria-hidden="true"><use href="#i-link"/></svg></i><b>Pagas fácil</b><span>QR en Bolivia o tarjeta desde afuera, y te acompañamos por WhatsApp.</span></div>
 </div></div></div></section>
 <section class="lp-sec" id="faq"><div class="lp-in lp-faq">
 <h2>Preguntas frecuentes</h2>
-<details class="lp-q"><summary>¿Es gratis?</summary><p>Puedes crear tu página y compartirla gratis durante 12 horas. Si quieres que se quede para siempre, la haces permanente con un pago único.</p></details>
-<details class="lp-q"><summary>¿Qué pasa cuando se cumplen las 12 horas?</summary><p>La página vence. Puedes reactivarla o hacerla permanente desde Mis páginas.</p></details>
+<details class="lp-q"><summary>¿Es gratis?</summary><p>Puedes crear tu página y compartirla gratis durante 16 horas. Si quieres que se quede para siempre, la haces permanente con un pago único.</p></details>
+<details class="lp-q"><summary>¿Qué pasa cuando se cumplen las 16 horas?</summary><p>La página vence. Puedes reactivarla o hacerla permanente desde Mis páginas.</p></details>
 <details class="lp-q"><summary>¿Necesito una cuenta?</summary><p>No para tu primera prueba. Con una cuenta guardas tus páginas, las editas cuando quieras y tienes más pruebas gratis con el tiempo.</p></details>
 <details class="lp-q"><summary>¿Cómo se lo mando a esa persona?</summary><p>Copias el enlace y lo envías por WhatsApp, o descargas el código QR para imprimirlo o mandarlo.</p></details>
 <details class="lp-q"><summary>¿Cómo pago?</summary><p>Escríbenos por WhatsApp y te guiamos con el pago.</p></details>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Crear mi página | Link Emocional</title>
-<meta name="description" content="Elige un diseño, escribe tu mensaje y obtén tu enlace en minutos. 12 horas gratis.">
+<meta name="description" content="Elige un diseño, escribe tu mensaje y obtén tu enlace en minutos. 16 horas gratis.">
 <link rel="icon" type="image/jpeg" href="og-image.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
@@ -20,7 +20,7 @@
   <!-- PASO 1: elegir diseño -->
   <section id="stepPick">
     <h1 class="t">Elige tu <em>diseño</em></h1>
-    <p class="sub">Escribe tu mensaje, sube tus fotos y recibe tu enlace en minutos. Es <b>gratis por 12 horas</b> y después la puedes hacer permanente.</p>
+    <p class="sub">Escribe tu mensaje, sube tus fotos y recibe tu enlace en minutos. Es <b>gratis por 16 horas</b> y después la puedes hacer permanente.</p>
     <div class="grid" id="grid"><div class="spin"></div></div>
   </section>
 
@@ -354,7 +354,7 @@
     $('edTitle').innerHTML = (editId ? 'Edita tu <em>página</em>' : tpl.emoji + ' ' + E(tpl.name));
     $('edSub').innerHTML = editId
       ? 'Los cambios se guardan en el mismo enlace.'
-      : 'Completa tus datos y mira cómo queda. Es gratis por ' + (LE.cfg.FREE_HOURS || 12) + ' horas; para dejarla para siempre cuesta <b>' +
+      : 'Completa tus datos y mira cómo queda. Es gratis por ' + (LE.cfg.FREE_HOURS || 16) + ' horas; para dejarla para siempre cuesta <b>' +
         LE.price(tpl.price).usd + ' · ' + LE.price(tpl.price).bob + '</b>, el mismo precio del catálogo.';
     $('bCreate').textContent = editId ? '💾 Guardar cambios' : '✨ Crear mi página';
     $('bBack').textContent = editId ? '← Volver' : '← Diseños';
@@ -398,14 +398,17 @@
       var cada = q.windowDays === 1 ? 'cada día' : 'cada ' + q.windowDays + ' días';
       var ud = q.userWindowDays || q.windowDays;
       var cadaCuenta = ud === 1 ? 'cada día' : 'cada ' + ud + ' días';
+      var ul = q.userLimit || 1;
+      var pagsCuenta = ul === 1 ? 'una página más' : ul + ' páginas gratis';
+      var pagsPrueba = q.limit === 1 ? 'página de prueba' : 'páginas de prueba';
       if (!q.loggedIn) {
         h = q.remaining > 0
-          ? '<div class="banner">🎁 Sin cuenta puedes crear <b>' + q.limit + ' página de prueba</b>. Con una cuenta gratis tienes una página más ' + cadaCuenta + '.<div class="r2">' + login + '</div></div>'
-          : '<div class="banner bad">Ya usaste tu página de prueba. <b>Inicia sesión</b> y tienes una página gratis más ' + cadaCuenta + '.<div class="r2">' + login + '</div></div>';
+          ? '<div class="banner">🎁 Sin cuenta puedes crear <b>' + q.limit + ' ' + pagsPrueba + '</b>. Con una cuenta gratis tienes ' + pagsCuenta + ' ' + cadaCuenta + '.<div class="r2">' + login + '</div></div>'
+          : '<div class="banner bad">Ya usaste tu página de prueba. <b>Inicia sesión</b> y tienes ' + pagsCuenta + ' ' + cadaCuenta + '.<div class="r2">' + login + '</div></div>';
       } else {
         h = q.remaining > 0
-          ? '<div class="banner">👤 Sesión iniciada. Tienes <b>' + q.remaining + ' página gratis</b> disponible (' + q.limit + ' ' + cada + ').</div>'
-          : '<div class="banner bad">Ya usaste tu página gratis. Puedes crear otra en <b>' + (q.resetAt ? LE.left(q.resetAt) : 'unos días') + '</b>. Mientras tanto, puedes hacer permanente alguna de las tuyas.</div>';
+          ? '<div class="banner">👤 Sesión iniciada. Tienes <b>' + q.remaining + (q.remaining === 1 ? ' página gratis</b> disponible' : ' páginas gratis</b> disponibles') + ' (' + q.limit + ' ' + cada + ').</div>'
+          : '<div class="banner bad">Ya usaste ' + (q.limit === 1 ? 'tu página gratis' : 'tus páginas gratis') + '. Puedes crear otra en <b>' + (q.resetAt ? LE.left(q.resetAt) : 'unos días') + '</b>. Mientras tanto, puedes hacer permanente alguna de las tuyas.</div>';
       }
       b.innerHTML = h;
       var ql = $('qLogin');

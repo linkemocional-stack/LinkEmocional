@@ -1078,7 +1078,7 @@ var pedirLabel = isFree ? 'Escríbenos' : 'Pedir';
 /* --- Link Emocional: boton "Crear mi pagina" (sistema de paginas con vencimiento) --- */
 var leSlug = (p.preview && p.preview.indexOf('frame-') === 0) ? p.preview.slice(6) : null;
 var leCrear = (leSlug && catalogMode === 'personalizado' && window.LE_TEMPLATE_SLUGS && window.LE_TEMPLATE_SLUGS.indexOf(leSlug) >= 0)
-? '<a class="le-crear" href="crear.html?t=' + leSlug + '">✨ Crear mi página gratis · 12 h</a>' : '';
+? '<a class="le-crear" href="crear.html?t=' + leSlug + '">✨ Crear mi página gratis · 16 h</a>' : '';
 document.getElementById('detalleActions').innerHTML = leCrear +
 '<div class="detalle-actions-main">' +
 '<button type="button" class="btn btn-video" data-product-id="' + p.id + '">Ver Video</button>' +

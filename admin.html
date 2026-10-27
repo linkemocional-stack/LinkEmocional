@@ -24,7 +24,7 @@
     <div class="row"><input class="in" id="qid" placeholder="ID de la página" autocapitalize="off" autocomplete="off" style="flex:2"></div>
     <div class="row" style="margin-top:10px">
       <button class="btn wa" id="qPerm">✅ Hacer permanente</button>
-      <button class="btn ghost" id="qExt">🔁 Reactivar +12 h</button>
+      <button class="btn ghost" id="qExt">🔁 Reactivar +16 h</button>
     </div>
   </section>
 
@@ -76,12 +76,12 @@
   $('search').oninput = function () { clearTimeout(tS); tS = setTimeout(load, 350); };
   $('filter').onchange = load;
   $('qPerm').onclick = function () { var id = cleanId($('qid').value); if (!id) return LE.toast('Pega el ID', true); act({ action: 'permanent', id: id, value: true }, 'Página permanente ✓').then(function () { $('qid').value = ''; }); };
-  $('qExt').onclick = function () { var id = cleanId($('qid').value); if (!id) return LE.toast('Pega el ID', true); act({ action: 'extend', id: id, hours: 12 }, 'Reactivada 12 h ✓'); };
+  $('qExt').onclick = function () { var id = cleanId($('qid').value); if (!id) return LE.toast('Pega el ID', true); act({ action: 'extend', id: id, hours: 16 }, 'Reactivada 16 h ✓'); };
   $('list').onclick = function (e) {
     var b = e.target.closest('button[data-a]'); if (!b) return;
     var id = b.closest('.pg-card').dataset.id, a = b.dataset.a;
     if (a === 'perm') act({ action: 'permanent', id: id, value: b.dataset.v === '1' });
-    else if (a === 'ext') { var h = prompt('¿Cuántas horas sumar?', '12'); if (h) act({ action: 'extend', id: id, hours: Number(h) }); }
+    else if (a === 'ext') { var h = prompt('¿Cuántas horas sumar?', '16'); if (h) act({ action: 'extend', id: id, hours: Number(h) }); }
     else if (a === 'slug') { var s = prompt('Enlace personalizado (solo letras, números, - y _). Vacío para quitarlo:', ''); if (s !== null) act({ action: 'slug', id: id, slug: s }); }
     else if (a === 'del') { if (confirm('¿Eliminar definitivamente?')) act({ action: 'delete', id: id }); }
   };
