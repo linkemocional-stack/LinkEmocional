@@ -7,6 +7,7 @@
    "tag": "Amor",
    "dim": "2D",
    "desc": "Mantén presionado para que crezca un árbol que se llena de flores brillantes; cada flor guarda un recuerdo.",
+   "price": 0.99,
    "kind": "st",
    "defaults": {
     "n1": "Tú",
@@ -124,6 +125,7 @@
    "tag": "Amor",
    "dim": "3D",
    "desc": "Un cielo de aurora sobre montañas, con una figura de partículas que se transforma entre estrellas, constelaciones que se trazan y estrellas fugaces.",
+   "price": 3.99,
    "kind": "le",
    "defaults": {
     "titulo": "Entre millones de estrellas, tú ✨",
@@ -400,6 +402,7 @@
    "tag": "Amor",
    "dim": "3D",
    "desc": "Un cosmos de partículas que se transforma entre corazón, anillo, infinito, galaxia y texto, con fotos y frases flotando y un contador de días juntos.",
+   "price": 1.99,
    "kind": "st",
    "defaults": {
     "titulo": "Cosmos PRO",
@@ -612,6 +615,7 @@
    "tag": "Cumpleaños",
    "dim": "2D",
    "desc": "Una torta con velas que se apagan al soplar al micrófono o al tocarlas, con confeti y un mensaje de cumpleaños.",
+   "price": 0.99,
    "kind": "st",
    "defaults": {
     "titulo": "¡Feliz cumpleaños!",
@@ -686,6 +690,7 @@
    "tag": "Amor",
    "dim": "3D",
    "desc": "Un cielo de atardecer lleno de linternas que suben flotando, con una figura de partículas que se transforma, luna, fuegos y corazones.",
+   "price": 3.99,
    "kind": "le",
    "defaults": {
     "titulo": "Mi deseo eres tú 🏮",
@@ -965,6 +970,7 @@
    "tag": "Amor",
    "dim": "2D",
    "desc": "Cientos de luciérnagas que escriben tus frases en el cielo nocturno y se dejan guiar por tu dedo.",
+   "price": 1.0,
    "kind": "st",
    "defaults": {
     "titulo": "Para ti",
@@ -1040,6 +1046,7 @@
    "tag": "Amor",
    "dim": "3D",
    "desc": "Un océano bioluminiscente con medusas que brillan, cardúmenes de luz y una figura de partículas que se transforma flotando en el agua.",
+   "price": 3.49,
    "kind": "le",
    "defaults": {
     "titulo": "Contigo todo fluye 🌊",
@@ -1342,6 +1349,7 @@
    "tag": "Aniversario",
    "dim": "3D",
    "desc": "Un universo con un corazón de partículas, dos planetas con sus nombres y lunas que guardan cada recuerdo, con contador de días juntos.",
+   "price": 1.99,
    "kind": "st",
    "defaults": {
     "n1": "Tú",
@@ -1458,6 +1466,7 @@
    "tag": "Amor",
    "dim": "3D",
    "desc": "Un cielo donde cada recuerdo es una estrella que se enciende y se une en un corazón de constelación, con contador de días juntos.",
+   "price": 1.49,
    "kind": "st",
    "defaults": {
     "n1": "Tú",
@@ -1595,6 +1604,7 @@
    "tag": "Amor",
    "dim": "3D",
    "desc": "Una rosa de partículas que florece y late sobre un cielo estrellado, con pétalos, estrellas fugaces y tus frases y fotos orbitando.",
+   "price": 3.99,
    "kind": "le",
    "defaults": {
     "titulo": "Eterna como tú 🌹",
@@ -1887,6 +1897,7 @@
    "tag": "Amor",
    "dim": "3D",
    "desc": "Una rosa de partículas que late y se transforma en corazón, anillo, luna y más, con historia por capítulos, contador en vivo y fuegos artificiales.",
+   "price": 3.99,
    "kind": "le",
    "defaults": {
     "titulo": "Eterna como tú 🌹",
@@ -2195,6 +2206,7 @@
    "tag": "Amor",
    "dim": "3D",
    "desc": "La versión de cine: una rosa 3D bajo una cúpula de cristal con auroras, reflejo en el suelo de luz, luciérnagas doradas e intro de película.",
+   "price": 4.99,
    "kind": "le",
    "defaults": {
     "titulo": "Eterna como tú 🌹",
@@ -2503,6 +2515,7 @@
    "tag": "Amor",
    "dim": "2D",
    "desc": "Fotos colgadas de un tendedero con luces: toca una, frótala con el dedo para revelarla y al final se abre un mensaje.",
+   "price": 0.99,
    "kind": "st",
    "defaults": {
     "titulo": "Nuestros recuerdos",
@@ -2597,6 +2610,7 @@
    "tag": "Amor",
    "dim": "2D",
    "desc": "Un vidrio empañado con la lluvia de una ciudad de noche: límpialo con el dedo para descubrir frases escondidas y una carta.",
+   "price": 1.99,
    "kind": "st",
    "defaults": {
     "titulo": "Limpia el vidrio",
@@ -2700,6 +2714,7 @@
    "tag": "Sorpresa",
    "dim": "2D",
    "desc": "Mensajes escondidos en el aire: gira el celular a tu alrededor para encontrarlos con la cámara de fondo.",
+   "price": 0.99,
    "kind": "st",
    "defaults": {
     "titulo": "Ventana mágica",

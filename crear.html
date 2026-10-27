@@ -14,6 +14,7 @@
 <header id="top"></header>
 
 <main class="page wide">
+  <div id="qbanner" style="margin-top:18px"></div>
   <!-- PASO 1: elegir diseño -->
   <section id="stepPick">
     <h1 class="t">Elegí tu <em>diseño</em></h1>
@@ -330,7 +331,7 @@
     TPLS.forEach(function (t) {
       var w = h('div', 'tpw');
       var b = h('button', 'tp', '<span class="em">' + t.emoji + '</span><b>' + E(t.name) + '</b><small>' + E(t.desc) + '</small>' +
-        '<span class="tags"><span class="chip">' + E(t.tag) + '</span><span class="chip">' + E(t.dim) + '</span></span>');
+        '<span class="tags"><span class="chip">' + E(t.tag) + '</span><span class="chip">' + E(t.dim) + '</span><span class="chip ok">' + LE.price(t.price).usd + '</span></span>');
       b.type = 'button'; b.onclick = function () { openEditor(t.slug); };
       var d = h('button', 'demo', '▶ Demo'); d.type = 'button'; d.onclick = function () { fullscreen('previews/' + t.slug + '.html'); };
       w.appendChild(b); w.appendChild(d); g.appendChild(w);
@@ -349,7 +350,8 @@
     $('edTitle').innerHTML = (editId ? 'Editá tu <em>página</em>' : tpl.emoji + ' ' + E(tpl.name));
     $('edSub').innerHTML = editId
       ? 'Los cambios se guardan en el mismo enlace.'
-      : 'Completá tus datos y mirá cómo queda. Es gratis por ' + (LE.cfg.FREE_HOURS || 12) + ' horas.';
+      : 'Completá tus datos y mirá cómo queda. Es gratis por ' + (LE.cfg.FREE_HOURS || 12) + ' horas; para dejarla para siempre cuesta <b>' +
+        LE.price(tpl.price).usd + ' · ' + LE.price(tpl.price).bob + '</b>, el mismo precio del catálogo.';
     $('bCreate').textContent = editId ? '💾 Guardar cambios' : '✨ Crear mi página';
     $('bBack').textContent = editId ? '← Volver' : '← Diseños';
     buildForm();
@@ -382,7 +384,30 @@
     });
   };
 
+  /* ======================= cupo de paginas gratis ======================= */
+  function showQuota() {
+    var b = $('qbanner');
+    if (qs.get('edit')) { b.innerHTML = ''; return; }
+    LE.quota().then(function (q) {
+      if (q.admin) { b.innerHTML = ''; return; }
+      var login = '<button class="btn sm" id="qLogin" type="button">Iniciar sesión</button>', hrs = q.resetAt ? Math.max(1, Math.ceil((new Date(q.resetAt) - Date.now()) / 3600000)) : null, h;
+      if (!q.loggedIn) {
+        h = q.remaining > 0
+          ? '<div class="banner">🎁 Sin cuenta podés crear <b>' + q.limit + ' página de prueba</b>. Para crear más, iniciá sesión (es gratis).<div class="r2">' + login + '</div></div>'
+          : '<div class="banner bad">Ya usaste tu página de prueba. <b>Iniciá sesión</b> para seguir creando más páginas.<div class="r2">' + login + '</div></div>';
+      } else {
+        h = q.remaining > 0
+          ? '<div class="banner">👤 Sesión iniciada. Hoy te quedan <b>' + q.remaining + ' de ' + q.limit + '</b> páginas gratis.</div>'
+          : '<div class="banner bad">Llegaste al límite de <b>' + q.limit + ' páginas gratis</b> cada 24 horas' + (hrs ? '. Podés crear otra en <b>' + hrs + ' h</b>' : '') + '. También podés hacer permanente alguna de las tuyas.</div>';
+      }
+      b.innerHTML = h;
+      var ql = $('qLogin');
+      if (ql) ql.onclick = function () { saveDraft(); location.href = 'login.html?next=' + encodeURIComponent('crear.html?resume=1'); };
+    }).catch(function () { });
+  }
+
   /* ======================= arranque ======================= */
+  showQuota();
   fetch('templates.json').then(function (r) { return r.json(); }).then(function (d) {
     TPLS = d.templates;
     var editParam = qs.get('edit');
