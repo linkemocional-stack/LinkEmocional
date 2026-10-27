@@ -188,6 +188,21 @@
 .lp-note{margin:18px 0 0;color:var(--muted-2);font-size:13.5px;line-height:1.6}
 @media(max-width:860px){.lp-about,.lp-why,.lp-price{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.lp-float,.lp-aur,.lp-mq div{animation:none}}
+.lp-stats{padding:56px 0 8px}
+.lp-stats .lp-in{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.lp-sp{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:18px;border-radius:28px;background:linear-gradient(120deg,rgba(139,111,240,.22),rgba(42,143,174,.28)),var(--glass);border:1px solid var(--border-soft);box-shadow:0 18px 50px rgba(0,0,0,.25)}
+.lp-sp>div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:20px 8px;border-radius:20px;background:rgba(13,10,30,.62);border:1px solid var(--border-soft);text-align:center}
+.lp-sp>div[hidden]{display:none}
+.lp-sp strong{white-space:nowrap;font-size:clamp(24px,2.9vw,36px);font-weight:800;letter-spacing:-.01em;line-height:1.1;font-variant-numeric:tabular-nums}
+.lp-sp span{font-size:13.5px;font-weight:700;color:var(--ink);opacity:.92}
+.lp-sp>div:nth-child(1) strong{color:#7ff0e8}
+.lp-sp>div:nth-child(2) strong{color:#ffb3d1}
+.lp-sp>div:nth-child(3) strong{color:#b9c2ff}
+.lp-sp.b>div:nth-child(1) strong{color:#a9b8ff}
+.lp-sp.b>div:nth-child(2) strong{color:#d4b8ff}
+.lp-sp.b>div:nth-child(3) strong{color:#ffd48a}
+@media(max-width:860px){.lp-stats .lp-in{grid-template-columns:1fr}.lp-sp{padding:12px;gap:10px;border-radius:24px}.lp-sp>div{padding:16px 4px}.lp-sp span{font-size:12px}}
+@media(max-width:860px){.lp-sp strong{font-size:clamp(20px,6vw,30px)}}
 </style>
 <div class="view view-home" id="viewHome">
 <svg style="position:absolute;width:0;height:0" aria-hidden="true"><defs>
@@ -235,6 +250,18 @@
 </header>
 </div>
 <div class="lp-mq" aria-hidden="true"><div><span>Dedícale a esa personita especial<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mamá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a quien te hace sonreír<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su aniversario<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu papá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para sorprender a quien más quieres<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en minutos<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a esa personita especial<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mamá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a quien te hace sonreír<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su aniversario<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu papá<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para sorprender a quien más quieres<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en minutos<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span></div></div>
+<section class="lp-stats" aria-label="Link Emocional en números"><div class="lp-in">
+<div class="lp-sp">
+<div id="stPagesBox" hidden><strong id="stPages" data-to="0">0</strong><span>Páginas creadas</span></div>
+<div><strong data-to="12" data-suf=" h">12 h</strong><span>De prueba gratis</span></div>
+<div><strong id="stFrom">$0.99</strong><span>Permanente desde</span></div>
+</div>
+<div class="lp-sp b">
+<div><strong data-to="30" data-suf="+">30+</strong><span>Plantillas</span></div>
+<div><strong data-to="100" data-suf="%">100%</strong><span>Personalizable</span></div>
+<div><strong>2D y 3D</strong><span>Animaciones reales</span></div>
+</div>
+</div></section>
 <section class="lp-sec" id="formas" style="border-top:0"><div class="lp-in">
 <h2>Dos formas de regalar</h2>
 <p class="lp-sub">Personalízalo todo a tu gusto, o elige un diseño ya armado.</p>
@@ -347,6 +374,21 @@ var tx=document.getElementById('lpTxt'),out=document.getElementById('lpOut'),pv=
 tx.addEventListener('input',function(){out.textContent=tx.value.trim()||'Tu mensaje aquí'});
 sw.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
 [].forEach.call(sw.children,function(x){x.setAttribute('aria-pressed',x===b)});pv.style.setProperty('--a',b.dataset.a);});
+/* ---- estadisticas: cuenta animada cuando entran en pantalla ---- */
+var still=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+function countUp(el,to,suf){suf=suf||'';if(still||!(to>0)){el.textContent=to.toLocaleString('es-BO').replace(/ /g,'.')+suf;return}
+var t0=null,D=1400;function step(t){if(t0===null)t0=t;var p=Math.min(1,(t-t0)/D),e=1-Math.pow(1-p,3);
+el.textContent=Math.round(to*e).toLocaleString('es-BO').replace(/ /g,'.')+suf;if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
+var seen=false;function runStats(){if(seen)return;seen=true;
+[].forEach.call(document.querySelectorAll('.lp-sp strong[data-to]'),function(el){var to=Number(el.dataset.to);if(to>0)countUp(el,to,el.dataset.suf)})}
+var sBox=document.querySelector('.lp-stats');
+if('IntersectionObserver' in window&&sBox){var io=new IntersectionObserver(function(en){if(en[0].isIntersecting){runStats();io.disconnect()}},{threshold:.3});io.observe(sBox)}else runStats();
+fetch('api/stats').then(function(r){return r.ok?r.json():Promise.reject()}).then(function(d){
+var n=Number(d&&d.pages);if(!(n>0))return;var el=document.getElementById('stPages');
+el.dataset.to=n;document.getElementById('stPagesBox').hidden=false;
+if(seen)countUp(el,n);else el.textContent='0';
+if(!seen){var w=setInterval(function(){if(seen){clearInterval(w);countUp(el,n)}},200)}
+}).catch(function(){});
 var IC={'Amor':'heart','Cumpleaños':'cake','Aniversario':'rings','Sorpresa':'mail'};
 fetch('templates.json').then(function(r){return r.json()}).then(function(d){
 var T=d.templates,g=document.getElementById('lpGrid'),fl=document.getElementById('lpFilter'),cur='Todos';
@@ -361,6 +403,7 @@ draw();
 var pr=T.map(function(t){return Number(t.price)}),mn=Math.min.apply(null,pr),mx=Math.max.apply(null,pr),C=window.LE_CONFIG||{},fx=C.USD_BOB||10,lk=C.PRECIO_ENLACE_USD||0.99;
 function set(i,v){var e=document.getElementById(i);if(e)e.textContent=v}
 set('lpMin',mn.toFixed(2));set('lpMin2',mn.toFixed(2));set('lpMax',mx.toFixed(2));set('lpMinBs','≈ Bs '+(mn*fx).toFixed(2));
+set('stFrom','$'+mn.toFixed(2));
 set('lpLink',Number(lk).toFixed(2));set('lpLinkBs','≈ Bs '+(lk*fx).toFixed(2));
 }).catch(function(){});
 })();
