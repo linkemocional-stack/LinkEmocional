@@ -40,7 +40,7 @@ module.exports = L.wrap(async function (req, res) {
   if (b.action === 'permanent') {
     await L.db('PATCH', where, { is_permanent: !!b.value });
   } else if (b.action === 'extend') {
-    const h = Math.max(1, Math.min(24 * 365, Number(b.hours) || 12));
+    const h = Math.max(1, Math.min(24 * 365, Number(b.hours) || 16));
     const from = Math.max(Date.now(), new Date(row.expires_at).getTime());
     await L.db('PATCH', where, { expires_at: new Date(from + h * 3600 * 1000).toISOString() });
   } else if (b.action === 'slug') {

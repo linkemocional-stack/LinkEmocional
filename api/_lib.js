@@ -8,11 +8,11 @@ const TEMPLATES = require('../templates.json').templates;
 
 const SB_URL = (process.env.SUPABASE_URL || '').replace(/\/+$/, '');
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY || '';
-const FREE_HOURS = Number(process.env.FREE_HOURS || 12);        // duracion de la prueba gratis
+const FREE_HOURS = Number(process.env.FREE_HOURS || 16);        // duracion de la prueba gratis
 const ANON_LIMIT = Number(process.env.ANON_LIMIT || 1);               // paginas de prueba SIN cuenta (por dispositivo)
 const ANON_WINDOW_DAYS = Number(process.env.ANON_WINDOW_DAYS || 30);   // ... dentro de esta ventana de dias
 const ANON_IP_LIMIT = Number(process.env.ANON_IP_LIMIT || 5);          // tope por IP (alto: muchas personas comparten IP en datos moviles)
-const USER_LIMIT = Number(process.env.USER_LIMIT || 1);                // paginas gratis CON cuenta ...
+const USER_LIMIT = Number(process.env.USER_LIMIT || 2);                // paginas gratis CON cuenta ...
 const USER_WINDOW_DAYS = Number(process.env.USER_WINDOW_DAYS || 3);    // ... cada tantos dias
 const USER_DEVICE_LIMIT = Number(process.env.USER_DEVICE_LIMIT || 3);  // tope por dispositivo (evita crear muchas cuentas)
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
@@ -112,7 +112,7 @@ function humanLeft(ms) {
 async function quota(req, user) {
   const days = user ? USER_WINDOW_DAYS : ANON_WINDOW_DAYS, win = days * 86400000;
   const limit = user ? USER_LIMIT : ANON_LIMIT;
-  const out = o => Object.assign({ loggedIn: !!user, limit, windowDays: days, userWindowDays: USER_WINDOW_DAYS }, o);
+  const out = o => Object.assign({ loggedIn: !!user, limit, windowDays: days, userWindowDays: USER_WINDOW_DAYS, userLimit: USER_LIMIT }, o);
   if (isAdmin(user)) return out({ admin: true, limit: null, used: 0, remaining: null, resetAt: null, needLogin: false });
 
   const base = 'paginas?select=created_at&created_at=gte.' + q(new Date(Date.now() - win).toISOString()) +
