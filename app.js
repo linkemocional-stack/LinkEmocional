@@ -62,12 +62,30 @@
     return /^[a-zA-Z0-9\-_./?=&%]+$/.test(n) && n.indexOf('//') < 0 && n.charAt(0) !== '/' ? n : (dflt || 'mis-paginas.html');
   };
 
+  /* ---------- identificador anonimo de este navegador (para los limites) ---------- */
+  LE.device = function () {
+    try {
+      var d = localStorage.getItem('le_device');
+      if (!d || !/^[a-f0-9]{24}$/.test(d)) {
+        var a = new Uint8Array(12); (window.crypto || window.msCrypto).getRandomValues(a);
+        d = Array.prototype.map.call(a, function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+        localStorage.setItem('le_device', d);
+      }
+      return d;
+    } catch (e) { return null; }
+  };
+  LE.left = function (iso) {
+    var h = Math.max(1, Math.ceil((new Date(iso) - Date.now()) / 3600000));
+    return h >= 48 ? Math.ceil(h / 24) + ' días' : h + (h === 1 ? ' hora' : ' horas');
+  };
+
   /* ---------- llamadas a la API ---------- */
   LE.api = function (path, o) {
     o = o || {};
     return LE.token().then(function (t) {
       var h = { 'Content-Type': 'application/json' };
       if (t) h.Authorization = 'Bearer ' + t;
+      var dv = LE.device(); if (dv) h['x-device'] = dv;
       if (o.editKey) h['x-edit-key'] = o.editKey;
       return fetch(path, { method: o.method || 'GET', headers: h, body: o.body ? JSON.stringify(o.body) : undefined });
     }).then(function (r) {

@@ -390,15 +390,16 @@
     if (qs.get('edit')) { b.innerHTML = ''; return; }
     LE.quota().then(function (q) {
       if (q.admin) { b.innerHTML = ''; return; }
-      var login = '<button class="btn sm" id="qLogin" type="button">Iniciar sesión</button>', hrs = q.resetAt ? Math.max(1, Math.ceil((new Date(q.resetAt) - Date.now()) / 3600000)) : null, h;
+      var login = '<button class="btn sm" id="qLogin" type="button">Iniciar sesión</button>', h;
+      var cada = q.windowDays === 1 ? 'cada día' : 'cada ' + q.windowDays + ' días';
       if (!q.loggedIn) {
         h = q.remaining > 0
-          ? '<div class="banner">🎁 Sin cuenta podés crear <b>' + q.limit + ' página de prueba</b>. Para crear más, iniciá sesión (es gratis).<div class="r2">' + login + '</div></div>'
-          : '<div class="banner bad">Ya usaste tu página de prueba. <b>Iniciá sesión</b> para seguir creando más páginas.<div class="r2">' + login + '</div></div>';
+          ? '<div class="banner">🎁 Sin cuenta podés crear <b>' + q.limit + ' página de prueba</b>. Con una cuenta gratis tenés una página más ' + cada + '.<div class="r2">' + login + '</div></div>'
+          : '<div class="banner bad">Ya usaste tu página de prueba. <b>Iniciá sesión</b> y tenés una página gratis más ' + cada + '.<div class="r2">' + login + '</div></div>';
       } else {
         h = q.remaining > 0
-          ? '<div class="banner">👤 Sesión iniciada. Hoy te quedan <b>' + q.remaining + ' de ' + q.limit + '</b> páginas gratis.</div>'
-          : '<div class="banner bad">Llegaste al límite de <b>' + q.limit + ' páginas gratis</b> cada 24 horas' + (hrs ? '. Podés crear otra en <b>' + hrs + ' h</b>' : '') + '. También podés hacer permanente alguna de las tuyas.</div>';
+          ? '<div class="banner">👤 Sesión iniciada. Tenés <b>' + q.remaining + ' página gratis</b> disponible (' + q.limit + ' ' + cada + ').</div>'
+          : '<div class="banner bad">Ya usaste tu página gratis. Podés crear otra en <b>' + (q.resetAt ? LE.left(q.resetAt) : 'unos días') + '</b>. Mientras tanto, podés hacer permanente alguna de las tuyas.</div>';
       }
       b.innerHTML = h;
       var ql = $('qLogin');

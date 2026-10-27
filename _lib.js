@@ -9,9 +9,12 @@ const TEMPLATES = require('../templates.json').templates;
 const SB_URL = (process.env.SUPABASE_URL || '').replace(/\/+$/, '');
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY || '';
 const FREE_HOURS = Number(process.env.FREE_HOURS || 12);        // duracion de la prueba gratis
-const ANON_LIMIT = Number(process.env.ANON_LIMIT || 1);         // paginas de prueba sin cuenta (por IP) cada 24 h
-const USER_DAILY_LIMIT = Number(process.env.USER_DAILY_LIMIT || 3); // paginas gratis por cuenta cada 24 h
-const WINDOW_H = 24;
+const ANON_LIMIT = Number(process.env.ANON_LIMIT || 1);               // paginas de prueba SIN cuenta (por dispositivo)
+const ANON_WINDOW_DAYS = Number(process.env.ANON_WINDOW_DAYS || 30);   // ... dentro de esta ventana de dias
+const ANON_IP_LIMIT = Number(process.env.ANON_IP_LIMIT || 5);          // tope por IP (alto: muchas personas comparten IP en datos moviles)
+const USER_LIMIT = Number(process.env.USER_LIMIT || 1);                // paginas gratis CON cuenta ...
+const USER_WINDOW_DAYS = Number(process.env.USER_WINDOW_DAYS || 3);    // ... cada tantos dias
+const USER_DEVICE_LIMIT = Number(process.env.USER_DEVICE_LIMIT || 3);  // tope por dispositivo (evita crear muchas cuentas)
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
 const WHATSAPP = process.env.WHATSAPP || '59178550176';
 const MAX_BODY_CHARS = 3400000;   // Vercel acepta hasta ~4.5 MB por peticion
@@ -92,17 +95,54 @@ async function getUser(req) {
 }
 function isAdmin(user) { return !!(user && user.email && ADMIN_EMAILS.indexOf(user.email) >= 0); }
 
-/* Cupo de paginas gratis (ventana movil de 24 h). Las que se hacen permanentes dejan de contar. */
-async function quota(req, user) {
-  if (isAdmin(user)) return { loggedIn: true, admin: true, limit: null, used: 0, remaining: null, resetAt: null, windowHours: WINDOW_H, needLogin: false };
-  const since = q(new Date(Date.now() - WINDOW_H * 3600 * 1000).toISOString());
-  const limit = user ? USER_DAILY_LIMIT : ANON_LIMIT;
-  const rows = await db('GET', 'paginas?select=created_at&created_at=gte.' + since + '&order=created_at.asc&limit=100&' +
-    (user ? 'owner=eq.' + user.id + '&is_permanent=eq.false' : 'ip_hash=eq.' + ipHash(req) + '&owner=is.null'));
-  const remaining = Math.max(0, limit - rows.length);
-  const resetAt = remaining === 0 && rows[0] ? new Date(new Date(rows[0].created_at).getTime() + WINDOW_H * 3600 * 1000).toISOString() : null;
-  return { loggedIn: !!user, limit, used: rows.length, remaining, resetAt, windowHours: WINDOW_H, needLogin: !user && remaining === 0 };
+// Si todavia no corriste la migracion (columnas device_id / guest), se usa la version simple
+async function withFallback(primary, fallback) {
+  try { return await primary(); }
+  catch (e) { if (e.dbCode === '42703' || /device_id|guest/.test(e.message || '')) return fallback(); throw e; }
 }
+function humanLeft(ms) {
+  const h = Math.max(1, Math.ceil(ms / 3600000));
+  if (h >= 48) return Math.ceil(h / 24) + ' días';
+  return h + (h === 1 ? ' hora' : ' horas');
+}
+
+/* Cupo de paginas gratis.
+   Sin cuenta: ANON_LIMIT por dispositivo (y tope por IP). Con cuenta: USER_LIMIT cada USER_WINDOW_DAYS dias.
+   Lo creado sin cuenta NO gasta el cupo de la cuenta. Las que se hacen permanentes dejan de contar. */
+async function quota(req, user) {
+  const days = user ? USER_WINDOW_DAYS : ANON_WINDOW_DAYS, win = days * 86400000;
+  const limit = user ? USER_LIMIT : ANON_LIMIT;
+  const out = o => Object.assign({ loggedIn: !!user, limit, windowDays: days }, o);
+  if (isAdmin(user)) return out({ admin: true, limit: null, used: 0, remaining: null, resetAt: null, needLogin: false });
+
+  const base = 'paginas?select=created_at&created_at=gte.' + q(new Date(Date.now() - win).toISOString()) +
+    '&order=created_at.asc&limit=100&';
+  const dev = deviceHash(req), ip = ipHash(req);
+  let list, ref, over;
+  if (user) {
+    list = await withFallback(
+      () => L_db(base + 'owner=eq.' + user.id + '&is_permanent=eq.false&guest=eq.false'),
+      () => L_db(base + 'owner=eq.' + user.id + '&is_permanent=eq.false'));
+    ref = list; over = list.length >= limit;
+    if (dev) {
+      const d = await withFallback(() => L_db(base + 'device_id=eq.' + dev), () => []);
+      if (d.length >= USER_DEVICE_LIMIT) { over = true; ref = d; }
+    }
+  } else {
+    list = dev
+      ? await withFallback(() => L_db(base + 'device_id=eq.' + dev), () => L_db(base + 'ip_hash=eq.' + ip + '&owner=is.null'))
+      : await L_db(base + 'ip_hash=eq.' + ip + '&owner=is.null');
+    ref = list; over = list.length >= limit;
+    if (dev) {
+      const r = await L_db(base + 'ip_hash=eq.' + ip + '&owner=is.null');
+      if (r.length >= ANON_IP_LIMIT) { over = true; ref = r; }
+    }
+  }
+  const remaining = over ? 0 : Math.max(0, limit - list.length);
+  const resetAt = over && ref[0] ? new Date(new Date(ref[0].created_at).getTime() + win).toISOString() : null;
+  return out({ used: list.length, remaining, resetAt, needLogin: !user && remaining === 0 });
+}
+function L_db(pathQuery) { return db('GET', pathQuery); }
 
 async function getPage(by, value) {
   const rows = await db('GET', 'paginas?select=*&' + by + '=eq.' + q(value) + '&limit=1');
@@ -115,10 +155,21 @@ function baseUrl(req) {
   const host = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0];
   return proto + '://' + host;
 }
+function ipKey(ip) {   // IPv6: se usa el prefijo /64 (la parte final cambia en cada conexion movil)
+  const m = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/i.exec(ip);
+  if (m) return m[1];
+  return ip.indexOf(':') >= 0 ? ip.split(':').slice(0, 4).join(':') : ip;
+}
 function ipHash(req) {
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() ||
     (req.socket && req.socket.remoteAddress) || '';
-  return crypto.createHash('sha256').update(ip + (process.env.IP_SALT || 'le')).digest('hex').slice(0, 32);
+  return crypto.createHash('sha256').update(ipKey(ip) + (process.env.IP_SALT || 'le')).digest('hex').slice(0, 32);
+}
+// Identificador anonimo del navegador (lo genera la web y lo guarda en el dispositivo)
+function deviceHash(req) {
+  const d = String(req.headers['x-device'] || '');
+  return /^[a-f0-9]{16,40}$/.test(d)
+    ? crypto.createHash('sha256').update('dev' + d + (process.env.IP_SALT || 'le')).digest('hex').slice(0, 32) : null;
 }
 const randomId = () => crypto.randomBytes(7).toString('hex');
 const randomKey = () => crypto.randomBytes(16).toString('hex');
@@ -214,7 +265,7 @@ function sanitizeConfig(tpl, cfg) {
 
 module.exports = {
   HttpError, send, sendHtml, wrap, readBody, db, q, getUser, isAdmin, getPage,
-  baseUrl, ipHash, randomId, randomKey, safeEq, pageState, templateBySlug, loadTemplateHtml,
+  baseUrl, ipHash, deviceHash, humanLeft, randomId, randomKey, safeEq, pageState, templateBySlug, loadTemplateHtml,
   sanitizeConfig, TEMPLATES,
-  quota, FREE_HOURS, ANON_LIMIT, USER_DAILY_LIMIT, WHATSAPP
+  quota, FREE_HOURS, ANON_LIMIT, USER_LIMIT, USER_WINDOW_DAYS, WHATSAPP
 };
