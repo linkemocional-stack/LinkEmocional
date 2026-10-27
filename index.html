@@ -55,12 +55,6 @@
 .lp-stage::before{content:"";position:absolute;inset:8% -12% 4%;background:radial-gradient(closest-side,rgba(139,111,240,.5),transparent 70%);filter:blur(30px);z-index:0}
 .lp-phone{position:relative;z-index:1;width:290px;height:580px;margin:0 auto;border-radius:44px;padding:12px;background:linear-gradient(160deg,#2a2150,#0d0a1e);border:1px solid var(--border-soft);box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 6px rgba(255,255,255,.03)}
 .lp-phone iframe{width:100%;height:100%;border:0;border-radius:32px;background:#000;display:block}
-.lp-float{position:absolute;z-index:2;font-size:28px;animation:lpf 7s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
-.lp-float.a{left:-14px;top:12%}.lp-float.b{right:-10px;top:24%;animation-delay:-2s}.lp-float.c{left:-6px;bottom:22%;animation-delay:-4s}
-@keyframes lpf{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(5deg)}}
-.lp-bubble{position:absolute;z-index:3;right:-44px;top:42%;max-width:210px;padding:12px 14px;border-radius:16px 16px 4px 16px;background:#1f8f5a;color:#fff;font-size:13.5px;font-weight:700;line-height:1.4;box-shadow:0 14px 30px rgba(0,0,0,.4);opacity:0;transform:translateY(12px) scale(.96);animation:lpb .6s 1.6s cubic-bezier(.2,.9,.3,1.2) forwards}
-.lp-bubble small{display:block;margin-top:4px;color:#c9f2dc;font-weight:600;font-size:12px}
-@keyframes lpb{to{opacity:1;transform:none}}
 .lp-demos{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:26px;position:relative;z-index:2}
 .lp-demos button{font:inherit;font-weight:800;font-size:13px;padding:8px 13px;border-radius:999px;border:1px solid var(--border-soft);background:var(--glass);color:var(--muted);cursor:pointer}
 .lp-demos button[aria-pressed=true]{background:var(--grad-brand);color:#0d0a1e;border-color:transparent}
@@ -74,7 +68,6 @@
 .lp-card{--c:139,111,240;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:6px;min-height:190px;padding:22px;border-radius:22px;background:radial-gradient(120% 90% at 100% 0,rgba(var(--c),.30),transparent 60%),var(--glass);border:1px solid rgba(var(--c),.35);transition:transform .25s,border-color .25s}
 .lp-card:hover{transform:translateY(-4px);border-color:rgb(var(--c))}
 .lp-card.t-Cumpleaños{--c:245,176,66}.lp-card.t-Aniversario{--c:240,98,146}.lp-card.t-Sorpresa{--c:111,214,232}
-.lp-card .e{font-size:44px;line-height:1;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))}
 .lp-card b{font-size:18px;margin-top:8px}
 .lp-card small{color:var(--muted);font-size:13px;font-weight:700}
 .lp-card .p{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:12px;font-weight:800}
@@ -86,7 +79,6 @@
 .lp-step span{color:var(--muted);line-height:1.55;font-size:15px}
 .lp-feat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .lp-feat div{padding:22px;border-radius:20px;background:var(--glass);border:1px solid var(--border-soft)}
-.lp-feat i{font-style:normal;font-size:28px;display:block;margin-bottom:10px}
 .lp-feat b{display:block;margin-bottom:4px;font-size:17px}
 .lp-feat span{color:var(--muted);font-size:15px;line-height:1.55}
 .lp-faq{max-width:760px}
@@ -108,47 +100,121 @@
 .lp-phone{width:250px;height:500px}
 .lp-grid,.lp-steps,.lp-feat{grid-template-columns:1fr}
 .lp-links a:not(.lp-login){display:none}
-.lp-bubble{right:-8px;max-width:180px;top:46%}
+
 .lp-hero p{font-size:16px}
 }
 @media(min-width:861px) and (max-width:1020px){.lp-grid,.lp-feat{grid-template-columns:repeat(2,1fr)}}
-@media(prefers-reduced-motion:reduce){.lp-float{animation:none}.lp-bubble{animation:none;opacity:1;transform:none}}
+
+
+.ic{width:26px;height:26px;fill:none;stroke:url(#lpg);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic.f{fill:url(#lpg);stroke:none}
+.lp-float{position:absolute;z-index:2;filter:drop-shadow(0 0 12px rgba(139,111,240,.7));animation:lpf 7s ease-in-out infinite}
+.lp-float .ic{width:36px;height:36px}
+.lp-float.a{left:-16px;top:12%}.lp-float.b{right:-14px;top:26%;animation-delay:-2s}.lp-float.c{left:-8px;bottom:20%;animation-delay:-4s}.lp-float.d{right:-8px;bottom:30%;animation-delay:-5s}
+@keyframes lpf{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-14px) rotate(6deg)}}
+.lp-hero{position:relative}
+.lp-aur{position:absolute;z-index:0;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none;animation:lpa 16s ease-in-out infinite}
+.lp-aur.a{width:380px;height:380px;background:#8b6ff0;left:-120px;top:-40px}
+.lp-aur.b{width:320px;height:320px;background:#2a8fae;right:-60px;bottom:-60px;animation-delay:-8s}
+@keyframes lpa{0%,100%{transform:translate(0,0)}50%{transform:translate(50px,30px)}}
+.lp-hero>*{position:relative;z-index:1}.lp-hero>.lp-aur{position:absolute;z-index:0}
+.lp-mq{overflow:hidden;border-block:1px solid var(--border-soft);padding:20px 0;background:linear-gradient(90deg,transparent,rgba(139,111,240,.08),transparent)}
+.lp-mq div{display:flex;width:max-content;animation:lpm 38s linear infinite}
+.lp-mq span{display:flex;align-items:center;gap:26px;padding-right:26px;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(24px,3vw,34px);white-space:nowrap;background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.lp-mq .ic{width:20px;height:20px}
+@keyframes lpm{to{transform:translateX(-50%)}}
+.lp-ways{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.lp-way{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:30px;border-radius:26px;background:radial-gradient(110% 90% at 0 0,rgba(139,111,240,.28),transparent 60%),var(--glass);border:1px solid var(--border-soft)}
+.lp-way.b{background:radial-gradient(110% 90% at 100% 0,rgba(111,214,232,.24),transparent 60%),var(--glass)}
+.lp-way .ib{display:grid;place-items:center;width:56px;height:56px;border-radius:18px;background:rgba(139,111,240,.16);border:1px solid var(--border-soft)}
+.lp-way .ib .ic{width:28px;height:28px}
+.lp-way b{font-size:24px}.lp-way span{color:var(--muted);line-height:1.6;margin-bottom:8px}
+.lp-try{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:center}
+.lp-try label{display:block;font-weight:800;margin-bottom:10px}
+.lp-try input{width:100%;font:inherit;font-size:17px;padding:15px 16px;border-radius:14px;border:1px solid var(--border-soft);background:var(--glass-strong);color:var(--ink)}
+.lp-try input:focus-visible{outline:2px solid var(--blue-light);outline-offset:2px}
+.lp-sw{display:flex;gap:10px;margin:16px 0 12px}
+.lp-sw button{width:34px;height:34px;border-radius:50%;border:2px solid transparent;cursor:pointer;background:var(--k)}
+.lp-sw button[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+.lp-try small{color:var(--muted-2);line-height:1.5;display:block}
+.lp-pv{--a:#8b6ff0;position:relative;aspect-ratio:4/3;border-radius:28px;display:grid;place-items:center;padding:30px;text-align:center;overflow:hidden;background:radial-gradient(70% 70% at 50% 40%,color-mix(in srgb,var(--a) 38%,transparent),transparent 70%),#08051a;border:1px solid var(--border-soft);transition:background .4s}
+.lp-pv p{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(28px,4vw,46px);line-height:1.15;overflow-wrap:anywhere;background:linear-gradient(120deg,#fff,var(--a));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.lp-pv .ic{position:absolute}.lp-pv .s1{left:9%;top:14%}.lp-pv .s2{right:10%;bottom:16%;width:34px;height:34px}.lp-pv .s3{right:16%;top:12%;width:18px;height:18px}
+.lp-card .ib{display:grid;place-items:center;width:54px;height:54px;border-radius:17px;background:rgba(var(--c),.18);border:1px solid rgba(var(--c),.4)}
+.lp-card .ib .ic{width:28px;height:28px}
+.lp-feat i{display:grid;place-items:center;width:48px;height:48px;border-radius:15px;background:rgba(139,111,240,.14);border:1px solid var(--border-soft);margin-bottom:14px}
+.lp-feat i .ic{width:24px;height:24px}
+@media(max-width:860px){.lp-ways,.lp-try{grid-template-columns:1fr}.lp-way{padding:24px}}
+@media(prefers-reduced-motion:reduce){.lp-float,.lp-aur,.lp-mq div{animation:none}}
 </style>
 <div class="view view-home" id="viewHome">
+<svg style="position:absolute;width:0;height:0" aria-hidden="true"><defs>
+<linearGradient id="lpg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6fd6e8"/><stop offset=".55" stop-color="#8b6ff0"/><stop offset="1" stop-color="#6f5bc0"/></linearGradient>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2l2.2 6.3L20.5 10l-6.3 1.7L12 18l-2.2-6.3L3.5 10l6.3-1.7zM19 16l.9 2.1L22 19l-2.1.9L19 22l-.9-2.1L16 19l2.1-.9z"/></symbol>
+<symbol id="i-gift" viewBox="0 0 24 24"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></symbol>
+<symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 21h16M5 21v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7M5 16c2.3 1.5 4.3 1.5 7 0s4.7-1.5 7 0M12 12V8M12 5v.01"/></symbol>
+<symbol id="i-rings" viewBox="0 0 24 24"><circle cx="9" cy="15" r="5"/><circle cx="15" cy="15" r="5"/><path d="M10 3.5h4l1 2-3 2.5-3-2.5z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 7l9 7 9-7"/></symbol>
+<symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+<symbol id="i-img" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6M8.5 9.5h.01"/></symbol>
+<symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM21 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM12 18h.01"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></symbol>
+</defs></svg>
 <div class="lp-top"><div class="lp-in"><nav class="lp-nav">
 <a class="lp-brand" href="index.html"><img src="logo.jpg" alt="">Link Emocional</a>
-<div class="lp-links"><a href="#disenos">Diseños</a><a href="#faq">Preguntas</a><a href="mis-paginas.html">Mis páginas</a><a class="lp-login" href="login.html">Iniciar sesión</a></div>
+<div class="lp-links"><a href="#formas">Con y sin editor</a><a href="#disenos">Diseños</a><a href="#faq">Preguntas</a><a href="mis-paginas.html">Mis páginas</a><a class="lp-login" href="login.html">Iniciar sesión</a></div>
 </nav></div></div>
 <div class="lp-in">
 <header class="lp-hero">
+<span class="lp-aur a"></span><span class="lp-aur b"></span>
 <div>
 <h1>Un regalo que se abre en el celular de<em>esa persona especial</em></h1>
 <p>Elegí un diseño animado en 2D o 3D, escribí tu mensaje, subí tus fotos y mandá el enlace por WhatsApp. Lo armás en minutos.</p>
 <div class="lp-cta">
 <a class="lp-btn main" href="crear.html">Crear mi página</a>
-<button class="lp-btn ghost" type="button" onclick="showView('catalogo','personalizado')">Ver el catálogo completo</button>
+<a class="lp-btn ghost" href="#formas">Ver con y sin editor</a>
 </div>
 <div class="lp-chips"><span>12 horas gratis</span><span>Editor incluido</span><span>Se comparte por WhatsApp</span></div>
 </div>
 <div class="lp-stage">
-<span class="lp-float a" aria-hidden="true">💜</span><span class="lp-float b" aria-hidden="true">✨</span><span class="lp-float c" aria-hidden="true">🌹</span>
+<span class="lp-float a"><svg class="ic f" aria-hidden="true"><use href="#i-heart"/></svg></span><span class="lp-float b"><svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span class="lp-float c"><svg class="ic " aria-hidden="true"><use href="#i-heart"/></svg></span><span class="lp-float d"><svg class="ic " aria-hidden="true"><use href="#i-spark"/></svg></span>
 <div class="lp-phone"><iframe id="lpDemo" src="previews/arbol-amor.html" title="Demo del diseño" loading="lazy"></iframe></div>
-<div class="lp-bubble">Mirá lo que hice para vos 💜<small>link-emocional.vercel.app/p/…</small></div>
 <div class="lp-demos" id="lpDemos" role="group" aria-label="Elegí una demo">
-<button type="button" aria-pressed="true" data-s="arbol-amor">🌸 Árbol</button>
-<button type="button" aria-pressed="false" data-s="nuestro-cielo">🌌 Cielo</button>
-<button type="button" aria-pressed="false" data-s="cumple-soplar">🎂 Cumple</button>
-<button type="button" aria-pressed="false" data-s="tendedero-recuerdos">📸 Recuerdos</button>
+<button type="button" aria-pressed="true" data-s="arbol-amor">Árbol</button>
+<button type="button" aria-pressed="false" data-s="nuestro-cielo">Cielo</button>
+<button type="button" aria-pressed="false" data-s="cumple-soplar">Cumpleaños</button>
+<button type="button" aria-pressed="false" data-s="tendedero-recuerdos">Recuerdos</button>
 </div>
 </div>
 </header>
 </div>
+<div class="lp-mq" aria-hidden="true"><div><span>Aniversarios<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Pedidas de mano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Sorpresas a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Te extraño<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Gracias por todo<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Perdón<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Felices fechas<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Aniversarios<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Pedidas de mano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Sorpresas a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Te extraño<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Gracias por todo<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Perdón<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Felices fechas<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span></div></div>
+<section class="lp-sec" id="formas" style="border-top:0"><div class="lp-in">
+<h2>Dos formas de regalar</h2>
+<p class="lp-sub">Personalizá todo vos misma o mismo, o elegí un diseño ya armado.</p>
+<div class="lp-ways">
+<div class="lp-way"><span class="ib"><svg class="ic " aria-hidden="true"><use href="#i-pen"/></svg></span><b>Con editor único</b><span>Cambiá frases, fotos, colores y música desde el editor. Es el regalo más personal.</span><button class="lp-btn main" type="button" onclick="showView('catalogo','personalizado')">Ver diseños con editor</button></div>
+<div class="lp-way b"><span class="ib"><svg class="ic " aria-hidden="true"><use href="#i-box"/></svg></span><b>Sin editor</b><span>Diseños ya armados y bonitos, listos para pedir. Algunos son gratis.</span><button class="lp-btn ghost" type="button" onclick="showView('catalogo','nopersonalizado')">Ver diseños sin editor</button></div>
+</div></div></section>
 <section class="lp-sec" id="disenos"><div class="lp-in">
 <h2>Un diseño para cada ocasión</h2>
-<p class="lp-sub">Todos se personalizan con tu mensaje y tus fotos. El precio es para dejarlos permanentes.</p>
+<p class="lp-sub">Los de esta lista se personalizan con tu mensaje y tus fotos. El precio es para dejarlos permanentes.</p>
 <div class="lp-filter" id="lpFilter" role="group" aria-label="Filtrar por ocasión"></div>
 <div class="lp-grid" id="lpGrid"></div>
 </div></section>
+<section class="lp-sec"><div class="lp-in">
+<h2>Probalo ahora mismo</h2>
+<p class="lp-sub">Escribí algo y mirá cómo queda. El editor completo suma fotos, música y más colores.</p>
+<div class="lp-try">
+<div><label for="lpTxt">Tu mensaje</label><input id="lpTxt" maxlength="70" value="Eres mi lugar favorito" autocomplete="off">
+<div class="lp-sw" id="lpSw" role="group" aria-label="Color"><button type="button" aria-pressed="true" style="--k:#8b6ff0" data-a="#8b6ff0" title="Violeta"></button><button type="button" aria-pressed="false" style="--k:#f06292" data-a="#f06292" title="Rosa"></button><button type="button" aria-pressed="false" style="--k:#6fd6e8" data-a="#6fd6e8" title="Celeste"></button><button type="button" aria-pressed="false" style="--k:#f5b042" data-a="#f5b042" title="Dorado"></button></div>
+<small>Esto es solo una muestra del texto y el color.</small></div>
+<div class="lp-pv" id="lpPv"><svg class="ic f s1" aria-hidden="true"><use href="#i-heart"/></svg><svg class="ic f s2" aria-hidden="true"><use href="#i-spark"/></svg><svg class="ic s3" aria-hidden="true"><use href="#i-spark"/></svg><p id="lpOut">Eres mi lugar favorito</p></div>
+</div></div></section>
 <section class="lp-sec"><div class="lp-in">
 <h2>Cómo funciona</h2>
 <p class="lp-sub">Tres pasos y ya tenés el enlace para mandar.</p>
@@ -161,12 +227,12 @@
 <h2>Todo lo que incluye</h2>
 <p class="lp-sub">Lo necesario para que el regalo se sienta tuyo.</p>
 <div class="lp-feat">
-<div><i>✏️</i><b>Editor propio</b><span>Frases, nombres y colores a tu gusto.</span></div>
-<div><i>🖼️</i><b>Tus fotos</b><span>Subí los recuerdos que quieras mostrar.</span></div>
-<div><i>🎵</i><b>Música</b><span>Agregá la canción que los representa.</span></div>
-<div><i>📱</i><b>Enlace y QR</b><span>Un enlace único y un QR para imprimir o enviar.</span></div>
-<div><i>🔗</i><b>Enlace con tu nombre</b><span>Opcional: link-emocional.vercel.app/s/tu-nombre.</span></div>
-<div><i>📂</i><b>Mis páginas</b><span>Con tu cuenta las ves, editás y reactivás desde cualquier celular.</span></div>
+<div><i><svg class="ic " aria-hidden="true"><use href="#i-pen"/></svg></i><b>Editor propio</b><span>Frases, nombres y colores a tu gusto.</span></div>
+<div><i><svg class="ic " aria-hidden="true"><use href="#i-img"/></svg></i><b>Tus fotos</b><span>Subí los recuerdos que quieras mostrar.</span></div>
+<div><i><svg class="ic " aria-hidden="true"><use href="#i-music"/></svg></i><b>Música</b><span>Agregá la canción que los representa.</span></div>
+<div><i><svg class="ic " aria-hidden="true"><use href="#i-phone"/></svg></i><b>Enlace y QR</b><span>Un enlace único y un QR para imprimir o enviar.</span></div>
+<div><i><svg class="ic " aria-hidden="true"><use href="#i-link"/></svg></i><b>Enlace con tu nombre</b><span>Opcional: link-emocional.vercel.app/s/tu-nombre.</span></div>
+<div><i><svg class="ic " aria-hidden="true"><use href="#i-folder"/></svg></i><b>Mis páginas</b><span>Con tu cuenta las ves, editás y reactivás desde cualquier celular.</span></div>
 </div></div></section>
 <section class="lp-sec" id="faq"><div class="lp-in lp-faq">
 <h2>Preguntas frecuentes</h2>
@@ -200,8 +266,12 @@
 (function(){
 var f=document.getElementById('lpDemo'),db=document.getElementById('lpDemos');
 db.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
-[].forEach.call(db.children,function(x){x.setAttribute('aria-pressed',x===b)});
-f.src='previews/'+b.dataset.s+'.html';});
+[].forEach.call(db.children,function(x){x.setAttribute('aria-pressed',x===b)});f.src='previews/'+b.dataset.s+'.html';});
+var tx=document.getElementById('lpTxt'),out=document.getElementById('lpOut'),pv=document.getElementById('lpPv'),sw=document.getElementById('lpSw');
+tx.addEventListener('input',function(){out.textContent=tx.value.trim()||'Tu mensaje acá'});
+sw.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+[].forEach.call(sw.children,function(x){x.setAttribute('aria-pressed',x===b)});pv.style.setProperty('--a',b.dataset.a);});
+var IC={'Amor':'heart','Cumpleaños':'cake','Aniversario':'rings','Sorpresa':'mail'};
 fetch('templates.json').then(function(r){return r.json()}).then(function(d){
 var T=d.templates,g=document.getElementById('lpGrid'),fl=document.getElementById('lpFilter'),cur='Todos';
 var tags=['Todos'].concat(T.map(function(t){return t.tag}).filter(function(v,i,a){return a.indexOf(v)===i}));
@@ -209,7 +279,7 @@ function draw(){
 fl.innerHTML=tags.map(function(t){var n=t==='Todos'?T.length:T.filter(function(x){return x.tag===t}).length;
 return '<button type="button" class="lp-chip" aria-pressed="'+(t===cur)+'" data-t="'+t+'">'+t+' ('+n+')</button>'}).join('');
 g.innerHTML=T.filter(function(t){return cur==='Todos'||t.tag===cur}).map(function(t){
-return '<a class="lp-card t-'+t.tag+'" href="crear.html?t='+encodeURIComponent(t.slug)+'"><span class="e">'+t.emoji+'</span><b>'+t.name+'</b><small>'+t.tag+' · '+t.dim+'</small><span class="p">$'+Number(t.price).toFixed(2)+'<i>Elegir</i></span></a>'}).join('');}
+return '<a class="lp-card t-'+t.tag+'" href="crear.html?t='+encodeURIComponent(t.slug)+'"><span class="ib"><svg class="ic" aria-hidden="true"><use href="#i-'+(IC[t.tag]||'gift')+'"/></svg></span><b>'+t.name+'</b><small>'+t.tag+' · '+t.dim+'</small><span class="p">$'+Number(t.price).toFixed(2)+'<i>Elegir</i></span></a>'}).join('');}
 fl.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;cur=b.dataset.t;draw();});
 draw();
 }).catch(function(){});
