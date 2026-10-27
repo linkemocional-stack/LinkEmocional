@@ -392,10 +392,12 @@
       if (q.admin) { b.innerHTML = ''; return; }
       var login = '<button class="btn sm" id="qLogin" type="button">Iniciar sesión</button>', h;
       var cada = q.windowDays === 1 ? 'cada día' : 'cada ' + q.windowDays + ' días';
+      var ud = q.userWindowDays || q.windowDays;
+      var cadaCuenta = ud === 1 ? 'cada día' : 'cada ' + ud + ' días';
       if (!q.loggedIn) {
         h = q.remaining > 0
-          ? '<div class="banner">🎁 Sin cuenta podés crear <b>' + q.limit + ' página de prueba</b>. Con una cuenta gratis tenés una página más ' + cada + '.<div class="r2">' + login + '</div></div>'
-          : '<div class="banner bad">Ya usaste tu página de prueba. <b>Iniciá sesión</b> y tenés una página gratis más ' + cada + '.<div class="r2">' + login + '</div></div>';
+          ? '<div class="banner">🎁 Sin cuenta podés crear <b>' + q.limit + ' página de prueba</b>. Con una cuenta gratis tenés una página más ' + cadaCuenta + '.<div class="r2">' + login + '</div></div>'
+          : '<div class="banner bad">Ya usaste tu página de prueba. <b>Iniciá sesión</b> y tenés una página gratis más ' + cadaCuenta + '.<div class="r2">' + login + '</div></div>';
       } else {
         h = q.remaining > 0
           ? '<div class="banner">👤 Sesión iniciada. Tenés <b>' + q.remaining + ' página gratis</b> disponible (' + q.limit + ' ' + cada + ').</div>'
