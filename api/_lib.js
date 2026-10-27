@@ -112,7 +112,7 @@ function humanLeft(ms) {
 async function quota(req, user) {
   const days = user ? USER_WINDOW_DAYS : ANON_WINDOW_DAYS, win = days * 86400000;
   const limit = user ? USER_LIMIT : ANON_LIMIT;
-  const out = o => Object.assign({ loggedIn: !!user, limit, windowDays: days }, o);
+  const out = o => Object.assign({ loggedIn: !!user, limit, windowDays: days, userWindowDays: USER_WINDOW_DAYS }, o);
   if (isAdmin(user)) return out({ admin: true, limit: null, used: 0, remaining: null, resetAt: null, needLogin: false });
 
   const base = 'paginas?select=created_at&created_at=gte.' + q(new Date(Date.now() - win).toISOString()) +
