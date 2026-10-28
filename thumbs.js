@@ -2,7 +2,7 @@
    Carga el iframe SOLO cuando la tarjeta se ve en pantalla y lo descarga al salir,
    así 15 diseños 3D no te frenan el celular. Uso: <div class="lt" data-thumb="slug"></div> */
 (function () {
-  var MAX = (window.innerWidth > 900 && (navigator.hardwareConcurrency || 4) >= 6) ? 6 : 4, live = [], queue = [];
+  var MAX = window.innerWidth > 900 ? 6 : 4, live = [], queue = [];
   var io = 'IntersectionObserver' in window ? new IntersectionObserver(onSee, { rootMargin: '300px' }) : null;
 
   function onSee(es) {

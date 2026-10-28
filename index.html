@@ -398,7 +398,7 @@ if(!seen){var w=setInterval(function(){if(seen){clearInterval(w);countUp(el,n)}}
 var IC={'Amor':'heart','Cumpleaños':'cake','Aniversario':'rings','Sorpresa':'mail'};
 fetch('templates.json').then(function(r){return r.json()}).then(function(d){
 var T=d.templates,g=document.getElementById('lpGrid');
-var FEAT=['corazon-galactico-pro','nuestro-cielo','rosa-eterna-ultra','mariposa-infinita-pro','cumple-soplar','nuestro-aniversario'];
+var FEAT=['rosa-cristal-pro','ventana-lluvia','rosa-imperial','linternas-deseo-pro','cumple-soplar','nuestro-aniversario'];
 var tot=document.getElementById('lpTotal');if(tot)tot.textContent=T.length;
 function draw(){
 var F=FEAT.map(function(s){return T.filter(function(x){return x.slug===s})[0]}).filter(Boolean);
