@@ -197,6 +197,42 @@
 .lp-phone::before{content:"";position:absolute;top:21px;left:50%;transform:translateX(-50%);width:78px;height:21px;border-radius:99px;background:#04020d;z-index:3;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
 .lp-phone::after{content:"";position:absolute;right:-4px;top:128px;width:4px;height:66px;border-radius:0 4px 4px 0;background:linear-gradient(180deg,#3a2f6b,#1b1440)}
 @keyframes lpph{50%{transform:translateY(-9px)}}
+
+/* ===== menú hamburguesa (celular) ===== */
+.lp-burger{display:none;place-items:center;width:42px;height:42px;margin-left:8px;border-radius:12px;border:1px solid var(--border-soft);background:var(--glass-strong);color:var(--ink);cursor:pointer;padding:0}
+.lp-burger span,.lp-burger span::before,.lp-burger span::after{display:block;width:18px;height:2px;border-radius:2px;background:var(--ink);transition:transform .25s,background .25s}
+.lp-burger span{position:relative}.lp-burger span::before,.lp-burger span::after{content:"";position:absolute;left:0}
+.lp-burger span::before{top:-6px}.lp-burger span::after{top:6px}
+.lp-burger[aria-expanded=true] span{background:transparent}
+.lp-burger[aria-expanded=true] span::before{top:0;transform:rotate(45deg)}.lp-burger[aria-expanded=true] span::after{top:0;transform:rotate(-45deg)}
+.lp-mnav{display:none}
+/* ===== pasos de la portada ===== */
+.lp-flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 22px}
+.lp-flow span{display:inline-flex;align-items:center;gap:8px;padding:7px 14px 7px 8px;border-radius:999px;border:1px solid var(--border-soft);background:var(--glass);font-weight:800;font-size:13px;color:var(--ink)}
+.lp-flow span b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--grad-brand);color:#0d0a1e;font-size:12px}
+.lp-flow i{font-style:normal;color:var(--muted-2);font-weight:800}
+/* ===== etiquetas de funciones alrededor del teléfono ===== */
+.lp-tags{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px;position:relative;z-index:2}
+.lp-tag{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:16px;background:rgba(23,18,46,.72);border:1px solid var(--border-soft);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-weight:800;font-size:13px;color:var(--ink);box-shadow:0 12px 30px rgba(0,0,0,.35);white-space:nowrap}
+.lp-tag .ic{width:22px;height:22px}
+@keyframes lpt{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media(min-width:1021px){
+.lp-stage{width:min(100%,500px)}
+.lp-tags{display:block;margin:0}
+.lp-tag{position:absolute;z-index:3;animation:lpt 8s ease-in-out infinite}
+.lp-tag.t1{left:0;top:15%}.lp-tag.t2{right:0;top:30%;animation-delay:-3s}.lp-tag.t3{left:1%;bottom:27%;animation-delay:-5s}.lp-tag.t4{right:0;bottom:13%;animation-delay:-1s}
+.lp-float.a{left:12%;top:5%}.lp-float.b{right:12%;top:9%}.lp-float.c{left:15%;bottom:2%}.lp-float.d{right:15%;bottom:5%}
+}
+@media(max-width:860px){
+.lp-burger{display:grid}
+.lp-links{margin-left:auto}
+.lp-mnav.open{display:grid;gap:2px;position:absolute;left:0;right:0;top:100%;padding:10px 22px 18px;background:rgba(13,10,30,.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border-soft);box-shadow:0 24px 40px rgba(0,0,0,.45)}
+.lp-mnav a{padding:14px 12px;border-radius:12px;font-weight:800;font-size:16px;color:var(--ink)}
+.lp-mnav a:active,.lp-mnav a:hover{background:var(--glass-strong)}
+.lp-cta .lp-btn{flex:1 1 100%;text-align:center}
+.lp-flow{margin-bottom:18px}
+}
+@media(prefers-reduced-motion:reduce){.lp-tag{animation:none}}
 @media(prefers-reduced-motion:reduce){.lp-phone{animation:none}.lp-float,.lp-aur{animation:none}.lp-mq div{animation-duration:70s}}
 .lp-stats{padding:0 0 64px}
 .lp-stats .lp-in{display:block}
@@ -228,11 +264,14 @@
 <div class="lp-top"><div class="lp-in"><nav class="lp-nav">
 <a class="lp-brand" href="index.html"><img src="logo.jpg" alt=""><span>Link Emocional</span></a>
 <div class="lp-links"><a href="#formas">Con y sin editor</a><a href="#disenos">Diseños</a><a href="#precios">Precios</a><a href="#nosotros">Nosotros</a><a href="#faq">Preguntas</a><a href="mis-paginas.html">Mis páginas</a><span id="lpAuthBox"><a class="lp-login" href="login.html">Iniciar sesión</a></span></div>
-</nav></div></div>
+<button class="lp-burger" id="lpBurger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="lpMenu"><span></span></button>
+</nav></div>
+<div class="lp-mnav" id="lpMenu"><a href="#formas">Con y sin editor</a><a href="#disenos">Diseños</a><a href="#precios">Precios</a><a href="#nosotros">Nosotros</a><a href="#faq">Preguntas</a><a href="mis-paginas.html">Mis páginas</a></div></div>
 <div class="lp-in">
 <header class="lp-hero">
 <span class="lp-aur a"></span><span class="lp-aur b"></span>
 <div>
+<div class="lp-flow" aria-label="Cómo funciona"><span><b>1</b>Elige un diseño</span><i>›</i><span><b>2</b>Personalízalo</span><i>›</i><span><b>3</b>Compártelo por WhatsApp</span></div>
 <h1>Un regalo que se abre en el celular de<em>esa persona especial</em></h1>
 <p>Elige un diseño animado en 2D o 3D, escribe tu mensaje, sube tus fotos y manda el enlace por WhatsApp. Lo armas en minutos.</p>
 <div class="lp-cta">
@@ -243,6 +282,12 @@
 </div>
 <div class="lp-stage">
 <span class="lp-float a"><svg class="ic f" aria-hidden="true"><use href="#i-heart"/></svg></span><span class="lp-float b"><svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span class="lp-float c"><svg class="ic " aria-hidden="true"><use href="#i-heart"/></svg></span><span class="lp-float d"><svg class="ic " aria-hidden="true"><use href="#i-spark"/></svg></span>
+<div class="lp-tags">
+<span class="lp-tag t1"><svg class="ic" aria-hidden="true"><use href="#i-pen"/></svg>Tu mensaje</span>
+<span class="lp-tag t2"><svg class="ic" aria-hidden="true"><use href="#i-img"/></svg>Tus fotos</span>
+<span class="lp-tag t3"><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg>Tu canción</span>
+<span class="lp-tag t4"><svg class="ic" aria-hidden="true"><use href="#i-link"/></svg>Enlace por WhatsApp</span>
+</div>
 <div class="lp-phone"><iframe id="lpDemo" src="previews/arbol-amor.html" title="Demo del diseño" loading="lazy"></iframe></div>
 <div class="lp-demos" id="lpDemos" role="group" aria-label="Elige una demo">
 <button type="button" aria-pressed="true" data-s="arbol-amor">Árbol</button>
@@ -526,5 +571,15 @@ set('lpLink',Number(lk).toFixed(2));set('lpLinkBs','≈ Bs '+(lk*fx).toFixed(2))
 
 <script src="wa-fab.js"></script>
 <script src="brand-icons.js"></script>
+<script>
+(function(){var b=document.getElementById('lpBurger'),m=document.getElementById('lpMenu');if(!b||!m)return;
+function set(o){m.classList.toggle('open',o);b.setAttribute('aria-expanded',o);b.setAttribute('aria-label',o?'Cerrar menú':'Abrir menú')}
+b.addEventListener('click',function(e){e.stopPropagation();set(!m.classList.contains('open'))});
+m.addEventListener('click',function(e){if(e.target.closest('a'))set(false)});
+document.addEventListener('click',function(e){if(!m.contains(e.target)&&e.target!==b)set(false)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
+window.addEventListener('resize',function(){if(window.innerWidth>860)set(false)});
+})();
+</script>
 </body>
 </html>
