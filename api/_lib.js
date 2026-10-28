@@ -17,10 +17,10 @@ const USER_WINDOW_DAYS = Number(process.env.USER_WINDOW_DAYS || 3);    // ... ca
 const USER_DEVICE_LIMIT = Number(process.env.USER_DEVICE_LIMIT || 3);  // tope por dispositivo (evita crear muchas cuentas)
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
 const WHATSAPP = process.env.WHATSAPP || '59178550176';
-const MAX_BODY_CHARS = 3400000;   // Vercel acepta hasta ~4.5 MB por peticion
+const MAX_BODY_CHARS = 3900000;   // Vercel acepta hasta ~4.5 MB por peticion
 const MAX_IMG = 450 * 1024;       // tamano maximo de cada foto (en caracteres base64)
 const HIDDEN = new Set(['cam', 'q']);
-const MAX_AUDIO = 1700 * 1024;     // musica (MP3) en base64: ~1.2 MB de audio
+const MAX_AUDIO = 2850 * 1024;     // musica (MP3) en base64: ~2 MB de audio
 const MAX_TOTAL = 4100000;        // tope de la pagina ya armada (limite de respuesta de Vercel ~4.5 MB)
 const AUDIO_RE = /^data:audio\/(?:mpeg|mp3|mp4|x-m4a|aac|ogg|wav|x-wav|webm);base64,[A-Za-z0-9+/=]+$/;
 const IMG_RE = /^data:image\/(?:png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/;
