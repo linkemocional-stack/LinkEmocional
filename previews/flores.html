@@ -1,0 +1,953 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>[preview] Flores amarillas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#F8EFD9;
+    --ivory-2:#F1E3C1;
+    --plum-deep:#160A1E;
+    --plum:#3A1030;
+    --wine:#5C1444;
+    --umber:#6B3A1F;
+    --gold:#F5B324;
+    --gold-2:#FFD766;
+    --ink:#3A1030;
+  }
+  *{ box-sizing:border-box; }
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:
+      radial-gradient(circle at 18% 12%, rgba(92,20,68,.55), transparent 55%),
+      radial-gradient(circle at 88% 82%, rgba(58,16,48,.65), transparent 55%),
+      linear-gradient(165deg, var(--plum-deep) 0%, var(--plum) 55%, var(--wine) 100%);
+    font-family:'Manrope', sans-serif;
+    overflow-x:hidden;
+  }
+  body.mode-editor{
+    overflow-y:auto;
+    height:auto;
+    min-height:100%;
+    background:#140A19;
+  }
+
+  /* ================= escena principal ================= */
+  .scene{
+    position:relative;
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding: 32px 16px 40px;
+    isolation:isolate;
+  }
+  .scene.in-preview{
+    min-height:auto;
+    height:auto;
+    width:380px;
+    padding:22px 14px 30px;
+    justify-content:flex-start;
+  }
+  body.mode-editor .scene{ display:none; }
+  body.mode-editor #previewBox .scene{ display:flex; }
+
+  /* luciérnagas */
+  .sky{ position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; }
+  .firefly{
+    position:absolute; width:4px; height:4px; border-radius:50%;
+    background:var(--gold-2);
+    box-shadow:0 0 6px 2px rgba(255,215,102,.7);
+    animation: twinkle ease-in-out infinite;
+    opacity:.15;
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:.12; transform:scale(.8); }
+    50%{ opacity:.85; transform:scale(1.3); }
+  }
+
+  /* pétalos cayendo, de fondo */
+  .petals-layer{ position:absolute; inset:0; overflow:hidden; z-index:1; pointer-events:none; }
+  .petal{
+    position:absolute; top:-6%;
+    width:9px; height:13px;
+    background:linear-gradient(160deg, var(--gold-2), var(--gold));
+    border-radius:60% 40% 60% 40%;
+    opacity:0;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+  @keyframes fall{
+    0%{ transform: translate(0,0) rotate(0deg); opacity:0; }
+    8%{ opacity:.85; }
+    92%{ opacity:.7; }
+    100%{ transform: translate(var(--drift,20px), 118vh) rotate(320deg); opacity:0; }
+  }
+
+  /* tarjeta base compartida */
+  .panel{
+    position:relative;
+    z-index:2;
+    width:min(92vw, 440px);
+    background: linear-gradient(170deg, var(--ivory) 0%, var(--ivory-2) 100%);
+    border-radius: 28px;
+    box-shadow: 0 30px 60px -18px rgba(0,0,0,.55), 0 2px 0 rgba(255,255,255,.5) inset;
+  }
+  .scene.in-preview .panel{ width:100%; }
+
+  /* ---------- pantalla de inicio ---------- */
+  .intro-card{
+    padding: 54px 28px 46px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:16px;
+    cursor:pointer;
+    transition: opacity .55s ease, transform .55s ease;
+  }
+  .intro-card.hide{ opacity:0; transform:scale(.93); pointer-events:none; }
+
+  .intro-flower-wrap{
+    position:relative;
+    width:118px; height:118px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pulse-ring{
+    position:absolute; inset:0; border-radius:50%;
+    background: radial-gradient(circle, rgba(245,179,36,.4), transparent 70%);
+    animation: pulseRing 2.6s ease-out infinite;
+  }
+  @keyframes pulseRing{
+    0%{ transform:scale(.55); opacity:.9; }
+    100%{ transform:scale(1.7); opacity:0; }
+  }
+  .intro-flower{
+    position:relative;
+    width:88px; height:88px;
+    animation: introBreathe 2.6s ease-in-out infinite;
+  }
+  @keyframes introBreathe{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.07) rotate(-2deg); }
+  }
+  .intro-title{
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.3rem;
+    color: var(--ink);
+    margin: 4px 0 0;
+    max-width: 22ch;
+    line-height:1.35;
+  }
+  .intro-hint{
+    font-size:.74rem;
+    letter-spacing:.03em;
+    color: rgba(58,16,48,.5);
+    margin:0;
+  }
+
+  /* ---------- jardín ---------- */
+  .garden-card{
+    padding: 26px 22px 22px;
+    cursor:pointer;
+    user-select:none;
+    opacity:0;
+    transform: translateY(14px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .garden-card.show{ opacity:1; transform:translateY(0); }
+
+  .top-line{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:1.05rem;
+    color: var(--ink);
+    opacity:0;
+    max-width: 65%;
+    line-height:1.3;
+    animation: reveal 1.4s ease forwards;
+    animation-delay: 1.6s;
+  }
+  @keyframes reveal{ to{ opacity:.85; } }
+
+  .tree-wrap{ position:relative; }
+  svg#tree{ display:block; width:100%; height:auto; margin-top:-6px; }
+
+  #tree .ground-el{
+    fill:none; stroke: var(--ink); stroke-width:1.4; opacity:.35;
+    stroke-dasharray:1; stroke-dashoffset:1;
+  }
+  #tree.start .ground-el{
+    animation: draw 1.8s ease forwards;
+    animation-delay:.1s;
+  }
+
+  #treeGroup{
+    transform-box: view-box;
+    transform-origin: 250px 430px;
+  }
+  #treeGroup.alive{
+    animation: sway 7s ease-in-out infinite alternate;
+  }
+  @keyframes sway{
+    from{ transform: rotate(-0.6deg); }
+    to{ transform: rotate(0.6deg); }
+  }
+
+  #tree .trunk-el{
+    fill:none; stroke: var(--umber); stroke-width:13; stroke-linecap:round;
+    stroke-dasharray:1; stroke-dashoffset:1;
+  }
+  #tree.start .trunk-el{
+    animation: draw 5.2s cubic-bezier(.32,.02,.18,1) forwards;
+    animation-delay:.35s;
+  }
+  #tree .branch-el{
+    fill:none; stroke: var(--umber); stroke-linecap:round;
+    stroke-dasharray:1; stroke-dashoffset:1;
+  }
+  #tree.start .branch-el{
+    animation-name: draw;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+
+  .flower{
+    transform-box: fill-box;
+    transform-origin:center;
+    transform: scale(0);
+    opacity:0;
+    animation-name: bloom;
+    animation-duration:1.15s;
+    animation-timing-function: cubic-bezier(.18,1.1,.34,1);
+    animation-fill-mode: forwards;
+  }
+  @keyframes bloom{
+    0%{ transform:scale(0) rotate(-8deg); opacity:0; }
+    65%{ transform:scale(1.1) rotate(2deg); opacity:1; }
+    100%{ transform:scale(1) rotate(0deg); opacity:1; }
+  }
+
+  .phrase-wrap{
+    border-top: 1px solid rgba(58,16,48,.18);
+    margin-top: 6px;
+    padding-top: 14px;
+    min-height: 64px;
+  }
+  .phrase{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size: 1.28rem;
+    line-height:1.35;
+    color: var(--ink);
+    margin:0;
+    opacity:0;
+    transition: opacity .6s ease;
+  }
+  .phrase.show{ opacity:1; }
+
+  .bottom-hint{
+    margin-top:18px;
+    font-size:.75rem;
+    color: rgba(248,239,217,.55);
+    letter-spacing:.02em;
+    opacity:0;
+    animation: reveal 1.4s ease forwards;
+    animation-delay: 2s;
+  }
+
+  /* ================= boton lapiz (editor) ================= */
+  .edit-toggle{
+    position:fixed; top:16px; right:16px;
+    width:46px; height:46px; border-radius:50%;
+    background:rgba(22,10,30,.55);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    border:1px solid rgba(255,215,102,.4);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; z-index:1000;
+    box-shadow:0 0 18px rgba(245,179,36,.18);
+    transition: transform .15s ease, background .15s ease;
+  }
+  .edit-toggle:hover{ transform:scale(1.07); background:rgba(22,10,30,.75); }
+  .edit-toggle svg{ width:19px; height:19px; }
+  body.mode-editor .edit-toggle{ display:none; }
+  body.no-editor .edit-toggle{ display:none !important; }
+
+  /* ================= boton de musica ================= */
+  .music-toggle{
+    display:none;
+    position:fixed; bottom:20px; left:20px;
+    width:46px; height:46px; border-radius:50%;
+    background:rgba(22,10,30,.55);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    border:1px solid rgba(255,215,102,.4);
+    align-items:center; justify-content:center;
+    cursor:pointer; z-index:1000;
+    box-shadow:0 0 18px rgba(245,179,36,.18);
+    transition: transform .15s ease, background .15s ease;
+  }
+  .music-toggle.visible{ display:flex; }
+  .music-toggle:hover{ transform:scale(1.07); }
+  .music-toggle svg{ width:18px; height:18px; }
+  .music-toggle .icon-pause{ display:none; }
+  .music-toggle.playing .icon-play{ display:none; }
+  .music-toggle.playing .icon-pause{ display:block; }
+  body.mode-editor .music-toggle{ display:none !important; }
+
+  /* ================= pagina del editor ================= */
+  .editor-page{
+    display:none;
+    position:relative;
+    min-height:100%;
+    color:#F8EFD9;
+    font-family:'Manrope', sans-serif;
+  }
+  body.mode-editor .editor-page{ display:block; }
+
+  .editor-topbar{
+    position:sticky; top:0;
+    display:flex; align-items:center; gap:14px;
+    padding:16px 20px;
+    background:rgba(20,10,25,0.92);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,215,102,.16);
+    z-index:60;
+  }
+  .back-btn{
+    width:40px; height:40px; flex:0 0 auto; border-radius:50%;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,215,102,.3);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; color:#F8EFD9;
+  }
+  .back-btn:hover{ background:rgba(255,255,255,0.12); }
+  .back-btn svg{ width:19px; height:19px; }
+  .editor-topbar-titles h1{ font-size:16px; margin:0; font-weight:700; }
+  .editor-topbar-titles p{ font-size:11.5px; margin:2px 0 0; color:#B9A7C0; }
+
+  /* ---- Marca de agua "Link Emocional" (solo visible dentro del editor) ---- */
+  .ed-brand-watermark{
+    margin-left:auto;
+    flex:0 0 auto;
+    font-family:'Manrope', sans-serif; font-weight:700; font-size:14px; letter-spacing:0.4px;
+    white-space:nowrap;
+    background:linear-gradient(90deg, #72CBE9, #745FC9);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    pointer-events:none; user-select:none;
+  }
+
+  .editor-body{ max-width:640px; margin:0 auto; padding:18px 20px 60px; }
+
+  .preview-box{
+    position:relative; width:100%; aspect-ratio:3/4;
+    border-radius:20px; overflow:hidden;
+    border:1px solid rgba(255,215,102,.22);
+    background:#0F0713;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    margin-bottom:26px;
+    display:flex; align-items:flex-start; justify-content:center;
+  }
+  .preview-box .preview-tag{
+    position:absolute; top:10px; left:12px; z-index:5;
+    font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color: var(--gold-2);
+    background:rgba(20,10,25,.6);
+    border:1px solid rgba(255,215,102,.35);
+    padding:4px 9px; border-radius:999px;
+    pointer-events:none;
+  }
+
+  .edit-section{ margin-bottom:26px; }
+  .edit-section h3{ font-size:13.5px; font-weight:700; margin:0 0 3px; color:#F8EFD9; }
+  .edit-section p{ font-size:12px; color:#B9A7C0; margin:0 0 12px; line-height:1.5; }
+
+  .chip-list{ display:flex; flex-direction:column; gap:7px; margin-bottom:10px; }
+  .chip{ display:flex; align-items:center; gap:9px; background:rgba(255,255,255,0.045); border:1px solid rgba(255,215,102,.16); border-radius:8px; padding:10px 9px 10px 13px; }
+  .chip span{ flex:1; font-size:13.5px; font-weight:500; word-break:break-word; }
+  .chip button{ background:none; border:none; color:#B9A7C0; font-size:16px; cursor:pointer; padding:3px 6px; border-radius:5px; }
+  .chip button:hover{ color:#ff8fa8; }
+  .empty-note{ font-size:12px; color:#7A6B80; font-style:italic; padding:5px 2px; }
+
+  .add-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .add-row input[type=text]{ flex:1 1 160px; min-width:0; background:rgba(255,255,255,0.05); border:1px solid rgba(255,215,102,.2); color:#F8EFD9; padding:11px; border-radius:8px; font-family:'Manrope',sans-serif; font-size:14px; }
+  .btn{ border:none; border-radius:8px; padding:11px 16px; font-family:'Manrope',sans-serif; font-weight:700; font-size:13px; cursor:pointer; }
+  .btn-add{ background:rgba(255,215,102,.16); color: var(--gold-2); border:1px solid rgba(255,215,102,.4); flex:0 0 auto; }
+  .btn-clear{ background:none; color:#B9A7C0; border:1px solid rgba(255,215,102,.16); font-size:11.5px; padding:8px 12px; margin-top:8px; }
+  .btn-clear:hover{ color:#ff8fa8; border-color:#ff8fa8; }
+
+  .images-grid{ display:flex; flex-wrap:wrap; gap:9px; margin-bottom:10px; }
+  .img-thumb{ width:60px; height:60px; border-radius:16px; background-size:cover; background-position:center; position:relative; border:1px solid rgba(255,215,102,.25); }
+  .img-thumb button{ position:absolute; top:-6px; right:-6px; width:21px; height:21px; border-radius:50%; background:#1a1420; border:1px solid rgba(255,215,102,.3); color:#F8EFD9; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+  .add-image-tile{ width:60px; height:60px; border-radius:16px; border:1.5px dashed rgba(255,215,102,.35); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#B9A7C0; font-size:24px; flex-shrink:0; }
+  .add-image-tile.disabled{ opacity:0.35; pointer-events:none; }
+  .add-image-tile input{ display:none; }
+
+  .panel-footer{ margin-top:6px; padding-top:20px; border-top:1px solid rgba(255,215,102,.14); }
+  .btn-download{ width:100%; background: var(--gold-2); color:#3A1030; padding:15px 16px; font-size:14.5px; border-radius:10px; }
+  .btn-download:hover{ filter:brightness(1.06); }
+  .filename-row{ margin-top:12px; }
+  .filename-row input{ width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,215,102,.2); color:#F8EFD9; padding:10px 11px; border-radius:7px; font-family:'Manrope',sans-serif; font-size:12.5px; box-sizing:border-box; }
+  .save-note{ font-size:11.5px; color:#8C7C93; line-height:1.5; margin-top:14px; }
+
+  .editor-checkbox-row{ display:flex; align-items:flex-start; gap:9px; margin-bottom:14px; }
+  .editor-checkbox-row input{ margin-top:3px; flex:0 0 auto; }
+  .editor-checkbox-row label{ font-size:12px; color:#B9A7C0; line-height:1.5; }
+</style>
+<style id="le-noeditor">#pencilBtn,.pencil-btn,.top-toolbar,#editToggle,.edit-toggle,#leEditToggle,.le-edit-toggle,.le-edit-hint,#editorOverlay,#editorPage,.editor-page,.le-editor-page,#pen,#ed{display:none!important}</style><script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 1}})}catch(e){}</script>
+<style id="pv-hide">
+/* vista previa: sin editor, sin pantalla de inicio */
+#pen,#ed,#go,#start-screen,.le-edit-toggle,.le-edit-hint,.le-editor-page,#leEditToggle,#coverScreen,#editorOverlay,#editorPage,#loadError{display:none !important}
+html,body{pointer-events:none !important;-webkit-user-select:none;user-select:none}
+</style>
+<script src="../protection.js"></script>
+</head>
+<body class="no-editor">
+
+<div class="edit-toggle" id="editToggle" title="Personalizar">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#F8EFD9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+</div>
+
+<div class="music-toggle" id="musicToggle" title="Reproducir música">
+  <svg class="icon-play" viewBox="0 0 24 24" fill="#F8EFD9"><path d="M8 5v14l11-7z"/></svg>
+  <svg class="icon-pause" viewBox="0 0 24 24" fill="#F8EFD9"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+</div>
+<audio id="bgAudio" loop preload="none"></audio>
+
+<div class="scene" id="scene">
+  <div class="sky" id="sky"></div>
+  <div class="petals-layer" id="petals"></div>
+
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <symbol id="flowerShape" viewBox="-10 -10 20 20">
+        <g>
+          <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#FFD766" transform="rotate(0)"/>
+          <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#FFD766" transform="rotate(45)"/>
+          <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#F5B324" transform="rotate(90)"/>
+          <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#FFD766" transform="rotate(135)"/>
+          <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#F5B324" transform="rotate(180)"/>
+          <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#FFD766" transform="rotate(225)"/>
+          <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#F5B324" transform="rotate(270)"/>
+          <ellipse cx="0" cy="-6.4" rx="3" ry="4.2" fill="#FFD766" transform="rotate(315)"/>
+          <circle cx="0" cy="0" r="3.1" fill="#4A2412"/>
+          <circle cx="-0.7" cy="-0.7" r="1.1" fill="#7A4420" opacity=".8"/>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="panel intro-card" id="introCard">
+    <div class="intro-flower-wrap">
+      <div class="pulse-ring"></div>
+      <svg class="intro-flower" viewBox="-10 -10 20 20">
+        <use href="#flowerShape" x="-10" y="-10" width="20" height="20"/>
+      </svg>
+    </div>
+    <p class="intro-title">Algo pequeño está a punto de crecer para ti</p>
+    <p class="intro-hint">toca el girasol</p>
+  </div>
+
+  <div class="panel garden-card" id="gardenCard" hidden>
+    <p class="top-line">Esto empezó siendo una ramita, como lo nuestro</p>
+
+    <div class="tree-wrap">
+      <svg id="tree" viewBox="0 0 500 480" xmlns="http://www.w3.org/2000/svg">
+        <line class="ground-el" pathLength="1" x1="40" y1="430" x2="460" y2="430"/>
+        <g id="treeGroup">
+          <path class="trunk-el" pathLength="1" d="M250,430 C234,368 262,330 244,282 C232,250 258,244 250,224"/>
+          <path class="branch-el" pathLength="1" stroke-width="8" d="M248,300 C216,286 190,270 168,252"
+                style="animation-delay:4.5s; animation-duration:2.1s;"/>
+          <path class="branch-el" pathLength="1" stroke-width="8" d="M252,290 C282,274 306,258 328,240"
+                style="animation-delay:4.9s; animation-duration:2.1s;"/>
+          <path class="branch-el" pathLength="1" stroke-width="6" d="M250,250 C248,236 250,228 250,216"
+                style="animation-delay:6.5s; animation-duration:1.4s;"/>
+          <g id="flowersGroup"></g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="phrase-wrap">
+      <p class="phrase" id="phrase"></p>
+    </div>
+  </div>
+
+  <p class="bottom-hint" id="bottomHint" hidden>toca el jardín para hacerlo florecer</p>
+</div>
+
+<div class="editor-page" id="editorPage">
+  <div class="editor-topbar">
+    <button class="back-btn" id="backBtn" title="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#F8EFD9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="editor-topbar-titles">
+      <h1>Editor de tu regalo</h1>
+      <p>Los cambios se ven al tocar el girasol en la vista previa</p>
+    </div>
+    <div class="ed-brand-watermark">Link Emocional</div>
+  </div>
+
+  <div class="editor-body">
+    <div class="preview-box" id="previewBox">
+      <div class="preview-tag">Vista previa</div>
+    </div>
+
+    <div class="edit-section">
+      <h3>Frases del jardín</h3>
+      <p>Van apareciendo una tras otra, en orden, cuando el jardín termina de crecer.</p>
+      <div class="chip-list" id="phraseList"></div>
+      <div class="add-row">
+        <input type="text" id="phraseInput" placeholder="Escribe una frase" maxlength="90">
+        <button class="btn btn-add" id="phraseAdd">Agregar</button>
+      </div>
+      <button class="btn btn-clear" id="phraseClear">Eliminar todas las frases</button>
+    </div>
+
+    <div class="edit-section">
+      <h3>Música de fondo</h3>
+      <p>Un MP3 opcional. Si lo agregas, aparece un botón discreto para reproducirlo en el jardín.</p>
+      <div class="chip-list" id="musicList"></div>
+      <label class="btn btn-add" id="addMusicTile" style="display:inline-block;">
+        Elegir archivo MP3
+        <input type="file" id="musicInput" accept="audio/mpeg,audio/mp3,.mp3" style="display:none;">
+      </label>
+    </div>
+
+    <div class="panel-footer">
+      <div class="editor-checkbox-row">
+        <input type="checkbox" id="includeEditorCheckbox">
+        <label for="includeEditorCheckbox">Incluir el editor (el lápiz) en este archivo. Dejalo desactivado para la versión final que le envíes a la persona — así no le aparece el lápiz. Actívalo solo si querés seguir editando este mismo archivo descargado más adelante.</label>
+      </div>
+      <button class="btn btn-download" id="downloadBtn">Descargar mi regalo personalizado</button>
+      <div class="filename-row">
+        <input type="text" id="filenameInput" value="flores-amarillas-para-ti.html">
+      </div>
+      <p class="save-note">El navegador no puede sobrescribir este archivo por seguridad. "Descargar" genera un HTML nuevo y completo con tus cambios ya aplicados (frases y música incluidas) y sigue trayendo este mismo editor adentro, listo para enviarlo o retocarlo después.</p>
+    </div>
+  </div>
+</div>
+
+<script id="initial-state" type="application/json">{"phrases": ["Elegí girasoles porque también giran buscando lo que aman.", "Cada pétalo amarillo es una forma distinta de decir te quiero.", "Sembré este jardín para no dejar de pensar en ti.", "Contigo hasta el invierno empieza a parecer primavera.", "No conozco una flor que alcance para explicar lo que siento.", "Un jardín entero, y aun así pensé primero en ti."], "music": "", "musicName": ""}</script>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- estado inicial ---------- */
+  var stateEl = document.getElementById('initial-state');
+  var state;
+  try { state = JSON.parse(stateEl.textContent); } catch(e){ state = {}; }
+  state.phrases = (state.phrases && state.phrases.length) ? state.phrases : [
+    "Un jardín que crece, poco a poco, para ti."
+  ];
+  state.music = state.music || null;
+  state.musicName = state.musicName || null;
+
+  function persistState(){ stateEl.textContent = JSON.stringify(state); }
+
+  /* ================= frases, en el jardín ================= */
+  var phraseEl = document.getElementById('phrase');
+  var phraseIndex = 0;
+  var phraseTimer = null;
+
+  function activePhrases(){
+    return (state.phrases && state.phrases.length) ? state.phrases : ["Un jardín que crece, poco a poco, para ti."];
+  }
+  function showPhrase(next){
+    phraseEl.classList.remove('show');
+    setTimeout(() => {
+      var list = activePhrases();
+      phraseEl.textContent = list[next % list.length];
+      phraseEl.classList.add('show');
+    }, 450);
+  }
+  function startPhraseCycle(){
+    showPhrase(phraseIndex);
+    phraseTimer = setInterval(() => {
+      phraseIndex = (phraseIndex + 1) % activePhrases().length;
+      showPhrase(phraseIndex);
+    }, 4800);
+  }
+  function bumpPhrase(){
+    if(!phraseTimer){ startPhraseCycle(); return; }
+    clearInterval(phraseTimer);
+    phraseIndex = (phraseIndex + 1) % activePhrases().length;
+    showPhrase(phraseIndex);
+    phraseTimer = setInterval(() => {
+      phraseIndex = (phraseIndex + 1) % activePhrases().length;
+      showPhrase(phraseIndex);
+    }, 4800);
+  }
+
+  /* ================= corazón de girasoles ================= */
+  var flowersGroup = document.getElementById('flowersGroup');
+  var NS = "http://www.w3.org/2000/svg";
+  var centerX = 250, centerY = 190;
+
+  function heartPoint(t, scale){
+    var x = 16 * Math.pow(Math.sin(t), 3);
+    var y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+    return { x: x * scale, y: -y * scale };
+  }
+  function addFlower(x, y, size, delay, instant){
+    var use = document.createElementNS(NS, "use");
+    use.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#flowerShape");
+    use.setAttribute("href", "#flowerShape");
+    use.setAttribute("x", x - size/2);
+    use.setAttribute("y", y - size/2);
+    use.setAttribute("width", size);
+    use.setAttribute("height", size);
+    use.setAttribute("class", "flower");
+    if(instant){ use.style.animationDuration = ".6s"; }
+    use.style.animationDelay = delay + "s";
+    flowersGroup.appendChild(use);
+  }
+
+  var svgEl = document.getElementById('tree');
+  var treeGroup = document.getElementById('treeGroup');
+  var gardenCard = document.getElementById('gardenCard');
+  var gardenStarted = false;
+
+  function growGarden(){
+    if(gardenStarted) return;
+    gardenStarted = true;
+
+    svgEl.classList.add('start');
+
+    var layers = [0.32, 0.5, 0.68, 0.85, 1.0];
+    var points = [];
+    layers.forEach((scaleLayer, li) => {
+      var steps = 10 + li * 4;
+      for(var i = 0; i < steps; i++){
+        var t = (i / steps) * Math.PI * 2;
+        var p = heartPoint(t, 10 * scaleLayer);
+        points.push({
+          x: centerX + p.x + (Math.random()-0.5) * 6,
+          y: centerY + p.y + (Math.random()-0.5) * 6,
+          size: 20 + Math.random() * 8,
+          t: t
+        });
+      }
+    });
+    for(var i2 = 0; i2 < 6; i2++){
+      points.push({
+        x: 150 - i2 * 14 + (Math.random()*10-5),
+        y: 340 + i2 * 14 + (Math.random()*10-5),
+        size: 12 + Math.random()*6,
+        t: 999 + i2
+      });
+    }
+    points.sort((a,b) => a.t - b.t);
+
+    var growStart = 7.2;
+    var stepGap = 0.22;
+    points.forEach((p, i) => {
+      var delay = growStart + i * stepGap + Math.random() * 0.12;
+      addFlower(p.x, p.y, p.size, delay, false);
+    });
+    var totalGrowTime = growStart + points.length * stepGap + 1.5;
+
+    setTimeout(() => treeGroup.classList.add('alive'), totalGrowTime * 1000);
+    setTimeout(startPhraseCycle, totalGrowTime * 1000);
+  }
+
+  /* ================= pantalla de inicio ================= */
+  var introCard = document.getElementById('introCard');
+  var bottomHint = document.getElementById('bottomHint');
+
+  introCard.addEventListener('click', () => {
+    introCard.classList.add('hide');
+    setTimeout(() => {
+      introCard.style.display = 'none';
+      gardenCard.hidden = false;
+      bottomHint.hidden = false;
+      requestAnimationFrame(() => gardenCard.classList.add('show'));
+      growGarden();
+    }, 500);
+  });
+
+  gardenCard.addEventListener('click', (e) => {
+    if(!gardenStarted) return;
+    var rect = svgEl.getBoundingClientRect();
+    var viewBoxW = 500, viewBoxH = 480;
+    var relX = (e.clientX - rect.left) / rect.width * viewBoxW;
+    var relY = (e.clientY - rect.top) / rect.height * viewBoxH;
+    for(var i = 0; i < 4; i++){
+      var angle = Math.random() * Math.PI * 2;
+      var dist = Math.random() * 20;
+      var x = relX + Math.cos(angle) * dist;
+      var y = relY + Math.sin(angle) * dist;
+      var size = 14 + Math.random() * 10;
+      addFlower(x, y, size, i * 0.08, true);
+    }
+    bumpPhrase();
+  });
+
+  /* ================= luciérnagas ================= */
+  var sky = document.getElementById('sky');
+  for(var i3 = 0; i3 < 22; i3++){
+    var f = document.createElement('div');
+    f.className = 'firefly';
+    f.style.left = Math.random()*100 + '%';
+    f.style.top = Math.random()*100 + '%';
+    f.style.animationDuration = (2.5 + Math.random()*3.5) + 's';
+    f.style.animationDelay = (Math.random()*4) + 's';
+    sky.appendChild(f);
+  }
+
+  /* ================= pétalos de fondo ================= */
+  var petalsLayer = document.getElementById('petals');
+  function spawnPetal(){
+    if(petalsLayer.childElementCount > 26) return;
+    var p = document.createElement('div');
+    p.className = 'petal';
+    var left = Math.random()*100;
+    var duration = 7 + Math.random()*7;
+    var drift = (Math.random()*80 - 40) + 'px';
+    p.style.left = left + '%';
+    p.style.setProperty('--drift', drift);
+    p.style.animationDuration = duration + 's';
+    p.addEventListener('animationend', () => p.remove());
+    petalsLayer.appendChild(p);
+  }
+  setInterval(spawnPetal, 850);
+  for(var i4=0;i4<4;i4++) setTimeout(spawnPetal, i4*300);
+
+  /* ================= música de fondo ================= */
+  var bgAudio = document.getElementById('bgAudio');
+  var musicToggle = document.getElementById('musicToggle');
+
+  function rebuildAudio(){
+    var wasPlaying = !bgAudio.paused;
+    bgAudio.pause();
+    if(state.music){
+      bgAudio.src = state.music;
+      musicToggle.classList.add('visible');
+      if(wasPlaying) bgAudio.play().catch(()=>{});
+    } else {
+      bgAudio.removeAttribute('src');
+      bgAudio.load();
+      musicToggle.classList.remove('visible','playing');
+    }
+  }
+  rebuildAudio();
+
+  musicToggle.addEventListener('click', () => {
+    if(!state.music) return;
+    if(bgAudio.paused){
+      bgAudio.play().then(() => musicToggle.classList.add('playing')).catch(()=>{});
+    } else {
+      bgAudio.pause();
+      musicToggle.classList.remove('playing');
+    }
+  });
+  bgAudio.addEventListener('pause', () => musicToggle.classList.remove('playing'));
+  bgAudio.addEventListener('play', () => musicToggle.classList.add('playing'));
+
+  /* ================= navegación: jardín <-> editor ================= */
+  var scene = document.getElementById('scene');
+  var previewBox = document.getElementById('previewBox');
+  var editToggle = document.getElementById('editToggle');
+  var backBtn = document.getElementById('backBtn');
+
+  function fitScenePreview(){
+    scene.style.transform = 'none';
+    requestAnimationFrame(() => {
+      var natural = scene.getBoundingClientRect();
+      var box = previewBox.getBoundingClientRect();
+      var scale = Math.min(box.width / natural.width, box.height / natural.height);
+      scene.style.transformOrigin = 'top center';
+      scene.style.transform = 'scale(' + scale + ')';
+    });
+  }
+
+  function enterEditor(){
+    document.body.classList.add('mode-editor');
+    scene.classList.add('in-preview');
+    previewBox.appendChild(scene);
+    window.scrollTo(0,0);
+    fitScenePreview();
+  }
+  function exitEditor(){
+    document.body.classList.remove('mode-editor');
+    scene.classList.remove('in-preview');
+    scene.style.transform = 'none';
+    document.body.insertBefore(scene, document.getElementById('editorPage'));
+  }
+  editToggle.addEventListener('click', enterEditor);
+  backBtn.addEventListener('click', exitEditor);
+  window.addEventListener('resize', () => {
+    if(document.body.classList.contains('mode-editor')) fitScenePreview();
+  });
+
+  /* ---------- frases: lista editable ---------- */
+  var PHRASE_EMPTY = "Sin frases — se mostrará un mensaje por defecto.";
+  function renderPhraseList(){
+    var el = document.getElementById('phraseList');
+    el.innerHTML = '';
+    if(state.phrases.length === 0){
+      var p = document.createElement('div');
+      p.className = 'empty-note';
+      p.textContent = PHRASE_EMPTY;
+      el.appendChild(p);
+      return;
+    }
+    state.phrases.forEach((text, idx) => {
+      var chip = document.createElement('div');
+      chip.className = 'chip';
+      var span = document.createElement('span');
+      span.textContent = text;
+      var btn = document.createElement('button');
+      btn.innerHTML = '&#10005;';
+      btn.title = 'Eliminar';
+      btn.addEventListener('click', () => {
+        state.phrases.splice(idx, 1);
+        renderPhraseList();
+        persistState();
+      });
+      chip.appendChild(span);
+      chip.appendChild(btn);
+      el.appendChild(chip);
+    });
+  }
+  renderPhraseList();
+
+  var phraseInput = document.getElementById('phraseInput');
+  document.getElementById('phraseAdd').addEventListener('click', addPhraseFromInput);
+  phraseInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') addPhraseFromInput(); });
+  function addPhraseFromInput(){
+    var v = phraseInput.value.trim();
+    if(!v) return;
+    state.phrases.push(v);
+    phraseInput.value = '';
+    renderPhraseList();
+    persistState();
+  }
+  document.getElementById('phraseClear').addEventListener('click', () => {
+    state.phrases = [];
+    renderPhraseList();
+    persistState();
+  });
+
+  /* ---------- música: editor ---------- */
+  var musicList = document.getElementById('musicList');
+  var musicInput = document.getElementById('musicInput');
+  var MUSIC_EMPTY = "Sin música agregada.";
+
+  function renderMusicUI(){
+    musicList.innerHTML = '';
+    if(!state.music){
+      var p = document.createElement('div');
+      p.className = 'empty-note';
+      p.textContent = MUSIC_EMPTY;
+      musicList.appendChild(p);
+      return;
+    }
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    var span = document.createElement('span');
+    span.textContent = state.musicName || 'cancion.mp3';
+    var btn = document.createElement('button');
+    btn.innerHTML = '&#10005;';
+    btn.title = 'Quitar música';
+    btn.addEventListener('click', () => {
+      state.music = null;
+      state.musicName = null;
+      renderMusicUI();
+      rebuildAudio();
+      persistState();
+    });
+    chip.appendChild(span);
+    chip.appendChild(btn);
+    musicList.appendChild(chip);
+  }
+  renderMusicUI();
+
+  musicInput.addEventListener('change', () => {
+    var file = musicInput.files && musicInput.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = (e) => {
+      state.music = e.target.result;
+      state.musicName = file.name;
+      renderMusicUI();
+      rebuildAudio();
+      persistState();
+    };
+    reader.readAsDataURL(file);
+    musicInput.value = '';
+  });
+
+  /* ---------- descargar ---------- */
+  var filenameInput = document.getElementById('filenameInput');
+  var includeEditorCheckbox = document.getElementById('includeEditorCheckbox');
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    persistState();
+    var keepEditor = includeEditorCheckbox.checked;
+    exitEditor();
+    setTimeout(() => {
+      if(!keepEditor) document.body.classList.add('no-editor');
+      var html = "<!doctype html>\n" + document.documentElement.outerHTML;
+      if(!keepEditor) document.body.classList.remove('no-editor');
+      var blob = new Blob([html], { type: 'text/html' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      var name = filenameInput.value.trim() || 'flores-amarillas-para-ti.html';
+      if(!name.toLowerCase().endsWith('.html')) name += '.html';
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }, 60);
+  });
+
+})();
+</script>
+<script>
+/* vista previa: arranca sola y simula al cliente (dedo fantasma) */
+(function(){
+function pe(type,x,y,target){var ev;try{ev=new PointerEvent(type,{clientX:x,clientY:y,pointerId:1,bubbles:true,cancelable:true,isPrimary:true,pointerType:"touch"});}catch(e){return;}(target||window).dispatchEvent(ev);}
+function $(i){return document.getElementById(i)}
+function go(){}
+function run(){ go(); setTimeout(function(){ try{ ghost(); }catch(e){} }, 900); }
+function ghost(){
+
+function q(s){return document.querySelector(s)}
+function clk(s,i){var l=document.querySelectorAll(s); var e=l[i||0]; if(e) e.click(); return !!e}
+function at(ms,fn){setTimeout(function(){try{fn()}catch(e){}},ms)}
+function again(ms){at(ms,function(){location.reload()})}
+function mouse(t,x,y){window.dispatchEvent(new MouseEvent(t,{clientX:x,clientY:y,bubbles:true}))}
+function drag(ms0,dur,fx,fy,tgt){ /* arrastra el dedo siguiendo fx(k),fy(k), k de 0 a 1 */
+  at(ms0,function(){var W=innerWidth,H=innerHeight,t0=Date.now();mouse('mousedown',fx(0)*W,fy(0)*H);
+   var iv=setInterval(function(){var k=Math.min(1,(Date.now()-t0)/dur);mouse('mousemove',fx(k)*W,fy(k)*H);
+    if(k>=1){clearInterval(iv);mouse('mouseup',fx(1)*W,fy(1)*H)}},30)});
+}
+function pdrag(ms0,dur,fx,fy,c){ at(ms0,function(){var W=innerWidth,H=innerHeight,t0=Date.now();pe('pointerdown',fx(0)*W,fy(0)*H,c);
+   var iv=setInterval(function(){var k=Math.min(1,(Date.now()-t0)/dur);pe('pointermove',fx(k)*W,fy(k)*H,window);
+    if(k>=1){clearInterval(iv);pe('pointerup',fx(1)*W,fy(1)*H,window)}},30)}); }
+function scanStar(stopId,n,after){ /* busca estrellas tocando puntos hasta que se abra la nota */
+  var pts=[],i,j; for(i=0;i<14;i++)for(j=0;j<14;j++)pts.push([.08+i*.065,.12+j*.06]);
+  pts.sort(function(){return Math.random()-.5}); var k=0,found=0;
+  var iv=setInterval(function(){ var o=q('#noteOverlay'); if(o&&o.classList.contains('show')){ if(!o._w){o._w=1; found++; setTimeout(function(){var c=q('#noteClose'); if(c)c.click(); o._w=0; if(found>=n){clearInterval(iv); if(after)after();}},2300);} return;}
+    if(o&&o._w) return; var p=pts[k++%pts.length],x=p[0]*innerWidth,y=p[1]*innerHeight; mouse('mousedown',x,y); mouse('mouseup',x,y); },110);
+}
+at(100,function(){clk('#introCard')}); again(45000);
+}
+if(document.readyState==="complete") setTimeout(run,60); else addEventListener("load",function(){setTimeout(run,60)});
+})();
+</script>
+</body>
+</html>

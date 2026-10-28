@@ -1,0 +1,920 @@
+
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>[preview] The Anniversary Times</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap');
+
+  :root{
+    --bg-pink-1:#3a0a1c;
+    --bg-pink-2:#6e1230;
+    --bg-pink-3:#a8264a;
+    --paper:#f4ead8;
+    --paper2:#ece0c4;
+    --ink:#241b14;
+    --ink-soft:#4a3a2a;
+    --red:#a4172a;
+    --red-dark:#7a1220;
+    --gold:#b8863b;
+    --gold-light:#e2c07d;
+    --line:rgba(36,27,20,0.28);
+    --line-soft:rgba(36,27,20,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 15% 0%, rgba(226,192,125,0.14), transparent 55%),
+      radial-gradient(ellipse at 85% 100%, rgba(255,120,150,0.16), transparent 55%),
+      linear-gradient(160deg, var(--bg-pink-1), var(--bg-pink-2) 55%, var(--bg-pink-3) 100%);
+    font-family:'Work Sans', sans-serif;
+    color:var(--paper);
+    overflow-x:hidden;
+  }
+  body.editing{ overflow-y:auto; background:#170812; }
+
+  .ambient{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0;}
+  .heart{position:absolute; top:-8%; color:rgba(255,190,205,0.45); animation:drift linear infinite;}
+  @keyframes drift{
+    0%{transform:translateY(-10vh) translateX(0) rotate(0deg); opacity:0;}
+    8%{opacity:0.6;} 92%{opacity:0.3;}
+    100%{transform:translateY(112vh) translateX(30px) rotate(180deg); opacity:0;}
+  }
+
+  /* ============ COVER (teaser) ============ */
+  .cover-screen{
+    position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; padding:30px 20px;
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .cover-screen.hide{ opacity:0; transform:scale(0.9); pointer-events:none; position:fixed; inset:0; }
+  .fold{
+    width:150px; height:190px; margin:0 auto 26px; position:relative; perspective:600px;
+  }
+  .fold-paper{
+    width:100%; height:100%; background:linear-gradient(160deg, var(--paper), var(--paper2));
+    border-radius:3px; box-shadow:0 20px 40px -14px rgba(0,0,0,0.55);
+    transform:rotate(-6deg); animation:foldSway 3.4s ease-in-out infinite;
+    display:flex; flex-direction:column; padding:14px 10px; color:var(--ink);
+  }
+  @keyframes foldSway{ 0%,100%{transform:rotate(-6deg);} 50%{transform:rotate(-2deg);} }
+  .fold-paper .ftitle{ font-family:'Playfair Display',serif; font-weight:800; font-size:12px; letter-spacing:0.5px; border-bottom:2px solid var(--ink); padding-bottom:5px; margin-bottom:6px;}
+  .fold-paper .fline{ height:4px; background:rgba(36,27,20,0.18); border-radius:2px; margin-bottom:5px;}
+  .fold-paper .fline.short{ width:60%; }
+  .cover-screen .eyebrow{ font-size:11px; letter-spacing:3px; color:var(--gold-light); margin-bottom:8px;}
+  .cover-screen h1{ font-family:'Playfair Display',serif; font-size:30px; font-style:italic; margin:0 0 10px; color:#fff;}
+  .cover-screen p.sub{ font-size:13.5px; color:rgba(255,255,255,0.75); max-width:280px; margin:0 auto 26px; line-height:1.5;}
+  .open-btn{
+    background:linear-gradient(180deg, var(--gold-light), var(--gold)); color:#2b1607; border:none;
+    padding:14px 30px; border-radius:30px; font-size:13px; letter-spacing:1px; font-weight:700; cursor:pointer;
+    box-shadow:0 10px 22px -8px rgba(184,134,59,0.6); transition:transform .15s;
+  }
+  .open-btn:active{ transform:scale(0.96); }
+
+  /* ============ NEWSPAPER WRAP ============ */
+  .np-wrap{
+    position:relative; z-index:2; min-height:100vh; display:flex; justify-content:center;
+    padding:26px 12px 60px; opacity:0; transform:scale(0.2) rotate(-260deg);
+  }
+  .np-wrap.enter{ animation:spinIn 1.05s cubic-bezier(.2,.7,.3,1) forwards; }
+  @keyframes spinIn{ to{ opacity:1; transform:scale(1) rotate(0deg); } }
+  body.editing .np-wrap{ display:none; }
+
+  .top-toolbar{
+    position:fixed; top:14px; right:14px; z-index:50; display:flex; gap:8px;
+  }
+  .pencil-btn{
+    width:42px; height:42px; border-radius:50%; border:1px solid rgba(226,192,125,0.4);
+    background:rgba(0,0,0,0.25); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .pencil-btn svg{ width:17px; height:17px; }
+  body.editing .top-toolbar{ display:none; }
+
+  /* ---- Marca de agua "Link Emocional" (solo visible dentro del editor) ---- */
+  .ed-brand-watermark{
+    margin-left:auto;
+    flex:0 0 auto;
+    font-family:'Work Sans', sans-serif; font-weight:700; font-size:14px; letter-spacing:0.4px;
+    white-space:nowrap;
+    background:linear-gradient(90deg, #72CBE9, #745FC9);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    pointer-events:none; user-select:none;
+  }
+
+  .newspaper{
+    width:100%; max-width:620px; background:linear-gradient(170deg, var(--paper), var(--paper2));
+    color:var(--ink); border-radius:4px; box-shadow:0 30px 70px -20px rgba(0,0,0,0.6);
+    padding:22px 20px 30px; position:relative;
+  }
+  .newspaper:before{
+    content:''; position:absolute; inset:6px; border:1px solid var(--line-soft); pointer-events:none; border-radius:2px;
+  }
+  .masthead{ text-align:center; border-bottom:3px double var(--ink); padding-bottom:12px; margin-bottom:14px; }
+  .masthead .edition{ font-size:9.5px; letter-spacing:2px; color:var(--red); text-transform:uppercase; margin-bottom:4px;}
+  .masthead h1{ font-family:'Playfair Display',serif; font-weight:800; font-size:30px; margin:2px 0; letter-spacing:0.5px; }
+  .masthead .meta-row{ display:flex; justify-content:space-between; font-size:9.5px; letter-spacing:0.8px; color:var(--ink-soft); border-top:1px solid var(--line); padding-top:5px; margin-top:4px;}
+
+  .headline{ font-family:'Playfair Display',serif; font-weight:800; font-size:21px; line-height:1.18; text-align:center; margin:14px 0 8px; }
+  .subhead{ font-family:'Old Standard TT', serif; font-style:italic; font-size:13px; text-align:center; color:var(--ink-soft); max-width:480px; margin:0 auto 16px; line-height:1.5;}
+
+  .lead-photo{ width:100%; border-radius:3px; overflow:hidden; border:1px solid var(--line); margin-bottom:6px; background:#d9cbaa; min-height:170px; display:flex; align-items:center; justify-content:center; position:relative;}
+  .lead-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .lead-photo .ph-placeholder{ color:var(--ink-soft); font-size:12px; text-align:center; padding:20px; }
+  .lead-caption{ font-size:11px; text-align:center; font-style:italic; color:var(--ink-soft); margin-bottom:6px;}
+  .pull-quote{ font-family:'Caveat',cursive; font-size:20px; text-align:center; color:var(--red-dark); border-top:1px dashed var(--line); border-bottom:1px dashed var(--line); padding:10px 6px; margin:14px 0; line-height:1.35;}
+
+  .section-title{ font-family:'Playfair Display',serif; font-weight:800; font-size:15px; border-bottom:2px solid var(--ink); padding-bottom:5px; margin:22px 0 10px; }
+
+  .two-col{ display:grid; grid-template-columns:1fr; gap:16px; }
+  @media(min-width:480px){ .two-col{ grid-template-columns:1fr 1fr; } }
+  .sidebar-box{ border:1px solid var(--line); padding:12px; border-radius:3px; background:rgba(255,255,255,0.25);}
+  .sidebar-box h4{ font-family:'Playfair Display',serif; font-size:13px; margin:0 0 6px; }
+  .sidebar-box p{ font-size:12.5px; line-height:1.55; margin:0; color:var(--ink-soft); }
+
+  .bar-chart{ display:flex; align-items:flex-end; gap:10px; height:100px; margin:10px 0 6px; }
+  .bar-item{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+  .bar-fill{ width:100%; max-width:26px; background:linear-gradient(180deg, var(--red), var(--red-dark)); border-radius:3px 3px 0 0; transition:height 1s ease; }
+  .bar-label{ font-size:9.5px; margin-top:5px; color:var(--ink-soft); text-align:center; }
+
+  .puzzle-box{ border:1px solid var(--line); border-radius:4px; padding:14px; margin-top:6px; background:rgba(255,255,255,0.3); }
+  .puzzle-box p.hint{ font-size:12px; color:var(--ink-soft); margin:0 0 10px; }
+
+  /* word search */
+  .ws-grid{ display:grid; grid-template-columns:repeat(9, 1fr); gap:3px; max-width:320px; margin:0 auto 10px; }
+  .ws-cell{ aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;
+    background:#fff; border:1px solid var(--line-soft); border-radius:2px; cursor:pointer; user-select:none; color:var(--ink);}
+  .ws-cell.picked{ background:var(--gold-light); }
+  .ws-cell.found{ background:#a8d5a8; }
+  .ws-status{ text-align:center; font-size:12.5px; color:var(--red-dark); min-height:18px; font-weight:600; }
+  .ws-reset{ display:block; margin:8px auto 0; background:transparent; border:1px solid var(--ink-soft); color:var(--ink-soft); padding:6px 14px; border-radius:20px; font-size:11px; cursor:pointer; }
+
+  /* scratch card */
+  .scratch-wrap{ position:relative; width:100%; max-width:320px; height:110px; margin:0 auto; border-radius:6px; overflow:hidden; border:1px solid var(--line);}
+  .scratch-message{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:10px;
+    font-family:'Caveat',cursive; font-size:22px; color:var(--red-dark); background:#fff; }
+  .scratch-canvas{ position:absolute; inset:0; cursor:pointer; touch-action:none; }
+  .scratch-hint2{ text-align:center; font-size:11px; color:var(--ink-soft); margin-top:8px;}
+
+  /* gallery */
+  .archive-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .archive-item{ aspect-ratio:1; border-radius:4px; overflow:hidden; border:1px solid var(--line); background:#d9cbaa; position:relative;}
+  .archive-item img{ width:100%; height:100%; object-fit:cover; display:block;}
+  .archive-item .ic-ph{ display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:6px; color:var(--ink-soft); }
+  .archive-item .ic-ph svg{ width:22px; height:22px; opacity:0.55; }
+  .archive-item .ic-ph span{ font-size:9.5px; letter-spacing:0.4px; }
+  .archive-cap{ font-size:9.5px; text-align:center; margin-top:3px; color:var(--ink-soft); font-style:italic;}
+
+  /* poll */
+  .poll-q{ font-size:13.5px; font-weight:600; text-align:center; margin-bottom:10px;}
+  .poll-opts{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+  .poll-opt{ background:#fff; border:1px solid var(--line); padding:9px 15px; border-radius:20px; font-size:12.5px; cursor:pointer; color:var(--ink); font-family:'Work Sans',sans-serif;}
+  .poll-opt.chosen{ background:var(--red); color:#fff; border-color:var(--red);}
+  .poll-result{ text-align:center; font-size:12px; color:var(--red-dark); margin-top:10px; min-height:16px; font-weight:600;}
+
+  /* memory game */
+  .mem-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:7px; max-width:320px; margin:0 auto; }
+  .mem-card{ aspect-ratio:1; perspective:600px; cursor:pointer; }
+  .mem-inner{ position:relative; width:100%; height:100%; transition:transform .4s; transform-style:preserve-3d;}
+  .mem-card.flip .mem-inner{ transform:rotateY(180deg); }
+  .mem-face{ position:absolute; inset:0; backface-visibility:hidden; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:20px;}
+  .mem-front{ background:linear-gradient(160deg, var(--red), var(--red-dark)); color:#fff; font-family:'Playfair Display',serif;}
+  .mem-back{ background:#fff; border:1px solid var(--line); transform:rotateY(180deg); }
+  .mem-status{ text-align:center; font-size:12px; color:var(--ink-soft); margin-top:10px; }
+
+  .closing{ text-align:center; margin-top:26px; border-top:3px double var(--ink); padding-top:16px; }
+  .closing h2{ font-family:'Playfair Display',serif; font-style:italic; font-size:20px; margin:0 0 8px; }
+  .closing p{ font-size:13px; color:var(--ink-soft); max-width:420px; margin:0 auto; line-height:1.6;}
+
+  .confetti{ position:fixed; top:-10px; z-index:99; border-radius:2px; pointer-events:none; animation:fall linear forwards;}
+  @keyframes fall{ to{ transform:translateY(105vh) rotate(400deg); opacity:0.2; } }
+
+  /* ===================== EDITOR ===================== */
+  .editor{ display:none; position:fixed; inset:0; z-index:200; overflow-y:auto; background:linear-gradient(180deg, #170812, #0c0409 60%); color:#fbeee0; font-family:'Work Sans',sans-serif;}
+  body.editing .editor{ display:block; }
+  .ed-topbar{ position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:12px; padding:16px 18px; background:rgba(20,6,14,0.9); backdrop-filter:blur(8px); border-bottom:1px solid rgba(226,192,125,0.25);}
+  .ed-back{ width:36px; height:36px; border-radius:50%; border:1px solid rgba(226,192,125,0.3); background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#fbeee0; flex:0 0 auto;}
+  .ed-back svg{ width:16px; height:16px;}
+  .ed-titles h1{ font-size:16px; margin:0; font-family:'Playfair Display',serif; color:var(--gold-light);}
+  .ed-titles p{ font-size:11px; margin:2px 0 0; color:rgba(251,238,224,0.5);}
+  .ed-body{ max-width:600px; margin:0 auto; padding:18px 18px 70px;}
+  .ed-section{ margin-bottom:26px; border:1px solid rgba(226,192,125,0.25); border-radius:10px; padding:16px;}
+  .ed-section h3{ font-size:12.5px; letter-spacing:1.3px; color:var(--gold-light); margin:0 0 3px; text-transform:uppercase; font-weight:700;}
+  .ed-section .ed-hint{ font-size:11.5px; color:rgba(251,238,224,0.45); margin:0 0 14px; line-height:1.5;}
+  .ed-field{ margin-bottom:12px; }
+  .ed-field label{ display:block; font-size:11px; color:rgba(251,238,224,0.6); margin-bottom:5px;}
+  .ed-field input[type=text], .ed-field textarea, .ed-field input[type=number]{
+    width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(226,192,125,0.25); color:#fbeee0;
+    padding:10px 11px; border-radius:7px; font-family:'Work Sans',sans-serif; font-size:13.5px; resize:vertical;}
+  .ed-field textarea{ min-height:56px; }
+  .ed-field input[type=range]{ width:100%; accent-color:var(--gold-light); }
+  .ed-card{ border:1px dashed rgba(226,192,125,0.25); border-radius:9px; padding:12px; margin-bottom:12px; position:relative; background:rgba(255,255,255,0.02);}
+  .ed-card-remove{ position:absolute; top:8px; right:8px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,0.3); border:1px solid rgba(226,192,125,0.25); color:#fbeee0; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+  .ed-add-btn{ background:rgba(226,192,125,0.12); border:1px solid var(--gold-light); color:var(--gold-light); padding:9px 16px; border-radius:20px; font-size:12px; cursor:pointer;}
+  .ed-add-btn[disabled]{ opacity:0.35; cursor:default; }
+  .ed-photo-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+  .ed-photo-preview{ width:54px; height:54px; border-radius:8px; background-size:cover; background-position:center; border:1px solid rgba(226,192,125,0.25); display:flex; align-items:center; justify-content:center; font-size:11px; color:rgba(251,238,224,0.4); flex:0 0 auto; text-align:center;}
+  .ed-small-btn{ background:rgba(255,255,255,0.05); border:1px solid rgba(226,192,125,0.25); color:#fbeee0; padding:6px 12px; border-radius:14px; font-size:11px; cursor:pointer;}
+  .ed-footer{ border-top:1px solid rgba(226,192,125,0.2); padding-top:20px; margin-top:6px;}
+  .ed-checkbox-row{ display:flex; align-items:flex-start; gap:9px; margin-bottom:16px;}
+  .ed-checkbox-row input{ margin-top:3px; flex:0 0 auto;}
+  .ed-checkbox-row label{ font-size:11.5px; color:rgba(251,238,224,0.6); line-height:1.5;}
+  .ed-download{ width:100%; background:linear-gradient(180deg, var(--gold-light), var(--gold)); color:#2b1607; border:none; padding:14px; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer;}
+  .ed-filename input{ width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(226,192,125,0.25); color:#fbeee0; padding:9px 10px; border-radius:7px; font-size:12px; margin-top:10px;}
+  .ed-note{ font-size:11px; color:rgba(251,238,224,0.4); margin-top:12px; line-height:1.5;}
+
+  body.no-pencil .top-toolbar{ display:none !important; }
+</style>
+<style id="le-noeditor">#pencilBtn,.pencil-btn,.top-toolbar,#editToggle,.edit-toggle,#leEditToggle,.le-edit-toggle,.le-edit-hint,#editorOverlay,#editorPage,.editor-page,.le-editor-page,#pen,#ed{display:none!important}</style><script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 1}})}catch(e){}</script>
+<style id="pv-hide">
+/* vista previa: sin editor, sin pantalla de inicio */
+#pen,#ed,#go,#start-screen,.le-edit-toggle,.le-edit-hint,.le-editor-page,#leEditToggle,#coverScreen,#editorOverlay,#editorPage,#loadError{display:none !important}
+html,body{pointer-events:none !important;-webkit-user-select:none;user-select:none}
+</style>
+<script src="../protection.js"></script>
+</head>
+<body class="no-pencil">
+
+<div class="ambient" id="ambient"></div>
+
+<div class="cover-screen" id="coverScreen">
+  <div class="fold"><div class="fold-paper">
+    <div class="ftitle">THE TIMES</div>
+    <div class="fline"></div><div class="fline"></div><div class="fline short"></div>
+  </div></div>
+  <h1>The Anniversary Times</h1>
+  <p class="sub">Un periódico hecho solo para nosotros, para contar nuestra historia y jugar juntos.</p>
+  <button class="open-btn" id="openBtn">ABRIR EL PERIÓDICO</button>
+</div>
+
+<div class="top-toolbar">
+  <button class="pencil-btn" id="pencilBtn" title="Personalizar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#e2c07d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+  </button>
+</div>
+
+
+<div class="np-wrap" id="npWrap">
+  <article class="newspaper">
+    <header class="masthead">
+      <h1 id="mastheadView"></h1>
+      <div class="meta-row"><span id="volInfoView"></span><span id="priceInfoView"></span></div>
+    </header>
+
+    <h2 class="headline" id="headlineView"></h2>
+    <p class="subhead" id="subheadView"></p>
+
+    <div class="lead-photo" id="leadPhotoBox"></div>
+    <div class="lead-caption" id="leadCaptionView"></div>
+    <div class="pull-quote" id="quoteView"></div>
+
+    <div class="two-col">
+      <div class="sidebar-box">
+        <h4 id="sidebarTitleView"></h4>
+        <p id="sidebarTextView"></p>
+      </div>
+      <div class="sidebar-box">
+        <h4>ÍNDICE DE AMOR</h4>
+        <div class="bar-chart" id="barChart"></div>
+      </div>
+    </div>
+
+    <div class="section-title">SOPA DE ANIVERSARIO</div>
+    <div class="puzzle-box">
+      <p class="hint" id="wsIntroView"></p>
+      <div class="ws-grid" id="wsGrid"></div>
+      <div class="ws-status" id="wsStatus"></div>
+      <button class="ws-reset" id="wsReset">Reiniciar</button>
+    </div>
+
+    <div class="section-title">RASCA Y DESCUBRE</div>
+    <div class="puzzle-box">
+      <div class="scratch-wrap">
+        <div class="scratch-message" id="scratchMessageView"></div>
+        <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
+      </div>
+      <div class="scratch-hint2">Rasca con el dedo o el mouse para revelar el mensaje</div>
+    </div>
+
+    <div class="section-title">ARCHIVO FOTOGRÁFICO</div>
+    <div class="archive-grid" id="archiveGrid"></div>
+
+    <div class="section-title">ENCUESTA DEL DÍA</div>
+    <div class="puzzle-box">
+      <div class="poll-q" id="pollQView"></div>
+      <div class="poll-opts" id="pollOpts"></div>
+      <div class="poll-result" id="pollResult"></div>
+    </div>
+
+    <div class="section-title">MEMORAMA DEL AMOR</div>
+    <div class="puzzle-box">
+      <div class="mem-grid" id="memGrid"></div>
+      <div class="mem-status" id="memStatus"></div>
+    </div>
+
+    <footer class="closing">
+      <h2 id="closingTitleView"></h2>
+      <p id="closingMsgView"></p>
+    </footer>
+  </article>
+</div>
+
+<!-- ===================== EDITOR ===================== -->
+<div class="editor" id="editorOverlay">
+  <div class="ed-topbar">
+    <button class="ed-back" id="edBack">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="ed-titles"><h1>Editor del periódico</h1><p>Los cambios se ven al volver</p></div>
+    <div class="ed-brand-watermark" id="brandWatermark">Link Emocional</div>
+  </div>
+  <div class="ed-body">
+
+    <div class="ed-section">
+      <h3>Portada</h3>
+      <div class="ed-field"><label>Nombre del periódico</label><input type="text" id="fMasthead" maxlength="40"></div>
+      <div class="ed-field"><label>Vol / Nº</label><input type="text" id="fVolInfo" maxlength="30"></div>
+      <div class="ed-field"><label>Precio</label><input type="text" id="fPriceInfo" maxlength="30"></div>
+    </div>
+
+    <div class="ed-section">
+      <h3>Titular</h3>
+      <div class="ed-field"><label>Titular principal</label><textarea id="fHeadline" maxlength="140"></textarea></div>
+      <div class="ed-field"><label>Bajada / subtítulo</label><textarea id="fSubhead" maxlength="200"></textarea></div>
+      <div class="ed-photo-row">
+        <div class="ed-photo-preview" id="leadPhotoPrev">Sin foto</div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label class="ed-small-btn">Subir foto principal<input type="file" accept="image/*" id="leadPhotoInput" style="display:none;"></label>
+          <button class="ed-small-btn" id="leadPhotoRemove">Quitar foto</button>
+        </div>
+      </div>
+      <div class="ed-field"><label>Pie de foto</label><input type="text" id="fLeadCaption" maxlength="80"></div>
+      <div class="ed-field"><label>Frase / cita destacada</label><textarea id="fQuote" maxlength="180"></textarea></div>
+    </div>
+
+    <div class="ed-section">
+      <h3>Columna "Confirmado"</h3>
+      <div class="ed-field"><label>Título</label><input type="text" id="fSidebarTitle" maxlength="40"></div>
+      <div class="ed-field"><label>Texto</label><textarea id="fSidebarText" maxlength="260"></textarea></div>
+    </div>
+
+    <div class="ed-section">
+      <h3>Índice de amor</h3>
+      <p class="ed-hint">Ajusta las 4 etiquetas y su nivel (0-100).</p>
+      <div id="loveIndexEdit"></div>
+    </div>
+
+    <div class="ed-section">
+      <h3>Sopa de aniversario</h3>
+      <p class="ed-hint">Escribe una sola palabra (sin espacios) que se esconderá en la sopa de letras.</p>
+      <div class="ed-field"><label>Texto de instrucción</label><input type="text" id="fWsIntro" maxlength="60"></div>
+      <div class="ed-field"><label>Palabra a encontrar</label><input type="text" id="fWsWord" maxlength="9"></div>
+    </div>
+
+    <div class="ed-section">
+      <h3>Rasca y descubre</h3>
+      <div class="ed-field"><label>Mensaje oculto</label><textarea id="fScratchMsg" maxlength="90"></textarea></div>
+    </div>
+
+    <div class="ed-section">
+      <h3>Archivo fotográfico</h3>
+      <p class="ed-hint">Hasta 6 fotos con su pie de foto.</p>
+      <div id="galleryEditList"></div>
+      <button class="ed-add-btn" id="addGalleryBtn">+ Agregar foto</button>
+    </div>
+
+    <div class="ed-section">
+      <h3>Encuesta</h3>
+      <div class="ed-field"><label>Pregunta</label><input type="text" id="fPollQ" maxlength="60"></div>
+      <p class="ed-hint">Opciones (3 a 5).</p>
+      <div id="pollEditList"></div>
+      <button class="ed-add-btn" id="addPollBtn">+ Agregar opción</button>
+    </div>
+
+    <div class="ed-section">
+      <h3>Memorama</h3>
+      <p class="ed-hint">Emojis o símbolos para las parejas del memorama (4 a 8).</p>
+      <div id="memEditList"></div>
+      <button class="ed-add-btn" id="addMemBtn">+ Agregar símbolo</button>
+    </div>
+
+    <div class="ed-section">
+      <h3>Cierre</h3>
+      <div class="ed-field"><label>Título</label><input type="text" id="fClosingTitle" maxlength="50"></div>
+      <div class="ed-field"><label>Mensaje final</label><textarea id="fClosingMsg" maxlength="260"></textarea></div>
+    </div>
+
+    <div class="ed-footer">
+      <div class="ed-checkbox-row">
+        <input type="checkbox" id="includeEditorCheckbox">
+        <label for="includeEditorCheckbox">Incluir el editor (el lápiz) en el archivo descargado. Déjalo desactivado para la versión final que le envíes a la persona — así no le aparece el lápiz. Actívalo si quieres poder seguir editando este mismo archivo más adelante.</label>
+      </div>
+      <button class="ed-download" id="downloadBtn">Descargar mi periódico personalizado</button>
+      <div class="ed-filename"><input type="text" id="filenameInput" value="nuestro-periodico-personalizado.html"></div>
+      <p class="ed-note">"Descargar" genera un archivo HTML nuevo y completo con todos tus cambios y fotos ya incluidos, listo para enviar o abrir desde cualquier navegador.</p>
+    </div>
+  </div>
+</div>
+
+<script id="initial-state" type="application/json">{"masthead": "THE ANNIVERSARY TIMES", "volInfo": "VOL. I · Nº 1", "priceInfo": "PRECIO: UN BESO", "headline": "¡EL MUNDO SE DETIENE: HOY CELEBRAMOS NUESTRO ANIVERSARIO!", "subhead": "Expertos no logran explicar cómo alguien puede seguir viéndose tan perfecta después de todo este tiempo juntos.", "leadPhoto": "", "leadCaption": "Imagen exclusiva, brindada por muchos aniversarios más.", "quote": "Feliz aniversario. Te amo no solo por lo que eres, sino por lo que soy cuando estoy contigo.", "sidebarTitle": "CONFIRMADO: MI CORAZÓN ES CADA VEZ MÁS TUYO", "sidebarText": "Desde que nos conocimos, nuestra historia solo ha crecido a niveles de felicidad nunca antes vistos.", "loveIndex": [{"label": "Año 1", "value": 30}, {"label": "Año 2", "value": 55}, {"label": "Año 3", "value": 75}, {"label": "Hoy", "value": 100}], "wsIntro": "Encuentra la palabra escondida tocando las letras en orden.", "wsWord": "AMOR", "scratchMsg": "¡Feliz aniversario, mi amor! Gracias por elegirme cada día.", "gallery": [{"photo": "", "caption": "Ese día..."}, {"photo": "", "caption": "Tú y yo"}, {"photo": "", "caption": "Aventuras"}, {"photo": "", "caption": "Siempre juntos"}], "pollQ": "¿Qué tanto me amas hoy?", "pollOptions": ["Mucho", "Infinito", "Más que ayer"], "memEmojis": ["💖", "🌹", "💌", "✨", "🥂", "💍"], "closingTitle": "Gracias por ser tú", "closingMsg": "Este periódico tiene una sola edición, una sola portada y un solo protagonista de mi corazón: tú. Feliz aniversario."}</script>
+
+<script>
+(function(){
+  var MAX_GALLERY=6, MIN_GALLERY=1, MAX_POLL=5, MIN_POLL=3, MAX_MEM=8, MIN_MEM=4;
+  var stateEl = document.getElementById('initial-state');
+  var state;
+  try { state = JSON.parse(stateEl.textContent); } catch(e){ state = {}; }
+  function persistState(){ stateEl.textContent = JSON.stringify(state); }
+  function escapeHtml(str){ var d=document.createElement('div'); d.textContent = str==null?'':str; return d.innerHTML; }
+
+  /* ---------- ambient hearts ---------- */
+  var ambient = document.getElementById('ambient');
+  for(var i=0;i<14;i++){
+    var h=document.createElement('div');
+    h.className='heart'; h.textContent = i%2===0 ? '♡':'❀';
+    h.style.left=(Math.random()*100)+'vw';
+    h.style.fontSize=(12+Math.random()*14)+'px';
+    h.style.animationDuration=(12+Math.random()*10)+'s';
+    h.style.animationDelay=(Math.random()*12)+'s';
+    ambient.appendChild(h);
+  }
+
+  /* ---------- open cover ---------- */
+  document.getElementById('openBtn').addEventListener('click', function(){
+    document.getElementById('coverScreen').classList.add('hide');
+    var wrap = document.getElementById('npWrap');
+    wrap.classList.add('enter');
+  });
+
+  /* ================= RENDER ================= */
+  function renderMasthead(){
+    document.getElementById('mastheadView').textContent = state.masthead;
+    document.getElementById('volInfoView').textContent = state.volInfo;
+    document.getElementById('priceInfoView').textContent = state.priceInfo;
+  }
+  function renderLead(){
+    document.getElementById('headlineView').textContent = state.headline;
+    document.getElementById('subheadView').textContent = state.subhead;
+    var box = document.getElementById('leadPhotoBox');
+    box.innerHTML = state.leadPhoto ? '<img src="'+state.leadPhoto+'">' : '<div class="ph-placeholder">Foto principal aquí</div>';
+    document.getElementById('leadCaptionView').textContent = state.leadCaption;
+    document.getElementById('quoteView').textContent = '“' + state.quote + '”';
+  }
+  function renderSidebar(){
+    document.getElementById('sidebarTitleView').textContent = state.sidebarTitle;
+    document.getElementById('sidebarTextView').textContent = state.sidebarText;
+    var el = document.getElementById('barChart');
+    el.innerHTML='';
+    state.loveIndex.forEach(function(item){
+      var d=document.createElement('div'); d.className='bar-item';
+      d.innerHTML = '<div class="bar-fill" style="height:'+Math.max(4,item.value)+'%"></div><div class="bar-label">'+escapeHtml(item.label)+'</div>';
+      el.appendChild(d);
+    });
+  }
+  function renderClosing(){
+    document.getElementById('closingTitleView').textContent = state.closingTitle;
+    document.getElementById('closingMsgView').textContent = state.closingMsg;
+  }
+  function renderGalleryView(){
+    var el = document.getElementById('archiveGrid');
+    el.innerHTML='';
+    state.gallery.forEach(function(item){
+      var wrap=document.createElement('div');
+      var box=document.createElement('div'); box.className='archive-item';
+      box.innerHTML = item.photo ? '<img src="'+item.photo+'">' : '<div class="ic-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Sin foto</span></div>';
+      wrap.appendChild(box);
+      var cap=document.createElement('div'); cap.className='archive-cap'; cap.textContent=item.caption||'';
+      wrap.appendChild(cap);
+      el.appendChild(wrap);
+    });
+  }
+
+  /* ---------- word search ---------- */
+  var GRID_SIZE=9;
+  var wsSelection=[];
+  function buildWordSearchGrid(){
+    var word = (state.wsWord||'AMOR').toUpperCase().replace(/[^A-ZÑ]/g,'') || 'AMOR';
+    word = word.slice(0,9);
+    var grid = [];
+    for(var r=0;r<GRID_SIZE;r++){ grid.push(new Array(GRID_SIZE).fill(null)); }
+    var horizontal = Math.random() < 0.5;
+    if(horizontal){
+      var row = Math.floor(Math.random()*GRID_SIZE);
+      var col = Math.floor(Math.random()*(GRID_SIZE-word.length+1));
+      for(var i=0;i<word.length;i++){ grid[row][col+i] = {ch:word[i], idx:i}; }
+    } else {
+      var col2 = Math.floor(Math.random()*GRID_SIZE);
+      var row2 = Math.floor(Math.random()*(GRID_SIZE-word.length+1));
+      for(var j=0;j<word.length;j++){ grid[row2+j][col2] = {ch:word[j], idx:j}; }
+    }
+    var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    for(var rr=0; rr<GRID_SIZE; rr++){
+      for(var cc=0; cc<GRID_SIZE; cc++){
+        if(!grid[rr][cc]) grid[rr][cc] = {ch: letters[Math.floor(Math.random()*letters.length)], idx:-1};
+      }
+    }
+    return {grid:grid, word:word};
+  }
+  var wsData;
+  function renderWordSearch(){
+    document.getElementById('wsIntroView').textContent = state.wsIntro;
+    wsData = buildWordSearchGrid();
+    wsSelection = [];
+    document.getElementById('wsStatus').textContent = '';
+    var el = document.getElementById('wsGrid');
+    el.innerHTML='';
+    for(var r=0;r<GRID_SIZE;r++){
+      for(var c=0;c<GRID_SIZE;c++){
+        var cellData = wsData.grid[r][c];
+        var cell = document.createElement('div');
+        cell.className='ws-cell';
+        cell.textContent = cellData.ch;
+        cell.dataset.r = r; cell.dataset.c = c;
+        cell.addEventListener('click', function(){ handleWsClick(this); });
+        el.appendChild(cell);
+      }
+    }
+  }
+  function handleWsClick(cell){
+    if(cell.classList.contains('found')) return;
+    cell.classList.toggle('picked');
+    var letter = cell.textContent;
+    if(cell.classList.contains('picked')) wsSelection.push({el:cell, ch:letter});
+    else wsSelection = wsSelection.filter(function(s){ return s.el!==cell; });
+    var current = wsSelection.map(function(s){ return s.ch; }).join('');
+    if(current.length === wsData.word.length){
+      if(current === wsData.word){
+        wsSelection.forEach(function(s){ s.el.classList.remove('picked'); s.el.classList.add('found'); });
+        document.getElementById('wsStatus').textContent = '¡Encontraste "'+wsData.word+'"! ♡';
+      } else {
+        document.getElementById('wsStatus').textContent = 'Casi... intenta de nuevo.';
+        setTimeout(function(){
+          wsSelection.forEach(function(s){ s.el.classList.remove('picked'); });
+          wsSelection = [];
+          document.getElementById('wsStatus').textContent = '';
+        }, 700);
+      }
+    }
+  }
+  document.getElementById('wsReset').addEventListener('click', renderWordSearch);
+
+  /* ---------- scratch card ---------- */
+  function renderScratch(){
+    document.getElementById('scratchMessageView').textContent = state.scratchMsg;
+    var canvas = document.getElementById('scratchCanvas');
+    var wrap = canvas.parentElement;
+    var w = wrap.clientWidth, h = wrap.clientHeight;
+    canvas.width = w; canvas.height = h;
+    var ctx = canvas.getContext('2d');
+    var grad = ctx.createLinearGradient(0,0,w,h);
+    grad.addColorStop(0,'#c9a15a'); grad.addColorStop(1,'#8a6b3a');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.font = '700 13px Work Sans, sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('RASCA AQUÍ', w/2, h/2);
+    ctx.globalCompositeOperation = 'destination-out';
+    canvas.style.opacity = '1';
+
+    var drawing=false, cleared=0, totalPixels = w*h, checked=false;
+    function scratchAt(x,y){
+      ctx.beginPath();
+      ctx.arc(x,y,18,0,Math.PI*2);
+      ctx.fill();
+    }
+    function getPos(e){
+      var rect = canvas.getBoundingClientRect();
+      var cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      var cy = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+      return {x:cx, y:cy};
+    }
+    function checkCleared(){
+      if(checked) return;
+      var data = ctx.getImageData(0,0,w,h).data;
+      var transparent=0;
+      for(var p=3;p<data.length;p+=40){ if(data[p]===0) transparent++; }
+      var ratio = transparent/(data.length/40);
+      if(ratio > 0.45){
+        checked = true;
+        canvas.style.transition='opacity .5s ease';
+        canvas.style.opacity='0';
+        setTimeout(function(){ canvas.style.pointerEvents='none'; }, 500);
+      }
+    }
+    function start(e){ drawing=true; var p=getPos(e); scratchAt(p.x,p.y); }
+    function move(e){ if(!drawing) return; var p=getPos(e); scratchAt(p.x,p.y); checkCleared(); }
+    function end(){ drawing=false; }
+    canvas.onmousedown=start; canvas.onmousemove=move; window.addEventListener('mouseup', end);
+    canvas.ontouchstart=function(e){ start(e); };
+    canvas.ontouchmove=function(e){ move(e); };
+    canvas.ontouchend=end;
+  }
+
+  /* ---------- poll ---------- */
+  function renderPoll(){
+    document.getElementById('pollQView').textContent = state.pollQ;
+    var el = document.getElementById('pollOpts');
+    el.innerHTML='';
+    document.getElementById('pollResult').textContent='';
+    state.pollOptions.forEach(function(opt){
+      var btn = document.createElement('button');
+      btn.className='poll-opt'; btn.textContent=opt;
+      btn.addEventListener('click', function(){
+        Array.prototype.forEach.call(el.children, function(b){ b.classList.remove('chosen'); });
+        btn.classList.add('chosen');
+        document.getElementById('pollResult').textContent = 'Gracias por responder: "'+opt+'" ♡';
+      });
+      el.appendChild(btn);
+    });
+  }
+
+  /* ---------- memory game ---------- */
+  var memFlipped=[], memMatched=0, memLock=false;
+  function shuffle(arr){
+    var a = arr.slice();
+    for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+    return a;
+  }
+  function renderMemory(){
+    memFlipped=[]; memMatched=0; memLock=false;
+    var symbols = (state.memEmojis && state.memEmojis.length ? state.memEmojis : ['💖','🌹','💌','✨']).slice(0,8);
+    var deck = shuffle(symbols.concat(symbols));
+    var el = document.getElementById('memGrid');
+    el.innerHTML='';
+    document.getElementById('memStatus').textContent = '0 / '+symbols.length+' parejas encontradas';
+    deck.forEach(function(sym, idx){
+      var card = document.createElement('div'); card.className='mem-card'; card.dataset.sym = sym; card.dataset.idx = idx;
+      card.innerHTML = '<div class="mem-inner"><div class="mem-face mem-front">♡</div><div class="mem-face mem-back">'+sym+'</div></div>';
+      card.addEventListener('click', function(){ handleMemClick(card, symbols.length); });
+      el.appendChild(card);
+    });
+  }
+  function handleMemClick(card, totalPairs){
+    if(memLock || card.classList.contains('flip') || memFlipped.indexOf(card)!==-1) return;
+    card.classList.add('flip');
+    memFlipped.push(card);
+    if(memFlipped.length===2){
+      memLock = true;
+      var a=memFlipped[0], b=memFlipped[1];
+      if(a.dataset.sym === b.dataset.sym){
+        memMatched++;
+        document.getElementById('memStatus').textContent = memMatched+' / '+totalPairs+' parejas encontradas'+(memMatched===totalPairs?' — ¡completado! ♡':'');
+        memFlipped=[]; memLock=false;
+      } else {
+        setTimeout(function(){
+          a.classList.remove('flip'); b.classList.remove('flip');
+          memFlipped=[]; memLock=false;
+        }, 700);
+      }
+    }
+  }
+
+  function renderAll(){
+    renderMasthead(); renderLead(); renderSidebar(); renderGalleryView();
+    renderWordSearch(); renderScratch(); renderPoll(); renderMemory(); renderClosing();
+  }
+
+  /* ================= CONFETTI on memory complete (bonus) ================= */
+  // (kept simple; not wired to avoid clutter)
+
+  /* ================= EDITOR ================= */
+  var pencilBtn = document.getElementById('pencilBtn');
+  var edBack = document.getElementById('edBack');
+  pencilBtn.addEventListener('click', function(){
+    document.body.classList.add('editing');
+    fillSimpleFields();
+    renderLoveIndexEditor();
+    renderGalleryEditor();
+    renderPollEditor();
+    renderMemEditor();
+    window.scrollTo(0,0);
+  });
+  edBack.addEventListener('click', function(){
+    document.body.classList.remove('editing');
+    renderAll();
+  });
+
+  function bindText(id, key){
+    var el = document.getElementById(id);
+    el.value = state[key];
+    el.addEventListener('input', function(){ state[key] = el.value; persistState(); });
+  }
+  function fillSimpleFields(){
+    bindText('fMasthead','masthead'); bindText('fVolInfo','volInfo'); bindText('fPriceInfo','priceInfo');
+    bindText('fHeadline','headline'); bindText('fSubhead','subhead'); bindText('fLeadCaption','leadCaption'); bindText('fQuote','quote');
+    bindText('fSidebarTitle','sidebarTitle'); bindText('fSidebarText','sidebarText');
+    bindText('fWsIntro','wsIntro'); bindText('fWsWord','wsWord');
+    bindText('fScratchMsg','scratchMsg');
+    bindText('fPollQ','pollQ');
+    bindText('fClosingTitle','closingTitle'); bindText('fClosingMsg','closingMsg');
+
+    var prev = document.getElementById('leadPhotoPrev');
+    function updateLeadPreview(){
+      if(state.leadPhoto){ prev.style.backgroundImage='url('+state.leadPhoto+')'; prev.textContent=''; }
+      else { prev.style.backgroundImage='none'; prev.textContent='Sin foto'; }
+    }
+    updateLeadPreview();
+    document.getElementById('leadPhotoInput').addEventListener('change', function(e){
+      var file = e.target.files && e.target.files[0];
+      if(!file) return;
+      fileToCompressedDataUrl(file).then(function(dataUrl){ state.leadPhoto = dataUrl; persistState(); updateLeadPreview(); });
+    });
+    document.getElementById('leadPhotoRemove').addEventListener('click', function(){ state.leadPhoto=null; persistState(); updateLeadPreview(); });
+  }
+
+  function fileToCompressedDataUrl(file, maxSize){
+    maxSize = maxSize || 400;
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var img = new Image();
+        img.onload = function(){
+          var w=img.width, h=img.height;
+          var scale = Math.min(1, maxSize/Math.max(w,h));
+          w = Math.round(w*scale); h = Math.round(h*scale);
+          var c = document.createElement('canvas'); c.width=w; c.height=h;
+          c.getContext('2d').drawImage(img,0,0,w,h);
+          resolve(c.toDataURL('image/jpeg', 0.85));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ---- love index editor ---- */
+  function renderLoveIndexEditor(){
+    var wrap = document.getElementById('loveIndexEdit');
+    wrap.innerHTML='';
+    state.loveIndex.forEach(function(item, idx){
+      var card = document.createElement('div'); card.className='ed-card';
+      card.innerHTML =
+        '<div class="ed-field"><label>Etiqueta</label><input type="text" class="li-label" maxlength="14"></div>' +
+        '<div class="ed-field"><label>Nivel: <span class="li-val-label"></span>%</label><input type="range" class="li-range" min="0" max="100"></div>';
+      card.querySelector('.li-label').value = item.label;
+      card.querySelector('.li-range').value = item.value;
+      card.querySelector('.li-val-label').textContent = item.value;
+      card.querySelector('.li-label').addEventListener('input', function(e){ item.label = e.target.value; persistState(); });
+      card.querySelector('.li-range').addEventListener('input', function(e){
+        item.value = parseInt(e.target.value,10);
+        card.querySelector('.li-val-label').textContent = item.value;
+        persistState();
+      });
+      wrap.appendChild(card);
+    });
+  }
+
+  /* ---- gallery editor ---- */
+  function renderGalleryEditor(){
+    var wrap = document.getElementById('galleryEditList');
+    wrap.innerHTML='';
+    state.gallery.forEach(function(item, idx){
+      var card = document.createElement('div'); card.className='ed-card';
+      card.innerHTML =
+        '<button class="ed-card-remove" data-idx="'+idx+'">&#10005;</button>' +
+        '<div class="ed-photo-row"><div class="ed-photo-preview" id="gPrev'+idx+'">Sin foto</div>' +
+        '<div style="display:flex; flex-direction:column; gap:6px;">' +
+        '<label class="ed-small-btn">Subir foto<input type="file" accept="image/*" class="g-photo" style="display:none;"></label>' +
+        '<button class="ed-small-btn g-remove-photo">Quitar foto</button></div></div>' +
+        '<div class="ed-field"><label>Pie de foto</label><input type="text" class="g-caption" maxlength="30"></div>';
+      var preview = card.querySelector('#gPrev'+idx);
+      function updatePrev(){
+        if(item.photo){ preview.style.backgroundImage='url('+item.photo+')'; preview.textContent=''; }
+        else { preview.style.backgroundImage='none'; preview.textContent='Sin foto'; }
+      }
+      updatePrev();
+      card.querySelector('.g-caption').value = item.caption;
+      card.querySelector('.g-caption').addEventListener('input', function(e){ item.caption = e.target.value; persistState(); });
+      card.querySelector('.g-photo').addEventListener('change', function(e){
+        var file = e.target.files && e.target.files[0];
+        if(!file) return;
+        fileToCompressedDataUrl(file).then(function(dataUrl){ item.photo = dataUrl; persistState(); updatePrev(); });
+      });
+      card.querySelector('.g-remove-photo').addEventListener('click', function(){ item.photo=null; persistState(); updatePrev(); });
+      card.querySelector('.ed-card-remove').addEventListener('click', function(){
+        if(state.gallery.length<=MIN_GALLERY) return;
+        state.gallery.splice(idx,1); persistState(); renderGalleryEditor();
+      });
+      wrap.appendChild(card);
+    });
+    document.getElementById('addGalleryBtn').disabled = state.gallery.length>=MAX_GALLERY;
+  }
+  document.getElementById('addGalleryBtn').addEventListener('click', function(){
+    if(state.gallery.length>=MAX_GALLERY) return;
+    state.gallery.push({photo:null, caption:'Nuevo recuerdo'});
+    persistState(); renderGalleryEditor();
+  });
+
+  /* ---- poll editor ---- */
+  function renderPollEditor(){
+    var wrap = document.getElementById('pollEditList');
+    wrap.innerHTML='';
+    state.pollOptions.forEach(function(opt, idx){
+      var row = document.createElement('div'); row.className='ed-card';
+      row.innerHTML = '<button class="ed-card-remove" data-idx="'+idx+'">&#10005;</button><div class="ed-field"><label>Opción '+(idx+1)+'</label><input type="text" class="p-opt" maxlength="30"></div>';
+      row.querySelector('.p-opt').value = opt;
+      row.querySelector('.p-opt').addEventListener('input', function(e){ state.pollOptions[idx] = e.target.value; persistState(); });
+      row.querySelector('.ed-card-remove').addEventListener('click', function(){
+        if(state.pollOptions.length<=MIN_POLL) return;
+        state.pollOptions.splice(idx,1); persistState(); renderPollEditor();
+      });
+      wrap.appendChild(row);
+    });
+    document.getElementById('addPollBtn').disabled = state.pollOptions.length>=MAX_POLL;
+  }
+  document.getElementById('addPollBtn').addEventListener('click', function(){
+    if(state.pollOptions.length>=MAX_POLL) return;
+    state.pollOptions.push('Nueva opción'); persistState(); renderPollEditor();
+  });
+
+  /* ---- memory editor ---- */
+  function renderMemEditor(){
+    var wrap = document.getElementById('memEditList');
+    wrap.innerHTML='';
+    state.memEmojis.forEach(function(sym, idx){
+      var row = document.createElement('div'); row.className='ed-card';
+      row.innerHTML = '<button class="ed-card-remove" data-idx="'+idx+'">&#10005;</button><div class="ed-field"><label>Símbolo '+(idx+1)+'</label><input type="text" class="m-sym" maxlength="4"></div>';
+      row.querySelector('.m-sym').value = sym;
+      row.querySelector('.m-sym').addEventListener('input', function(e){ state.memEmojis[idx] = e.target.value; persistState(); });
+      row.querySelector('.ed-card-remove').addEventListener('click', function(){
+        if(state.memEmojis.length<=MIN_MEM) return;
+        state.memEmojis.splice(idx,1); persistState(); renderMemEditor();
+      });
+      wrap.appendChild(row);
+    });
+    document.getElementById('addMemBtn').disabled = state.memEmojis.length>=MAX_MEM;
+  }
+  document.getElementById('addMemBtn').addEventListener('click', function(){
+    if(state.memEmojis.length>=MAX_MEM) return;
+    state.memEmojis.push('💛'); persistState(); renderMemEditor();
+  });
+
+  /* ---- download ---- */
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+    persistState();
+    var keepEditor = document.getElementById('includeEditorCheckbox').checked;
+    document.body.classList.remove('editing');
+    document.getElementById('coverScreen').classList.add('hide');
+    document.getElementById('npWrap').classList.add('enter');
+    renderAll();
+    setTimeout(function(){
+      if(!keepEditor) document.body.classList.add('no-pencil');
+      var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      if(!keepEditor) document.body.classList.remove('no-pencil');
+      var blob = new Blob([html], {type:'text/html'});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      var name = document.getElementById('filenameInput').value.trim() || 'nuestro-periodico-personalizado.html';
+      if(!name.toLowerCase().endsWith('.html')) name += '.html';
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    }, 60);
+  });
+
+  /* ================= INIT ================= */
+  renderAll();
+})();
+</script>
+<script>
+/* vista previa: arranca sola y simula al cliente (dedo fantasma) */
+(function(){
+function pe(type,x,y,target){var ev;try{ev=new PointerEvent(type,{clientX:x,clientY:y,pointerId:1,bubbles:true,cancelable:true,isPrimary:true,pointerType:"touch"});}catch(e){return;}(target||window).dispatchEvent(ev);}
+function $(i){return document.getElementById(i)}
+function go(){ var g=$("openBtn"); if(g) g.click(); }
+function run(){ go(); setTimeout(function(){ try{ ghost(); }catch(e){} }, 900); }
+function ghost(){
+
+function q(s){return document.querySelector(s)}
+function clk(s,i){var l=document.querySelectorAll(s); var e=l[i||0]; if(e) e.click(); return !!e}
+function at(ms,fn){setTimeout(function(){try{fn()}catch(e){}},ms)}
+function again(ms){at(ms,function(){location.reload()})}
+function mouse(t,x,y){window.dispatchEvent(new MouseEvent(t,{clientX:x,clientY:y,bubbles:true}))}
+function drag(ms0,dur,fx,fy,tgt){ /* arrastra el dedo siguiendo fx(k),fy(k), k de 0 a 1 */
+  at(ms0,function(){var W=innerWidth,H=innerHeight,t0=Date.now();mouse('mousedown',fx(0)*W,fy(0)*H);
+   var iv=setInterval(function(){var k=Math.min(1,(Date.now()-t0)/dur);mouse('mousemove',fx(k)*W,fy(k)*H);
+    if(k>=1){clearInterval(iv);mouse('mouseup',fx(1)*W,fy(1)*H)}},30)});
+}
+function pdrag(ms0,dur,fx,fy,c){ at(ms0,function(){var W=innerWidth,H=innerHeight,t0=Date.now();pe('pointerdown',fx(0)*W,fy(0)*H,c);
+   var iv=setInterval(function(){var k=Math.min(1,(Date.now()-t0)/dur);pe('pointermove',fx(k)*W,fy(k)*H,window);
+    if(k>=1){clearInterval(iv);pe('pointerup',fx(1)*W,fy(1)*H,window)}},30)}); }
+function scanStar(stopId,n,after){ /* busca estrellas tocando puntos hasta que se abra la nota */
+  var pts=[],i,j; for(i=0;i<14;i++)for(j=0;j<14;j++)pts.push([.08+i*.065,.12+j*.06]);
+  pts.sort(function(){return Math.random()-.5}); var k=0,found=0;
+  var iv=setInterval(function(){ var o=q('#noteOverlay'); if(o&&o.classList.contains('show')){ if(!o._w){o._w=1; found++; setTimeout(function(){var c=q('#noteClose'); if(c)c.click(); o._w=0; if(found>=n){clearInterval(iv); if(after)after();}},2300);} return;}
+    if(o&&o._w) return; var p=pts[k++%pts.length],x=p[0]*innerWidth,y=p[1]*innerHeight; mouse('mousedown',x,y); mouse('mouseup',x,y); },110);
+}
+at(1800,function(){var els=[document.scrollingElement].concat([].slice.call(document.querySelectorAll('*')).filter(function(e){return e.scrollHeight>e.clientHeight+80&&/(auto|scroll)/.test(getComputedStyle(e).overflowY)})); var el=els[els.length-1]||els[0]; var t0=Date.now(); var iv=setInterval(function(){el.scrollTop=(Date.now()-t0)/9; },30); at(9000,function(){clearInterval(iv)})}); again(13000);
+}
+if(document.readyState==="complete") setTimeout(run,60); else addEventListener("load",function(){setTimeout(run,60)});
+})();
+</script>
+</body>
+</html>

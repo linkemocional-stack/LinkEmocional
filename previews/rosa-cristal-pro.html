@@ -1,0 +1,2188 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#2a0a18">
+<title>[preview] 🌹 Rosa de Cristal 🌹</title>
+<meta name="description" content="Una rosa de partículas que abre sus pétalos dentro de una cúpula de cristal, en un jardín nocturno con luciérnagas, luna y estrellas fugaces.">
+<meta property="og:title" content="🌹 Rosa de Cristal 🌹">
+<meta property="og:description" content="Una rosa de partículas que abre sus pétalos dentro de una cúpula de cristal, en un jardín nocturno.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌹</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Indie+Flower&family=Montserrat:wght@700;800&family=Pacifico&family=Playfair+Display:wght@600;700;800&family=Quicksand:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html, body {
+    margin:0; height:100%; background:#000; overflow:hidden;
+    font-family:'Dancing Script', cursive;
+    touch-action:none;
+    -webkit-user-select:none; user-select:none; -webkit-tap-highlight-color:transparent;
+  }
+  canvas { display:block; }
+
+  #start-screen{
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background:radial-gradient(circle at center,#3a0a1c 0%,#050108 100%);
+    display:flex; justify-content:center; align-items:center; flex-direction:column;
+    z-index:3000; color:#ffc3d6; font-size:2rem; font-weight:700; cursor:pointer;
+    transition:opacity 1s ease; text-shadow:0 0 15px #ff3d78;
+  }
+  #start-screen.hidden{ opacity:0; pointer-events:none; }
+  .pulse-text{ animation:pulse 1.5s infinite alternate; letter-spacing:.5px; }
+  @keyframes pulse{ 0%{transform:scale(1);opacity:.8} 100%{transform:scale(1.1);opacity:1} }
+  .start-heart{ margin-top:18px; font-size:3.4rem; animation:startBeat 1.6s ease-in-out infinite; }
+  @keyframes startBeat{ 0%,100%{transform:scale(1) rotate(-4deg)} 50%{transform:scale(1.16) rotate(4deg)} }
+  @media (max-width:480px){ .start-heart{ font-size:2.6rem; margin-top:12px; } }
+
+  #top-title{
+    position:fixed; top:20px; left:0; width:100%; text-align:center;
+    z-index:1500; pointer-events:none;
+    font-family:'Dancing Script', cursive; font-weight:700; font-size:2.8rem; letter-spacing:1px;
+    background:linear-gradient(90deg,#ffd7a8,#ff3d78,#ffb3c6);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 14px rgba(224,36,94,.55));
+    animation:titlePulse 1.8s ease-in-out infinite;
+  }
+  @keyframes titlePulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.035)} }
+  @media (max-width:480px){ #top-title{ font-size:1.9rem; top:14px; } }
+
+  #love-letter-btn{
+    position:fixed; bottom:24px; right:24px; z-index:1800;
+    width:60px; height:60px; border-radius:50%; border:none; cursor:pointer;
+    background:linear-gradient(135deg,#8a1030,#e0245e);
+    box-shadow:0 0 18px rgba(224,36,94,.6), 0 4px 14px rgba(0,0,0,.35);
+    display:flex; align-items:center; justify-content:center; font-size:1.55rem;
+    animation:btnBeat 1.8s ease-in-out infinite; transition:transform .25s ease;
+  }
+  #love-letter-btn:hover{ transform:scale(1.08); }
+  @keyframes btnBeat{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.07)} }
+
+  #love-letter-overlay{
+    position:fixed; inset:0; background:rgba(20,3,10,.84);
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    z-index:2500; display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .4s ease; padding:24px;
+  }
+  #love-letter-overlay.visible{ opacity:1; pointer-events:auto; }
+  #love-letter-card{
+    max-width:620px; width:100%; max-height:82vh; overflow-y:auto;
+    background:linear-gradient(160deg,rgba(64,10,28,.96),rgba(14,3,8,.98));
+    border:1px solid rgba(224,36,94,.35); border-radius:22px;
+    padding:40px 32px; box-shadow:0 0 40px rgba(224,36,94,.35);
+    color:#ffe4e9; font-family:'Dancing Script', cursive;
+    transform:translateY(18px) scale(.96); transition:transform .4s ease; position:relative;
+  }
+  #love-letter-overlay.visible #love-letter-card{ transform:translateY(0) scale(1); }
+  #love-letter-card h2{
+    text-align:center; margin:0 0 22px; font-size:2rem; font-weight:700;
+    background:linear-gradient(90deg,#e9b3ff,#c86bff,#ffd6f5);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  #love-letter-card p{ line-height:1.8; font-size:1.25rem; margin:0 0 16px; }
+  #love-letter-close{
+    position:absolute; top:14px; right:16px; background:none; border:none;
+    color:#ffb8c8; font-size:1.35rem; cursor:pointer; line-height:1; padding:4px;
+  }
+  #love-letter-close:hover{ color:#fff; }
+  @media (max-width:480px){
+    #love-letter-btn{ width:52px; height:52px; font-size:1.3rem; bottom:18px; right:18px; }
+    #love-letter-card{ padding:30px 22px; border-radius:18px; }
+    #love-letter-card h2{ font-size:1.6rem; }
+    #love-letter-card p{ font-size:1.1rem; }
+  }
+
+/* ============================================================
+   EDITOR LINK EMOCIONAL  (inyectado)
+   ============================================================ */
+:root{
+  --le-accent: #e0245e;
+  --le-accent-soft: rgba(224,36,94,0.14);
+  --le-bg: #1a060e;
+  --le-panel: rgba(26,6,14,0.92);
+  --le-text: #ffe4e9;
+  --le-muted: #c08a95;
+  --le-line: rgba(224,36,94,0.24);
+}
+
+/* ---- boton lapiz ---- */
+.le-edit-toggle{
+  position:fixed; top:16px; right:16px;
+  width:50px; height:50px; border-radius:50%;
+  background:rgba(10,8,4,0.45);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--le-line);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; z-index:3600;
+  box-shadow:0 0 22px rgba(0,0,0,0.35);
+  transition:transform .15s ease, background .15s ease;
+}
+.le-edit-toggle:hover{ transform:scale(1.07); background:rgba(10,8,4,0.7); }
+.le-edit-toggle svg{ width:20px; height:20px; }
+body.le-no-editor .le-edit-toggle{ display:none !important; }
+
+/* ---- pagina del editor ---- */
+.le-editor-page{
+  display:none; position:relative; z-index:50; min-height:100%;
+  color:var(--le-text);
+  font-family:'Quicksand','Segoe UI',Arial,sans-serif;
+}
+html.le-editing{ overflow-y:auto !important; overflow-x:hidden !important; height:auto !important; touch-action:auto !important; background:var(--le-bg) !important; }
+body.le-editor{ overflow-y:auto !important; overflow-x:hidden !important; background:var(--le-bg) !important; touch-action:auto !important; height:auto !important; }
+body.le-editor .le-editor-page{ display:block; }
+body.le-editor #start-screen,
+body.le-editor #top-title,
+body.le-editor #love-letter-btn,
+body.le-editor #love-letter-overlay,
+body.le-editor .le-edit-toggle{ display:none !important; }
+body.le-no-editor .le-editor-page{ display:none !important; }
+
+#c.le-stage-full{ position:fixed; top:0; left:0; z-index:1; }
+#c.le-stage-preview{ position:relative !important; display:block; width:100% !important; height:100% !important; }
+
+.le-topbar{
+  position:sticky; top:0; display:flex; align-items:center; gap:14px;
+  padding:14px 18px; background:var(--le-panel);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--le-line); z-index:60;
+}
+.le-back{
+  width:40px; height:40px; flex:0 0 auto; border-radius:50%;
+  background:rgba(255,255,255,0.06); border:1px solid var(--le-line);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--le-text);
+}
+.le-back:hover{ background:rgba(255,255,255,0.13); }
+.le-back svg{ width:19px; height:19px; }
+.le-titles{ flex:1 1 auto; min-width:0; }
+.le-titles h1{ font-size:16px; margin:0; font-weight:700; }
+.le-titles p{ font-size:11.5px; margin:2px 0 0; color:var(--le-muted); }
+.le-brand{
+  margin-left:auto; flex:0 0 auto;
+  font-weight:700; font-size:14px; letter-spacing:0.4px; white-space:nowrap;
+  background:linear-gradient(90deg,#72CBE9,#745FC9);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  pointer-events:none; user-select:none;
+}
+
+.le-body{ max-width:640px; margin:0 auto; padding:18px 18px 70px; }
+
+.le-preview{
+  position:relative; width:100%; aspect-ratio:4/3;
+  border-radius:20px; overflow:hidden;
+  border:1px solid var(--le-line); background:#000;
+  box-shadow:0 10px 30px rgba(0,0,0,0.45); margin-bottom:24px;
+}
+.le-preview .le-tag{
+  position:absolute; top:10px; left:12px; font-size:10.5px; font-weight:700;
+  letter-spacing:0.06em; text-transform:uppercase; color:var(--le-accent);
+  background:rgba(0,0,0,0.5); border:1px solid var(--le-line);
+  padding:4px 9px; border-radius:999px; pointer-events:none; z-index:5;
+}
+
+.le-sec{ margin-bottom:26px; }
+.le-sec h3{ font-size:13.5px; font-weight:700; margin:0 0 3px; color:var(--le-text); }
+.le-sec p.le-hint{ font-size:12px; color:var(--le-muted); margin:0 0 12px; line-height:1.5; }
+
+.le-input, .le-area{
+  width:100%; box-sizing:border-box;
+  background:rgba(255,255,255,0.05); border:1px solid var(--le-line);
+  color:var(--le-text); padding:11px; border-radius:8px;
+  font-family:'Quicksand',sans-serif; font-size:14px; font-weight:600;
+}
+.le-area{ min-height:150px; line-height:1.6; font-weight:500; resize:vertical; }
+
+.le-color-row{ display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+.le-color-row input[type=color]{ width:44px; height:44px; border:2px solid var(--le-line); border-radius:11px; background:none; cursor:pointer; padding:0; flex:0 0 auto; }
+.le-color-row input[type=text]{ flex:1 1 140px; min-width:0; }
+.le-swatches{ display:flex; gap:8px; flex-wrap:wrap; }
+.le-sw{ width:28px; height:28px; border-radius:8px; border:2px solid rgba(255,255,255,0.15); cursor:pointer; transition:transform .12s ease; flex-shrink:0; }
+.le-sw:hover{ transform:scale(1.12); }
+.le-sw.active{ border-color:#fff; }
+
+.le-opts{ display:flex; flex-wrap:wrap; gap:8px; }
+.le-opt{
+  flex:1 1 95px; background:rgba(255,255,255,0.04); border:1px solid var(--le-line);
+  border-radius:9px; padding:11px 8px; cursor:pointer; font-size:15px;
+  color:var(--le-text); text-align:center; line-height:1.2;
+}
+.le-opt small{ display:block; font-size:9.5px; font-weight:700; color:var(--le-muted); margin-top:3px; font-family:'Quicksand',sans-serif; }
+.le-opt.active{ border-color:var(--le-accent); color:var(--le-accent); background:var(--le-accent-soft); }
+.le-opt.active small{ color:var(--le-accent); opacity:.85; }
+
+.le-chips{ display:flex; flex-direction:column; gap:7px; margin-bottom:10px; max-height:280px; overflow-y:auto; }
+.le-chip{ display:flex; align-items:center; gap:9px; background:rgba(255,255,255,0.045); border:1px solid var(--le-line); border-radius:8px; padding:10px 9px 10px 13px; }
+.le-chip span{ flex:1; font-size:13.5px; font-weight:600; word-break:break-word; }
+.le-chip button{ background:none; border:none; color:var(--le-muted); font-size:16px; cursor:pointer; padding:3px 6px; border-radius:5px; }
+.le-chip button:hover{ color:#ff8fa8; }
+.le-empty{ font-size:12px; color:var(--le-muted); font-style:italic; padding:5px 2px; opacity:.8; }
+
+.le-add-row{ display:flex; gap:8px; flex-wrap:wrap; }
+.le-add-row input[type=text]{ flex:1 1 160px; min-width:0; }
+.le-btn{ border:none; border-radius:8px; padding:11px 16px; font-family:'Quicksand',sans-serif; font-weight:700; font-size:13px; cursor:pointer; }
+.le-btn-add{ background:var(--le-accent-soft); color:var(--le-accent); border:1px solid var(--le-line); flex:0 0 auto; }
+.le-btn-clear{ background:none; color:var(--le-muted); border:1px solid var(--le-line); font-size:11.5px; padding:8px 12px; margin-top:8px; }
+.le-btn-clear:hover{ color:#ff8fa8; border-color:#ff8fa8; }
+
+.le-grid{ display:flex; flex-wrap:wrap; gap:9px; margin-bottom:10px; }
+.le-thumb{ width:60px; height:60px; border-radius:14px; background-size:cover; background-position:center; position:relative; border:1px solid var(--le-line); }
+.le-thumb button{ position:absolute; top:-6px; right:-6px; width:21px; height:21px; border-radius:50%; background:#1a1208; border:1px solid var(--le-line); color:var(--le-text); font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+.le-add-tile{ width:60px; height:60px; border-radius:14px; border:1.5px dashed var(--le-line); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--le-muted); font-size:24px; flex-shrink:0; }
+.le-add-tile.disabled{ opacity:.35; pointer-events:none; }
+.le-add-tile input{ display:none; }
+.le-note{ font-size:11px; color:var(--le-muted); margin-top:2px; }
+
+.le-switch{ display:flex; align-items:center; gap:10px; padding:11px 12px; background:rgba(255,255,255,0.04); border:1px solid var(--le-line); border-radius:9px; margin-bottom:8px; cursor:pointer; }
+.le-switch input{ width:18px; height:18px; accent-color:var(--le-accent); flex:0 0 auto; }
+.le-switch span{ font-size:13px; font-weight:600; }
+
+.le-range .le-label{ font-size:12px; color:var(--le-muted); margin-bottom:6px; }
+.le-range input[type=range]{ width:100%; accent-color:var(--le-accent); }
+
+.le-footer{ margin-top:6px; padding-top:20px; border-top:1px solid var(--le-line); }
+.le-check{ display:flex; align-items:flex-start; gap:9px; margin-bottom:14px; }
+.le-check input{ margin-top:3px; flex:0 0 auto; accent-color:var(--le-accent); }
+.le-check label{ font-size:12px; color:var(--le-muted); line-height:1.5; }
+.le-btn-dl{ width:100%; background:var(--le-accent); color:#1a1200; padding:15px 16px; font-size:14.5px; border-radius:10px; }
+.le-btn-dl:hover{ filter:brightness(1.08); }
+.le-file-row{ margin-top:12px; }
+.le-save-note{ font-size:11.5px; color:var(--le-muted); line-height:1.5; margin-top:14px; }
+
+</style>
+<style id="le-noeditor">#pencilBtn,.pencil-btn,.top-toolbar,#editToggle,.edit-toggle,#leEditToggle,.le-edit-toggle,.le-edit-hint,#editorOverlay,#editorPage,.editor-page,.le-editor-page,#pen,#ed{display:none!important}</style><script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 1}})}catch(e){}</script>
+<style id="pv-hide">
+/* vista previa: sin editor, sin pantalla de inicio */
+#pen,#ed,#go,#start-screen,.le-edit-toggle,.le-edit-hint,.le-editor-page,#leEditToggle,#coverScreen,#editorOverlay,#editorPage,#loadError{display:none !important}
+html,body{pointer-events:none !important;-webkit-user-select:none;user-select:none}
+</style>
+<script src="../protection.js"></script>
+</head>
+<body class="le-no-editor">
+
+<div id="start-screen">
+  <div class="pulse-text" id="tap-text">Toca para iniciar</div>
+  <div class="start-heart" aria-hidden="true">🌹</div>
+</div>
+
+<div id="top-title"></div>
+
+<button id="love-letter-btn" aria-label="Leer mensaje">💌</button>
+
+<div id="love-letter-overlay">
+  <div id="love-letter-card">
+    <button id="love-letter-close" aria-label="Cerrar mensaje">✕</button>
+    <h2>Para ti 🌹</h2>
+    <div id="love-letter-body"></div>
+  </div>
+</div>
+
+<canvas id="c"></canvas>
+<audio id="audio" loop></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script><script>window.THREE||document.write('<script src="https://unpkg.com/three@0.148.0/build/three.min.js"><\/script>')</script><script>window.THREE||document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"><\/script>')</script>
+<script>if (typeof THREE === "undefined") { document.write('<script src="https://unpkg.com/three@0.148.0/build/three.min.js"><\/script>'); }</script>
+<script>if (typeof THREE === "undefined") { document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"><\/script>'); }</script>
+<script id="le-initial-state" type="application/json">{"color": "#e0245e", "font": "dancing", "shape": "heart", "burst": true, "trail": true, "burstCount": 80, "extra": {"figuraA": "capullo", "figuraB": "rosaAbierta", "cupula": true, "luciernagasOn": true, "luciernagas": 80, "fugaces": true, "petalos": true}}</script>
+<script>
+(function(){
+  var el = document.getElementById("le-initial-state");
+  var s = {};
+  try { s = JSON.parse(el.textContent || "{}") || {}; } catch(e){ s = {}; }
+  window.LE_STATE = {
+    state: s,
+    applyTo: function(cfg){
+      if (!cfg) return;
+      window.LE_BASE = {
+        titulo: cfg.titulo, mensaje: cfg.mensaje, tapTexto: cfg.tapTexto,
+        frases: Array.isArray(cfg.frases) ? cfg.frases.slice() : [],
+        fotos:  Array.isArray(cfg.fotos)  ? cfg.fotos.slice()  : [],
+        musica: cfg.musica
+      };
+      if (s.titulo   != null) cfg.titulo   = s.titulo;
+      if (s.mensaje  != null) cfg.mensaje  = s.mensaje;
+      if (s.tapTexto != null) cfg.tapTexto = s.tapTexto;
+      if (s.color    != null) cfg.color    = s.color;
+      if (Array.isArray(s.frases)) cfg.frases = s.frases;
+      if (Array.isArray(s.fotos))  cfg.fotos  = s.fotos;
+      if (typeof s.musica === "string") cfg.musica = s.musica;
+      if (s.extra && typeof s.extra === "object"){
+        for (var k in s.extra){ if (Object.prototype.hasOwnProperty.call(s.extra,k)) cfg[k] = s.extra[k]; }
+      }
+    }
+  };
+})();
+</script>
+<script>
+const DEFAULTS = {
+  titulo: "Mi rosa eterna 🌹",
+  tapTexto: "Toca para iniciar",
+  mensaje: "Hay flores que se marchitan. Esta no.\n\nLa encerré en cristal para que el tiempo no le gane, igual que quiero que pase con lo nuestro.\n\nCada pétalo que se abre es una razón para quererte: tu risa, tu forma de cuidar, los días simples que contigo se vuelven especiales.\n\nQue esta rosa se abra una y otra vez, para siempre, como este cariño.",
+  frases: [
+    "Mi rosa eterna 🌹", "Nunca te vas a marchitar", "Cada pétalo es un te quiero",
+    "Mi para siempre", "Contigo florece todo", "Eres mi jardín favorito",
+    "Te elijo cada día", "Mi calma en las noches", "Gracias por quedarte",
+    "Mi lugar favorito eres tú", "Eterna como esta rosa", "Mi milagro diario",
+    "Contigo todo es más bonito", "Nuestro amor no se marchita", "Mi hogar eres tú",
+    "Te pienso siempre", "Mi mejor casualidad", "Bajo esta cúpula, para siempre",
+    "Mi alma te reconoce", "Para toda la vida 🌹"
+  ],
+  fotos: [],
+  musica: "",
+  color: "#c86bff",
+  figuraA: "capullo",
+  figuraB: "rosaAbierta",
+  cupula: true,
+  luciernagasOn: true,
+  luciernagas: 80,
+  fugaces: true
+};
+const CONFIG = Object.assign({}, DEFAULTS);
+if (window.LE_STATE && window.LE_STATE.applyTo) window.LE_STATE.applyTo(CONFIG);
+</script>
+
+<script>
+/* ============================================================
+   ROSA DE CRISTAL — escena 3D
+   ============================================================ */
+const isMobile = /Android|iPhone|iPad|iPod|Mobi/i.test(navigator.userAgent) || window.innerWidth <= 820;
+
+/* ---------- inicio / audio ---------- */
+const startScreen = document.getElementById('start-screen');
+const audio = document.getElementById('audio');
+if (CONFIG.musica) { audio.src = CONFIG.musica; }
+audio.preload = 'auto';
+try { audio.load(); } catch(e){}
+
+let experienceStarted = false;
+function unlockAudioAndStart(){
+  if (experienceStarted) return;
+  experienceStarted = true;
+  const pp = audio.play();
+  if (pp && typeof pp.catch === 'function') pp.catch(function(){});
+  startScreen.classList.add('hidden');
+}
+startScreen.addEventListener('touchend', function(e){ e.preventDefault(); unlockAudioAndStart(); }, {passive:false});
+startScreen.addEventListener('click', unlockAudioAndStart);
+
+/* ---------- carta ---------- */
+document.getElementById('top-title').textContent = CONFIG.titulo;
+const letterBody = document.getElementById('love-letter-body');
+String(CONFIG.mensaje || '').split(/\n\s*\n/).forEach(function(par){
+  const p = document.createElement('p');
+  p.textContent = par.trim();
+  letterBody.appendChild(p);
+});
+const letterBtn = document.getElementById('love-letter-btn');
+const letterOverlay = document.getElementById('love-letter-overlay');
+const letterClose = document.getElementById('love-letter-close');
+letterBtn.addEventListener('click', function(){ letterOverlay.classList.add('visible'); });
+letterClose.addEventListener('click', function(){ letterOverlay.classList.remove('visible'); });
+letterOverlay.addEventListener('click', function(e){ if (e.target === letterOverlay) letterOverlay.classList.remove('visible'); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') letterOverlay.classList.remove('visible'); });
+
+/* ---------- renderer ---------- */
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: !isMobile});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
+renderer.setSize(innerWidth, innerHeight);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 6000);
+
+let targetDist = 430, currentDist = 430;
+let rotX = 0.18, rotY = 0;
+
+/* ---------- texturas base ---------- */
+function makeDotTexture(){
+  const size = 64;
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(size/2,size/2,0,size/2,size/2,size/2);
+  g.addColorStop(0.0,'rgba(255,255,255,1)');
+  g.addColorStop(0.55,'rgba(255,255,255,1)');
+  g.addColorStop(0.85,'rgba(255,255,255,0.55)');
+  g.addColorStop(1.0,'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0,0,size,size);
+  return new THREE.CanvasTexture(c);
+}
+const dotTexture = makeDotTexture();
+
+function petalTexture(){
+  const size = 128;
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  ctx.translate(size/2, size/2);
+  const g = ctx.createRadialGradient(0,-size*0.12,2,0,0,size*0.46);
+  g.addColorStop(0,'rgba(255,255,255,1)');
+  g.addColorStop(0.55,'rgba(255,255,255,0.75)');
+  g.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, size*0.22, size*0.44, 0, 0, Math.PI*2);
+  ctx.fill();
+  return new THREE.CanvasTexture(c);
+}
+const petalTex = petalTexture();
+
+function makeAurora(size, hex){
+  size = size || 1024;
+  const rgb = function(h){ h=h.replace('#',''); return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]; };
+  const dark = function(h,a){ const c=rgb(h); return 'rgb('+Math.round(c[0]*(1-a))+','+Math.round(c[1]*(1-a))+','+Math.round(c[2]*(1-a))+')'; };
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  /* fondo jardín nocturno: azul-violeta profundo */
+  const base = dark('#1a1040', 0.0);
+  ctx.fillStyle = '#0a0620'; ctx.fillRect(0,0,size,size);
+  const blobs = [
+    {x:0.22,y:0.28,r:0.62,a:0.55, c:dark(hex,0.72)},
+    {x:0.78,y:0.60,r:0.55,a:0.70, c:dark('#2a1a55',0.4)},
+    {x:0.50,y:0.50,r:0.82,a:0.84, c:dark(hex,0.86)}
+  ];
+  blobs.forEach(function(b){
+    const g = ctx.createRadialGradient(size*b.x,size*b.y,0,size*b.x,size*b.y,size*b.r);
+    g.addColorStop(0, b.c.replace('rgb(','rgba(').replace(')',',0.55)'));
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(0,0,size,size);
+  });
+  /* luna llena, arriba a la izquierda */
+  const mx = size*0.20, my = size*0.18, mr = size*0.055;
+  const halo = ctx.createRadialGradient(mx,my,0,mx,my,mr*3.2);
+  halo.addColorStop(0,'rgba(255,250,225,0.55)');
+  halo.addColorStop(1,'rgba(255,250,225,0)');
+  ctx.fillStyle = halo; ctx.fillRect(0,0,size,size);
+  const moonGrad = ctx.createRadialGradient(mx-mr*0.25,my-mr*0.25,mr*0.1,mx,my,mr);
+  moonGrad.addColorStop(0,'#fffef2');
+  moonGrad.addColorStop(0.7,'#fff2cf');
+  moonGrad.addColorStop(1,'#f0dca0');
+  ctx.fillStyle = moonGrad;
+  ctx.beginPath(); ctx.arc(mx,my,mr,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = 'rgba(200,180,140,0.35)';
+  [[0.3,-0.2,0.16],[-0.15,0.3,0.11],[0.15,0.35,0.08]].forEach(function(cr){
+    ctx.beginPath(); ctx.arc(mx+cr[0]*mr, my+cr[1]*mr, cr[2]*mr, 0, Math.PI*2); ctx.fill();
+  });
+  for (let i=0;i<340;i++){
+    ctx.fillStyle = 'rgba(255,255,255,'+(Math.random()*0.5)+')';
+    const s = Math.random()*1.4;
+    ctx.fillRect(Math.random()*size, Math.random()*size, s, s);
+  }
+  return new THREE.CanvasTexture(c);
+}
+scene.background = makeAurora(1024, CONFIG.color || '#e0245e');
+
+/* ---------- estrellas de fondo ---------- */
+(function makeStars(count, spread){
+  count = count || (isMobile ? 1600 : 2600); spread = spread || 3200;
+  const g = new THREE.BufferGeometry();
+  const pos = new Float32Array(count*3);
+  for (let i=0;i<count;i++){
+    const r = spread*(0.3 + Math.random()*0.7);
+    const th = Math.random()*Math.PI*2;
+    const ph = Math.acos(2*Math.random()-1);
+    pos[i*3]   = r*Math.sin(ph)*Math.cos(th);
+    pos[i*3+1] = r*Math.cos(ph);
+    pos[i*3+2] = r*Math.sin(ph)*Math.sin(th);
+  }
+  g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({
+    size: 2.2, sizeAttenuation:false, map: dotTexture, transparent:true,
+    alphaTest:0.01, depthWrite:false, opacity:0.9, color:0xfff0ff
+  })));
+})();
+
+/* ============================================================
+   FIGURA CENTRAL DE PARTÍCULAS (morph entre dos formas)
+   ============================================================ */
+function curveFor(kind, t){
+  if (kind === 'capullo'){
+    const r = 10*(1 + 0.20*Math.cos(6*t));
+    return { x: r*Math.cos(t), y: r*Math.sin(t) };
+  }
+  if (kind === 'rosaAbierta'){
+    let r = (0.55 + 0.45*Math.cos(5*t)) * 58;
+    r *= (1 + 0.09*Math.cos(15*t));
+    return { x: r*Math.cos(t), y: r*Math.sin(t) };
+  }
+  if (kind === 'mariposa'){
+    const r = Math.exp(Math.cos(t)) - 2*Math.cos(4*t) - Math.pow(Math.sin(t/12),5);
+    return { x: Math.sin(t)*r*11.5, y: Math.cos(t)*r*11.5 - 6 };
+  }
+  if (kind === 'infinito'){
+    const d = 1 + Math.sin(t)*Math.sin(t);
+    return { x: (Math.cos(t)/d)*56, y: (Math.sin(t)*Math.cos(t)/d)*56 };
+  }
+  if (kind === 'flor'){
+    const r = Math.cos(5*t)*52;
+    return { x: r*Math.cos(t), y: r*Math.sin(t) };
+  }
+  if (kind === 'estrella'){
+    const tot = 10, va = Math.PI*2/tot;
+    const u = (t % (Math.PI*2)) / va;
+    const k = Math.floor(u), f = u - k;
+    const r0 = (k%2===0) ? 52 : 23, r1 = ((k+1)%2===0) ? 52 : 23;
+    const a0 = -Math.PI/2 + k*va, a1 = -Math.PI/2 + (k+1)*va;
+    const r = r0 + (r1-r0)*f, a = a0 + (a1-a0)*f;
+    return { x: r*Math.cos(a), y: r*Math.sin(a) };
+  }
+  if (kind === 'luna'){
+    return { x: Math.cos(t)*52, y: Math.sin(t)*52 };
+  }
+  /* corazon */
+  const x = 16*Math.pow(Math.sin(t),3);
+  const y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+  return { x: x*3.3, y: y*3.3 + 20 };
+}
+
+const SHAPE_TMAX = { capullo: Math.PI*2, rosaAbierta: Math.PI*2, mariposa: 12*Math.PI, infinito: Math.PI*2, flor: Math.PI*2, estrella: Math.PI*2, luna: Math.PI*2, corazon: Math.PI*2 };
+
+function cupHeight(kind, r){
+  if (kind === 'capullo')     return 15 * (1 - Math.min(1, r/13));
+  if (kind === 'rosaAbierta') return 22 * (1 - Math.min(1, r/58));
+  return 0;
+}
+
+function buildShape(kind, count, seeds){
+  const arr = new Float32Array(count*3);
+  const tmax = SHAPE_TMAX[kind] || Math.PI*2;
+
+  /* la luna se muestrea por relleno: disco grande menos disco desplazado */
+  if (kind === 'luna'){
+    const R = 56, r2 = 47, dx = 21;
+    for (let i=0;i<count;i++){
+      let x = 0, y = 0, tries = 0;
+      do {
+        const rr = Math.sqrt(Math.random())*R;
+        const aa = Math.random()*Math.PI*2;
+        x = rr*Math.cos(aa); y = rr*Math.sin(aa);
+        tries++;
+      } while (Math.hypot(x-dx, y) < r2 && tries < 60);
+      arr[i*3] = x; arr[i*3+1] = y; arr[i*3+2] = (Math.random()-0.5)*9;
+    }
+    return arr;
+  }
+
+  for (let i=0;i<count;i++){
+    const t = seeds[i]*tmax;
+    const p0 = curveFor(kind, t);
+    const p1 = curveFor(kind, t + 0.002);
+    let tx = p1.x-p0.x, ty = p1.y-p0.y;
+    const len = Math.hypot(tx,ty) || 1;
+    const nx = -ty/len, ny = tx/len;
+    const off = (seeds[(i+7)%count]-0.5) * 5.5;
+    const px = p0.x + nx*off, py = p0.y + ny*off;
+    arr[i*3]   = px;
+    arr[i*3+1] = py;
+    arr[i*3+2] = (seeds[(i+13)%count]-0.5) * 9 + cupHeight(kind, Math.hypot(px,py));
+  }
+  return arr;
+}
+
+const FIG_COUNT = isMobile ? 5200 : 7200;
+const seeds = new Float32Array(FIG_COUNT);
+for (let i=0;i<FIG_COUNT;i++) seeds[i] = Math.random();
+
+let shapeA = buildShape(CONFIG.figuraA || 'capullo', FIG_COUNT, seeds);
+let shapeB = buildShape(CONFIG.figuraB || 'rosaAbierta', FIG_COUNT, seeds);
+const livePos = new Float32Array(shapeA);
+
+const heartGeom = new THREE.BufferGeometry();
+heartGeom.setAttribute('position', new THREE.BufferAttribute(livePos, 3));
+const heartMat = new THREE.PointsMaterial({
+  color: 0xe0245e, size: 1.25, map: dotTexture, transparent:true,
+  alphaTest:0.01, depthWrite:false, opacity:0.96, blending: THREE.AdditiveBlending
+});
+const heart = new THREE.Points(heartGeom, heartMat);
+scene.add(heart);
+
+function rebuildShapes(a, b){
+  shapeA = buildShape(a, FIG_COUNT, seeds);
+  shapeB = buildShape(b, FIG_COUNT, seeds);
+}
+
+const HOLD = 6, MORPH = 2.6;
+const CYCLE = (HOLD + MORPH) * 2;
+function easeInOutCubic(x){ return x < 0.5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2; }
+function mixAt(sec){
+  const p = sec % CYCLE;
+  if (p < HOLD) return 0;
+  if (p < HOLD + MORPH) return easeInOutCubic((p-HOLD)/MORPH);
+  if (p < HOLD*2 + MORPH) return 1;
+  return 1 - easeInOutCubic((p - HOLD*2 - MORPH)/MORPH);
+}
+const sceneStart = performance.now();
+
+/* ============================================================
+   PÉTALOS QUE SUBEN
+   ============================================================ */
+const PETAL_COUNT = isMobile ? 260 : 420;
+const petalPos = new Float32Array(PETAL_COUNT*3);
+const petalData = [];
+for (let i=0;i<PETAL_COUNT;i++){
+  const r = 40 + Math.random()*300;
+  const a = Math.random()*Math.PI*2;
+  petalPos[i*3]   = Math.cos(a)*r;
+  petalPos[i*3+1] = -200 + Math.random()*400;
+  petalPos[i*3+2] = Math.sin(a)*r;
+  petalData.push({ speed: 8 + Math.random()*16, sway: Math.random()*Math.PI*2, swayAmp: 6 + Math.random()*10 });
+}
+const petalGeom = new THREE.BufferGeometry();
+petalGeom.setAttribute('position', new THREE.BufferAttribute(petalPos,3));
+const spiralMat = new THREE.PointsMaterial({
+  color: 0xff8fae, size: 6, map: petalTex, transparent:true,
+  alphaTest:0.01, depthWrite:false, opacity:0.85, blending: THREE.AdditiveBlending
+});
+const spiral = new THREE.Points(petalGeom, spiralMat);
+scene.add(spiral);
+
+/* ============================================================
+   LUCIÉRNAGAS
+   ============================================================ */
+const fireflyMax = isMobile ? 90 : 160;
+let ACTIVE_FIREFLIES = (typeof CONFIG.luciernagas === 'number') ? Math.min(CONFIG.luciernagas, fireflyMax) : (isMobile ? 45 : 80);
+const fireflyPos = new Float32Array(fireflyMax*3);
+const fireflyData = [];
+for (let i=0;i<fireflyMax;i++){
+  const r = 60 + Math.random()*320;
+  const a = Math.random()*Math.PI*2;
+  fireflyPos[i*3]   = Math.cos(a)*r;
+  fireflyPos[i*3+1] = -60 + Math.random()*220;
+  fireflyPos[i*3+2] = Math.sin(a)*r;
+  fireflyData.push({
+    ang: a, radius: r, vy: 4 + Math.random()*6,
+    flick: Math.random()*Math.PI*2, flickSpeed: 1.5 + Math.random()*2.5,
+    drift: 0.05 + Math.random()*0.1
+  });
+}
+const fireflyGeom = new THREE.BufferGeometry();
+fireflyGeom.setAttribute('position', new THREE.BufferAttribute(fireflyPos,3));
+const fireflyMat = new THREE.PointsMaterial({
+  color: 0xffe9a8, size: 3.4, map: dotTexture, transparent:true,
+  alphaTest:0.01, depthWrite:false, opacity:0.95, blending: THREE.AdditiveBlending
+});
+const fireflies = new THREE.Points(fireflyGeom, fireflyMat);
+fireflies.visible = (CONFIG.luciernagas !== 0) && (CONFIG.luciernagasOn !== false);
+fireflyGeom.setDrawRange(0, ACTIVE_FIREFLIES);
+scene.add(fireflies);
+function setFireflyCount(n){
+  ACTIVE_FIREFLIES = Math.max(0, Math.min(fireflyMax, n|0));
+  fireflyGeom.setDrawRange(0, ACTIVE_FIREFLIES);
+}
+window.setFireflyCount = setFireflyCount;
+
+/* ============================================================
+   CÚPULA DE CRISTAL
+   ============================================================ */
+const domeGroup = new THREE.Group();
+const domeOuter = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(150, 2),
+  new THREE.MeshBasicMaterial({ color: 0xffffff, transparent:true, opacity:0.10, wireframe:true })
+);
+const domeInner = new THREE.Mesh(
+  new THREE.SphereGeometry(148, 32, 24),
+  new THREE.MeshBasicMaterial({ color: 0xffe6ef, transparent:true, opacity:0.035, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite:false })
+);
+const domeRim = new THREE.Mesh(
+  new THREE.TorusGeometry(150, 1.4, 8, 64),
+  new THREE.MeshBasicMaterial({ color: 0xffe6ef, transparent:true, opacity:0.28, blending: THREE.AdditiveBlending, depthWrite:false })
+);
+domeRim.rotation.x = Math.PI/2;
+domeGroup.add(domeOuter, domeInner, domeRim);
+domeGroup.visible = (CONFIG.cupula !== false);
+scene.add(domeGroup);
+
+/* ============================================================
+   POLVO ESFÉRICO
+   ============================================================ */
+const DUST_INNER_R = 150;
+const DUST_OUTER_R = 390;
+const dustPts = [];
+const DUST_COUNT = isMobile ? 7000 : 13000;
+for (let i=0;i<DUST_COUNT;i++){
+  const r = DUST_INNER_R + Math.random()*(DUST_OUTER_R-DUST_INNER_R);
+  const th = Math.random()*Math.PI*2;
+  const ph = Math.acos(2*Math.random()-1);
+  dustPts.push(new THREE.Vector3(r*Math.sin(ph)*Math.cos(th), r*Math.cos(ph), r*Math.sin(ph)*Math.sin(th)));
+}
+const dustGeom = new THREE.BufferGeometry().setFromPoints(dustPts);
+const dustMat = new THREE.PointsMaterial({
+  color: 0xf0d5ff, size: 1.0, map: dotTexture, transparent:true,
+  alphaTest:0.01, depthWrite:false, opacity:0.5, blending: THREE.AdditiveBlending
+});
+const dust = new THREE.Points(dustGeom, dustMat);
+scene.add(dust);
+
+/* ============================================================
+   RESPLANDOR + ANILLOS
+   ============================================================ */
+function makeGlow(size, c1, c2){
+  size = size || 768; c1 = c1 || '255,110,150'; c2 = c2 || '255,200,150';
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d');
+  const gr = g.createRadialGradient(size/2,size/2,size*0.05,size/2,size/2,size*0.5);
+  gr.addColorStop(0,'rgba('+c1+',0.7)');
+  gr.addColorStop(0.5,'rgba('+c2+',0.2)');
+  gr.addColorStop(1,'rgba(0,0,0,0)');
+  g.fillStyle = gr; g.fillRect(0,0,size,size);
+  return new THREE.CanvasTexture(c);
+}
+const glow = new THREE.Sprite(new THREE.SpriteMaterial({map: makeGlow(), transparent:true, depthWrite:false, blending: THREE.AdditiveBlending}));
+glow.scale.set(470,470,1);
+scene.add(glow);
+
+function ringTexture(size){
+  size = size || 768;
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d'); g.translate(size/2,size/2);
+  const r1 = size*0.35, r2 = size*0.48;
+  const gr = g.createRadialGradient(0,0,r1*0.6,0,0,r2);
+  gr.addColorStop(0.0,'rgba(255,240,235,1)');
+  gr.addColorStop(0.3,'rgba(224,36,94,1)');
+  gr.addColorStop(0.7,'rgba(120,10,45,0.8)');
+  gr.addColorStop(1.0,'rgba(0,0,0,0)');
+  g.fillStyle = gr;
+  g.beginPath(); g.arc(0,0,r2,0,Math.PI*2); g.arc(0,0,r1,0,Math.PI*2,true); g.closePath(); g.fill();
+  return new THREE.CanvasTexture(c);
+}
+const ring1 = new THREE.Mesh(new THREE.RingGeometry(86,118,128), new THREE.MeshBasicMaterial({map:ringTexture(), transparent:true, side:THREE.DoubleSide, opacity:0.3, blending:THREE.AdditiveBlending}));
+const ring2 = new THREE.Mesh(new THREE.RingGeometry(132,160,128), new THREE.MeshBasicMaterial({map:ringTexture(), transparent:true, side:THREE.DoubleSide, opacity:0.18, blending:THREE.AdditiveBlending}));
+ring1.rotation.x = Math.PI/2;
+ring2.rotation.x = Math.PI/2;
+ring2.rotation.z = 0.6;
+scene.add(ring1); scene.add(ring2);
+
+/* ============================================================
+   ESTRELLAS FUGACES
+   ============================================================ */
+const shootTex = (function(){
+  const w = 256, h = 16;
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0,0,w,0);
+  g.addColorStop(0,'rgba(255,255,255,0)');
+  g.addColorStop(0.75,'rgba(255,255,255,0.65)');
+  g.addColorStop(1,'rgba(255,255,255,1)');
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.ellipse(w/2,h/2,w/2,h/2.6,0,0,Math.PI*2); ctx.fill();
+  return new THREE.CanvasTexture(c);
+})();
+const shootPool = [];
+for (let i=0;i<6;i++){
+  const m = new THREE.SpriteMaterial({map: shootTex, transparent:true, depthWrite:false, blending: THREE.AdditiveBlending, opacity:0});
+  const s = new THREE.Sprite(m);
+  s.visible = false;
+  s.userData = { alive:false, vel:new THREE.Vector3(), life:0 };
+  scene.add(s);
+  shootPool.push(s);
+}
+let shootTimer = 2;
+function launchShoot(){
+  const s = shootPool.find(function(x){ return !x.userData.alive; });
+  if (!s) return;
+  const ph = Math.acos(2*Math.random()-1), th = Math.random()*Math.PI*2;
+  const r = 700 + Math.random()*500;
+  s.position.set(r*Math.sin(ph)*Math.cos(th), r*Math.cos(ph), r*Math.sin(ph)*Math.sin(th));
+  const dir = new THREE.Vector3(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+  s.userData.vel = dir.multiplyScalar(420 + Math.random()*300);
+  s.userData.life = 1;
+  s.userData.alive = true;
+  s.material.opacity = 1;
+  s.material.color.copy(heartMat.color).lerp(new THREE.Color(0xffffff), 0.6);
+  s.scale.set(130, 8, 1);
+  s.visible = true;
+}
+
+/* ============================================================
+   FRASES ORBITANDO
+   ============================================================ */
+const WORDS = [];
+const baseWords = Array.isArray(CONFIG.frases) ? CONFIG.frases : [];
+const PHRASE_REPEAT = isMobile ? 4 : 6;
+for (let i=0;i<PHRASE_REPEAT;i++) WORDS.push.apply(WORDS, baseWords);
+
+function makeTextTexture(text, color){
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 128;
+  const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  let fs = 50;
+  ctx.font = '700 '+fs+'px "Dancing Script", cursive';
+  while (ctx.measureText(text).width > c.width-50 && fs > 24){ fs -= 2; ctx.font = '700 '+fs+'px "Dancing Script", cursive'; }
+  ctx.fillStyle = '#fff7f2'; ctx.shadowColor = color; ctx.shadowBlur = 26;
+  ctx.fillText(text, c.width/2, c.height/2);
+  return new THREE.CanvasTexture(c);
+}
+const COLORS = ['#e0245e','#ff6f91','#ffb37a','#ff8fae','#c81d43','#ffd6a5','#ff4d7d','#f7cac9','#ffe0c2'];
+const textGroup = new THREE.Group(); scene.add(textGroup);
+
+document.fonts.ready.then(function(){
+  for (let i=0;i<WORDS.length;i++){
+    const tex = makeTextTexture(WORDS[i], COLORS[i%COLORS.length]);
+    const mat = new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false, alphaTest:0.01});
+    const sp = new THREE.Sprite(mat);
+    sp.scale.set(98, 12.25, 1);
+    const phi = Math.acos(2*Math.random()-1), theta = Math.random()*Math.PI*2;
+    const r = DUST_INNER_R + Math.random()*(DUST_OUTER_R-DUST_INNER_R-30);
+    sp.position.set(r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+    sp.userData = {phi:phi, theta:theta, radius:r, speed: 0.001 + Math.random()*0.001};
+    textGroup.add(sp);
+  }
+});
+
+/* ============================================================
+   FOTOS ORBITANDO
+   ============================================================ */
+const photoGroup = new THREE.Group(); scene.add(photoGroup);
+const photoGlowTex = makeGlow(512, '255,200,215', '255,110,150');
+const loader = new THREE.TextureLoader();
+const PHOTO_PATHS = Array.isArray(CONFIG.fotos) ? CONFIG.fotos : [];
+const PHOTO_REPEAT = isMobile ? 6 : 10;
+const PHOTO_INSTANCES = [];
+for (let rep=0; rep<PHOTO_REPEAT; rep++) PHOTO_INSTANCES.push.apply(PHOTO_INSTANCES, PHOTO_PATHS);
+
+PHOTO_INSTANCES.forEach(function(path){
+  const phi = Math.acos(2*Math.random()-1);
+  const theta = Math.random()*Math.PI*2;
+  const r = DUST_INNER_R + Math.random()*(DUST_OUTER_R-DUST_INNER_R-30);
+  const speed = 0.0007 + Math.random()*0.0009;
+  const base = isMobile ? 32 : 44;
+
+  const gm = new THREE.SpriteMaterial({map: photoGlowTex, transparent:true, depthWrite:false, opacity:0.55, blending: THREE.AdditiveBlending});
+  const gs = new THREE.Sprite(gm);
+  gs.scale.set(base*1.6, base*1.6, 1);
+  gs.position.set(r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+  gs.renderOrder = -1;
+  gs.userData = {phi:phi, theta:theta, radius:r, speed:speed, isGlow:true};
+  photoGroup.add(gs);
+
+  loader.load(path, function(tex){
+    const iw = (tex.image && tex.image.width) || 1;
+    const ih = (tex.image && tex.image.height) || 1;
+    const ratio = iw/ih;
+    const mat = new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false, opacity:0.95});
+    const sp = new THREE.Sprite(mat);
+    if (ratio >= 1) sp.scale.set(base*ratio, base, 1); else sp.scale.set(base, base/ratio, 1);
+    sp.position.set(r*Math.sin(phi)*Math.cos(theta), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(theta));
+    sp.userData = {phi:phi, theta:theta, radius:r, speed:speed, isPhoto:true};
+    photoGroup.add(sp);
+  }, undefined, function(){});
+});
+
+/* ============================================================
+   CONTROLES
+   ============================================================ */
+let isPointerDown = false, startX = 0, startY = 0;
+let targetRotX = 0.18, targetRotY = 0, velX = 0, velY = 0;
+
+function onDown(e){
+  isPointerDown = true; velX = 0; velY = 0;
+  const t = e.touches ? e.touches[0] : e;
+  startX = t.clientX; startY = t.clientY;
+}
+function onMove(e){
+  if (!isPointerDown) return;
+  if (e.touches && e.touches.length > 1) return;
+  const t = e.touches ? e.touches[0] : e;
+  const dx = t.clientX - startX, dy = t.clientY - startY;
+  if (Math.abs(dx) > 2 || Math.abs(dy) > 2){
+    const sensX = (Math.PI*1.5)/innerWidth, sensY = (Math.PI*0.8)/innerHeight;
+    velY = -dx*sensX; velX = dy*sensY;
+    targetRotY += velY;
+    targetRotX = Math.max(-1.25, Math.min(1.25, targetRotX + velX));
+    startX = t.clientX; startY = t.clientY;
+  }
+}
+function onUp(){ isPointerDown = false; }
+
+const dom = renderer.domElement;
+dom.addEventListener('mousedown', onDown);
+dom.addEventListener('mousemove', onMove);
+window.addEventListener('mouseup', onUp);
+dom.addEventListener('touchstart', onDown, {passive:true});
+dom.addEventListener('touchmove', onMove, {passive:true});
+window.addEventListener('touchend', function(e){
+  if (!e.touches || e.touches.length === 0) onUp();
+  else { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }
+}, {passive:true});
+
+addEventListener('wheel', function(e){
+  targetDist = Math.max(190, Math.min(1150, targetDist + e.deltaY*0.25));
+}, {passive:true});
+
+let pinchDist = null;
+function getPinch(t){ return Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY); }
+addEventListener('touchstart', function(e){
+  if (e.touches.length === 2){ pinchDist = getPinch(e.touches); isPointerDown = false; }
+}, {passive:true});
+addEventListener('touchmove', function(e){
+  if (e.touches.length === 2){
+    const nd = getPinch(e.touches);
+    if (pinchDist !== null){
+      targetDist = Math.max(190, Math.min(1150, targetDist + (pinchDist-nd)*0.85));
+    }
+    pinchDist = nd;
+  } else if (pinchDist !== null){
+    pinchDist = null;
+    if (e.touches.length === 1){ startX = e.touches[0].clientX; startY = e.touches[0].clientY; isPointerDown = true; }
+  }
+}, {passive:true});
+addEventListener('touchend', function(e){ if (e.touches.length < 2) pinchDist = null; }, {passive:true});
+
+/* ============================================================
+   ANIMACIÓN
+   ============================================================ */
+let t = 0;
+let lastMs = performance.now();
+const INERTIA = 0.88;
+
+function tick(){
+  requestAnimationFrame(tick);
+  const now = performance.now();
+  const dt = Math.min(0.05, (now-lastMs)/1000);
+  lastMs = now;
+  t += 0.01;
+
+  if (!isPointerDown){
+    velX *= INERTIA; velY *= INERTIA;
+    targetRotX = Math.max(-1.25, Math.min(1.25, targetRotX + velX));
+    targetRotY += velY;
+  }
+  rotX += (targetRotX - rotX)*0.12;
+  rotY += (targetRotY - rotY)*0.12;
+
+  ring1.rotation.z += 0.0022;
+  ring2.rotation.z -= 0.0016;
+  dust.rotation.y  += 0.0006;
+
+  const gs = 470*(1 + Math.sin(t*0.4)*0.035);
+  glow.scale.set(gs, gs, 1);
+
+  const beat = 1.0 + 0.045*Math.sin(t*3.4);
+  heart.scale.set(beat, beat, beat);
+
+  /* morph de apertura (capullo <-> flor abierta, o lo que elijas) */
+  const elapsed = (now - sceneStart)/1000;
+  const mix = mixAt(elapsed);
+  const arr = heartGeom.attributes.position.array;
+  for (let i=0;i<FIG_COUNT;i++){
+    const ix = i*3;
+    arr[ix]   = shapeA[ix]   + (shapeB[ix]   - shapeA[ix])*mix;
+    arr[ix+1] = shapeA[ix+1] + (shapeB[ix+1] - shapeA[ix+1])*mix;
+    arr[ix+2] = shapeA[ix+2] + (shapeB[ix+2] - shapeA[ix+2])*mix;
+  }
+  heartGeom.attributes.position.needsUpdate = true;
+  heart.rotation.y += 0.0011;
+
+  /* cúpula de cristal: gira despacio y brilla suave */
+  if (domeGroup.visible){
+    domeGroup.rotation.y += 0.0016;
+    domeRim.material.opacity = 0.22 + 0.10*Math.sin(t*0.8);
+    domeInner.material.opacity = 0.03 + 0.02*Math.sin(t*0.6);
+  }
+
+  /* luciérnagas: suben, se mecen y titilan */
+  if (fireflies.visible){
+    const fp = fireflyGeom.attributes.position.array;
+    for (let i=0;i<ACTIVE_FIREFLIES;i++){
+      const d = fireflyData[i];
+      const ix = i*3;
+      d.ang += d.drift*dt;
+      fp[ix]   = Math.cos(d.ang)*d.radius;
+      fp[ix+2] = Math.sin(d.ang)*d.radius;
+      fp[ix+1] += d.vy*dt;
+      if (fp[ix+1] > 190){ fp[ix+1] = -80; d.radius = 60 + Math.random()*320; }
+      d.flick += dt*d.flickSpeed;
+    }
+    fireflyGeom.attributes.position.needsUpdate = true;
+    fireflyMat.opacity = 0.7 + 0.3*Math.sin(t*3.1);
+  }
+
+  /* pétalos subiendo */
+  const pp = petalGeom.attributes.position.array;
+  for (let i=0;i<PETAL_COUNT;i++){
+    const d = petalData[i];
+    const ix = i*3;
+    pp[ix+1] += d.speed*dt;
+    d.sway += dt*1.2;
+    pp[ix]   += Math.cos(d.sway)*d.swayAmp*dt;
+    pp[ix+2] += Math.sin(d.sway*0.7)*d.swayAmp*dt;
+    if (pp[ix+1] > 230){
+      const r = 40 + Math.random()*300, a = Math.random()*Math.PI*2;
+      pp[ix] = Math.cos(a)*r; pp[ix+1] = -230; pp[ix+2] = Math.sin(a)*r;
+    }
+  }
+  petalGeom.attributes.position.needsUpdate = true;
+  spiral.rotation.y += 0.0009;
+
+  /* estrellas fugaces */
+  if (CONFIG.fugaces !== false){
+    shootTimer -= dt;
+    if (shootTimer <= 0){ launchShoot(); shootTimer = 2.5 + Math.random()*4; }
+  }
+  for (let i=0;i<shootPool.length;i++){
+    const s = shootPool[i];
+    if (!s.userData.alive) continue;
+    s.userData.life -= dt/2.2;
+    if (s.userData.life <= 0){ s.userData.alive = false; s.visible = false; continue; }
+    s.position.addScaledVector(s.userData.vel, dt);
+    s.material.opacity = Math.sin(s.userData.life*Math.PI)*0.9;
+  }
+
+  /* frases y fotos orbitando */
+  textGroup.children.forEach(function(sp){
+    sp.material.opacity = 0.8 + 0.2*Math.sin(t*2);
+    sp.userData.theta += sp.userData.speed;
+    sp.position.x = sp.userData.radius*Math.sin(sp.userData.phi)*Math.cos(sp.userData.theta);
+    sp.position.z = sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
+  });
+  photoGroup.children.forEach(function(sp){
+    sp.userData.theta += sp.userData.speed;
+    sp.position.x = sp.userData.radius*Math.sin(sp.userData.phi)*Math.cos(sp.userData.theta);
+    sp.position.z = sp.userData.radius*Math.sin(sp.userData.phi)*Math.sin(sp.userData.theta);
+    if (sp.userData.isPhoto) sp.material.opacity = 0.82 + 0.14*Math.sin(t*1.6 + sp.userData.radius);
+  });
+
+  currentDist += (targetDist - currentDist)*0.06;
+  camera.position.set(
+    currentDist*Math.cos(rotX)*Math.sin(rotY),
+    currentDist*Math.sin(rotX),
+    currentDist*Math.cos(rotX)*Math.cos(rotY)
+  );
+  camera.lookAt(0,0,0);
+  renderer.render(scene, camera);
+}
+tick();
+
+window.addEventListener('resize', function(){
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+</script>
+
+
+<!-- ===== EDITOR LINK EMOCIONAL ===== -->
+<div class="le-edit-toggle" id="leEditToggle" title="Personalizar">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#e0245e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+</div>
+
+<div class="le-editor-page" id="leEditorPage">
+  <div class="le-topbar">
+    <button class="le-back" id="leBackBtn" title="Volver a la animación">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="le-titles">
+      <h1>Editor de tu regalo</h1>
+      <p>Los cambios se ven al instante en la vista previa</p>
+    </div>
+    <div class="le-brand">Link Emocional</div>
+  </div>
+
+  <div class="le-body">
+    <div class="le-preview" id="lePreviewBox">
+      <div class="le-tag">Vista previa en vivo</div>
+    </div>
+
+    <div class="le-sec">
+      <h3>Título</h3>
+      <p class="le-hint">El texto grande que aparece arriba de la animación.</p>
+      <input type="text" class="le-input" id="leTitulo" maxlength="60" placeholder="Escribe el título">
+    </div>
+
+    <div class="le-sec">
+      <h3>Texto de la pantalla de inicio</h3>
+      <p class="le-hint">Lo que se lee antes de tocar para empezar.</p>
+      <input type="text" class="le-input" id="leTapTexto" maxlength="40" placeholder="Toca para iniciar">
+    </div>
+
+    <div class="le-sec">
+      <h3>Mensaje de la carta</h3>
+      <p class="le-hint">El texto que se abre con el botón 💌. Deja una línea en blanco entre párrafos para separarlos.</p>
+      <textarea class="le-area" id="leMensaje" placeholder="Escribe tu mensaje..."></textarea>
+    </div>
+
+
+    <div class="le-sec">
+      <h3>Color principal</h3>
+      <p class="le-hint">Cambia el color de las partículas, el resplandor, los anillos y los textos de toda la escena.</p>
+      <div class="le-color-row">
+        <input type="color" id="leColorPicker" value="#e0245e">
+        <input type="text" class="le-input" id="leColorText" value="#e0245e" maxlength="7">
+      </div>
+      <div class="le-swatches" id="leSwatches"></div>
+    </div>
+
+    <div class="le-sec">
+      <h3>Tipografía</h3>
+      <p class="le-hint">El estilo de letra del título, del mensaje y de las frases que orbitan.</p>
+      <div class="le-opts" id="leFontRow"></div>
+    </div>
+
+    <div class="le-sec">
+      <h3>Frases que orbitan</h3>
+      <p class="le-hint">Frases cortas que giran alrededor de la escena. Se repiten automáticamente para llenar el espacio.</p>
+      <div class="le-chips" id="leFrasesList"></div>
+      <div class="le-add-row">
+        <input type="text" class="le-input" id="leFraseInput" placeholder="Escribe una frase" maxlength="60">
+        <button class="le-btn le-btn-add" id="leFraseAdd">Agregar</button>
+      </div>
+      <button class="le-btn le-btn-clear" id="leFrasesClear">Eliminar todas las frases</button>
+    </div>
+
+    <div class="le-sec">
+      <h3>Fotos flotando</h3>
+      <p class="le-hint">Fotos que giran junto a las frases. Se reducen y comprimen solas para que el archivo no pese de más. Hasta 10.</p>
+      <div class="le-grid" id="leFotosList"></div>
+      <label class="le-add-tile" id="leAddFotoTile">
+        +
+        <input type="file" id="leFotoInput" accept="image/*" multiple>
+      </label>
+      <div class="le-note" id="leFotosNote"></div>
+      <button class="le-btn le-btn-clear" id="leFotosClear" style="margin-top:10px;">Eliminar todas las fotos</button>
+    </div>
+
+    <div class="le-sec">
+      <h3>Música de fondo</h3>
+      <p class="le-hint">Suena al tocar "Toca para iniciar". Si la quitas, la animación queda en silencio.</p>
+      <div class="le-chips" id="leMusicList"></div>
+      <label class="le-btn le-btn-add" id="leAddMusicTile" style="display:inline-block;">
+        Elegir archivo de audio
+        <input type="file" id="leMusicInput" accept="audio/*" style="display:none;">
+      </label>
+      <button class="le-btn le-btn-clear" id="leMusicReset" style="margin-top:10px;">Volver a la canción original</button>
+    </div>
+
+    <div class="le-sec">
+      <h3>Efectos al tocar</h3>
+      <p class="le-hint">Al tocar la pantalla sale una ráfaga de partículas, y el puntero deja un rastro brillante.</p>
+      <label class="le-switch"><input type="checkbox" id="leBurstOn"><span>Ráfaga al tocar</span></label>
+      <label class="le-switch"><input type="checkbox" id="leTrailOn"><span>Rastro que sigue al puntero</span></label>
+      <div class="le-opts" id="leShapeRow" style="margin-top:10px;">
+        <div class="le-opt" data-shape="heart">&#9829;<small>Corazón</small></div>
+        <div class="le-opt" data-shape="star">&#10022;<small>Estrella</small></div>
+        <div class="le-opt" data-shape="flower">&#10047;<small>Flor</small></div>
+        <div class="le-opt" data-shape="burst">&#10022;<small>Chispas</small></div>
+      </div>
+      <div class="le-range" style="margin-top:16px;">
+        <div class="le-label">Intensidad de la ráfaga: <span id="leBurstVal">70</span> partículas</div>
+        <input type="range" id="leBurstRange" min="20" max="160" step="10" value="70">
+      </div>
+    </div>
+
+    <div class="le-sec">
+      <h3>Figura central</h3>
+      <p class="le-hint">La figura de partículas se transforma de la primera a la segunda y vuelve, en bucle. Por defecto: capullo cerrado → rosa abierta.</p>
+      <div class="le-label" style="font-size:12px;color:var(--le-muted);margin-bottom:6px;">Figura 1</div>
+      <div class="le-opts" id="leFigA"></div>
+      <div class="le-label" style="font-size:12px;color:var(--le-muted);margin:14px 0 6px;">Figura 2</div>
+      <div class="le-opts" id="leFigB"></div>
+    </div>
+
+    <div class="le-sec">
+      <h3>Cúpula de cristal</h3>
+      <p class="le-hint">Una esfera de cristal envuelve la rosa, como si estuviera protegida para siempre.</p>
+      <label class="le-switch"><input type="checkbox" id="leDomeOn"><span>Mostrar cúpula de cristal</span></label>
+    </div>
+
+    <div class="le-sec">
+      <h3>Luciérnagas</h3>
+      <p class="le-hint">Puntitos de luz cálida que suben flotando y titilan, como en un jardín de noche.</p>
+      <label class="le-switch"><input type="checkbox" id="leFireflyOn"><span>Mostrar luciérnagas</span></label>
+      <div class="le-range" style="margin-top:10px;">
+        <div class="le-label">Cantidad: <span id="leFireflyVal">80</span></div>
+        <input type="range" id="leFireflyRange" min="0" max="160" step="5" value="80">
+      </div>
+    </div>
+
+    <div class="le-sec">
+      <h3>Ambiente</h3>
+      <p class="le-hint">Pétalos que suben desde abajo y estrellas fugaces cruzando el cielo nocturno.</p>
+      <label class="le-switch"><input type="checkbox" id="lePetalsOn"><span>Pétalos flotando</span></label>
+      <label class="le-switch"><input type="checkbox" id="leShootOn"><span>Estrellas fugaces</span></label>
+    </div>
+
+
+    <div class="le-footer">
+      <div class="le-check">
+        <input type="checkbox" id="leIncludeEditor">
+        <label for="leIncludeEditor">Incluir el editor (el lápiz) en el archivo descargado. Déjalo <b>desactivado</b> para la versión final que le envíes a la persona — así no le aparece el lápiz. Actívalo solo si querés seguir editando ese archivo más adelante.</label>
+      </div>
+      <button class="le-btn le-btn-dl" id="leDownloadBtn">Descargar mi regalo personalizado</button>
+      <div class="le-file-row">
+        <input type="text" class="le-input" id="leFilename" value="mi-rosa-de-cristal.html">
+      </div>
+      <p class="le-save-note">El navegador no puede sobrescribir este archivo por seguridad. "Descargar" genera un HTML nuevo y completo con tus cambios ya aplicados (fotos, música, frases, colores) — listo para enviar por WhatsApp o subir a tu hosting.</p>
+    </div>
+  </div>
+</div>
+
+<script>window.LE_APP = {"defaultColor": "#e0245e", "defaultFont": "dancing", "filename": "mi-rosa-de-cristal.html", "nebula": true, "photoGlow": true, "photoRepeatM": 6, "photoRepeatD": 10, "maxImg": 10};</script>
+<script>
+
+/* ============================================================
+   LINK EMOCIONAL — Editor integrado + efectos de puntero
+   Este bloque NO toca la animación original: sólo la lee,
+   la repinta cuando cambias algo y le suma los efectos.
+   ============================================================ */
+(function(){
+"use strict";
+if (typeof THREE === "undefined") { return; }
+
+var APP   = window.LE_APP || {};
+var LE    = window.LE_STATE || { state:{} };
+var state = LE.state;
+var BASE  = window.LE_BASE || {};
+var stateEl = document.getElementById("le-initial-state");
+
+function persist(){ try { stateEl.textContent = JSON.stringify(state); } catch(e){} }
+
+/* ---------- referencias a la escena original ---------- */
+var S_scene   = (typeof scene   !== "undefined") ? scene   : null;
+var S_camera  = (typeof camera  !== "undefined") ? camera  : null;
+var S_rend    = (typeof renderer!== "undefined") ? renderer: null;
+var S_canvas  = (typeof canvas  !== "undefined") ? canvas  : document.getElementById("c");
+var S_dot     = (typeof dotTexture !== "undefined") ? dotTexture : null;
+var S_mobile  = (typeof isMobile !== "undefined") ? isMobile : false;
+var S_textG   = (typeof textGroup  !== "undefined") ? textGroup  : null;
+var S_photoG  = (typeof photoGroup !== "undefined") ? photoGroup : null;
+var S_heartM  = (typeof heartMat  !== "undefined") ? heartMat  : null;
+var S_spiralM = (typeof spiralMat !== "undefined") ? spiralMat : null;
+var S_dustM   = (typeof dustMat   !== "undefined") ? dustMat   : null;
+var S_glow    = (typeof glow  !== "undefined") ? glow  : null;
+var S_ring1   = (typeof ring1 !== "undefined") ? ring1 : null;
+var S_ring2   = (typeof ring2 !== "undefined") ? ring2 : null;
+var S_audio   = (typeof audio !== "undefined") ? audio : document.getElementById("audio");
+var S_rIn     = (typeof DUST_INNER_R !== "undefined") ? DUST_INNER_R : 150;
+var S_rOut    = (typeof DUST_OUTER_R !== "undefined") ? DUST_OUTER_R : 380;
+
+if (!S_scene || !S_camera || !S_canvas) { return; }
+if (!S_dot) { S_dot = null; }
+
+/* ---------- fuentes disponibles ---------- */
+var FONTS = [
+  { id:"indie",      label:"Manuscrita", css:"'Indie Flower', cursive",        w:"700" },
+  { id:"playfair",   label:"Elegante",   css:"'Playfair Display', serif",      w:"800" },
+  { id:"dancing",    label:"Romántica",  css:"'Dancing Script', cursive",      w:"700" },
+  { id:"pacifico",   label:"Divertida",  css:"'Pacifico', cursive",            w:"400" },
+  { id:"quicksand",  label:"Redonda",    css:"'Quicksand', sans-serif",        w:"700" },
+  { id:"montserrat", label:"Bold",       css:"'Montserrat', sans-serif",       w:"800" }
+];
+function fontById(id){ for (var i=0;i<FONTS.length;i++) if (FONTS[i].id===id) return FONTS[i]; return FONTS[0]; }
+
+var PRESETS = [
+  "#ffc93d","#ff3399","#ff6fa5","#ff5757","#ff9f4a",
+  "#ffe066","#c9ff4e","#6bffb0","#26e0c8","#7cf5ff",
+  "#5ec2ff","#a06bff","#d4a5ff","#ff4ecb","#ffffff",
+  "#f78fb3","#a8e6cf","#ffd3a5","#00c2a8","#e6a817"
+];
+var MAX_IMG = APP.maxImg || 10;
+
+/* ---------- helpers de color ---------- */
+function hx(h){ h=(h||"#ffffff").replace("#",""); if(h.length===3){h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];} return {r:parseInt(h.substr(0,2),16)||0,g:parseInt(h.substr(2,2),16)||0,b:parseInt(h.substr(4,2),16)||0}; }
+function toHex(c){ function p(n){ n=Math.max(0,Math.min(255,Math.round(n))).toString(16); return n.length<2?"0"+n:n; } return "#"+p(c.r)+p(c.g)+p(c.b); }
+function lighten(hex,a){ var c=hx(hex); return toHex({r:c.r+(255-c.r)*a, g:c.g+(255-c.g)*a, b:c.b+(255-c.b)*a}); }
+function darken(hex,a){ var c=hx(hex); return toHex({r:c.r*(1-a), g:c.g*(1-a), b:c.b*(1-a)}); }
+function rgbTrip(hex){ var c=hx(hex); return c.r+","+c.g+","+c.b; }
+function palette(hex){
+  return [ hex, lighten(hex,0.25), lighten(hex,0.5), lighten(hex,0.7),
+           darken(hex,0.15), lighten(hex,0.35), lighten(hex,0.6), hex, lighten(hex,0.45) ];
+}
+
+/* ---------- valores efectivos ---------- */
+function eff(key, fallback){
+  if (state[key] !== undefined && state[key] !== null) return state[key];
+  if (BASE[key] !== undefined && BASE[key] !== null) return BASE[key];
+  return fallback;
+}
+function effFrases(){ return Array.isArray(state.frases) ? state.frases : (BASE.frases || []).slice(); }
+function effFotos(){  return Array.isArray(state.fotos)  ? state.fotos  : (BASE.fotos  || []).slice(); }
+function effMusica(){ return (typeof state.musica === "string") ? state.musica : (BASE.musica || ""); }
+
+state.color = state.color || APP.defaultColor || "#ffc93d";
+state.font  = state.font  || APP.defaultFont  || "indie";
+state.shape = state.shape || "heart";
+if (state.burst === undefined) state.burst = true;
+if (state.trail === undefined) state.trail = true;
+if (state.burstCount === undefined) state.burstCount = 70;
+
+/* ============================================================
+   TEXTURAS PROPIAS (color configurable)
+   ============================================================ */
+function glowTex(hex, size){
+  size = size || 768;
+  var c1 = rgbTrip(lighten(hex,0.25)), c2 = rgbTrip(hex);
+  var c = document.createElement("canvas"); c.width=c.height=size;
+  var g = c.getContext("2d");
+  var gr = g.createRadialGradient(size/2,size/2,size*0.05,size/2,size/2,size*0.5);
+  gr.addColorStop(0,"rgba("+c1+",0.7)");
+  gr.addColorStop(0.5,"rgba("+c2+",0.2)");
+  gr.addColorStop(1,"rgba(0,0,0,0)");
+  g.fillStyle=gr; g.fillRect(0,0,size,size);
+  return new THREE.CanvasTexture(c);
+}
+function ringTex(hex, size){
+  size = size || 768;
+  var c = document.createElement("canvas"); c.width=c.height=size;
+  var g = c.getContext("2d"); g.translate(size/2,size/2);
+  var r1=size*0.35, r2=size*0.48;
+  var gr = g.createRadialGradient(0,0,r1*0.6,0,0,r2);
+  gr.addColorStop(0.0,"rgba("+rgbTrip(lighten(hex,0.75))+",1)");
+  gr.addColorStop(0.3,"rgba("+rgbTrip(hex)+",1)");
+  gr.addColorStop(0.7,"rgba("+rgbTrip(darken(hex,0.35))+",0.8)");
+  gr.addColorStop(1.0,"rgba(0,0,0,0)");
+  g.fillStyle=gr;
+  g.beginPath(); g.arc(0,0,r2,0,Math.PI*2); g.arc(0,0,r1,0,Math.PI*2,true); g.closePath(); g.fill();
+  return new THREE.CanvasTexture(c);
+}
+function nebulaTexFor(hex, size){
+  size = size || 1024;
+  var c = document.createElement("canvas"); c.width=c.height=size;
+  var ctx = c.getContext("2d");
+  ctx.fillStyle = darken(hex,0.94); ctx.fillRect(0,0,size,size);
+  var blobs = [
+    { x:0.3, y:0.35, r:0.55, c:"rgba("+rgbTrip(darken(hex,0.55))+",0.55)" },
+    { x:0.7, y:0.60, r:0.50, c:"rgba("+rgbTrip(darken(hex,0.7))+",0.5)" },
+    { x:0.5, y:0.50, r:0.70, c:"rgba("+rgbTrip(darken(hex,0.82))+",0.4)" }
+  ];
+  blobs.forEach(function(b){
+    var gr = ctx.createRadialGradient(size*b.x,size*b.y,0,size*b.x,size*b.y,size*b.r);
+    gr.addColorStop(0,b.c); gr.addColorStop(1,"rgba(0,0,0,0)");
+    ctx.fillStyle=gr; ctx.fillRect(0,0,size,size);
+  });
+  for (var i=0;i<300;i++){
+    ctx.fillStyle = "rgba(255,255,255,"+(Math.random()*0.5)+")";
+    var s = Math.random()*1.4;
+    ctx.fillRect(Math.random()*size, Math.random()*size, s, s);
+  }
+  return new THREE.CanvasTexture(c);
+}
+function textTex(text, shadow, fontCss, weight){
+  var c = document.createElement("canvas"); c.width=1024; c.height=128;
+  var ctx = c.getContext("2d"); ctx.clearRect(0,0,c.width,c.height);
+  ctx.textAlign="center"; ctx.textBaseline="middle";
+  var fs = 50;
+  ctx.font = weight+" "+fs+"px "+fontCss;
+  while (ctx.measureText(text).width > c.width-50 && fs > 22){ fs -= 2; ctx.font = weight+" "+fs+"px "+fontCss; }
+  ctx.fillStyle="#fffdf5"; ctx.shadowColor=shadow; ctx.shadowBlur=25;
+  ctx.fillText(text, c.width/2, c.height/2);
+  return new THREE.CanvasTexture(c);
+}
+
+/* ============================================================
+   APLICAR TEMA (color + tipografía) SIN ROMPER LA ESCENA
+   ============================================================ */
+var themeStyle = document.getElementById("le-theme-style");
+if (!themeStyle){
+  themeStyle = document.createElement("style");
+  themeStyle.id = "le-theme-style";
+  document.head.appendChild(themeStyle);
+}
+
+function applyTheme(){
+  var hex = state.color;
+  var f = fontById(state.font);
+  var c1 = lighten(hex,0.55), c2 = hex, c3 = lighten(hex,0.75);
+
+  themeStyle.textContent =
+    "#top-title{font-family:" + f.css + " !important;font-weight:" + f.w + " !important;" +
+      "background-image:linear-gradient(90deg," + c1 + "," + c2 + "," + c3 + ") !important;" +
+      "filter:drop-shadow(0 0 14px rgba(" + rgbTrip(hex) + ",0.55)) !important;}" +
+    "#start-screen{color:" + c1 + " !important;text-shadow:0 0 15px " + hex + " !important;" +
+      "background:radial-gradient(circle at center," + darken(hex,0.82) + " 0%,#000 100%) !important;}" +
+    "#love-letter-btn{background:linear-gradient(135deg," + darken(hex,0.2) + "," + hex + ") !important;" +
+      "box-shadow:0 0 18px rgba(" + rgbTrip(hex) + ",0.6),0 4px 14px rgba(0,0,0,.35) !important;}" +
+    "#love-letter-card{border-color:rgba(" + rgbTrip(hex) + ",0.35) !important;" +
+      "box-shadow:0 0 40px rgba(" + rgbTrip(hex) + ",0.35) !important;" +
+      "background:linear-gradient(160deg," + darken(hex,0.78) + "," + darken(hex,0.94) + ") !important;" +
+      "font-family:" + f.css + " !important;color:" + lighten(hex,0.82) + " !important;}" +
+    "#love-letter-card h2{font-family:" + f.css + " !important;" +
+      "background-image:linear-gradient(90deg," + c1 + "," + c2 + "," + c3 + ") !important;}" +
+    "#love-letter-close{color:" + lighten(hex,0.6) + " !important;}" +
+    "html,body{font-family:" + f.css + ";}";
+
+  var col = new THREE.Color(hex);
+  try { if (S_heartM)  S_heartM.color.set(col); } catch(e){}
+  try { if (S_spiralM) S_spiralM.color.set(new THREE.Color(lighten(hex,0.25))); } catch(e){}
+  try { if (S_dustM)   S_dustM.color.set(new THREE.Color(lighten(hex,0.6))); } catch(e){}
+
+  try {
+    if (S_glow && S_glow.material){
+      if (S_glow.material.map) S_glow.material.map.dispose();
+      S_glow.material.map = glowTex(hex);
+      S_glow.material.needsUpdate = true;
+    }
+  } catch(e){}
+
+  try {
+    var rt = ringTex(hex);
+    [S_ring1,S_ring2].forEach(function(r){
+      if (r && r.material){
+        if (r.material.map) r.material.map.dispose();
+        r.material.map = rt;
+        r.material.needsUpdate = true;
+      }
+    });
+  } catch(e){}
+
+  if (APP.nebula){
+    try {
+      if (S_scene.background && S_scene.background.dispose) S_scene.background.dispose();
+      S_scene.background = (typeof makeAurora === "function") ? makeAurora(1024, hex) : nebulaTexFor(hex);
+    } catch(e){}
+  }
+
+  // halos de las fotos
+  try {
+    if (S_photoG){
+      var pg = glowTex(hex, 512);
+      S_photoG.children.forEach(function(sp){
+        if (sp.userData && sp.userData.isGlow && sp.material){ sp.material.map = pg; sp.material.needsUpdate = true; }
+      });
+    }
+  } catch(e){}
+
+  // colores de las partículas de efectos
+  EFFECT_COLORS = palette(hex);
+}
+
+/* ============================================================
+   RECONSTRUIR FRASES Y FOTOS (vista previa en vivo)
+   ============================================================ */
+function clearGroup(grp){
+  if (!grp) return;
+  for (var i = grp.children.length - 1; i >= 0; i--){
+    var ch = grp.children[i];
+    grp.remove(ch);
+    if (ch.material){
+      if (ch.material.map && ch.material.map.dispose) ch.material.map.dispose();
+      ch.material.dispose();
+    }
+  }
+}
+
+function rebuildFrases(){
+  if (!S_textG) return;
+  clearGroup(S_textG);
+  var list = effFrases();
+  if (!list.length) return;
+  var f = fontById(state.font);
+  var cols = palette(state.color);
+  var rep = S_mobile ? 4 : 6;
+  var all = [];
+  for (var r=0;r<rep;r++) all = all.concat(list);
+  for (var i=0;i<all.length;i++){
+    var tex = textTex(all[i], cols[i % cols.length], f.css, f.w);
+    var mat = new THREE.SpriteMaterial({ map:tex, transparent:true, depthWrite:false, alphaTest:0.01 });
+    var sp  = new THREE.Sprite(mat);
+    sp.scale.set(98, 12.25, 1);
+    var phi = Math.acos(2*Math.random()-1), theta = Math.random()*Math.PI*2;
+    var rad = S_rIn + Math.random()*(S_rOut - S_rIn - 30);
+    sp.position.set(rad*Math.sin(phi)*Math.cos(theta), rad*Math.cos(phi), rad*Math.sin(phi)*Math.sin(theta));
+    sp.userData = { phi:phi, theta:theta, radius:rad, speed:0.001 + Math.random()*0.001 };
+    S_textG.add(sp);
+  }
+}
+
+var photoLoaderLE = new THREE.TextureLoader();
+var photoBuildToken = 0;
+function rebuildFotos(){
+  if (!S_photoG) return;
+  photoBuildToken++;
+  var token = photoBuildToken;
+  clearGroup(S_photoG);
+  var list = effFotos();
+  if (!list.length) return;
+  var rep = S_mobile ? (APP.photoRepeatM||6) : (APP.photoRepeatD||10);
+  var base = S_mobile ? 32 : 44;
+  var pg = glowTex(state.color, 512);
+  var inst = [];
+  for (var r=0;r<rep;r++) inst = inst.concat(list);
+  inst.forEach(function(src){
+    var phi = Math.acos(2*Math.random()-1), theta = Math.random()*Math.PI*2;
+    var rad = S_rIn + Math.random()*(S_rOut - S_rIn - 30);
+    var speed = 0.0007 + Math.random()*0.0009;
+
+    if (APP.photoGlow){
+      var gmat = new THREE.SpriteMaterial({ map:pg, transparent:true, depthWrite:false, opacity:0.6, blending:THREE.AdditiveBlending });
+      var gs = new THREE.Sprite(gmat);
+      gs.scale.set(base*1.6, base*1.6, 1);
+      gs.position.set(rad*Math.sin(phi)*Math.cos(theta), rad*Math.cos(phi), rad*Math.sin(phi)*Math.sin(theta));
+      gs.renderOrder = -1;
+      gs.userData = { phi:phi, theta:theta, radius:rad, speed:speed, isGlow:true };
+      S_photoG.add(gs);
+    }
+
+    photoLoaderLE.load(src, function(tex){
+      if (token !== photoBuildToken) return;
+      var iw = (tex.image && tex.image.width) || 1;
+      var ih = (tex.image && tex.image.height) || 1;
+      var ratio = iw/ih;
+      var mat = new THREE.SpriteMaterial({ map:tex, transparent:true, depthWrite:false, opacity:0.95 });
+      var sp = new THREE.Sprite(mat);
+      if (ratio >= 1) sp.scale.set(base*ratio, base, 1); else sp.scale.set(base, base/ratio, 1);
+      sp.position.set(rad*Math.sin(phi)*Math.cos(theta), rad*Math.cos(phi), rad*Math.sin(phi)*Math.sin(theta));
+      sp.userData = { phi:phi, theta:theta, radius:rad, speed:speed, isPhoto:true };
+      S_photoG.add(sp);
+    }, undefined, function(){});
+  });
+}
+
+function applyTitulo(){
+  var el = document.getElementById("top-title");
+  if (el) el.textContent = eff("titulo", "");
+}
+function applyTapText(){
+  var el = document.getElementById("tap-text");
+  if (!el) el = document.querySelector("#start-screen .pulse-text");
+  if (el) el.textContent = eff("tapTexto", "Toca para iniciar");
+}
+function applyMensaje(){
+  var body = document.getElementById("love-letter-body");
+  if (!body) return;
+  body.innerHTML = "";
+  var txt = eff("mensaje", "");
+  String(txt).split(/\n\s*\n/).forEach(function(par){
+    var p = document.createElement("p");
+    p.textContent = par.trim();
+    body.appendChild(p);
+  });
+}
+function applyMusica(){
+  if (!S_audio) return;
+  var m = effMusica();
+  if (m){ if (S_audio.src !== m) { S_audio.src = m; S_audio.load(); } }
+  else { try { S_audio.pause(); } catch(e){} S_audio.removeAttribute("src"); try{S_audio.load();}catch(e){} }
+}
+
+/* ============================================================
+   EFECTOS: RÁFAGA AL TOCAR + RASTRO DEL PUNTERO
+   ============================================================ */
+var EFFECT_COLORS = palette(state.color);
+
+function dustTex(){
+  var size = 128;
+  var c = document.createElement("canvas"); c.width=c.height=size;
+  var ctx = c.getContext("2d");
+  var gr = ctx.createRadialGradient(size/2,size/2,0,size/2,size/2,size/2);
+  gr.addColorStop(0,"rgba(255,255,255,1)");
+  gr.addColorStop(0.35,"rgba(255,255,255,0.85)");
+  gr.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=gr; ctx.fillRect(0,0,size,size);
+  return new THREE.CanvasTexture(c);
+}
+var fxTex = S_dot || dustTex();
+
+var BURST_POOL = S_mobile ? 260 : 420;
+var TRAIL_POOL = S_mobile ? 140 : 220;
+var burstPool = [], trailPool = [], burstCursor = 0, trailCursor = 0;
+
+function makePool(arr, n){
+  for (var i=0;i<n;i++){
+    var m = new THREE.SpriteMaterial({ map:fxTex, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, opacity:0 });
+    var s = new THREE.Sprite(m);
+    s.visible = false;
+    s.userData = { alive:false, vel:new THREE.Vector3(), life:0, maxLife:1, baseScale:1 };
+    S_scene.add(s);
+    arr.push(s);
+  }
+}
+makePool(burstPool, BURST_POOL);
+makePool(trailPool, TRAIL_POOL);
+
+function shapePoint(scale){
+  var sh = state.shape || "heart";
+  var t = Math.random()*Math.PI*2, x, y, j = 0.06;
+  if (sh === "star"){
+    var tot=10, va=Math.PI*2/tot, k=Math.floor(Math.random()*tot), f=Math.random();
+    var r0=(k%2===0)?1:0.45, r1=((k+1)%2===0)?1:0.45;
+    var a0=-Math.PI/2+k*va, a1=-Math.PI/2+(k+1)*va;
+    var rr=r0+(r1-r0)*f, aa=a0+(a1-a0)*f;
+    x=rr*Math.cos(aa); y=rr*Math.sin(aa);
+  } else if (sh === "flower"){
+    var rf = Math.cos(4*t);
+    x = rf*Math.cos(t); y = rf*Math.sin(t);
+  } else if (sh === "burst"){
+    var rb = Math.sqrt(Math.random());
+    x = rb*Math.cos(t); y = rb*Math.sin(t); j = 0.02;
+  } else {
+    x = Math.pow(Math.sin(t),3);
+    y = (13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t)) / 16;
+  }
+  return { x:(x+(Math.random()-0.5)*j)*scale, y:(y+(Math.random()-0.5)*j)*scale };
+}
+
+function worldFromPointer(cx, cy, dist){
+  var rect = S_canvas.getBoundingClientRect();
+  if (!rect.width || !rect.height) return null;
+  var nx = ((cx - rect.left)/rect.width)*2 - 1;
+  var ny = -((cy - rect.top)/rect.height)*2 + 1;
+  var v = new THREE.Vector3(nx, ny, 0.5).unproject(S_camera);
+  var dir = v.sub(S_camera.position).normalize();
+  return S_camera.position.clone().add(dir.multiplyScalar(dist));
+}
+function camDist(){ return (typeof currentDist !== "undefined") ? currentDist : 400; }
+
+function spawnBurst(cx, cy){
+  if (!state.burst) return;
+  var pos = worldFromPointer(cx, cy, camDist()*0.5);
+  if (!pos) return;
+  var count = Math.max(10, Math.min(BURST_POOL, state.burstCount|0));
+  var scale = camDist()*0.085;
+  for (var n=0;n<count;n++){
+    var s = burstPool[burstCursor];
+    burstCursor = (burstCursor+1) % BURST_POOL;
+    var p = shapePoint(scale);
+    var off = new THREE.Vector3(p.x, p.y, (Math.random()-0.5)*scale*0.35);
+    s.position.copy(pos).add(off);
+    var out = off.lengthSq() > 0.0001 ? off.clone().normalize() : new THREE.Vector3(0,1,0);
+    out.multiplyScalar(26 + Math.random()*34);
+    s.userData.vel = out;
+    s.userData.life = 1;
+    s.userData.maxLife = 1.1 + Math.random()*0.7;
+    s.userData.baseScale = (camDist()*0.011) * (0.7 + Math.random()*0.9);
+    s.userData.alive = true;
+    s.material.color.setStyle(EFFECT_COLORS[n % EFFECT_COLORS.length]);
+    s.material.opacity = 1;
+    s.visible = true;
+    s.scale.set(1,1,1);
+  }
+}
+
+var lastTX = null, lastTY = null;
+function spawnTrail(cx, cy){
+  var pos = worldFromPointer(cx, cy, camDist()*0.5);
+  if (!pos) return;
+  var s = trailPool[trailCursor];
+  trailCursor = (trailCursor+1) % TRAIL_POOL;
+  s.position.copy(pos);
+  s.userData.vel = new THREE.Vector3((Math.random()-0.5)*7,(Math.random()-0.5)*7+2,(Math.random()-0.5)*7);
+  s.userData.life = 1;
+  s.userData.maxLife = 0.55 + Math.random()*0.45;
+  s.userData.baseScale = (camDist()*0.008) * (0.6 + Math.random()*0.9);
+  s.userData.alive = true;
+  s.material.color.setStyle(EFFECT_COLORS[Math.floor(Math.random()*EFFECT_COLORS.length)]);
+  s.material.opacity = 1;
+  s.visible = true;
+  s.scale.set(1,1,1);
+}
+function handleTrail(cx, cy){
+  if (!state.trail) return;
+  if (lastTX === null){ lastTX = cx; lastTY = cy; return; }
+  if (Math.hypot(cx-lastTX, cy-lastTY) > 8){
+    spawnTrail(cx, cy);
+    lastTX = cx; lastTY = cy;
+  }
+}
+
+function stepPool(arr, dt, drag){
+  for (var i=0;i<arr.length;i++){
+    var s = arr[i];
+    if (!s.userData.alive) continue;
+    s.userData.life -= dt / s.userData.maxLife;
+    if (s.userData.life <= 0){ s.userData.alive = false; s.visible = false; s.material.opacity = 0; continue; }
+    s.position.addScaledVector(s.userData.vel, dt);
+    s.userData.vel.multiplyScalar(drag);
+    var k = s.userData.life;
+    s.material.opacity = k*k;
+    var sc = s.userData.baseScale * (0.5 + k*0.9);
+    s.scale.set(sc, sc, 1);
+  }
+}
+
+var lastFrame = performance.now();
+(function fxLoop(){
+  requestAnimationFrame(fxLoop);
+  var now = performance.now();
+  var dt = Math.min(0.05, (now - lastFrame)/1000);
+  lastFrame = now;
+  stepPool(burstPool, dt, 0.94);
+  stepPool(trailPool, dt, 0.92);
+})();
+
+/* ---------- entrada del puntero ---------- */
+var downX=0, downY=0, downT=0, moved=0, isDown=false;
+function started(){ return (typeof experienceStarted === "undefined") ? true : experienceStarted; }
+
+function evXY(e){ var t = (e.touches && e.touches[0]) ? e.touches[0] : e; return { x:t.clientX, y:t.clientY }; }
+
+function fxDown(e){
+  if (mode !== "full" || !started()) return;
+  if (e.target && e.target.closest && e.target.closest(".le-edit-toggle,#love-letter-btn,#love-letter-overlay")) return;
+  var p = evXY(e); isDown = true; moved = 0; downX=p.x; downY=p.y; downT=performance.now();
+}
+function fxMove(e){
+  if (mode !== "full" || !started()) return;
+  var p = evXY(e);
+  if (isDown) moved += Math.abs(p.x-downX)+Math.abs(p.y-downY);
+  handleTrail(p.x, p.y);
+}
+function fxUp(e){
+  if (mode !== "full" || !started()) return;
+  if (!isDown) return;
+  isDown = false;
+  if (moved < 16 && (performance.now()-downT) < 550) spawnBurst(downX, downY);
+}
+window.addEventListener("mousedown", fxDown);
+window.addEventListener("mousemove", fxMove);
+window.addEventListener("mouseup", fxUp);
+window.addEventListener("touchstart", fxDown, {passive:true});
+window.addEventListener("touchmove", fxMove, {passive:true});
+window.addEventListener("touchend", function(e){
+  if (mode !== "full" || !started()) return;
+  if (!isDown) return;
+  isDown = false;
+  if (moved < 16 && (performance.now()-downT) < 550) spawnBurst(downX, downY);
+}, {passive:true});
+
+/* ============================================================
+   NAVEGACIÓN: animación completa <-> editor
+   ============================================================ */
+var mode = "full";
+var previewBox = document.getElementById("lePreviewBox");
+
+function resizeStage(){
+  var w, h;
+  if (mode === "editor" && previewBox){
+    var r = previewBox.getBoundingClientRect();
+    w = Math.max(1, Math.round(r.width));
+    h = Math.max(1, Math.round(r.height));
+  } else {
+    w = window.innerWidth; h = window.innerHeight;
+  }
+  S_camera.aspect = w/h;
+  S_camera.updateProjectionMatrix();
+  if (S_rend) S_rend.setSize(w, h, true);
+}
+window.addEventListener("resize", function(){ requestAnimationFrame(resizeStage); });
+
+function enterEditor(){
+  if (typeof unlockAudioAndStart === "function"){ try { unlockAudioAndStart(); } catch(e){} }
+  mode = "editor";
+  document.documentElement.classList.add("le-editing");
+  document.body.classList.add("le-editor");
+  S_canvas.classList.remove("le-stage-full");
+  S_canvas.classList.add("le-stage-preview");
+  if (previewBox) previewBox.appendChild(S_canvas);
+  window.scrollTo(0,0);
+  requestAnimationFrame(resizeStage);
+}
+function exitEditor(){
+  mode = "full";
+  document.documentElement.classList.remove("le-editing");
+  document.body.classList.remove("le-editor");
+  S_canvas.classList.remove("le-stage-preview");
+  S_canvas.classList.add("le-stage-full");
+  document.body.insertBefore(S_canvas, document.body.firstChild);
+  requestAnimationFrame(resizeStage);
+}
+S_canvas.classList.add("le-stage-full");
+document.getElementById("leEditToggle").addEventListener("click", enterEditor);
+document.getElementById("leBackBtn").addEventListener("click", exitEditor);
+
+/* ============================================================
+   CONTROLES DEL EDITOR
+   ============================================================ */
+/* -- título -- */
+var tituloInput = document.getElementById("leTitulo");
+if (tituloInput){
+  tituloInput.value = eff("titulo","");
+  tituloInput.addEventListener("input", function(){
+    state.titulo = tituloInput.value;
+    applyTitulo(); persist();
+  });
+}
+
+/* -- texto de inicio -- */
+var tapInput = document.getElementById("leTapTexto");
+if (tapInput){
+  tapInput.value = eff("tapTexto","Toca para iniciar");
+  tapInput.addEventListener("input", function(){
+    state.tapTexto = tapInput.value;
+    applyTapText(); persist();
+  });
+}
+
+/* -- mensaje / carta -- */
+var msgInput = document.getElementById("leMensaje");
+if (msgInput){
+  msgInput.value = eff("mensaje","");
+  msgInput.addEventListener("input", function(){
+    state.mensaje = msgInput.value;
+    applyMensaje(); persist();
+  });
+}
+
+/* -- color -- */
+var swWrap = document.getElementById("leSwatches");
+var colorPicker = document.getElementById("leColorPicker");
+var colorText = document.getElementById("leColorText");
+swWrap.innerHTML = "";
+PRESETS.forEach(function(hex){
+  var d = document.createElement("div");
+  d.className = "le-sw"; d.style.background = hex; d.title = hex;
+  d.addEventListener("click", function(){ setColor(hex); });
+  swWrap.appendChild(d);
+});
+function refreshSw(){
+  Array.prototype.forEach.call(swWrap.children, function(d,i){
+    d.classList.toggle("active", PRESETS[i].toLowerCase() === (state.color||"").toLowerCase());
+  });
+}
+function setColor(hex, skipRebuild){
+  if (!/^#([0-9a-fA-F]{6})$/.test(hex)) return;
+  state.color = hex;
+  colorPicker.value = hex; colorText.value = hex;
+  refreshSw(); applyTheme();
+  if (!skipRebuild) rebuildFrases();
+  persist();
+}
+colorPicker.addEventListener("input", function(){ setColor(colorPicker.value); });
+colorText.addEventListener("change", function(){ setColor(colorText.value.trim()); });
+colorPicker.value = state.color; colorText.value = state.color; refreshSw();
+
+/* -- tipografía -- */
+var fontRow = document.getElementById("leFontRow");
+fontRow.innerHTML = "";
+FONTS.forEach(function(f){
+  var d = document.createElement("div");
+  d.className = "le-opt";
+  d.style.fontFamily = f.css;
+  d.innerHTML = "Aa<small>" + f.label + "</small>";
+  d.addEventListener("click", function(){
+    state.font = f.id;
+    refreshFont(); applyTheme(); rebuildFrases(); persist();
+  });
+  fontRow.appendChild(d);
+});
+function refreshFont(){
+  Array.prototype.forEach.call(fontRow.children, function(d,i){
+    d.classList.toggle("active", FONTS[i].id === state.font);
+  });
+}
+refreshFont();
+
+/* -- frases -- */
+var frasesList = document.getElementById("leFrasesList");
+var fraseInput = document.getElementById("leFraseInput");
+function renderFrases(){
+  frasesList.innerHTML = "";
+  var arr = effFrases();
+  if (!arr.length){
+    var e = document.createElement("div");
+    e.className = "le-empty"; e.textContent = "Sin frases — agrega al menos una.";
+    frasesList.appendChild(e);
+    return;
+  }
+  arr.forEach(function(txt, idx){
+    var chip = document.createElement("div"); chip.className = "le-chip";
+    var sp = document.createElement("span"); sp.textContent = txt;
+    var b = document.createElement("button"); b.innerHTML = "&#10005;"; b.title = "Eliminar";
+    b.addEventListener("click", function(){
+      var cur = effFrases(); cur.splice(idx,1);
+      state.frases = cur; renderFrases(); rebuildFrases(); persist();
+    });
+    chip.appendChild(sp); chip.appendChild(b);
+    frasesList.appendChild(chip);
+  });
+}
+function addFrase(){
+  var v = fraseInput.value.trim(); if (!v) return;
+  var cur = effFrases(); cur.push(v);
+  state.frases = cur; fraseInput.value = "";
+  renderFrases(); rebuildFrases(); persist();
+}
+document.getElementById("leFraseAdd").addEventListener("click", addFrase);
+fraseInput.addEventListener("keydown", function(e){ if (e.key === "Enter") addFrase(); });
+document.getElementById("leFrasesClear").addEventListener("click", function(){
+  state.frases = []; renderFrases(); rebuildFrases(); persist();
+});
+renderFrases();
+
+/* -- fotos -- */
+var fotosList = document.getElementById("leFotosList");
+var addTile = document.getElementById("leAddFotoTile");
+var fotoInput = document.getElementById("leFotoInput");
+var fotosNote = document.getElementById("leFotosNote");
+function renderFotos(){
+  fotosList.innerHTML = "";
+  var arr = effFotos();
+  arr.forEach(function(src, idx){
+    var t = document.createElement("div");
+    t.className = "le-thumb";
+    t.style.backgroundImage = "url(" + src + ")";
+    var b = document.createElement("button"); b.innerHTML = "&#10005;";
+    b.addEventListener("click", function(){
+      var cur = effFotos(); cur.splice(idx,1);
+      state.fotos = cur; renderFotos(); rebuildFotos(); persist();
+    });
+    t.appendChild(b);
+    fotosList.appendChild(t);
+  });
+  addTile.classList.toggle("disabled", arr.length >= MAX_IMG);
+  fotosNote.textContent = arr.length + " / " + MAX_IMG + " fotos";
+}
+function fileToDataUrl(file){
+  return new Promise(function(res, rej){
+    var fr = new FileReader();
+    fr.onload = function(ev){
+      var img = new Image();
+      img.onload = function(){
+        var max = 420;
+        var w = img.width, h = img.height;
+        var sc = Math.min(1, max/Math.max(w,h));
+        w = Math.round(w*sc); h = Math.round(h*sc);
+        var c = document.createElement("canvas"); c.width=w; c.height=h;
+        c.getContext("2d").drawImage(img,0,0,w,h);
+        res(c.toDataURL("image/jpeg", 0.82));
+      };
+      img.onerror = rej;
+      img.src = ev.target.result;
+    };
+    fr.onerror = rej;
+    fr.readAsDataURL(file);
+  });
+}
+fotoInput.addEventListener("change", function(){
+  var files = Array.prototype.slice.call(fotoInput.files || []);
+  var cur = effFotos();
+  files = files.slice(0, Math.max(0, MAX_IMG - cur.length));
+  Promise.all(files.map(fileToDataUrl)).then(function(urls){
+    state.fotos = cur.concat(urls);
+    renderFotos(); rebuildFotos(); persist();
+  }).catch(function(){});
+  fotoInput.value = "";
+});
+document.getElementById("leFotosClear").addEventListener("click", function(){
+  state.fotos = []; renderFotos(); rebuildFotos(); persist();
+});
+renderFotos();
+
+/* -- música -- */
+var musicList = document.getElementById("leMusicList");
+var musicInput = document.getElementById("leMusicInput");
+function renderMusic(){
+  musicList.innerHTML = "";
+  var chip = document.createElement("div"); chip.className = "le-chip";
+  var sp = document.createElement("span");
+  var m = effMusica();
+  if (!m){ sp.textContent = "Sin música"; }
+  else if (typeof state.musica === "string"){ sp.textContent = state.musicaNombre || "canción personalizada"; }
+  else { sp.textContent = "Canción original del diseño"; }
+  var b = document.createElement("button"); b.innerHTML = "&#10005;"; b.title = "Quitar música";
+  b.addEventListener("click", function(){
+    state.musica = ""; state.musicaNombre = null;
+    renderMusic(); applyMusica(); persist();
+  });
+  chip.appendChild(sp);
+  if (m) chip.appendChild(b);
+  musicList.appendChild(chip);
+}
+musicInput.addEventListener("change", function(){
+  var f = musicInput.files && musicInput.files[0];
+  if (!f) return;
+  var fr = new FileReader();
+  fr.onload = function(ev){
+    state.musica = ev.target.result;
+    state.musicaNombre = f.name;
+    renderMusic(); applyMusica(); persist();
+  };
+  fr.readAsDataURL(f);
+  musicInput.value = "";
+});
+document.getElementById("leMusicReset").addEventListener("click", function(){
+  state.musica = null; state.musicaNombre = null;
+  renderMusic(); applyMusica(); persist();
+});
+renderMusic();
+
+/* -- efectos -- */
+var burstOn = document.getElementById("leBurstOn");
+var trailOn = document.getElementById("leTrailOn");
+burstOn.checked = !!state.burst;
+trailOn.checked = !!state.trail;
+burstOn.addEventListener("change", function(){ state.burst = burstOn.checked; persist(); });
+trailOn.addEventListener("change", function(){ state.trail = trailOn.checked; persist(); });
+
+var shapeRow = document.getElementById("leShapeRow");
+Array.prototype.forEach.call(shapeRow.children, function(opt){
+  opt.addEventListener("click", function(){
+    state.shape = opt.getAttribute("data-shape");
+    refreshShape(); persist();
+  });
+});
+function refreshShape(){
+  Array.prototype.forEach.call(shapeRow.children, function(opt){
+    opt.classList.toggle("active", opt.getAttribute("data-shape") === state.shape);
+  });
+}
+refreshShape();
+
+var burstRange = document.getElementById("leBurstRange");
+var burstVal = document.getElementById("leBurstVal");
+burstRange.value = state.burstCount;
+burstVal.textContent = state.burstCount;
+burstRange.addEventListener("input", function(){
+  state.burstCount = parseInt(burstRange.value, 10);
+  burstVal.textContent = state.burstCount;
+  persist();
+});
+
+/* -- descargar -- */
+var filenameInput = document.getElementById("leFilename");
+var includeEditor = document.getElementById("leIncludeEditor");
+document.getElementById("leDownloadBtn").addEventListener("click", function(){
+  persist();
+  var keep = includeEditor.checked;
+  exitEditor();
+  setTimeout(function(){
+    if (!keep) document.body.classList.add("le-no-editor");
+    var ssEl = document.getElementById("start-screen");
+    var ssWasHidden = ssEl ? ssEl.classList.contains("hidden") : false;
+    if (ssEl) ssEl.classList.remove("hidden");
+    var html = "<!doctype html>\n" + document.documentElement.outerHTML;
+    if (ssEl && ssWasHidden) ssEl.classList.add("hidden");
+    if (!keep) document.body.classList.remove("le-no-editor");
+    var blob = new Blob([html], { type:"text/html" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    var name = (filenameInput.value || "").trim() || (APP.filename || "mi-regalo.html");
+    if (!/\.html?$/i.test(name)) name += ".html";
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+  }, 80);
+});
+
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
+applyTitulo();
+applyTapText();
+applyMensaje();
+applyMusica();
+applyTheme();
+
+function needsRebuild(){
+  return (state.font !== (APP.defaultFont||"indie")) || (state.color !== (APP.defaultColor||""));
+}
+if (document.fonts && document.fonts.ready){
+  document.fonts.ready.then(function(){
+    setTimeout(function(){ if (needsRebuild()) rebuildFrases(); }, 120);
+  });
+} else {
+  setTimeout(function(){ if (needsRebuild()) rebuildFrases(); }, 600);
+}
+
+})();
+
+</script>
+<script>
+/* ---- controles propios de la Rosa de Cristal ---- */
+(function(){
+  "use strict";
+  var LE = window.LE_STATE; if (!LE) return;
+  var st = LE.state;
+  st.extra = st.extra || {};
+  var ex = st.extra;
+  var el = document.getElementById("le-initial-state");
+  function persist(){ try { el.textContent = JSON.stringify(st); } catch(e){} }
+
+  var FIGS = [
+    {id:"capullo",     label:"Capullo",  icon:"\u273F"},
+    {id:"rosaAbierta", label:"Rosa",     icon:"\u{1F339}"},
+    {id:"corazon",     label:"Corazón",  icon:"\u2665"},
+    {id:"infinito",    label:"Infinito", icon:"\u221E"},
+    {id:"flor",        label:"Flor",     icon:"\u2740"},
+    {id:"estrella",    label:"Estrella", icon:"\u2726"},
+    {id:"luna",        label:"Luna",     icon:"\u263D"},
+    {id:"mariposa",    label:"Mariposa", icon:"\u{1F98B}"}
+  ];
+  ex.figuraA = ex.figuraA || "capullo";
+  ex.figuraB = ex.figuraB || "rosaAbierta";
+  if (ex.cupula     === undefined) ex.cupula = true;
+  if (ex.luciernagasOn === undefined) ex.luciernagasOn = true;
+  if (ex.luciernagas   === undefined) ex.luciernagas = (window.innerWidth <= 820 ? 45 : 80);
+  if (ex.fugaces    === undefined) ex.fugaces = true;
+  if (ex.petalos    === undefined) ex.petalos = true;
+
+  function applyShapes(){ try { rebuildShapes(ex.figuraA, ex.figuraB); } catch(e){} }
+  function applyRest(){
+    try {
+      CONFIG.fugaces = ex.fugaces;
+      if (typeof spiral !== "undefined") spiral.visible = !!ex.petalos;
+      if (typeof domeGroup !== "undefined") domeGroup.visible = !!ex.cupula;
+      if (typeof fireflies !== "undefined") fireflies.visible = !!ex.luciernagasOn && ex.luciernagas > 0;
+      if (typeof setFireflyCount === "function") setFireflyCount(ex.luciernagas);
+    } catch(e){}
+  }
+
+  function buildRow(id, key){
+    var row = document.getElementById(id);
+    if (!row) return;
+    FIGS.forEach(function(f){
+      var d = document.createElement("div");
+      d.className = "le-opt";
+      d.setAttribute("data-fig", f.id);
+      d.innerHTML = f.icon + "<small>" + f.label + "</small>";
+      d.addEventListener("click", function(){
+        ex[key] = f.id;
+        refresh(row, key);
+        applyShapes();
+        persist();
+      });
+      row.appendChild(d);
+    });
+    refresh(row, key);
+  }
+  function refresh(row, key){
+    Array.prototype.forEach.call(row.children, function(d){
+      d.classList.toggle("active", d.getAttribute("data-fig") === ex[key]);
+    });
+  }
+  buildRow("leFigA", "figuraA");
+  buildRow("leFigB", "figuraB");
+
+  function wireSwitch(id, key){
+    var c = document.getElementById(id);
+    if (!c) return;
+    c.checked = !!ex[key];
+    c.addEventListener("change", function(){ ex[key] = c.checked; applyRest(); persist(); });
+  }
+  wireSwitch("leDomeOn", "cupula");
+  wireSwitch("leFireflyOn", "luciernagasOn");
+  wireSwitch("lePetalsOn", "petalos");
+  wireSwitch("leShootOn", "fugaces");
+
+  var fr = document.getElementById("leFireflyRange");
+  var frv = document.getElementById("leFireflyVal");
+  if (fr){
+    fr.value = ex.luciernagas;
+    frv.textContent = ex.luciernagas;
+    fr.addEventListener("input", function(){
+      ex.luciernagas = parseInt(fr.value, 10);
+      frv.textContent = ex.luciernagas;
+      applyRest(); persist();
+    });
+  }
+
+  applyRest();
+  persist();
+})();
+
+</script>
+<script>
+/* vista previa: arranca sola y simula al cliente (dedo fantasma) */
+(function(){
+function pe(type,x,y,target){var ev;try{ev=new PointerEvent(type,{clientX:x,clientY:y,pointerId:1,bubbles:true,cancelable:true,isPrimary:true,pointerType:"touch"});}catch(e){return;}(target||window).dispatchEvent(ev);}
+function $(i){return document.getElementById(i)}
+function go(){ try{ unlockAudioAndStart(); }catch(e){ try{ document.getElementById("start-screen").click(); }catch(e2){} } }
+function run(){ go(); setTimeout(function(){ try{ ghost(); }catch(e){} }, 900); }
+function ghost(){
+
+}
+if(document.readyState==="complete") setTimeout(run,60); else addEventListener("load",function(){setTimeout(run,60)});
+})();
+</script>
+</body>
+</html>

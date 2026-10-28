@@ -1,0 +1,2024 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>[preview] FÉNIX RENACIENTE 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Poppins:wght@600;700;800&family=Playfair+Display:wght@700;800&family=Pacifico&family=Dancing+Script:wght@700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body, html {
+    margin: 0;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    user-select: none;
+    font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
+}
+body.mode-editor {
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #060b0d;
+}
+
+#c { display: block; background: #000; touch-action: none; }
+#c.stage-full { position: fixed; top: 0; left: 0; z-index: 1; }
+#c.stage-preview { position: relative; display: block; }
+
+.vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%);
+    z-index: 500;
+}
+
+.hint {
+    position: fixed;
+    top: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #d8fff8;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-shadow: 0 0 10px #26e0c8;
+    background: rgba(4, 20, 18, 0.35);
+    border: 1px solid rgba(90, 255, 235, 0.35);
+    padding: 8px 16px;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    z-index: 900;
+    opacity: 0;
+    animation: hintIn 1s ease forwards 1.4s, hintOut 1s ease forwards 7s;
+    pointer-events: none;
+    text-align: center;
+}
+@keyframes hintIn { to { opacity: 1; } }
+@keyframes hintOut { to { opacity: 0; } }
+
+body.mode-editor .vignette,
+body.mode-editor .hint,
+body.mode-editor .edit-toggle,
+body.mode-editor .music-toggle {
+    display: none;
+}
+
+/* ==== boton lapiz (solo en vista completa) ==== */
+.edit-toggle{
+    position:fixed;
+    top:18px; right:18px;
+    width:50px; height:50px;
+    border-radius:50%;
+    background:rgba(6,16,16,0.45);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(150,255,235,0.28);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    z-index:1000;
+    box-shadow:0 0 22px rgba(38,224,200,0.16);
+    transition:transform .15s ease, background .15s ease;
+}
+.edit-toggle:hover{ transform:scale(1.07); background:rgba(6,16,16,0.65); }
+.edit-toggle svg{ width:20px; height:20px; }
+
+/* ==== boton de musica (solo en vista completa, solo si hay mp3 cargado) ==== */
+.music-toggle{
+    display:none;
+    position:fixed;
+    bottom:22px; left:22px;
+    width:50px; height:50px;
+    border-radius:50%;
+    background:rgba(6,16,16,0.45);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(150,255,235,0.28);
+    align-items:center; justify-content:center;
+    cursor:pointer;
+    z-index:1000;
+    box-shadow:0 0 22px rgba(38,224,200,0.16);
+    transition:transform .15s ease, background .15s ease;
+}
+.music-toggle.visible{ display:flex; }
+.music-toggle:hover{ transform:scale(1.07); background:rgba(6,16,16,0.65); }
+.music-toggle svg{ width:20px; height:20px; }
+.music-toggle .icon-pause{ display:none; }
+.music-toggle.playing .icon-play{ display:none; }
+.music-toggle.playing .icon-pause{ display:block; }
+
+/* ==== aviso si la animacion no pudo cargar (sin internet / bloqueado) ==== */
+.load-error{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    background:#05080a;
+    color:#eafffb;
+    align-items:center;
+    justify-content:center;
+    padding:32px;
+    text-align:center;
+    font-family:'Quicksand','Segoe UI',Arial,sans-serif;
+}
+.load-error.visible{ display:flex; }
+.load-error-box{ max-width:380px; }
+.load-error-box h2{ font-size:17px; margin:0 0 10px; }
+.load-error-box p{ font-size:13.5px; color:#9fb3b0; line-height:1.6; margin:0 0 18px; }
+.load-error-box button{ background:#26e0c8; color:#04211d; border:none; border-radius:9px; padding:11px 20px; font-weight:700; font-size:13.5px; cursor:pointer; font-family:inherit; }
+
+/* ==== pagina del editor ==== */
+.editor-page{
+    display:none;
+    position:relative;
+    z-index: 50;
+    min-height:100%;
+    color:#eafffb;
+    font-family:'Quicksand',sans-serif;
+}
+body.mode-editor .editor-page{ display:block; }
+
+.editor-topbar{
+    position:sticky;
+    top:0;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px 20px;
+    background:rgba(6,11,13,0.88);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(150,255,235,0.14);
+    z-index:60;
+}
+.back-btn{
+    width:40px; height:40px;
+    flex:0 0 auto;
+    border-radius:50%;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(150,255,235,0.22);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    color:#eafffb;
+}
+.back-btn:hover{ background:rgba(255,255,255,0.12); }
+.back-btn svg{ width:19px; height:19px; }
+.editor-topbar-titles h1{ font-size:16px; margin:0; font-weight:700; }
+.editor-topbar-titles p{ font-size:11.5px; margin:2px 0 0; color:#8fa3a0; }
+
+.editor-body{
+    max-width:640px;
+    margin:0 auto;
+    padding:18px 20px 60px;
+}
+
+.preview-box{
+    position:relative;
+    width:100%;
+    aspect-ratio:4/3;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid rgba(150,255,235,0.18);
+    background:#02050a;
+    box-shadow:0 0 30px rgba(38,224,200,0.10) inset, 0 10px 30px rgba(0,0,0,0.4);
+    margin-bottom:26px;
+}
+.preview-box .preview-tag{
+    position:absolute;
+    top:10px; left:12px;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:#26e0c8;
+    background:rgba(4,16,15,0.55);
+    border:1px solid rgba(38,224,200,0.35);
+    padding:4px 9px;
+    border-radius:999px;
+    pointer-events:none;
+    z-index:5;
+}
+
+.edit-section{ margin-bottom:26px; }
+.edit-section h3{ font-size:13.5px; font-weight:700; margin:0 0 3px; color:#eafffb; }
+.edit-section p{ font-size:12px; color:#8fa3a0; margin:0 0 12px; line-height:1.5; }
+
+.color-row{ display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+.color-row input[type=color]{ width:44px; height:44px; border:2px solid rgba(150,255,235,0.2); border-radius:11px; background:none; cursor:pointer; padding:0; flex:0 0 auto; }
+.color-row input[type=text]{ flex:1 1 140px; min-width:0; background:rgba(255,255,255,0.05); border:1px solid rgba(150,255,235,0.18); color:#eafffb; padding:11px; border-radius:8px; font-family:'Quicksand',sans-serif; font-size:14px; font-weight:600; }
+.swatches{ display:flex; gap:8px; flex-wrap:wrap; }
+.swatch{ width:28px; height:28px; border-radius:8px; border:2px solid rgba(150,255,235,0.15); cursor:pointer; transition:transform .12s ease; flex-shrink:0; }
+.swatch:hover{ transform:scale(1.12); }
+.swatch.active{ border-color:#fff; }
+
+.shape-row{ display:flex; gap:10px; flex-wrap:wrap; }
+.shape-opt{ flex:1 1 120px; background:rgba(255,255,255,0.04); border:1px solid rgba(150,255,235,0.16); border-radius:9px; padding:12px; text-align:center; cursor:pointer; font-size:13.5px; font-weight:600; color:#8fa3a0; }
+.shape-opt.active{ border-color:#26e0c8; color:#26e0c8; background:rgba(38,224,200,0.12); }
+
+.font-row{ display:flex; flex-wrap:wrap; gap:8px; }
+.font-opt{ flex:1 1 90px; background:rgba(255,255,255,0.04); border:1px solid rgba(150,255,235,0.16); border-radius:9px; padding:11px 8px; cursor:pointer; font-size:15px; color:#eafffb; text-align:center; line-height:1.2; }
+.font-opt small{ display:block; font-size:9.5px; font-weight:600; color:#8fa3a0; margin-top:3px; letter-spacing:0.02em; }
+.font-opt.active{ border-color:#26e0c8; color:#26e0c8; background:rgba(38,224,200,0.12); }
+.font-opt.active small{ color:#26e0c8; opacity:0.8; }
+
+.chip-list{ display:flex; flex-direction:column; gap:7px; margin-bottom:10px; }
+.chip{ display:flex; align-items:center; gap:9px; background:rgba(255,255,255,0.045); border:1px solid rgba(150,255,235,0.14); border-radius:8px; padding:10px 9px 10px 13px; }
+.chip span{ flex:1; font-size:13.5px; font-weight:600; word-break:break-word; }
+.chip button{ background:none; border:none; color:#8fa3a0; font-size:16px; cursor:pointer; padding:3px 6px; border-radius:5px; }
+.chip button:hover{ color:#ff8fa8; }
+.empty-note{ font-size:12px; color:#607370; font-style:italic; padding:5px 2px; }
+
+.add-row{ display:flex; gap:8px; flex-wrap:wrap; }
+.add-row input[type=text]{ flex:1 1 160px; min-width:0; background:rgba(255,255,255,0.05); border:1px solid rgba(150,255,235,0.18); color:#eafffb; padding:11px; border-radius:8px; font-family:'Quicksand',sans-serif; font-size:14px; }
+.btn{ border:none; border-radius:8px; padding:11px 16px; font-family:'Quicksand',sans-serif; font-weight:700; font-size:13px; cursor:pointer; }
+.btn-add{ background:rgba(38,224,200,0.14); color:#26e0c8; border:1px solid rgba(38,224,200,0.35); flex:0 0 auto; }
+.btn-clear{ background:none; color:#8fa3a0; border:1px solid rgba(150,255,235,0.14); font-size:11.5px; padding:8px 12px; margin-top:8px; }
+.btn-clear:hover{ color:#ff8fa8; border-color:#ff8fa8; }
+
+.range-row input[type=range]{ width:100%; accent-color:#26e0c8; }
+.range-row .label{ font-size:12px; color:#8fa3a0; margin-bottom:6px; }
+
+.images-grid{ display:flex; flex-wrap:wrap; gap:9px; margin-bottom:10px; }
+.img-thumb{ width:60px; height:60px; border-radius:16px; background-size:cover; background-position:center; position:relative; border:1px solid rgba(150,255,235,0.18); }
+.img-thumb button{ position:absolute; top:-6px; right:-6px; width:21px; height:21px; border-radius:50%; background:#1a1f28; border:1px solid rgba(150,255,235,0.3); color:#eafffb; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+.add-image-tile{ width:60px; height:60px; border-radius:16px; border:1.5px dashed rgba(150,255,235,0.3); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#8fa3a0; font-size:24px; flex-shrink:0; }
+.add-image-tile.disabled{ opacity:0.35; pointer-events:none; }
+.add-image-tile input{ display:none; }
+.images-note{ font-size:11px; color:#607370; margin-top:2px; }
+
+.panel-footer{ margin-top:6px; padding-top:20px; border-top:1px solid rgba(150,255,235,0.12); }
+.btn-download{ width:100%; background:#26e0c8; color:#04211d; padding:15px 16px; font-size:14.5px; border-radius:10px; }
+.btn-download:hover{ filter:brightness(1.08); }
+.filename-row{ margin-top:12px; }
+.filename-row input{ width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(150,255,235,0.18); color:#eafffb; padding:10px 11px; border-radius:7px; font-family:'Quicksand',sans-serif; font-size:12.5px; box-sizing:border-box; }
+.save-note{ font-size:11.5px; color:#607370; line-height:1.5; margin-top:14px; font-family:'Quicksand',sans-serif; }
+
+.editor-checkbox-row{ display:flex; align-items:flex-start; gap:9px; margin-bottom:14px; }
+.editor-checkbox-row input{ margin-top:3px; flex:0 0 auto; }
+.editor-checkbox-row label{ font-size:12px; color:#9fb3b0; line-height:1.5; }
+
+.load-error-detail{ font-size:10.5px; color:#5c7370; margin-top:14px; word-break:break-word; text-align:left; background:rgba(255,255,255,0.04); border-radius:8px; padding:8px 10px; font-family:monospace; }
+
+body.no-editor .edit-toggle{ display:none !important; }
+</style>
+<style id="le-noeditor">#pencilBtn,.pencil-btn,.top-toolbar,#editToggle,.edit-toggle,#leEditToggle,.le-edit-toggle,.le-edit-hint,#editorOverlay,#editorPage,.editor-page,.le-editor-page,#pen,#ed{display:none!important}</style><script>try{Object.defineProperty(window,"devicePixelRatio",{get:function(){return 1}})}catch(e){}</script>
+<style id="pv-hide">
+/* vista previa: sin editor, sin pantalla de inicio */
+#pen,#ed,#go,#start-screen,.le-edit-toggle,.le-edit-hint,.le-editor-page,#leEditToggle,#coverScreen,#editorOverlay,#editorPage,#loadError{display:none !important}
+html,body{pointer-events:none !important;-webkit-user-select:none;user-select:none}
+</style>
+<script src="../protection.js"></script>
+</head>
+<body class="no-editor">
+<canvas id="c" class="stage-full"></canvas>
+<div class="vignette"></div>
+
+<div class="edit-toggle" id="editToggle" title="Personalizar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#eafffb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+</div>
+
+<div class="music-toggle" id="musicToggle" title="Reproducir musica">
+    <svg class="icon-play" viewBox="0 0 24 24" fill="#eafffb"><path d="M8 5v14l11-7z"/></svg>
+    <svg class="icon-pause" viewBox="0 0 24 24" fill="#eafffb"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+</div>
+<audio id="bgAudio" loop preload="none"></audio>
+
+<div class="load-error" id="loadError">
+    <div class="load-error-box">
+        <h2>No se pudo cargar la animacion</h2>
+        <p>Esto puede pasar por falta de internet al abrir el archivo, por abrirlo dentro de una app (como un chat) que bloquea la carga, o porque el navegador tiene desactivada la aceleracion grafica (WebGL). Probá con internet activo, en un navegador normal (Chrome, Edge, Safari), y con la aceleracion de hardware activada en su configuracion.</p>
+        <button id="reloadBtn">Reintentar</button>
+        <div class="load-error-detail" id="loadErrorDetail" style="display:none;"></div>
+    </div>
+</div>
+
+<div class="editor-page" id="editorPage">
+    <div class="editor-topbar">
+        <button class="back-btn" id="backBtn" title="Volver a la animacion">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#eafffb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="editor-topbar-titles">
+            <h1>Editor de tu regalo</h1>
+            <p>Los cambios se ven al instante en la vista previa</p>
+        </div>
+    </div>
+
+    <div class="editor-body">
+        <div class="preview-box" id="previewBox">
+            <div class="preview-tag">Vista previa en vivo</div>
+        </div>
+
+        <div class="edit-section">
+            <h3>Color principal</h3>
+            <p>Cambia el color de las llamas y el resplandor de toda la escena.</p>
+            <div class="color-row">
+                <input type="color" id="colorPicker" value="#ff7a1a">
+                <input type="text" id="colorText" value="#ff7a1a" maxlength="7">
+            </div>
+            <div class="swatches" id="swatches"></div>
+        </div>
+
+        <div class="edit-section">
+            <h3>Tipografia</h3>
+            <p>El estilo de letra de los mensajes y palabras.</p>
+            <div class="font-row" id="fontRow"></div>
+        </div>
+
+        <div class="edit-section">
+            <h3>Forma de las rafagas</h3>
+            <p>Se lanza al tocar la pantalla en la vista completa.</p>
+            <div class="shape-row">
+                <div class="shape-opt" data-shape="heart">&#9829; Corazon</div>
+                <div class="shape-opt" data-shape="star">&#10022; Estrella</div>
+            </div>
+        </div>
+
+        <div class="edit-section">
+            <h3>Frase central</h3>
+            <p>Mensajes que aparecen flotando en el pecho del Fenix, uno tras otro.</p>
+            <div class="chip-list" id="centerList"></div>
+            <div class="add-row">
+                <input type="text" id="centerInput" placeholder="Escribe una frase" maxlength="40">
+                <button class="btn btn-add" id="centerAdd">Agregar</button>
+            </div>
+            <button class="btn btn-clear" id="centerClear">Eliminar todas las frases centrales</button>
+            <div class="range-row" style="margin-top:16px;">
+                <div class="label">Velocidad de cambio: <span id="intervalVal">2.6s</span></div>
+                <input type="range" id="intervalRange" min="1" max="6" step="0.2" value="2.6">
+            </div>
+        </div>
+
+        <div class="edit-section">
+            <h3>Palabras orbitando</h3>
+            <p>Palabras cortas que giran alrededor del Fenix.</p>
+            <div class="chip-list" id="orbitList"></div>
+            <div class="add-row">
+                <input type="text" id="orbitInput" placeholder="Escribe una palabra" maxlength="18">
+                <button class="btn btn-add" id="orbitAdd">Agregar</button>
+            </div>
+            <button class="btn btn-clear" id="orbitClear">Eliminar todas las palabras orbitando</button>
+        </div>
+
+        <div class="edit-section">
+            <h3>Fotos flotando</h3>
+            <p>Fotos pequeñas y semitransparentes con bordes en degradado, giran junto a las palabras. Hasta 6.</p>
+            <div class="images-grid" id="imagesList"></div>
+            <label class="add-image-tile" id="addImageTile">
+                +
+                <input type="file" id="imageInput" accept="image/*" multiple>
+            </label>
+            <div class="images-note" id="imagesNote"></div>
+            <button class="btn btn-clear" id="imagesClear" style="margin-top:10px;">Eliminar todas las fotos</button>
+        </div>
+
+        <div class="edit-section">
+            <h3>Musica de fondo</h3>
+            <p>Un MP3 opcional. Si lo agregas, aparece un boton de reproduccion discreto en la vista completa; si no agregas ninguno, ese boton no se muestra.</p>
+            <div class="chip-list" id="musicList"></div>
+            <label class="btn btn-add" id="addMusicTile" style="display:inline-block;">
+                Elegir archivo MP3
+                <input type="file" id="musicInput" accept="audio/mpeg,audio/mp3,.mp3" style="display:none;">
+            </label>
+        </div>
+
+        <div class="panel-footer">
+            <div class="editor-checkbox-row">
+                <input type="checkbox" id="includeEditorCheckbox">
+                <label for="includeEditorCheckbox">Incluir el editor (el lapiz) en este archivo. Dejalo desactivado para la versión final que le envíes a la persona — así no le aparece el lápiz. Actívalo solo si querés seguir editando este mismo archivo descargado más adelante.</label>
+            </div>
+            <button class="btn btn-download" id="downloadBtn">Descargar mi regalo personalizado</button>
+            <div class="filename-row">
+                <input type="text" id="filenameInput" value="mi-fenix-personalizado.html">
+            </div>
+            <p class="save-note">El navegador no puede sobrescribir este archivo por seguridad. "Descargar" genera un HTML nuevo y completo con tus cambios ya aplicados (incluidas las fotos, cancion, etc) y sigue trayendo este mismo editor adentro, listo para enviarlo o retocarlo despues.</p>
+        </div>
+    </div>
+</div>
+
+<script id="initial-state" type="application/json">{"color": "#ff7a1a", "font": "quicksand", "shape": "heart", "centerTexts": ["FELIZ CUMPLEAÑOS", "TE QUIERO MUCHO", "♥"], "centerInterval": 2.6, "orbitWords": ["SORPRESA", "PARA TI", "FELICIDADES", "GRACIAS", "✦", "TE QUIERO", "♥", "DISFRUTA"], "images": [], "music": "", "musicName": ""}</script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
+<script>
+if (typeof THREE === "undefined") {
+    document.write('<script src="https://unpkg.com/three@0.148.0/build/three.min.js"><\/script>');
+}
+</script>
+<script>
+if (typeof THREE === "undefined") {
+    document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"><\/script>');
+}
+</script>
+<script>
+(function(){
+"use strict";
+
+function showLoadError(err){
+    try { console.error("Fenix Renaciente 3D - error al iniciar:", err); } catch(e){}
+    var el = document.getElementById("loadError");
+    if (el) el.classList.add("visible");
+    var btn = document.getElementById("reloadBtn");
+    if (btn) btn.addEventListener("click", function(){ window.location.reload(); });
+    var detail = document.getElementById("loadErrorDetail");
+    if (detail && err) {
+        var msg = (err && err.message) ? err.message : String(err);
+        var line = (err && err.stack) ? err.stack.split("\n")[0] : "";
+        detail.textContent = msg + (line && line !== msg ? " (" + line + ")" : "");
+        detail.style.display = "block";
+    }
+}
+
+if (typeof THREE === "undefined") {
+    showLoadError(new Error("THREE.js no se pudo cargar"));
+    return;
+}
+
+try {
+
+/* ============================================================
+   CONFIGURACION DE FUENTES DISPONIBLES
+   ============================================================ */
+var FONTS = [
+    { id: "quicksand",  label: "Redonda",   sub: "Aa", family: "'Quicksand', sans-serif",       weight: "800" },
+    { id: "poppins",    label: "Moderna",   sub: "Aa", family: "'Poppins', sans-serif",          weight: "800" },
+    { id: "playfair",   label: "Elegante",  sub: "Aa", family: "'Playfair Display', serif",      weight: "800" },
+    { id: "pacifico",   label: "Divertida", sub: "Aa", family: "'Pacifico', cursive",             weight: "400" },
+    { id: "dancing",    label: "Romantica", sub: "Aa", family: "'Dancing Script', cursive",       weight: "700" },
+    { id: "montserrat", label: "Bold",      sub: "Aa", family: "'Montserrat', sans-serif",        weight: "800" }
+];
+function fontById(id){
+    for (var i = 0; i < FONTS.length; i++) if (FONTS[i].id === id) return FONTS[i];
+    return FONTS[0];
+}
+
+var PRESET_COLORS = [
+    "#ff7a1a","#ff2d2d","#ffd23f","#ff9f4a","#ff4e4e",
+    "#ffb347","#ff6b6b","#ffffff","#ff5e00","#ffcc33",
+    "#ff8c42","#ffe066","#e63946","#ff3c00","#ffa62b",
+    "#c1121f","#f77f00","#fcbf49","#d62828","#ffd166"
+];
+
+var MAX_IMAGES = 6;
+
+/* colores fijos de las llamas: naranja, rojo intenso, amarillo */
+var FIRE_HUES = ["#ff7a1a", "#ff2d2d", "#ffd23f"];
+
+/* ============================================================
+   ESTADO INICIAL
+   ============================================================ */
+var stateEl = document.getElementById("initial-state");
+var state;
+try {
+    state = JSON.parse(stateEl.textContent);
+} catch (e) {
+    state = {};
+}
+state.color = state.color || "#ff7a1a";
+state.font = state.font || "quicksand";
+state.shape = state.shape || "heart";
+state.centerTexts = state.centerTexts && state.centerTexts.length ? state.centerTexts : ["FELIZ CUMPLEA\u00d1OS", "TE QUIERO MUCHO", "\u2665"];
+state.centerInterval = state.centerInterval || 2.6;
+state.orbitWords = state.orbitWords && state.orbitWords.length ? state.orbitWords : ["SORPRESA", "PARA TI", "FELICIDADES", "GRACIAS"];
+state.images = state.images || [];
+state.music = state.music || null;
+state.musicName = state.musicName || null;
+
+function persistState(){
+    stateEl.textContent = JSON.stringify(state);
+}
+
+/* ---------- vista actual: 'full' (animacion completa) o 'editor' ---------- */
+var currentView = "full";
+
+/* ---------- three.js escena base ---------- */
+var canvas = document.getElementById("c"),
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+var scene = new THREE.Scene(),
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 6000);
+
+scene.background = new THREE.Color(0x040404);
+
+var CAM_DIST_START = 90, CAM_DIST_END = 340;
+var targetDist = CAM_DIST_START, currentDist = CAM_DIST_START, rotX = 0.12, rotY = 0.3;
+
+var previewBox = document.getElementById("previewBox");
+
+function doResize(){
+    var w, h;
+    if (currentView === "editor") {
+        var r = previewBox.getBoundingClientRect();
+        w = Math.max(1, Math.round(r.width));
+        h = Math.max(1, Math.round(r.height));
+    } else {
+        w = window.innerWidth;
+        h = window.innerHeight;
+    }
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+}
+doResize();
+
+/* ---------- utilidades de color ---------- */
+function toRgbTriplet(threeColor) {
+    return Math.round(threeColor.r * 255) + "," + Math.round(threeColor.g * 255) + "," + Math.round(threeColor.b * 255);
+}
+function lighten(hex, amt) {
+    var c = new THREE.Color(hex);
+    c.lerp(new THREE.Color(0xffffff), amt);
+    return c;
+}
+function generatePalette(baseHex, n) {
+    var base = new THREE.Color(baseHex);
+    var hsl = {};
+    base.getHSL(hsl);
+    var arr = [];
+    for (var i = 0; i < n; i++) {
+        var l = Math.min(0.9, Math.max(0.4, hsl.l + (Math.random() - 0.5) * 0.3));
+        var h = (hsl.h + (Math.random() - 0.5) * 0.05 + 1) % 1;
+        var c = new THREE.Color();
+        c.setHSL(h, Math.min(1, hsl.s * 1.05 || 0.7), l);
+        arr.push("#" + c.getHexString());
+    }
+    return arr;
+}
+var COLORS = generatePalette(state.color, 10);
+var CORE_WARM_COLOR = "#fff6d0";
+var INNER_GLOW_RGB = toRgbTriplet(lighten(state.color, 0.7));
+var OUTER_GLOW_RGB = toRgbTriplet(new THREE.Color(state.color));
+
+/* ---------- textura de polvo compartida ---------- */
+function makeDustTexture(size) {
+    size = size || 128;
+    var c = document.createElement("canvas");
+    c.width = c.height = size;
+    var ctx = c.getContext("2d"),
+        gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    gradient.addColorStop(0, "rgba(255,255,255,1)");
+    gradient.addColorStop(0.35, "rgba(255,255,255,0.8)");
+    gradient.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+}
+var dustTex = makeDustTexture();
+
+function makeSmokeTexture(size) {
+    size = size || 128;
+    var c = document.createElement("canvas");
+    c.width = c.height = size;
+    var ctx = c.getContext("2d"),
+        gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    gradient.addColorStop(0, "rgba(120,120,120,0.55)");
+    gradient.addColorStop(0.5, "rgba(90,90,90,0.28)");
+    gradient.addColorStop(1, "rgba(60,60,60,0)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+}
+var smokeTex = makeSmokeTexture();
+
+/* ---------- muestreo de puntos: corazon y estrella (rafagas) ---------- */
+function heartSamplePoint(scale) {
+    scale = scale || 1;
+    var x = 0, y = 0, inside = false, tries = 0;
+    while (!inside && tries < 30) {
+        x = (Math.random() * 2 - 1) * 1.3;
+        y = (Math.random() * 2 - 1) * 1.3;
+        var val = Math.pow(x * x + y * y - 1, 3) - x * x * Math.pow(y, 3);
+        inside = val <= 0;
+        tries++;
+    }
+    return { x: x * scale, y: y * scale };
+}
+function heartOutlinePoint(scale, jitter) {
+    scale = scale || 1; jitter = jitter === undefined ? 0.05 : jitter;
+    var t = Math.random() * Math.PI * 2;
+    var x = 16 * Math.pow(Math.sin(t), 3);
+    var y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+    var nx = x / 16 + (Math.random() - 0.5) * jitter;
+    var ny = y / 16 + (Math.random() - 0.5) * jitter;
+    return { x: nx * scale, y: ny * scale };
+}
+function starOutlinePoint(scale, jitter, points, outerR, innerR) {
+    scale = scale || 1; jitter = jitter === undefined ? 0.05 : jitter;
+    points = points || 5; outerR = outerR || 1; innerR = innerR === undefined ? 0.42 : innerR;
+    var totalVerts = points * 2,
+        vertAngle = (Math.PI * 2) / totalVerts,
+        k = Math.floor(Math.random() * totalVerts),
+        t = Math.random(),
+        r0 = k % 2 === 0 ? outerR : innerR,
+        r1 = (k + 1) % 2 === 0 ? outerR : innerR,
+        a0 = -Math.PI / 2 + k * vertAngle,
+        a1 = -Math.PI / 2 + (k + 1) * vertAngle,
+        r = r0 + (r1 - r0) * t,
+        a = a0 + (a1 - a0) * t;
+    return {
+        x: (r * Math.cos(a) + (Math.random() - 0.5) * jitter) * scale,
+        y: (r * Math.sin(a) + (Math.random() - 0.5) * jitter) * scale
+    };
+}
+function starSamplePoint(scale, points, outerR, innerR) {
+    scale = scale || 1; points = points || 5; outerR = outerR || 1; innerR = innerR === undefined ? 0.42 : innerR;
+    var totalVerts = points * 2, vertAngle = (Math.PI * 2) / totalVerts;
+    var a = Math.random() * Math.PI * 2;
+    var norm = ((a + Math.PI / 2) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+    var k = Math.floor(norm / vertAngle) % totalVerts;
+    var r0 = k % 2 === 0 ? outerR : innerR;
+    var rr = Math.sqrt(Math.random()) * r0;
+    return { x: rr * Math.cos(a) * scale, y: rr * Math.sin(a) * scale };
+}
+function shapePoint(scale, fillRatio) {
+    scale = scale || 1; fillRatio = fillRatio === undefined ? 0.3 : fillRatio;
+    if (state.shape === "star") {
+        return Math.random() < fillRatio ? starSamplePoint(scale) : starOutlinePoint(scale);
+    }
+    return Math.random() < fillRatio ? heartSamplePoint(scale) : heartOutlinePoint(scale);
+}
+
+/* ---------- estrellas de fondo lejanas ---------- */
+(function (starsCount, maxRadius) {
+    starsCount = starsCount || 2200; maxRadius = maxRadius || 3800;
+    var geometry = new THREE.BufferGeometry(),
+        positions = new Float32Array(3 * starsCount);
+    for (var i = 0; i < starsCount; i++) {
+        var r = maxRadius * (0.3 + 0.7 * Math.random()),
+            theta = Math.random() * Math.PI * 2,
+            phi = Math.acos(2 * Math.random() - 1);
+        positions[3 * i] = r * Math.sin(phi) * Math.cos(theta);
+        positions[3 * i + 1] = r * Math.cos(phi);
+        positions[3 * i + 2] = r * Math.sin(phi) * Math.sin(theta);
+    }
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    scene.add(new THREE.Points(geometry, new THREE.PointsMaterial({ size: 1.3, color: 0x776655, depthWrite: false })));
+})();
+
+/* ---------- luces suaves ---------- */
+scene.add(new THREE.AmbientLight(0x201008, 1.1));
+var rimLight = new THREE.PointLight(new THREE.Color(state.color).getHex(), 1.8, 1400);
+rimLight.position.set(0, 40, 60);
+scene.add(rimLight);
+
+/* ============================================================
+   1) CENIZAS: brasas tenues + humo
+   ============================================================ */
+var EMBER_COUNT = 240;
+var emberGroup = new THREE.Group();
+for (var emi = 0; emi < EMBER_COUNT; emi++) {
+    var emat = new THREE.SpriteMaterial({ map: dustTex, color: new THREE.Color(0x8a1f0a), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
+    var espr = new THREE.Sprite(emat);
+    var er = Math.random() * 9;
+    var etheta = Math.random() * Math.PI * 2;
+    espr.userData.baseX = Math.cos(etheta) * er;
+    espr.userData.baseZ = Math.sin(etheta) * er;
+    espr.userData.baseY = -18 + Math.random() * 4;
+    espr.userData.flickerPhase = Math.random() * Math.PI * 2;
+    espr.userData.flickerSpeed = 4 + Math.random() * 5;
+    espr.scale.set(1.4 + Math.random() * 1.6, 1.4 + Math.random() * 1.6, 1);
+    emberGroup.add(espr);
+}
+scene.add(emberGroup);
+
+var SMOKE_COUNT = 110;
+var smokeGroup = new THREE.Group();
+for (var smi = 0; smi < SMOKE_COUNT; smi++) {
+    var smat = new THREE.SpriteMaterial({ map: smokeTex, transparent: true, depthWrite: false, opacity: 0 });
+    var sspr = new THREE.Sprite(smat);
+    sspr.userData.baseX = (Math.random() - 0.5) * 10;
+    sspr.userData.baseZ = (Math.random() - 0.5) * 10;
+    sspr.userData.riseSpeed = 4 + Math.random() * 5;
+    sspr.userData.driftX = (Math.random() - 0.5) * 3;
+    sspr.userData.driftZ = (Math.random() - 0.5) * 3;
+    sspr.userData.y = -18 + Math.random() * 40;
+    sspr.userData.baseOpacity = 0.25 + Math.random() * 0.25;
+    sspr.scale.set(8 + Math.random() * 10, 8 + Math.random() * 10, 1);
+    smokeGroup.add(sspr);
+}
+scene.add(smokeGroup);
+
+/* ============================================================
+   2) EL RENACER: vortice + explosion de fuego liquido
+   ============================================================ */
+var VORTEX_COUNT = 700;
+var vortexGroup = new THREE.Group();
+var vortexParticles = [];
+for (var vi = 0; vi < VORTEX_COUNT; vi++) {
+    var vmat = new THREE.SpriteMaterial({ map: dustTex, color: new THREE.Color(FIRE_HUES[vi % FIRE_HUES.length]), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
+    var vspr = new THREE.Sprite(vmat);
+    vspr.userData.angleOffset = Math.random() * Math.PI * 2;
+    vspr.userData.tOffset = Math.random() * 0.3;
+    vspr.userData.radiusJitter = Math.random() * 6;
+    vspr.scale.set(2 + Math.random() * 2.5, 2 + Math.random() * 2.5, 1);
+    vortexGroup.add(vspr);
+    vortexParticles.push(vspr);
+}
+scene.add(vortexGroup);
+
+var SPIRAL_TURNS = 3.2, COLUMN_HEIGHT = 70, COLUMN_TOP_RADIUS = 8, COLUMN_BASE_RADIUS = 26;
+
+var BOOM_POOL_SIZE = 480;
+var boomPool = [];
+for (var bmi = 0; bmi < BOOM_POOL_SIZE; bmi++) {
+    var bmmat = new THREE.SpriteMaterial({ map: dustTex, color: 0xffcc55, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+    var bmspr = new THREE.Sprite(bmmat);
+    bmspr.visible = false;
+    bmspr.userData.alive = false;
+    scene.add(bmspr);
+    boomPool.push(bmspr);
+}
+var boomTriggered = false;
+function triggerBoom() {
+    for (var i = 0; i < BOOM_POOL_SIZE; i++) {
+        var sprite = boomPool[i];
+        var theta = Math.random() * Math.PI * 2,
+            phi = Math.acos(2 * Math.random() - 1),
+            speed = 45 + Math.random() * 150;
+        var dir = new THREE.Vector3(Math.sin(phi) * Math.cos(theta), Math.abs(Math.sin(phi) * Math.sin(theta)) * 0.8 + 0.2, Math.cos(phi));
+        sprite.position.set((Math.random() - 0.5) * 10, COLUMN_HEIGHT * 0.4 + (Math.random() - 0.5) * 20, (Math.random() - 0.5) * 10);
+        sprite.userData.velocity = dir.multiplyScalar(speed);
+        sprite.userData.life = 1;
+        sprite.userData.maxLife = 1.2 + Math.random() * 1.3;
+        sprite.userData.baseScale = 3 + Math.random() * 6.5;
+        sprite.userData.alive = true;
+        var hue = FIRE_HUES[i % FIRE_HUES.length];
+        sprite.material.color.set(Math.random() < 0.3 ? "#fff6d0" : hue);
+        sprite.material.opacity = 1;
+        sprite.visible = true;
+        sprite.scale.set(1, 1, 1);
+    }
+}
+var boomFlash = new THREE.Sprite(new THREE.SpriteMaterial({ map: dustTex, color: 0xffe9b0, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
+boomFlash.position.set(0, COLUMN_HEIGHT * 0.4, 0);
+boomFlash.renderOrder = 998;
+scene.add(boomFlash);
+
+/* ============================================================
+   3) EL FENIX: silueta formada por particulas de fuego
+   ============================================================ */
+var TARGET_HALF_WIDTH = 150;
+var phoenix = buildPhoenixData();
+
+function drawFeatherFan(ctx, ox, oy, angleFrom, angleTo, count, minLen, maxLen, widthBase) {
+    for (var i = 0; i < count; i++) {
+        var f = count === 1 ? 0.5 : i / (count - 1);
+        var angle = angleFrom + (angleTo - angleFrom) * f;
+        var lenT = Math.sin(Math.PI * f);
+        var len = minLen + (maxLen - minLen) * lenT;
+        var width = widthBase * (0.4 + 0.6 * lenT);
+        var perp = angle + Math.PI / 2;
+        var tipX = ox + Math.cos(angle) * len, tipY = oy + Math.sin(angle) * len;
+        var baseX1 = ox + Math.cos(perp) * width * 0.5, baseY1 = oy + Math.sin(perp) * width * 0.5;
+        var baseX2 = ox - Math.cos(perp) * width * 0.5, baseY2 = oy - Math.sin(perp) * width * 0.5;
+        var midX = ox + Math.cos(angle) * len * 0.6, midY = oy + Math.sin(angle) * len * 0.6;
+        ctx.beginPath();
+        ctx.moveTo(baseX1, baseY1);
+        ctx.quadraticCurveTo(midX + Math.cos(perp) * width * 0.22, midY + Math.sin(perp) * width * 0.22, tipX, tipY);
+        ctx.quadraticCurveTo(midX - Math.cos(perp) * width * 0.22, midY - Math.sin(perp) * width * 0.22, baseX2, baseY2);
+        ctx.closePath();
+        ctx.fill();
+    }
+}
+
+function buildPhoenixData() {
+    var W = 780, H = 560, cx = 390, cy = 260;
+    var c = document.createElement("canvas");
+    c.width = W; c.height = H;
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+
+    /* cuerpo */
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + 30, 26, 88, 0, 0, Math.PI * 2);
+    ctx.fill();
+    /* cabeza */
+    ctx.beginPath();
+    ctx.arc(cx, cy - 70, 19, 0, Math.PI * 2);
+    ctx.fill();
+    /* pico */
+    ctx.beginPath();
+    ctx.moveTo(cx - 5, cy - 88);
+    ctx.lineTo(cx + 5, cy - 88);
+    ctx.lineTo(cx, cy - 105);
+    ctx.closePath();
+    ctx.fill();
+
+    var wingOriginY = cy - 12;
+    var leftWingOriginX = cx - 15, rightWingOriginX = cx + 15;
+    /* ala izquierda: de casi horizontal-izquierda a casi vertical-arriba */
+    drawFeatherFan(ctx, leftWingOriginX, wingOriginY, Math.PI * 0.97, Math.PI * 0.52, 11, 65, 235, 34);
+    /* ala derecha (espejo) */
+    drawFeatherFan(ctx, rightWingOriginX, wingOriginY, Math.PI * 0.03, Math.PI * 0.48, 11, 65, 235, 34);
+    /* cola: abanico apuntando hacia abajo */
+    drawFeatherFan(ctx, cx, cy + 108, Math.PI * 0.32, Math.PI * 0.68, 6, 45, 130, 24);
+
+    var imgData = ctx.getImageData(0, 0, W, H).data;
+    var stride = 4;
+    var rawPoints = [];
+    var bodyHalfWidthCanvas = 34;
+    var tailYCutoff = cy + 55;
+    for (var py = 0; py < H; py += stride) {
+        for (var px = 0; px < W; px += stride) {
+            var idx = (py * W + px) * 4 + 3;
+            if (imgData[idx] > 40 && Math.random() < 0.82) {
+                var jx = px + (Math.random() - 0.5) * stride;
+                var jy = py + (Math.random() - 0.5) * stride;
+                var isWing = Math.abs(jx - cx) > bodyHalfWidthCanvas && jy < tailYCutoff;
+                rawPoints.push({ x: jx, y: jy, isWing: isWing });
+            }
+        }
+    }
+    if (rawPoints.length > 6200) {
+        for (var sIdx = rawPoints.length - 1; sIdx > 0; sIdx--) {
+            var j = Math.floor(Math.random() * (sIdx + 1));
+            var tmp = rawPoints[sIdx]; rawPoints[sIdx] = rawPoints[j]; rawPoints[j] = tmp;
+        }
+        rawPoints = rawPoints.slice(0, 6200);
+    }
+
+    var meanX = 0, meanY = 0;
+    rawPoints.forEach(function (p) { meanX += p.x; meanY += p.y; });
+    meanX /= rawPoints.length; meanY /= rawPoints.length;
+
+    var maxAbsX = 1;
+    rawPoints.forEach(function (p) { maxAbsX = Math.max(maxAbsX, Math.abs(p.x - meanX)); });
+    var worldScale = TARGET_HALF_WIDTH / maxAbsX;
+
+    var n = rawPoints.length;
+    var restPos = new Float32Array(n * 3);
+    var isWingArr = new Uint8Array(n);
+    var colorT = new Float32Array(n);
+    var hueVariance = new Int8Array(n);
+    var maxDist = 1;
+    var chestX = 0, chestY = (wingOriginY - meanY) * -worldScale * 0.3;
+
+    for (var i = 0; i < n; i++) {
+        var p = rawPoints[i];
+        var wx = (p.x - meanX) * worldScale;
+        var wy = -(p.y - meanY) * worldScale;
+        var wz = (Math.random() - 0.5) * 8;
+        restPos[3 * i] = wx;
+        restPos[3 * i + 1] = wy;
+        restPos[3 * i + 2] = wz;
+        isWingArr[i] = p.isWing ? 1 : 0;
+        var d = Math.hypot(wx - chestX, wy - chestY);
+        if (d > maxDist) maxDist = d;
+    }
+    for (var i2 = 0; i2 < n; i2++) {
+        var wx2 = restPos[3 * i2], wy2 = restPos[3 * i2 + 1];
+        var d2 = Math.hypot(wx2 - chestX, wy2 - chestY);
+        colorT[i2] = Math.max(0, Math.min(1, d2 / maxDist));
+        hueVariance[i2] = Math.floor(Math.random() * FIRE_HUES.length);
+    }
+
+    var shoulderXWorld = Math.abs(rightWingOriginX - meanX) * worldScale;
+    var shoulderYWorld = -(wingOriginY - meanY) * worldScale;
+
+    return {
+        n: n,
+        restPos: restPos,
+        isWing: isWingArr,
+        colorT: colorT,
+        hueVariance: hueVariance,
+        shoulderX: shoulderXWorld,
+        shoulderY: shoulderYWorld,
+        chestY: chestY
+    };
+}
+
+var phoenixScatter = new Float32Array(phoenix.n * 3);
+for (var psi = 0; psi < phoenix.n; psi++) {
+    phoenixScatter[3 * psi] = (Math.random() - 0.5) * 10;
+    phoenixScatter[3 * psi + 1] = COLUMN_HEIGHT * 0.35 + (Math.random() - 0.5) * 25;
+    phoenixScatter[3 * psi + 2] = (Math.random() - 0.5) * 10;
+}
+
+var phoenixCurrentPos = new Float32Array(phoenix.n * 3);
+phoenixCurrentPos.set(phoenixScatter);
+var phoenixColorArr = new Float32Array(phoenix.n * 3);
+
+function buildPhoenixColors() {
+    var coreColor = new THREE.Color(CORE_WARM_COLOR);
+    var hueColors = FIRE_HUES.map(function (h) {
+        return new THREE.Color(h).lerp(new THREE.Color(state.color), 0.3);
+    });
+    for (var i = 0; i < phoenix.n; i++) {
+        var t = phoenix.colorT[i];
+        var edge = hueColors[phoenix.hueVariance[i]];
+        var c = coreColor.clone().lerp(edge, Math.min(1, t * 1.1));
+        phoenixColorArr[3 * i] = c.r;
+        phoenixColorArr[3 * i + 1] = c.g;
+        phoenixColorArr[3 * i + 2] = c.b;
+    }
+    if (phoenixGeo.attributes.color) phoenixGeo.attributes.color.needsUpdate = true;
+}
+
+var phoenixGeo = new THREE.BufferGeometry();
+phoenixGeo.setAttribute("position", new THREE.BufferAttribute(phoenixCurrentPos, 3));
+phoenixGeo.setAttribute("color", new THREE.BufferAttribute(phoenixColorArr, 3));
+var phoenixMat = new THREE.PointsMaterial({
+    map: dustTex, size: 2.9, vertexColors: true,
+    transparent: true, depthWrite: false, sizeAttenuation: true,
+    blending: THREE.AdditiveBlending, opacity: 0
+});
+var phoenixGroup = new THREE.Group();
+var phoenixPoints = new THREE.Points(phoenixGeo, phoenixMat);
+phoenixGroup.add(phoenixPoints);
+scene.add(phoenixGroup);
+buildPhoenixColors();
+
+var FLAP_SPEED = 1.1, FLAP_AMP = 0.62;
+
+function updatePhoenixPositions(revealT, flapTheta) {
+    for (var i = 0; i < phoenix.n; i++) {
+        var rx = phoenix.restPos[3 * i], ry = phoenix.restPos[3 * i + 1], rz = phoenix.restPos[3 * i + 2];
+        var fx = rx, fy = ry;
+        if (phoenix.isWing[i]) {
+            var sign = rx >= 0 ? 1 : -1;
+            var pivotX = sign * phoenix.shoulderX;
+            var pivotY = phoenix.shoulderY;
+            var dx = rx - pivotX, dy = ry - pivotY;
+            var angle = sign * flapTheta;
+            var ca = Math.cos(angle), sa = Math.sin(angle);
+            var nx = dx * ca - dy * sa;
+            var ny = dx * sa + dy * ca;
+            fx = pivotX + nx;
+            fy = pivotY + ny;
+        }
+        var sx = phoenixScatter[3 * i], sy = phoenixScatter[3 * i + 1], sz = phoenixScatter[3 * i + 2];
+        phoenixCurrentPos[3 * i] = sx + (fx - sx) * revealT;
+        phoenixCurrentPos[3 * i + 1] = sy + (fy - sy) * revealT;
+        phoenixCurrentPos[3 * i + 2] = sz + (rz - sz) * revealT;
+    }
+    phoenixGeo.attributes.position.needsUpdate = true;
+}
+
+/* nucleo brillante en el pecho: fondo para el texto */
+function makeGlowTexture(size) {
+    size = size || 768;
+    var c = document.createElement("canvas");
+    c.width = c.height = size;
+    var ctx = c.getContext("2d"),
+        gradient = ctx.createRadialGradient(size / 2, size / 2, 0.04 * size, size / 2, size / 2, 0.5 * size);
+    gradient.addColorStop(0, "rgba(" + INNER_GLOW_RGB + ",0.95)");
+    gradient.addColorStop(0.4, "rgba(" + OUTER_GLOW_RGB + ",0.55)");
+    gradient.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+}
+var glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeGlowTexture(), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
+glow.scale.set(230, 230, 1);
+glow.position.set(0, phoenix.chestY, 6);
+glow.renderOrder = 3;
+scene.add(glow);
+
+/* acento decorativo detras del texto central: sigue la forma elegida (corazon / estrella) */
+function drawHeartPath(ctx, s) {
+    ctx.beginPath();
+    ctx.moveTo(0, 4 * s);
+    ctx.bezierCurveTo(0, 2 * s, -2 * s, -1 * s, -6 * s, -1 * s);
+    ctx.bezierCurveTo(-11 * s, -1 * s, -11 * s, 6 * s, -11 * s, 6 * s);
+    ctx.bezierCurveTo(-11 * s, 11 * s, -6 * s, 15.5 * s, 0, 20 * s);
+    ctx.bezierCurveTo(6 * s, 15.5 * s, 11 * s, 11 * s, 11 * s, 6 * s);
+    ctx.bezierCurveTo(11 * s, 6 * s, 11 * s, -1 * s, 6 * s, -1 * s);
+    ctx.bezierCurveTo(2 * s, -1 * s, 0, 2 * s, 0, 4 * s);
+    ctx.closePath();
+}
+function drawStarPath(ctx, s) {
+    var points = 5, outerR = 16 * s, innerR = 6.8 * s;
+    ctx.beginPath();
+    for (var k = 0; k < points * 2; k++) {
+        var r = k % 2 === 0 ? outerR : innerR;
+        var a = -Math.PI / 2 + k * (Math.PI / points);
+        var px = r * Math.cos(a), py = r * Math.sin(a);
+        if (k === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+}
+function makeShapeAccentTexture(shape, size) {
+    size = size || 512;
+    var c = document.createElement("canvas");
+    c.width = c.height = size;
+    var ctx = c.getContext("2d");
+    var s = size / 52;
+    ctx.translate(size / 2, size / 2);
+    ctx.scale(s, s);
+    ctx.translate(0, shape === "star" ? 0 : -6);
+    if (shape === "star") drawStarPath(ctx, 1); else drawHeartPath(ctx, 1);
+    var grad = ctx.createRadialGradient(0, shape === "star" ? 0 : 6, 1, 0, shape === "star" ? 0 : 6, 17);
+    grad.addColorStop(0, "rgba(255,255,255,0.95)");
+    grad.addColorStop(0.4, "rgba(" + toRgbTriplet(new THREE.Color(state.color)) + ",0.85)");
+    grad.addColorStop(1, "rgba(" + toRgbTriplet(new THREE.Color(state.color)) + ",0)");
+    ctx.fillStyle = grad;
+    ctx.fill();
+    return new THREE.CanvasTexture(c);
+}
+var coreAccent = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeShapeAccentTexture(state.shape), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
+coreAccent.scale.set(115, 115, 1);
+coreAccent.position.set(0, phoenix.chestY, 2);
+coreAccent.renderOrder = 4;
+scene.add(coreAccent);
+
+/* ---------- textos centrales (pecho del Fenix) ---------- */
+function makeCenterTextTexture(text, themeColor, fontFamily, fontWeight) {
+    var c = document.createElement("canvas");
+    c.width = 512; c.height = 512;
+    var ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+    var fontSize = text.length > 14 ? 46 : 64;
+    ctx.font = fontWeight + " " + fontSize + "px " + fontFamily;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#ffffff";
+    ctx.shadowColor = themeColor;
+    ctx.shadowBlur = 45;
+    ctx.fillText(text, c.width / 2, c.height / 2);
+    return new THREE.CanvasTexture(c);
+}
+var centerTextures = [];
+var centerMat = new THREE.SpriteMaterial({ map: null, transparent: true, opacity: 0 });
+var centerSprite = new THREE.Sprite(centerMat);
+centerSprite.scale.set(62, 62, 1);
+centerSprite.position.set(0, phoenix.chestY, 10);
+centerSprite.renderOrder = 999;
+scene.add(centerSprite);
+
+function rebuildCenterTextures(){
+    centerTextures.forEach(function(t){ t.dispose(); });
+    var f = fontById(state.font);
+    var texts = state.centerTexts.length ? state.centerTexts : ["\u2665"];
+    centerTextures = texts.map(function(t){ return makeCenterTextTexture(t, state.color, f.family, f.weight); });
+    centerMat.map = centerTextures[0];
+    centerMat.needsUpdate = true;
+}
+
+/* ---------- palabras orbitando ---------- */
+function makeTextTexture(text, shadowColor, fontFamily, fontWeight) {
+    var c = document.createElement("canvas");
+    c.width = 512; c.height = 128;
+    var ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.font = fontWeight + " 50px " + fontFamily;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#ffffff";
+    ctx.shadowColor = shadowColor;
+    ctx.shadowBlur = 28;
+    ctx.fillText(text, c.width / 2, c.height / 2);
+    return new THREE.CanvasTexture(c);
+}
+var textGroup = new THREE.Group();
+scene.add(textGroup);
+
+function clearGroup(group){
+    while (group.children.length) {
+        var obj = group.children.pop();
+        if (obj.material) {
+            if (obj.material.map) obj.material.map.dispose();
+            obj.material.dispose();
+        }
+        group.remove(obj);
+    }
+}
+
+function updateOrbiters(group, flatten, centerY){
+    flatten = flatten === undefined ? 1 : flatten;
+    centerY = centerY || 0;
+    group.children.forEach(function(obj){
+        var ud = obj.userData;
+        ud.theta += ud.speed;
+        obj.position.x = ud.radius * Math.sin(ud.phi) * Math.cos(ud.theta);
+        obj.position.z = ud.radius * Math.sin(ud.phi) * Math.sin(ud.theta);
+        obj.position.y = centerY + ud.radius * Math.cos(ud.phi) * flatten;
+    });
+}
+
+function rebuildOrbitWords(){
+    clearGroup(textGroup);
+    var f = fontById(state.font);
+    var words = [];
+    var base = state.orbitWords.length ? state.orbitWords : ["\u2665"];
+    for (var e = 0; e < 5; e++) words = words.concat(base);
+    for (var i = 0; i < words.length; i++) {
+        var phi = Math.acos(2 * Math.random() - 1),
+            theta = Math.random() * Math.PI * 2,
+            radius = 130 + 110 * Math.random(),
+            tex = makeTextTexture(words[i], COLORS[i % COLORS.length], f.family, f.weight),
+            obj = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
+        obj.scale.set(50, 15.5, 1);
+        obj.userData.phi = phi;
+        obj.userData.theta = theta;
+        obj.userData.radius = radius;
+        obj.userData.speed = 0.0006 + 0.0009 * Math.random();
+        obj.userData.pulsePhase = Math.random() * Math.PI * 2;
+        obj.userData.introFade = introDone ? 1 : 0;
+        textGroup.add(obj);
+    }
+}
+
+/* ---------- fotos flotando (con borde en degradado) ---------- */
+var imageGroup = new THREE.Group();
+scene.add(imageGroup);
+
+function loadFeatheredImageTexture(dataUrl){
+    return new Promise(function(resolve, reject){
+        var img = new Image();
+        img.onload = function(){
+            var size = 300;
+            var c = document.createElement("canvas");
+            c.width = c.height = size;
+            var ctx = c.getContext("2d");
+            var scale = Math.max(size / img.width, size / img.height);
+            var w = img.width * scale, hh = img.height * scale;
+            ctx.drawImage(img, (size - w) / 2, (size - hh) / 2, w, hh);
+            ctx.globalCompositeOperation = "destination-in";
+            var grad = ctx.createRadialGradient(size / 2, size / 2, size * 0.24, size / 2, size / 2, size * 0.5);
+            grad.addColorStop(0, "rgba(255,255,255,1)");
+            grad.addColorStop(0.65, "rgba(255,255,255,0.85)");
+            grad.addColorStop(1, "rgba(255,255,255,0)");
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, size, size);
+            ctx.globalCompositeOperation = "source-over";
+            resolve(new THREE.CanvasTexture(c));
+        };
+        img.onerror = reject;
+        img.src = dataUrl;
+    });
+}
+
+function rebuildImages(){
+    clearGroup(imageGroup);
+    state.images.forEach(function(dataUrl){
+        loadFeatheredImageTexture(dataUrl).then(function(tex){
+            var phi = Math.acos(2 * Math.random() - 1),
+                theta = Math.random() * Math.PI * 2,
+                radius = 150 + 95 * Math.random(),
+                obj = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, opacity: 0 }));
+            obj.scale.set(32, 32, 1);
+            obj.userData.phi = phi;
+            obj.userData.theta = theta;
+            obj.userData.radius = radius;
+            obj.userData.speed = 0.0005 + 0.0007 * Math.random();
+            obj.userData.pulsePhase = Math.random() * Math.PI * 2;
+            obj.userData.targetOpacity = 0.62;
+            obj.userData.introFade = introDone ? 1 : 0;
+            imageGroup.add(obj);
+        }).catch(function(){});
+    });
+}
+
+/* ---------- chispas ambientales alrededor del Fenix ---------- */
+function makeSparkTexture(hex, size) {
+    size = size || 256;
+    var c = document.createElement("canvas");
+    c.width = c.height = size;
+    var ctx = c.getContext("2d"),
+        g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    var col = new THREE.Color(hex);
+    g.addColorStop(0, "rgba(" + toRgbTriplet(col.clone().lerp(new THREE.Color(0xffffff), 0.5)) + ",0.9)");
+    g.addColorStop(0.5, "rgba(" + toRgbTriplet(col) + ",0.4)");
+    g.addColorStop(1, "rgba(" + toRgbTriplet(col) + ",0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+}
+var SPARK_COUNT = 46;
+var sparkGroup = new THREE.Group();
+for (var spi = 0; spi < SPARK_COUNT; spi++) {
+    var hue = FIRE_HUES[spi % FIRE_HUES.length];
+    var spmat = new THREE.SpriteMaterial({ map: makeSparkTexture(hue), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 });
+    var spspr = new THREE.Sprite(spmat);
+    spspr.userData.phi = Math.acos(2 * Math.random() - 1);
+    spspr.userData.theta = Math.random() * Math.PI * 2;
+    spspr.userData.radius = 100 + Math.random() * 130;
+    spspr.userData.speed = 0.0004 + Math.random() * 0.0009;
+    spspr.userData.baseOpacity = 0.35 + Math.random() * 0.35;
+    var s = 4 + Math.random() * 6;
+    spspr.scale.set(s, s, 1);
+    sparkGroup.add(spspr);
+}
+scene.add(sparkGroup);
+
+/* ---------- rafagas al tocar (corazon o estrella, segun el editor) ---------- */
+var BURST_POOL_SIZE = 260;
+var burstPool = [];
+for (var bi = 0; bi < BURST_POOL_SIZE; bi++) {
+    var bmat2 = new THREE.SpriteMaterial({ map: dustTex, color: new THREE.Color(state.color), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+    var bspr = new THREE.Sprite(bmat2);
+    bspr.visible = false;
+    bspr.userData.alive = false;
+    scene.add(bspr);
+    burstPool.push(bspr);
+}
+var burstCursor = 0;
+var corePulseBoost = 0;
+
+function spawnBurst(worldPos, count, big) {
+    count = count || 70;
+    var shapeScale = big ? 42 : 28;
+    for (var n = 0; n < count; n++) {
+        var sprite = burstPool[burstCursor];
+        burstCursor = (burstCursor + 1) % BURST_POOL_SIZE;
+        var p = shapePoint(shapeScale);
+        var offset = new THREE.Vector3(p.x, p.y, (Math.random() - 0.5) * shapeScale * 0.4);
+        sprite.position.copy(worldPos).add(offset);
+        var outward = offset.lengthSq() > 0.0001 ? offset.clone().normalize() : new THREE.Vector3(0, 1, 0);
+        outward.multiplyScalar((big ? 55 : 34) + Math.random() * (big ? 45 : 30));
+        sprite.userData.velocity = outward;
+        sprite.userData.life = 1.0;
+        sprite.userData.maxLife = (big ? 1.5 : 1.1) + Math.random() * 0.6;
+        sprite.userData.baseScale = (big ? 6.5 : 4.5) + Math.random() * (big ? 4.5 : 3.5);
+        sprite.userData.alive = true;
+        sprite.material.color.setStyle(COLORS[n % COLORS.length]);
+        sprite.material.opacity = 1;
+        sprite.visible = true;
+        sprite.scale.set(1, 1, 1);
+    }
+    corePulseBoost = big ? 0.5 : 0.25;
+}
+
+function worldPositionFromPointer(clientX, clientY, distance) {
+    var rect = canvas.getBoundingClientRect();
+    var ndcX = ((clientX - rect.left) / rect.width) * 2 - 1;
+    var ndcY = -((clientY - rect.top) / rect.height) * 2 + 1;
+    var vector = new THREE.Vector3(ndcX, ndcY, 0.5).unproject(camera);
+    var dir = vector.sub(camera.position).normalize();
+    return camera.position.clone().add(dir.multiplyScalar(distance));
+}
+
+/* ---------- rastro de polvo del cursor ---------- */
+var TRAIL_POOL_SIZE = 220;
+var trailPool = [];
+for (var ti = 0; ti < TRAIL_POOL_SIZE; ti++) {
+    var tmat = new THREE.SpriteMaterial({ map: dustTex, color: lighten(state.color, 0.2), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+    var tspr = new THREE.Sprite(tmat);
+    tspr.visible = false;
+    tspr.userData.alive = false;
+    scene.add(tspr);
+    trailPool.push(tspr);
+}
+var trailCursor = 0, lastTrailX = null, lastTrailY = null;
+
+function spawnTrailDust(clientX, clientY) {
+    var worldPos = worldPositionFromPointer(clientX, clientY, currentDist * 0.55);
+    var sprite = trailPool[trailCursor];
+    trailCursor = (trailCursor + 1) % TRAIL_POOL_SIZE;
+    sprite.position.copy(worldPos);
+    sprite.userData.velocity = new THREE.Vector3((Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4 + 1, (Math.random() - 0.5) * 4);
+    sprite.userData.life = 1.0;
+    sprite.userData.maxLife = 0.6 + Math.random() * 0.4;
+    sprite.userData.baseScale = 2 + Math.random() * 2.5;
+    sprite.userData.alive = true;
+    sprite.material.color.setStyle(COLORS[Math.floor(Math.random() * COLORS.length)]);
+    sprite.material.opacity = 1;
+    sprite.visible = true;
+    sprite.scale.set(1, 1, 1);
+}
+
+function handlePointerTrail(clientX, clientY) {
+    if (lastTrailX === null) { lastTrailX = clientX; lastTrailY = clientY; return; }
+    var dist = Math.hypot(clientX - lastTrailX, clientY - lastTrailY);
+    if (dist > 10) {
+        spawnTrailDust(clientX, clientY);
+        lastTrailX = clientX; lastTrailY = clientY;
+    }
+}
+
+/* ---------- controles: arrastrar para rotar, tocar para lanzar rafaga (solo vista completa) ---------- */
+var dragging = false, lastX = 0, lastY = 0, downX = 0, downY = 0, downTime = 0, moved = 0;
+
+function onDown(e) {
+    if (currentView !== "full") return;
+    dragging = true;
+    moved = 0;
+    var t = e.touches ? e.touches[0] : e;
+    lastX = downX = t.clientX;
+    lastY = downY = t.clientY;
+    downTime = performance.now();
+}
+function onMove(e) {
+    if (currentView !== "full") return;
+    if (!dragging) return;
+    var t = e.touches ? e.touches[0] : e,
+        nX = (t.clientX - lastX) / window.innerWidth,
+        nY = (t.clientY - lastY) / window.innerHeight;
+    rotY -= 3 * nX;
+    rotX = Math.max(-1.2, Math.min(1.2, rotX - 2.2 * nY));
+    moved += Math.abs(t.clientX - lastX) + Math.abs(t.clientY - lastY);
+    lastX = t.clientX; lastY = t.clientY;
+}
+function onUp(e) {
+    if (currentView !== "full") return;
+    if (!dragging) return;
+    dragging = false;
+    var wasQuickTap = moved < 12 && (performance.now() - downTime) < 500;
+    if (wasQuickTap) {
+        var pos = worldPositionFromPointer(downX, downY, currentDist * 0.55);
+        spawnBurst(pos, 65, false);
+    }
+}
+
+window.addEventListener("mousedown", onDown);
+window.addEventListener("mousemove", onMove);
+window.addEventListener("mouseup", onUp);
+window.addEventListener("touchstart", onDown, { passive: true });
+window.addEventListener("touchmove", onMove, { passive: true });
+window.addEventListener("touchend", onUp, { passive: true });
+
+window.addEventListener("mousemove", function(e){
+    if (currentView === "full") handlePointerTrail(e.clientX, e.clientY);
+});
+window.addEventListener("touchmove", function(e){
+    if (currentView !== "full") return;
+    var t = e.touches && e.touches[0];
+    if (t) handlePointerTrail(t.clientX, t.clientY);
+}, { passive: true });
+
+window.addEventListener("dblclick", function(e){
+    if (currentView !== "full") return;
+    var pos = worldPositionFromPointer(e.clientX, e.clientY, currentDist * 0.55);
+    spawnBurst(pos, 110, true);
+});
+var lastTapTime = 0;
+window.addEventListener("touchend", function(e){
+    if (currentView !== "full") return;
+    var now = performance.now();
+    if (now - lastTapTime < 320 && moved < 12) {
+        var t = e.changedTouches && e.changedTouches[0];
+        if (t) {
+            var pos = worldPositionFromPointer(t.clientX, t.clientY, currentDist * 0.55);
+            spawnBurst(pos, 110, true);
+        }
+    }
+    lastTapTime = now;
+}, { passive: true });
+
+window.addEventListener("wheel", function(e){
+    if (currentView !== "full") return;
+    targetDist += 0.3 * e.deltaY;
+    targetDist = Math.max(70, Math.min(650, targetDist));
+}, { passive: true });
+
+var pinch = 0;
+window.addEventListener("touchmove", function(e){
+    if (currentView !== "full") return;
+    if (e.touches && e.touches.length === 2) {
+        e.preventDefault();
+        var dX = e.touches[0].clientX - e.touches[1].clientX,
+            dY = e.touches[0].clientY - e.touches[1].clientY,
+            dist = Math.hypot(dX, dY);
+        if (pinch) {
+            targetDist += 0.5 * (pinch - dist);
+            targetDist = Math.max(70, Math.min(650, targetDist));
+        }
+        pinch = dist;
+    }
+}, { passive: false });
+window.addEventListener("touchend", function(){ pinch = 0; }, { passive: true });
+
+window.addEventListener("resize", doResize);
+window.addEventListener("orientationchange", function(){ setTimeout(doResize, 150); });
+
+/* ============================================================
+   TIMELINE DE LA INTRO: Cenizas -> Renacer -> Fenix en vuelo
+   ============================================================ */
+var ASH_FADE_IN         = 500;
+var VORTEX_START        = 1600;
+var VORTEX_DURATION     = 1500;
+var BOOM_AT             = VORTEX_START + VORTEX_DURATION;
+var PHOENIX_START       = BOOM_AT;
+var PHOENIX_DURATION    = 3600;
+var CORE_CROSS_START    = BOOM_AT;
+var CORE_CROSS_DURATION = 2200;
+var SPARK_START         = BOOM_AT + 1400;
+var SPARK_DURATION      = 2200;
+var WORDS_START         = BOOM_AT + 1800;
+var WORDS_DURATION      = 2000;
+var INTRO_DONE_AT       = 8000;
+
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+
+var introDone = false;
+var introStartTime = performance.now();
+
+var timeClock = 0;
+var lastFrame = performance.now();
+
+function tick() {
+    requestAnimationFrame(tick);
+    var now = performance.now();
+    var dt = Math.min((now - lastFrame) / 1000, 0.05);
+    lastFrame = now;
+    timeClock += 0.01;
+
+    var flapTheta = FLAP_AMP * Math.sin(timeClock * FLAP_SPEED);
+    var revealT = 1;
+
+    if (!introDone) {
+        var elapsed = now - introStartTime;
+
+        var ashFade = clamp01(elapsed / ASH_FADE_IN);
+        emberGroup.children.forEach(function(e){
+            var ud = e.userData;
+            e.position.set(ud.baseX, ud.baseY, ud.baseZ);
+            var flicker = 0.55 + 0.45 * Math.sin(timeClock * ud.flickerSpeed + ud.flickerPhase);
+            e.material.opacity = ashFade * flicker;
+        });
+        smokeGroup.children.forEach(function(s){
+            var ud = s.userData;
+            ud.y += ud.riseSpeed * dt;
+            if (ud.y > 40) { ud.y = -18; }
+            s.position.set(ud.baseX + Math.sin(timeClock + ud.baseX) * ud.driftX, ud.y, ud.baseZ + Math.cos(timeClock + ud.baseZ) * ud.driftZ);
+            s.material.opacity = ashFade * ud.baseOpacity;
+        });
+
+        var vortexT = clamp01((elapsed - VORTEX_START) / VORTEX_DURATION);
+        var ashFadeOut = 1 - easeOutCubic(vortexT);
+        emberGroup.children.forEach(function(e){ e.material.opacity *= ashFadeOut; });
+        smokeGroup.children.forEach(function(s){ s.material.opacity *= (1 - vortexT); });
+        if (vortexT > 0 && vortexT < 1) {
+            vortexParticles.forEach(function(v, idx){
+                var ud = v.userData;
+                var t = clamp01(vortexT + ud.tOffset);
+                var angle = t * SPIRAL_TURNS * Math.PI * 2 + ud.angleOffset;
+                var radius = COLUMN_BASE_RADIUS * (1 - t * 0.75) + ud.radiusJitter * (1 - t * 0.5);
+                var y = -18 + t * (COLUMN_HEIGHT + 18);
+                v.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
+                v.material.opacity = Math.min(1, t * 3) * (1 - Math.max(0, t - 0.85) * 6);
+            });
+            vortexGroup.visible = true;
+        } else if (vortexT >= 1) {
+            vortexGroup.visible = false;
+        }
+
+        if (!boomTriggered && elapsed >= BOOM_AT) {
+            triggerBoom();
+            boomTriggered = true;
+        }
+        var flashT = clamp01((elapsed - BOOM_AT) / 450);
+        boomFlash.material.opacity = boomTriggered ? Math.max(0, 1 - flashT) * 0.85 : 0;
+        boomFlash.scale.set(25 + flashT * 240, 25 + flashT * 240, 1);
+
+        revealT = easeOutCubic(clamp01((elapsed - PHOENIX_START) / PHOENIX_DURATION));
+
+        var crossT = easeOutCubic(clamp01((elapsed - CORE_CROSS_START) / CORE_CROSS_DURATION));
+        glow.material.opacity = crossT;
+        coreAccent.material.opacity = 0.85 * crossT;
+        centerMat.opacity = crossT;
+        phoenixMat.opacity = Math.min(1, revealT * 1.15);
+
+        var sparkT = easeOutCubic(clamp01((elapsed - SPARK_START) / SPARK_DURATION));
+        sparkGroup.children.forEach(function(s){ s.material.opacity = s.userData.baseOpacity * sparkT; });
+
+        var wordsEase = easeOutCubic(clamp01((elapsed - WORDS_START) / WORDS_DURATION));
+        textGroup.children.forEach(function(obj){ obj.userData.introFade = wordsEase; });
+        imageGroup.children.forEach(function(obj){ obj.userData.introFade = wordsEase; });
+
+        var camT = easeOutCubic(clamp01(elapsed / (PHOENIX_START + PHOENIX_DURATION * 0.8)));
+        targetDist = CAM_DIST_START + (CAM_DIST_END - CAM_DIST_START) * camT;
+
+        if (elapsed >= INTRO_DONE_AT) {
+            introDone = true;
+            emberGroup.visible = false;
+            smokeGroup.visible = false;
+            vortexGroup.visible = false;
+            boomFlash.visible = false;
+        }
+    }
+
+    updatePhoenixPositions(revealT, flapTheta);
+
+    phoenixGroup.rotation.y += 0.0009;
+
+    corePulseBoost *= 0.9;
+    var glowPulse = 1 + 0.06 * Math.sin(0.6 * timeClock) + corePulseBoost * 0.6;
+    glow.scale.set(230 * glowPulse, 230 * glowPulse, 1);
+    var accentPulse = 1 + 0.06 * Math.sin(1.5 * timeClock) + corePulseBoost * 0.4;
+    coreAccent.scale.set(115 * accentPulse, 115 * accentPulse, 1);
+    var textPulse = 1 + 0.04 * Math.sin(1.4 * timeClock) + corePulseBoost * 0.4;
+    centerSprite.scale.set(62 * textPulse, 62 * textPulse, 1);
+
+    updateOrbiters(textGroup, 1, phoenix.chestY);
+    textGroup.children.forEach(function(obj){
+        var ud = obj.userData;
+        var base = 0.78;
+        var fade = ud.introFade !== undefined ? ud.introFade : 1;
+        obj.material.opacity = fade * (base + (1 - base) * (0.5 + 0.5 * Math.sin(2 * timeClock + (ud.pulsePhase || 0))));
+    });
+
+    updateOrbiters(imageGroup, 1, phoenix.chestY);
+    imageGroup.children.forEach(function(obj){
+        var ud = obj.userData;
+        var target = ud.targetOpacity || 0.6;
+        var fade = ud.introFade !== undefined ? ud.introFade : 1;
+        obj.material.opacity = fade * (target * 0.7 + target * 0.3 * (0.5 + 0.5 * Math.sin(1.6 * timeClock + (ud.pulsePhase || 0))));
+    });
+
+    updateOrbiters(sparkGroup, 0.7, phoenix.chestY);
+
+    for (var bmj = 0; bmj < BOOM_POOL_SIZE; bmj++) {
+        var bmsprite = boomPool[bmj];
+        if (!bmsprite.userData.alive) continue;
+        bmsprite.userData.velocity.y -= 6 * dt;
+        bmsprite.userData.velocity.multiplyScalar(0.975);
+        bmsprite.position.addScaledVector(bmsprite.userData.velocity, dt);
+        bmsprite.userData.life -= dt / bmsprite.userData.maxLife;
+        if (bmsprite.userData.life <= 0) {
+            bmsprite.userData.alive = false;
+            bmsprite.visible = false;
+            continue;
+        }
+        var bms = bmsprite.userData.baseScale * Math.min(1, bmsprite.userData.life * 1.5 + 0.4);
+        bmsprite.scale.set(bms, bms, 1);
+        bmsprite.material.opacity = Math.min(1, bmsprite.userData.life * 1.7);
+    }
+
+    for (var bj = 0; bj < BURST_POOL_SIZE; bj++) {
+        var bsprite = burstPool[bj];
+        if (!bsprite.userData.alive) continue;
+        bsprite.userData.velocity.y -= 18 * dt;
+        bsprite.userData.velocity.multiplyScalar(0.985);
+        bsprite.position.addScaledVector(bsprite.userData.velocity, dt);
+        bsprite.userData.life -= dt / bsprite.userData.maxLife;
+        if (bsprite.userData.life <= 0) {
+            bsprite.userData.alive = false;
+            bsprite.visible = false;
+            continue;
+        }
+        var bs = bsprite.userData.baseScale * Math.min(1, bsprite.userData.life * 1.6);
+        bsprite.scale.set(bs, bs, 1);
+        bsprite.material.opacity = Math.min(1, bsprite.userData.life * 1.8);
+    }
+
+    for (var tj = 0; tj < TRAIL_POOL_SIZE; tj++) {
+        var tsprite = trailPool[tj];
+        if (!tsprite.userData.alive) continue;
+        tsprite.userData.velocity.y -= 6 * dt;
+        tsprite.userData.velocity.multiplyScalar(0.96);
+        tsprite.position.addScaledVector(tsprite.userData.velocity, dt);
+        tsprite.userData.life -= dt / tsprite.userData.maxLife;
+        if (tsprite.userData.life <= 0) {
+            tsprite.userData.alive = false;
+            tsprite.visible = false;
+            continue;
+        }
+        var ts = tsprite.userData.baseScale * Math.min(1, tsprite.userData.life * 1.5 + 0.3);
+        tsprite.scale.set(ts, ts, 1);
+        tsprite.material.opacity = Math.min(1, tsprite.userData.life * 1.6);
+    }
+
+    currentDist += 0.045 * (targetDist - currentDist);
+    var cosX = Math.cos(rotX), sinX = Math.sin(rotX),
+        cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+    camera.position.set(
+        currentDist * sinY * cosX,
+        phoenix.chestY * 0.4 + currentDist * sinX,
+        currentDist * cosY * cosX
+    );
+    camera.lookAt(0, phoenix.chestY * 0.4, 0);
+
+    var textIndex = Math.floor(timeClock / state.centerInterval) % centerTextures.length;
+    if (centerTextures.length) centerMat.map = centerTextures[textIndex];
+
+    renderer.render(scene, camera);
+}
+
+/* ============================================================
+   NAVEGACION: vista completa <-> editor
+   ============================================================ */
+var editToggle = document.getElementById("editToggle");
+var backBtn = document.getElementById("backBtn");
+
+function enterEditor(){
+    currentView = "editor";
+    document.body.classList.add("mode-editor");
+    canvas.classList.remove("stage-full");
+    canvas.classList.add("stage-preview");
+    previewBox.appendChild(canvas);
+    document.getElementById("editorPage").scrollTop = 0;
+    window.scrollTo(0, 0);
+    requestAnimationFrame(doResize);
+}
+function exitEditor(){
+    currentView = "full";
+    document.body.classList.remove("mode-editor");
+    canvas.classList.remove("stage-preview");
+    canvas.classList.add("stage-full");
+    document.body.insertBefore(canvas, document.body.firstChild);
+    requestAnimationFrame(doResize);
+}
+
+editToggle.addEventListener("click", enterEditor);
+backBtn.addEventListener("click", exitEditor);
+
+/* --- color --- */
+var swatchesEl = document.getElementById("swatches");
+swatchesEl.innerHTML = "";
+PRESET_COLORS.forEach(function(hex){
+    var sw = document.createElement("div");
+    sw.className = "swatch";
+    sw.style.background = hex;
+    sw.title = hex;
+    sw.addEventListener("click", function(){ setColor(hex); });
+    swatchesEl.appendChild(sw);
+});
+function refreshSwatchActive(){
+    Array.prototype.forEach.call(swatchesEl.children, function(sw, i){
+        sw.classList.toggle("active", PRESET_COLORS[i].toLowerCase() === state.color.toLowerCase());
+    });
+}
+var colorPicker = document.getElementById("colorPicker");
+var colorText = document.getElementById("colorText");
+function setColor(hex){
+    if(!/^#([0-9a-fA-F]{6})$/.test(hex)) return;
+    state.color = hex;
+    colorPicker.value = hex;
+    colorText.value = hex;
+    refreshSwatchActive();
+    applyColorChange();
+    persistState();
+}
+colorPicker.addEventListener("input", function(){ setColor(colorPicker.value); });
+colorText.addEventListener("change", function(){ setColor(colorText.value.trim()); });
+colorPicker.value = state.color;
+colorText.value = state.color;
+refreshSwatchActive();
+
+function applyColorChange(){
+    COLORS = generatePalette(state.color, 10);
+    INNER_GLOW_RGB = toRgbTriplet(lighten(state.color, 0.7));
+    OUTER_GLOW_RGB = toRgbTriplet(new THREE.Color(state.color));
+
+    rimLight.color.set(state.color);
+
+    buildPhoenixColors();
+
+    if (glow.material.map) glow.material.map.dispose();
+    glow.material.map = makeGlowTexture();
+    glow.material.needsUpdate = true;
+
+    if (coreAccent.material.map) coreAccent.material.map.dispose();
+    coreAccent.material.map = makeShapeAccentTexture(state.shape);
+    coreAccent.material.needsUpdate = true;
+
+    rebuildCenterTextures();
+    rebuildOrbitWords();
+}
+
+/* --- fuente --- */
+var fontRow = document.getElementById("fontRow");
+fontRow.innerHTML = "";
+FONTS.forEach(function(f){
+    var opt = document.createElement("div");
+    opt.className = "font-opt";
+    opt.style.fontFamily = f.family;
+    opt.innerHTML = f.label + "<small>" + f.sub + "</small>";
+    opt.addEventListener("click", function(){
+        state.font = f.id;
+        refreshFontActive();
+        rebuildCenterTextures();
+        rebuildOrbitWords();
+        persistState();
+    });
+    fontRow.appendChild(opt);
+});
+function refreshFontActive(){
+    Array.prototype.forEach.call(fontRow.children, function(opt, i){
+        opt.classList.toggle("active", FONTS[i].id === state.font);
+    });
+}
+refreshFontActive();
+
+/* --- forma (tambien redibuja el acento del nucleo) --- */
+document.querySelectorAll(".shape-opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+        state.shape = opt.dataset.shape;
+        document.querySelectorAll(".shape-opt").forEach(function(o){ o.classList.toggle("active", o === opt); });
+        if (coreAccent.material.map) coreAccent.material.map.dispose();
+        coreAccent.material.map = makeShapeAccentTexture(state.shape);
+        coreAccent.material.needsUpdate = true;
+        persistState();
+    });
+    if (opt.dataset.shape === state.shape) opt.classList.add("active");
+});
+
+/* --- intervalo frase central --- */
+var intervalRange = document.getElementById("intervalRange");
+var intervalVal = document.getElementById("intervalVal");
+intervalRange.value = state.centerInterval;
+intervalVal.textContent = state.centerInterval.toFixed(1) + "s";
+intervalRange.addEventListener("input", function(){
+    state.centerInterval = parseFloat(intervalRange.value);
+    intervalVal.textContent = state.centerInterval.toFixed(1) + "s";
+    persistState();
+});
+intervalRange.addEventListener("change", persistState);
+
+/* --- listas genericas --- */
+function renderList(containerId, arr, emptyMsg){
+    var el = document.getElementById(containerId);
+    el.innerHTML = "";
+    if(arr.length === 0){
+        var p = document.createElement("div");
+        p.className = "empty-note";
+        p.textContent = emptyMsg;
+        el.appendChild(p);
+        return;
+    }
+    arr.forEach(function(word, idx){
+        var chip = document.createElement("div");
+        chip.className = "chip";
+        var span = document.createElement("span");
+        span.textContent = word;
+        var btn = document.createElement("button");
+        btn.innerHTML = "&#10005;";
+        btn.title = "Eliminar";
+        btn.addEventListener("click", function(){
+            arr.splice(idx, 1);
+            renderList(containerId, arr, emptyMsg);
+            onListChanged(containerId);
+        });
+        chip.appendChild(span);
+        chip.appendChild(btn);
+        el.appendChild(chip);
+    });
+}
+function onListChanged(containerId){
+    if (containerId === "centerList") rebuildCenterTextures();
+    if (containerId === "orbitList") rebuildOrbitWords();
+    persistState();
+}
+function wireAdder(inputId, btnId, arr, containerId, emptyMsg){
+    var input = document.getElementById(inputId);
+    var btn = document.getElementById(btnId);
+    function add(){
+        var v = input.value.trim();
+        if(!v) return;
+        arr.push(v);
+        input.value = "";
+        renderList(containerId, arr, emptyMsg);
+        onListChanged(containerId);
+    }
+    btn.addEventListener("click", add);
+    input.addEventListener("keydown", function(e){ if(e.key === "Enter") add(); });
+}
+
+var CENTER_EMPTY = "Sin frases centrales \u2014 agrega al menos una.";
+var ORBIT_EMPTY = "Sin palabras orbitando \u2014 agrega al menos una.";
+renderList("centerList", state.centerTexts, CENTER_EMPTY);
+renderList("orbitList", state.orbitWords, ORBIT_EMPTY);
+wireAdder("centerInput", "centerAdd", state.centerTexts, "centerList", CENTER_EMPTY);
+wireAdder("orbitInput", "orbitAdd", state.orbitWords, "orbitList", ORBIT_EMPTY);
+
+document.getElementById("centerClear").addEventListener("click", function(){
+    state.centerTexts.length = 0;
+    renderList("centerList", state.centerTexts, CENTER_EMPTY);
+    onListChanged("centerList");
+});
+document.getElementById("orbitClear").addEventListener("click", function(){
+    state.orbitWords.length = 0;
+    renderList("orbitList", state.orbitWords, ORBIT_EMPTY);
+    onListChanged("orbitList");
+});
+
+/* --- fotos flotando --- */
+var imagesList = document.getElementById("imagesList");
+var addImageTile = document.getElementById("addImageTile");
+var imageInput = document.getElementById("imageInput");
+var imagesNote = document.getElementById("imagesNote");
+
+function renderImagesList(){
+    imagesList.innerHTML = "";
+    state.images.forEach(function(dataUrl, idx){
+        var thumb = document.createElement("div");
+        thumb.className = "img-thumb";
+        thumb.style.backgroundImage = "url(" + dataUrl + ")";
+        var btn = document.createElement("button");
+        btn.innerHTML = "&#10005;";
+        btn.addEventListener("click", function(){
+            state.images.splice(idx, 1);
+            renderImagesList();
+            rebuildImages();
+            persistState();
+        });
+        thumb.appendChild(btn);
+        imagesList.appendChild(thumb);
+    });
+    addImageTile.classList.toggle("disabled", state.images.length >= MAX_IMAGES);
+    imagesNote.textContent = state.images.length + " / " + MAX_IMAGES + " fotos";
+}
+renderImagesList();
+
+function fileToCompressedDataUrl(file){
+    return new Promise(function(resolve, reject){
+        var reader = new FileReader();
+        reader.onload = function(e){
+            var img = new Image();
+            img.onload = function(){
+                var maxSize = 320;
+                var w = img.width, ih = img.height;
+                var scale = Math.min(1, maxSize / Math.max(w, ih));
+                w = Math.round(w * scale); ih = Math.round(ih * scale);
+                var c = document.createElement("canvas");
+                c.width = w; c.height = ih;
+                var ctx = c.getContext("2d");
+                ctx.drawImage(img, 0, 0, w, ih);
+                resolve(c.toDataURL("image/jpeg", 0.82));
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+imageInput.addEventListener("change", function(){
+    var files = Array.prototype.slice.call(imageInput.files || []);
+    var remaining = MAX_IMAGES - state.images.length;
+    files = files.slice(0, Math.max(0, remaining));
+    Promise.all(files.map(fileToCompressedDataUrl)).then(function(dataUrls){
+        state.images = state.images.concat(dataUrls);
+        renderImagesList();
+        rebuildImages();
+        persistState();
+    });
+    imageInput.value = "";
+});
+
+document.getElementById("imagesClear").addEventListener("click", function(){
+    state.images = [];
+    renderImagesList();
+    rebuildImages();
+    persistState();
+});
+
+/* --- musica de fondo --- */
+var bgAudio = document.getElementById("bgAudio");
+var musicToggle = document.getElementById("musicToggle");
+var musicList = document.getElementById("musicList");
+var musicInput = document.getElementById("musicInput");
+var MUSIC_EMPTY = "Sin musica agregada.";
+
+function renderMusicUI(){
+    musicList.innerHTML = "";
+    if (!state.music) {
+        var p = document.createElement("div");
+        p.className = "empty-note";
+        p.textContent = MUSIC_EMPTY;
+        musicList.appendChild(p);
+        return;
+    }
+    var chip = document.createElement("div");
+    chip.className = "chip";
+    var span = document.createElement("span");
+    span.textContent = state.musicName || "cancion.mp3";
+    var btn = document.createElement("button");
+    btn.innerHTML = "&#10005;";
+    btn.title = "Quitar musica";
+    btn.addEventListener("click", function(){
+        state.music = null;
+        state.musicName = null;
+        renderMusicUI();
+        rebuildAudio();
+        persistState();
+    });
+    chip.appendChild(span);
+    chip.appendChild(btn);
+    musicList.appendChild(chip);
+}
+
+function rebuildAudio(){
+    var wasPlaying = !bgAudio.paused;
+    bgAudio.pause();
+    if (state.music) {
+        bgAudio.src = state.music;
+        musicToggle.classList.add("visible");
+        if (wasPlaying) bgAudio.play().catch(function(){});
+    } else {
+        bgAudio.removeAttribute("src");
+        bgAudio.load();
+        musicToggle.classList.remove("visible", "playing");
+    }
+}
+
+musicInput.addEventListener("change", function(){
+    var file = musicInput.files && musicInput.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+        state.music = e.target.result;
+        state.musicName = file.name;
+        renderMusicUI();
+        rebuildAudio();
+        persistState();
+    };
+    reader.readAsDataURL(file);
+    musicInput.value = "";
+});
+
+musicToggle.addEventListener("click", function(){
+    if (!state.music) return;
+    if (bgAudio.paused) {
+        bgAudio.play().then(function(){
+            musicToggle.classList.add("playing");
+        }).catch(function(){});
+    } else {
+        bgAudio.pause();
+        musicToggle.classList.remove("playing");
+    }
+});
+bgAudio.addEventListener("pause", function(){ musicToggle.classList.remove("playing"); });
+bgAudio.addEventListener("play", function(){ musicToggle.classList.add("playing"); });
+
+renderMusicUI();
+if (state.music) rebuildAudio();
+
+/* --- descargar --- */
+var filenameInput = document.getElementById("filenameInput");
+var includeEditorCheckbox = document.getElementById("includeEditorCheckbox");
+document.getElementById("downloadBtn").addEventListener("click", function(){
+    persistState();
+    var keepEditor = includeEditorCheckbox.checked;
+    exitEditor();
+    setTimeout(function(){
+        if (!keepEditor) document.body.classList.add("no-editor");
+        var html = "<!doctype html>\n" + document.documentElement.outerHTML;
+        if (!keepEditor) document.body.classList.remove("no-editor");
+        var blob = new Blob([html], { type: "text/html" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        var name = filenameInput.value.trim() || "mi-fenix-personalizado.html";
+        if(!name.toLowerCase().endsWith(".html")) name += ".html";
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    }, 60);
+});
+
+/* ============================================================
+   ARRANQUE: precargar fuentes y luego construir texturas
+   ============================================================ */
+function preloadFonts(){
+    var specs = FONTS.map(function(f){ return f.weight + " 64px " + f.family; });
+    if (!document.fonts || !document.fonts.load) return Promise.resolve();
+    return Promise.all(specs.map(function(s){
+        return document.fonts.load(s).catch(function(){});
+    })).catch(function(){});
+}
+
+preloadFonts().then(function(){
+    rebuildCenterTextures();
+    rebuildOrbitWords();
+    if (state.images.length) rebuildImages();
+    tick();
+});
+
+} catch (err) {
+    showLoadError(err);
+}
+
+})();
+</script>
+<script>
+/* vista previa: arranca sola y simula al cliente (dedo fantasma) */
+(function(){
+function pe(type,x,y,target){var ev;try{ev=new PointerEvent(type,{clientX:x,clientY:y,pointerId:1,bubbles:true,cancelable:true,isPrimary:true,pointerType:"touch"});}catch(e){return;}(target||window).dispatchEvent(ev);}
+function $(i){return document.getElementById(i)}
+function go(){}
+function run(){ go(); setTimeout(function(){ try{ ghost(); }catch(e){} }, 900); }
+function ghost(){
+
+function q(s){return document.querySelector(s)}
+function clk(s,i){var l=document.querySelectorAll(s); var e=l[i||0]; if(e) e.click(); return !!e}
+function at(ms,fn){setTimeout(function(){try{fn()}catch(e){}},ms)}
+function again(ms){at(ms,function(){location.reload()})}
+function mouse(t,x,y){window.dispatchEvent(new MouseEvent(t,{clientX:x,clientY:y,bubbles:true}))}
+function drag(ms0,dur,fx,fy,tgt){ /* arrastra el dedo siguiendo fx(k),fy(k), k de 0 a 1 */
+  at(ms0,function(){var W=innerWidth,H=innerHeight,t0=Date.now();mouse('mousedown',fx(0)*W,fy(0)*H);
+   var iv=setInterval(function(){var k=Math.min(1,(Date.now()-t0)/dur);mouse('mousemove',fx(k)*W,fy(k)*H);
+    if(k>=1){clearInterval(iv);mouse('mouseup',fx(1)*W,fy(1)*H)}},30)});
+}
+function pdrag(ms0,dur,fx,fy,c){ at(ms0,function(){var W=innerWidth,H=innerHeight,t0=Date.now();pe('pointerdown',fx(0)*W,fy(0)*H,c);
+   var iv=setInterval(function(){var k=Math.min(1,(Date.now()-t0)/dur);pe('pointermove',fx(k)*W,fy(k)*H,window);
+    if(k>=1){clearInterval(iv);pe('pointerup',fx(1)*W,fy(1)*H,window)}},30)}); }
+function scanStar(stopId,n,after){ /* busca estrellas tocando puntos hasta que se abra la nota */
+  var pts=[],i,j; for(i=0;i<14;i++)for(j=0;j<14;j++)pts.push([.08+i*.065,.12+j*.06]);
+  pts.sort(function(){return Math.random()-.5}); var k=0,found=0;
+  var iv=setInterval(function(){ var o=q('#noteOverlay'); if(o&&o.classList.contains('show')){ if(!o._w){o._w=1; found++; setTimeout(function(){var c=q('#noteClose'); if(c)c.click(); o._w=0; if(found>=n){clearInterval(iv); if(after)after();}},2300);} return;}
+    if(o&&o._w) return; var p=pts[k++%pts.length],x=p[0]*innerWidth,y=p[1]*innerHeight; mouse('mousedown',x,y); mouse('mouseup',x,y); },110);
+}
+drag(1200,2600,function(k){return .25+.5*k},function(k){return .3+.35*Math.sin(k*6)}); drag(4800,2600,function(k){return .75-.5*k},function(k){return .6-.3*Math.sin(k*5)});
+}
+if(document.readyState==="complete") setTimeout(run,60); else addEventListener("load",function(){setTimeout(run,60)});
+})();
+</script>
+</body>
+</html>
