@@ -2,7 +2,7 @@
    Carga el iframe SOLO cuando la tarjeta se ve en pantalla y lo descarga al salir,
    así 15 diseños 3D no te frenan el celular. Uso: <div class="lt" data-thumb="slug"></div> */
 (function () {
-  var MAX = window.innerWidth > 900 ? 6 : 4, live = [], queue = [];
+  var MAX = (window.innerWidth > 900 && (navigator.hardwareConcurrency || 4) >= 6) ? 6 : 4, live = [], queue = [], busy = false;
   var io = 'IntersectionObserver' in window ? new IntersectionObserver(onSee, { rootMargin: '300px' }) : null;
 
   function onSee(es) {
@@ -12,9 +12,18 @@
       else { el._on = 0; queue = queue.filter(function (q) { return q !== el; }); unload(el); }
     });
   }
+  /* carga de a una (cada ~0.9 s) para no ahogar el navegador con varias escenas 3D a la vez */
   function pump() {
-    while (queue.length && live.length < MAX) { load(queue.shift()); }
+    if (busy || !queue.length || live.length >= MAX) return;
+    busy = true; load(queue.shift());
+    setTimeout(function () { busy = false; pump(); }, 900);
   }
+  /* si hay más tarjetas visibles que animaciones permitidas, se turnan cada ~8 s */
+  setInterval(function () {
+    if (document.hidden || !queue.length || live.length < MAX) return;
+    var el = live[0]; if (!el || Date.now() - (el._t || 0) < 8000) return;
+    unload(el); if (el._on) queue.push(el); pump();
+  }, 2500);
   function load(el) {
     if (el._f || !el._on) return;
     var f = document.createElement('iframe');
@@ -32,7 +41,7 @@
         } catch (e) {}
       }, 700);
     };
-    fit(el);
+    fit(el); el._t = Date.now();
     el.appendChild(f); el._f = f; live.push(el);
   }
   function fit(el) {
