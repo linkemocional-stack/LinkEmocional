@@ -20,7 +20,7 @@ module.exports = L.wrap(async function (req, res) {
         { needLogin: true });
     }
     const left = qt.resetAt ? L.humanLeft(new Date(qt.resetAt).getTime() - Date.now()) : null;
-    throw new L.HttpError(429, 'limit', 'Ya usaste tu página gratis.' + (left ? ' Puedes crear otra en ' + left + '.' : '') +
+    throw new L.HttpError(429, 'limit', (qt.limit === 1 ? 'Ya usaste tu página gratis.' : 'Ya usaste tus páginas gratis.') + (left ? ' Puedes crear otra en ' + left + '.' : '') +
       ' Mientras tanto puedes hacer permanente alguna de las tuyas.', { needLogin: false, resetAt: qt.resetAt });
   }
 

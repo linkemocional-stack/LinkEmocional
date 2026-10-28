@@ -19,7 +19,10 @@ const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').toLowerCase().split(',').m
 const WHATSAPP = process.env.WHATSAPP || '59178550176';
 const MAX_BODY_CHARS = 3400000;   // Vercel acepta hasta ~4.5 MB por peticion
 const MAX_IMG = 450 * 1024;       // tamano maximo de cada foto (en caracteres base64)
-const HIDDEN = new Set(['musica', 'mnom', 'cam', 'q']);
+const HIDDEN = new Set(['cam', 'q']);
+const MAX_AUDIO = 1700 * 1024;     // musica (MP3) en base64: ~1.2 MB de audio
+const MAX_TOTAL = 4100000;        // tope de la pagina ya armada (limite de respuesta de Vercel ~4.5 MB)
+const AUDIO_RE = /^data:audio\/(?:mpeg|mp3|mp4|x-m4a|aac|ogg|wav|x-wav|webm);base64,[A-Za-z0-9+/=]+$/;
 const IMG_RE = /^data:image\/(?:png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/;
 
 class HttpError extends Error {
@@ -139,7 +142,7 @@ async function quota(req, user) {
     }
   }
   const remaining = over ? 0 : Math.max(0, limit - list.length);
-  const resetAt = over && ref[0] ? new Date(new Date(ref[0].created_at).getTime() + win).toISOString() : null;
+  const resetAt = (over || user) && ref[0] ? new Date(new Date(ref[0].created_at).getTime() + win).toISOString() : null;
   return out({ used: list.length, remaining, resetAt, needLogin: !user && remaining === 0 });
 }
 function L_db(pathQuery) { return db('GET', pathQuery); }
@@ -212,6 +215,7 @@ function collectSpecs(tpl) {
 function cleanStr(s, max) {
   s = typeof s === 'string' ? s : String(s == null ? '' : s);
   if (/^data:image\//i.test(s)) return (s.length <= MAX_IMG && IMG_RE.test(s)) ? s : '';
+  if (/^data:audio\//i.test(s)) return (s.length <= MAX_AUDIO && AUDIO_RE.test(s)) ? s : '';
   return s.replace(/<3/g, '♥').replace(/[<>]/g, '')
     .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u2028\u2029]/g, '').slice(0, max);
 }
@@ -239,6 +243,7 @@ function san(def, v, key, specs, depth) {
     if (!Array.isArray(v)) return def;
     const proto = def.length ? def[0] : '';
     const max = spec && spec.max ? spec.max : 20;
+    if (spec && spec.fixed) return def.map((d, i) => cleanStr(v[i] == null ? d : v[i], spec.itemMax || 120));
     if (typeof proto === 'string') {
       const itemMax = spec && spec.itemMax ? spec.itemMax : 120;
       return v.slice(0, max).map(x => cleanStr(x, itemMax)).filter(s => s !== '');
@@ -260,6 +265,10 @@ function sanitizeConfig(tpl, cfg) {
   const specs = collectSpecs(tpl);
   const out = san(tpl.defaults, cfg, '', specs, 0);
   HIDDEN.forEach(k => { if (k in tpl.defaults) out[k] = tpl.defaults[k]; });
+  const base = loadTemplateHtml(tpl.slug);
+  if (base && base.length + JSON.stringify(out).length > MAX_TOTAL) {
+    throw new HttpError(413, 'too_big', 'La página pesa demasiado. Prueba con menos fotos o una canción más corta.');
+  }
   return out;
 }
 
