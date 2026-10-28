@@ -226,3 +226,15 @@ img,svg,iframe,canvas{max-width:100%}
 .legal-nav a{padding:8px 14px;border-radius:99px;border:1px solid var(--border);background:var(--glass);color:var(--muted);text-decoration:none;font-weight:700;font-size:13px}
 .legal-nav a.on,.legal-nav a:hover{color:var(--ink);background:var(--glass-strong)}
 .legal-note{margin:16px 0 0;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.5}
+
+.cdq{display:inline-block;font-variant-numeric:tabular-nums;letter-spacing:.02em;font-weight:800;color:#fff;background:rgba(139,111,240,.2);border:1px solid rgba(139,111,240,.4);padding:1px 9px;border-radius:9px;white-space:nowrap}
+
+.ex-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.ex-bar i{display:block;height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,#6fd6e8,#8b6ff0);transition:width 1s linear}
+.ex-msg{margin:9px 0 0;font-size:13px;font-weight:700;line-height:1.4;color:#ffb3bb}
+.pg-card.urgent{border-color:rgba(255,107,122,.55);box-shadow:0 0 0 1px rgba(255,107,122,.25),0 10px 30px rgba(255,107,122,.12)}
+.pg-card.urgent .ex-bar i{background:linear-gradient(90deg,#ff6b7a,#ffb24a)}
+.pg-card.urgent .chip.warn{color:var(--bad);border-color:rgba(255,107,122,.5)}
+.pg-card.urgent .btn[data-a=perm]{flex:1 1 100%;animation:exp 1.6s ease-in-out infinite}
+@keyframes exp{50%{box-shadow:0 0 0 6px rgba(255,107,122,.22)}}
+@media(prefers-reduced-motion:reduce){.pg-card.urgent .btn[data-a=perm]{animation:none}}

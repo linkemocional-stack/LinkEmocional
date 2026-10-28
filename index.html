@@ -25,6 +25,8 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="thumbs.css">
 <meta name="google-site-verification" content="a3fdMdk76daRucAahfs-ZkE6D0emZtWKUegQTFXFVjk" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js">
 <script src="protection.js"></script>
 </head>
 <body>
@@ -187,8 +189,15 @@
 .lp-pc .lp-btn{margin-top:auto;text-align:center}
 .lp-note{margin:18px 0 0;color:var(--muted-2);font-size:13.5px;line-height:1.6}
 @media(max-width:860px){.lp-about,.lp-why,.lp-price{grid-template-columns:1fr}}
-@media(prefers-reduced-motion:reduce){.lp-float,.lp-aur,.lp-mq div{animation:none}}
-.lp-stats{padding:56px 0 8px}
+
+.lp-stage{position:relative}
+.lp-stage::before{content:"";position:absolute;left:50%;top:44%;width:360px;height:360px;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(139,111,240,.5),rgba(42,143,174,.18) 60%,transparent);filter:blur(34px);z-index:0;pointer-events:none}
+.lp-phone{animation:lpph 7s ease-in-out infinite;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 6px rgba(255,255,255,.035),inset 0 0 0 1px rgba(255,255,255,.09),inset 0 2px 0 rgba(255,255,255,.12)}
+.lp-phone::before{content:"";position:absolute;top:21px;left:50%;transform:translateX(-50%);width:78px;height:21px;border-radius:99px;background:#04020d;z-index:3;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+.lp-phone::after{content:"";position:absolute;right:-4px;top:128px;width:4px;height:66px;border-radius:0 4px 4px 0;background:linear-gradient(180deg,#3a2f6b,#1b1440)}
+@keyframes lpph{50%{transform:translateY(-9px)}}
+@media(prefers-reduced-motion:reduce){.lp-phone{animation:none}.lp-float,.lp-aur{animation:none}.lp-mq div{animation-duration:70s}}
+.lp-stats{padding:0 0 64px}
 .lp-stats .lp-in{display:block}
 .lp-sp{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;overflow:hidden;max-width:980px;margin:0 auto;border-radius:26px;background:linear-gradient(180deg,rgba(139,111,240,.14),rgba(13,10,30,.55)),var(--glass);border:1px solid var(--border-soft);box-shadow:0 18px 50px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .lp-sp>div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:26px 10px;text-align:center;margin:0 -1px -1px 0;border-right:1px solid var(--border-soft);border-bottom:1px solid transparent;transition:background .25s}
@@ -244,6 +253,13 @@
 </header>
 </div>
 <div class="lp-mq" aria-hidden="true"><div><span>Dedícale a esa personita especial<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a quien te hace sonreír<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su aniversario<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para sorprender a quien más quieres<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en minutos<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a esa personita especial<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su cumpleaños<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para tu pareja<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a quien te hace sonreír<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en su aniversario<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu mejor amiga<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para ese amor a distancia<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para sorprender a quien más quieres<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Dedícale a tu hermano<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span>Un código para dedicar en minutos<svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span></div></div>
+<section class="lp-sec" id="formas" style="border-top:0"><div class="lp-in">
+<h2>Dos formas de regalar</h2>
+<p class="lp-sub">Personalízalo todo a tu gusto, o elige un diseño ya armado.</p>
+<div class="lp-ways">
+<div class="lp-way"><span class="ib"><svg class="ic " aria-hidden="true"><use href="#i-pen"/></svg></span><b>Con editor único</b><span>Cambia frases, fotos, colores y música desde el editor. Es el regalo más personal.</span><button class="lp-btn main" type="button" onclick="showView('catalogo','personalizado')">Ver diseños con editor</button></div>
+<div class="lp-way b"><span class="ib"><svg class="ic " aria-hidden="true"><use href="#i-box"/></svg></span><b>Sin editor</b><span>Diseños ya armados y bonitos, listos para pedir. Algunos son gratis.</span><button class="lp-btn ghost" type="button" onclick="showView('catalogo','nopersonalizado')">Ver diseños sin editor</button></div>
+</div></div></section>
 <section class="lp-stats" aria-label="Link Emocional en números"><div class="lp-in">
 <div class="lp-sp">
 <div id="stPagesBox" hidden><strong id="stPages" data-to="0">0</strong><span>Páginas creadas</span></div>
@@ -254,13 +270,6 @@
 <div><strong>2D y 3D</strong><span>Animaciones reales</span></div>
 </div>
 </div></section>
-<section class="lp-sec" id="formas" style="border-top:0"><div class="lp-in">
-<h2>Dos formas de regalar</h2>
-<p class="lp-sub">Personalízalo todo a tu gusto, o elige un diseño ya armado.</p>
-<div class="lp-ways">
-<div class="lp-way"><span class="ib"><svg class="ic " aria-hidden="true"><use href="#i-pen"/></svg></span><b>Con editor único</b><span>Cambia frases, fotos, colores y música desde el editor. Es el regalo más personal.</span><button class="lp-btn main" type="button" onclick="showView('catalogo','personalizado')">Ver diseños con editor</button></div>
-<div class="lp-way b"><span class="ib"><svg class="ic " aria-hidden="true"><use href="#i-box"/></svg></span><b>Sin editor</b><span>Diseños ya armados y bonitos, listos para pedir. Algunos son gratis.</span><button class="lp-btn ghost" type="button" onclick="showView('catalogo','nopersonalizado')">Ver diseños sin editor</button></div>
-</div></div></section>
 <section class="lp-sec" id="disenos"><div class="lp-in">
 <h2>Un diseño para cada ocasión</h2>
 <p class="lp-sub">Los de esta lista se personalizan con tu mensaje y tus fotos. El precio es para dejarlos permanentes.</p>
@@ -359,9 +368,13 @@
 </div>
 <script>
 (function(){
-var f=document.getElementById('lpDemo'),db=document.getElementById('lpDemos');
-db.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+var f=document.getElementById('lpDemo'),db=document.getElementById('lpDemos'),auto=1,vis=1;
+db.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(e.isTrusted)auto=0;
 [].forEach.call(db.children,function(x){x.setAttribute('aria-pressed',x===b)});f.src='previews/'+b.dataset.s+'.html';});
+/* demos del telefono: cambian solas cada 12 s hasta que la persona toca una */
+var ph=document.querySelector('.lp-phone');
+if(ph&&'IntersectionObserver' in window)new IntersectionObserver(function(es){vis=es[0].isIntersecting}).observe(ph);
+setInterval(function(){if(!auto||!vis||document.hidden)return;var bs=[].slice.call(db.children),i=bs.findIndex(function(x){return x.getAttribute('aria-pressed')==='true'});bs[(i+1)%bs.length].click()},12000);
 var tx=document.getElementById('lpTxt'),out=document.getElementById('lpOut'),pv=document.getElementById('lpPv'),sw=document.getElementById('lpSw');
 tx.addEventListener('input',function(){out.textContent=tx.value.trim()||'Tu mensaje aquí'});
 sw.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
@@ -389,7 +402,7 @@ function draw(){
 fl.innerHTML=tags.map(function(t){var n=t==='Todos'?T.length:T.filter(function(x){return x.tag===t}).length;
 return '<button type="button" class="lp-chip" aria-pressed="'+(t===cur)+'" data-t="'+t+'">'+t+' ('+n+')</button>'}).join('');
 g.innerHTML=T.filter(function(t){return cur==='Todos'||t.tag===cur}).map(function(t){
-return '<a class="lp-card t-'+t.tag+'" href="crear.html?t='+encodeURIComponent(t.slug)+'"><div class="lt" data-thumb="'+t.slug+'"></div><b>'+t.name+'</b><small>'+t.tag+' · '+t.dim+'</small><span class="p">$'+Number(t.price).toFixed(2)+'<i>Elegir</i></span></a>'}).join('');if(window.LEThumbs)LEThumbs.scan(g);}
+return '<a class="lp-card t-'+t.tag+'" href="crear.html?t='+encodeURIComponent(t.slug)+'"><div class="lt" data-thumb="'+t.slug+'" data-emoji="'+(t.emoji||'')+'"></div><b>'+t.name+'</b><small>'+t.tag+' · '+t.dim+'</small><span class="p">$'+Number(t.price).toFixed(2)+'<i>Elegir</i></span></a>'}).join('');if(window.LEThumbs)LEThumbs.scan(g);}
 fl.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;cur=b.dataset.t;draw();});
 draw();
 var pr=T.map(function(t){return Number(t.price)}),mn=Math.min.apply(null,pr),mx=Math.max.apply(null,pr),C=window.LE_CONFIG||{},fx=C.USD_BOB||10,lk=C.PRECIO_ENLACE_USD||0.99;
@@ -511,6 +524,7 @@ set('lpLink',Number(lk).toFixed(2));set('lpLinkBs','≈ Bs '+(lk*fx).toFixed(2))
 <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
 <script src="previews.js"></script>
 
+<script src="wa-fab.js"></script>
 <script src="brand-icons.js"></script>
 </body>
 </html>

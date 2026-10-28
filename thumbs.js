@@ -2,8 +2,8 @@
    Carga el iframe SOLO cuando la tarjeta se ve en pantalla y lo descarga al salir,
    así 15 diseños 3D no te frenan el celular. Uso: <div class="lt" data-thumb="slug"></div> */
 (function () {
-  var MAX = 4, live = [], queue = [];
-  var io = 'IntersectionObserver' in window ? new IntersectionObserver(onSee, { rootMargin: '150px' }) : null;
+  var MAX = (window.innerWidth > 900 && (navigator.hardwareConcurrency || 4) >= 6) ? 6 : 4, live = [], queue = [];
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(onSee, { rootMargin: '300px' }) : null;
 
   function onSee(es) {
     es.forEach(function (e) {
@@ -21,7 +21,8 @@
     f.src = 'previews/' + el.dataset.thumb + '.html';
     f.title = ''; f.tabIndex = -1; f.setAttribute('aria-hidden', 'true'); f.setAttribute('scrolling', 'no');
     f.onload = function () {
-      el.classList.add('ok');
+      // la portada (emoji) se queda hasta que la animación ya está corriendo
+      setTimeout(function () { if (el._f === f) el.classList.add('ok'); }, 1150);
       // arranca la animación como si la persona tocara la pantalla
       setTimeout(function () {
         try {
@@ -49,6 +50,7 @@
     scan: function (root) {
       [].forEach.call((root || document).querySelectorAll('.lt[data-thumb]'), function (el) {
         if (el._seen) return; el._seen = 1;
+        if (!el.querySelector('.po')) { var po = document.createElement('span'); po.className = 'po'; po.setAttribute('aria-hidden', 'true'); var ic = document.createElement('i'); ic.textContent = el.dataset.emoji || '✨'; po.appendChild(ic); el.insertBefore(po, el.firstChild); }
         if (io) io.observe(el); else { el._on = 1; queue.push(el); pump(); }
       });
     }

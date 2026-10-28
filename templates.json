@@ -97,6 +97,17 @@
      ]
     },
     {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "mnom"
+      }
+     ]
+    },
+    {
      "title": "Colores y estilo",
      "fields": [
       {
@@ -216,6 +227,16 @@
        "type": "photos",
        "max": 10,
        "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
       }
      ]
     },
@@ -522,6 +543,17 @@
      ]
     },
     {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "mnom"
+      }
+     ]
+    },
+    {
      "title": "Colores y estilo",
      "fields": [
       {
@@ -659,6 +691,17 @@
      ]
     },
     {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "mnom"
+      }
+     ]
+    },
+    {
      "title": "Colores y estilo",
      "fields": [
       {
@@ -781,6 +824,16 @@
        "type": "photos",
        "max": 10,
        "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
       }
      ]
     },
@@ -1018,6 +1071,17 @@
      ]
     },
     {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "mnom"
+      }
+     ]
+    },
+    {
      "title": "Colores y estilo",
      "fields": [
       {
@@ -1139,6 +1203,16 @@
        "type": "photos",
        "max": 10,
        "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
       }
      ]
     },
@@ -1448,6 +1522,17 @@
      ]
     },
     {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "mnom"
+      }
+     ]
+    },
+    {
      "title": "Colores y estilo",
      "fields": [
       {
@@ -1576,6 +1661,17 @@
      ]
     },
     {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "mnom"
+      }
+     ]
+    },
+    {
      "title": "Colores y estilo",
      "fields": [
       {
@@ -1694,6 +1790,16 @@
        "type": "photos",
        "max": 10,
        "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
       }
      ]
     },
@@ -1987,6 +2093,16 @@
        "type": "photos",
        "max": 10,
        "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
       }
      ]
     },
@@ -2300,6 +2416,16 @@
      ]
     },
     {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
+      }
+     ]
+    },
+    {
      "title": "Colores y estilo",
      "fields": [
       {
@@ -2592,6 +2718,17 @@
      ]
     },
     {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "mnom"
+      }
+     ]
+    },
+    {
      "title": "Colores y estilo",
      "fields": [
       {
@@ -2671,6 +2808,17 @@
        "max": 20,
        "itemMax": 70,
        "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "mnom"
       }
      ]
     },
@@ -2809,12 +2957,3834 @@
      ]
     },
     {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "mnom"
+      }
+     ]
+    },
+    {
      "title": "Colores y estilo",
      "fields": [
       {
        "key": "color",
        "label": "Color principal",
        "type": "color"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "buzon-cartas",
+   "name": "Buzón de Cartas",
+   "emoji": "💌",
+   "tag": "Amor",
+   "dim": "2D",
+   "desc": "Un buzón que se abre con la puerta girando en 3D y libera varios sobres para elegir y leer, con confeti al abrir cada uno.",
+   "price": 1.0,
+   "kind": "is",
+   "defaults": {
+    "title": "Buzón de Cartas",
+    "subtitle": "Abre el buzón y elige una carta para leer",
+    "envelopes": [
+     {
+      "label": "Para cuando me extrañes",
+      "text": "Aunque no esté cerca, mi corazón siempre está contigo.",
+      "photo": ""
+     },
+     {
+      "label": "Para un mal día",
+      "text": "Respira. Esto también va a pasar, y yo sigo aquí para ti.",
+      "photo": ""
+     },
+     {
+      "label": "Para celebrar juntos",
+      "text": "Cada logro tuyo también es una fiesta para mí.",
+      "photo": ""
+     },
+     {
+      "label": "Solo porque sí",
+      "text": "No necesito una razón para decirte que te amo. Aquí tienes una carta sin motivo, solo cariño.",
+      "photo": ""
+     }
+    ]
+   },
+   "groups": [
+    {
+     "title": "Encabezado",
+     "fields": [
+      {
+       "key": "title",
+       "label": "Título",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "subtitle",
+       "label": "Instrucción",
+       "type": "text",
+       "max": 120
+      }
+     ]
+    },
+    {
+     "title": "Cartas",
+     "fields": [
+      {
+       "key": "envelopes",
+       "label": "Cartas del buzón",
+       "type": "cards",
+       "of": [
+        {
+         "key": "label",
+         "label": "Etiqueta (ej: Para cuando me extrañes)",
+         "type": "text",
+         "max": 50
+        },
+        {
+         "key": "text",
+         "label": "Mensaje",
+         "type": "textarea",
+         "max": 260,
+         "rows": 4
+        },
+        {
+         "key": "photo",
+         "label": "Foto (opcional)",
+         "type": "photo"
+        }
+       ],
+       "min": 1,
+       "max": 8,
+       "itemLabel": "Carta",
+       "addLabel": "Agregar carta"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "capsula-tiempo",
+   "name": "Cápsula del Tiempo",
+   "emoji": "⏳",
+   "tag": "Amor",
+   "dim": "2D",
+   "desc": "Cartas selladas para abrir cuando quieras, o con candado hasta la fecha que elijas para cada una.",
+   "price": 1.0,
+   "kind": "is",
+   "defaults": {
+    "title": "Nuestra Cápsula del Tiempo",
+    "subtitle": "Toca una carta para abrirla. Las que tienen candado se abren solas en su fecha.",
+    "envelopes": [
+     {
+      "label": "Abrir cuando me extrañes",
+      "date": "",
+      "text": "Aunque no esté cerca, mi corazón siempre está contigo.",
+      "photo": ""
+     },
+     {
+      "label": "Abrir en nuestro aniversario",
+      "date": "",
+      "text": "Un año más a tu lado y sigo eligiéndote todos los días.",
+      "photo": ""
+     },
+     {
+      "label": "Abrir cuando quieras reír",
+      "date": "",
+      "text": "Recuerda esa vez que nos reímos hasta que dolió la panza. Te amo, tonto/a.",
+      "photo": ""
+     },
+     {
+      "label": "Abrir hoy",
+      "date": "",
+      "text": "Esta carta no tiene fecha: ábrela cuando quieras sentir un poco de cariño extra.",
+      "photo": ""
+     }
+    ]
+   },
+   "groups": [
+    {
+     "title": "Encabezado",
+     "fields": [
+      {
+       "key": "title",
+       "label": "Título",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "subtitle",
+       "label": "Instrucción",
+       "type": "text",
+       "max": 120
+      }
+     ]
+    },
+    {
+     "title": "Cartas selladas",
+     "fields": [
+      {
+       "key": "envelopes",
+       "label": "Cartas de la cápsula",
+       "type": "cards",
+       "of": [
+        {
+         "key": "label",
+         "label": "Etiqueta (ej: Abrir en nuestro aniversario)",
+         "type": "text",
+         "max": 50
+        },
+        {
+         "key": "date",
+         "label": "Fecha de apertura (opcional: vacía = siempre disponible)",
+         "type": "date"
+        },
+        {
+         "key": "text",
+         "label": "Mensaje",
+         "type": "textarea",
+         "max": 260,
+         "rows": 4
+        },
+        {
+         "key": "photo",
+         "label": "Foto (opcional)",
+         "type": "photo"
+        }
+       ],
+       "min": 1,
+       "max": 8,
+       "itemLabel": "Carta",
+       "addLabel": "Agregar carta"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "constelacion",
+   "name": "Tu Constelación",
+   "emoji": "✨",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Un cielo 3D donde cada estrella guarda un mensaje distinto: se van encendiendo una a una hasta formar tu constelación completa.",
+   "price": 1.99,
+   "kind": "is",
+   "defaults": {
+    "title": "Una constelación solo para ti ✨",
+    "subtitleInitial": "gira el cielo, toca una estrella para descubrirla",
+    "color": "#ffe9a8",
+    "shape": "heart",
+    "messages": [
+     "La primera vez que hablamos ya sabía que ibas a brillar en mi vida ✨",
+     "Ese día que nos reímos tanto que ya ni recordábamos de qué 😂",
+     "Cuando me escuchaste sin decir nada, y fue justo lo que necesitaba 💫",
+     "La vez que me mandaste ese mensaje random y me alegró el día entero 📱",
+     "Cada plan pequeño contigo termina siendo mi momento favorito de la semana",
+     "Esa conversación de madrugada que no queríamos que terminara 🌙",
+     "Cuando celebraste mis logros como si fueran tuyos 🎉",
+     "La forma en la que apareces justo cuando hace falta 🤍",
+     "Todas las veces que me hiciste ver las cosas distinto, mejor",
+     "Esta constelación, como todo lo demás, es porque existes tú ⭐"
+    ],
+    "finalMessage": "Cada estrella de esta constelación eres tú, en un momento distinto. Gracias por brillar así, siempre."
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "title",
+       "label": "Título principal",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "subtitleInitial",
+       "label": "Subtítulo inicial",
+       "type": "text",
+       "max": 70
+      },
+      {
+       "key": "finalMessage",
+       "label": "Mensaje final (al encender todas las estrellas)",
+       "type": "textarea",
+       "max": 220,
+       "rows": 3
+      }
+     ]
+    },
+    {
+     "title": "Mensajes (uno por estrella)",
+     "fields": [
+      {
+       "key": "messages",
+       "label": "Mensajes",
+       "type": "list",
+       "max": 20,
+       "itemMax": 160,
+       "addLabel": "Agregar mensaje"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color de las estrellas",
+       "type": "color"
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la constelación",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "circle",
+         "l": "Círculo"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "cielo-farolillos",
+   "name": "Un Cielo de Farolillos",
+   "emoji": "🏮",
+   "tag": "Amor",
+   "dim": "2D",
+   "desc": "Un atardecer con farolillos apagados esperando: cada uno guarda un deseo y se enciende y vuela al tocarlo.",
+   "price": 1.99,
+   "kind": "is",
+   "defaults": {
+    "title": "Un cielo de farolillos para ti 🏮",
+    "subtitleInitial": "toca un farolillo, lee el deseo y déjalo volar",
+    "color": "#ff9a52",
+    "messages": [
+     "Que la vida te sorprenda con más días tan lindos como los que compartimos 🏮",
+     "Que cada meta que persigues encuentre su camino más pronto de lo que esperas ✨",
+     "Que siempre tengas a alguien cerca cuando necesites reír sin motivo 😄",
+     "Que el tiempo te alcance para lo que amas hacer 🌙",
+     "Que las cosas difíciles se sientan más livianas cuando yo esté cerca 💫",
+     "Que nunca dejes de sorprenderte con las cosas simples de la vida 🌸",
+     "Que tengas la calma que mereces incluso en los días más movidos 🕊️",
+     "Que cada nuevo comienzo te traiga algo bueno 🌅",
+     "Que sepas, sin que te lo repita todo el tiempo, lo importante que eres 💛",
+     "Este deseo es simple: que seas muy feliz 🏮"
+    ],
+    "finalMessage": "Ojalá cada uno de estos deseos encuentre su camino hasta ti. Gracias por ser tú."
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "title",
+       "label": "Título principal",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "subtitleInitial",
+       "label": "Subtítulo inicial",
+       "type": "text",
+       "max": 70
+      },
+      {
+       "key": "finalMessage",
+       "label": "Mensaje final (al soltar todos los farolillos)",
+       "type": "textarea",
+       "max": 220,
+       "rows": 3
+      }
+     ]
+    },
+    {
+     "title": "Deseos (uno por farolillo)",
+     "fields": [
+      {
+       "key": "messages",
+       "label": "Deseos / mensajes",
+       "type": "list",
+       "max": 20,
+       "itemMax": 160,
+       "addLabel": "Agregar deseo"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color del farolillo",
+       "type": "color"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "frasco-razones",
+   "name": "Un Frasco de Razones",
+   "emoji": "🫙",
+   "tag": "Amor",
+   "dim": "2D",
+   "desc": "Un frasco de vidrio lleno de estrellitas: cada una guarda una razón distinta por la que la quieres, y brilla más al abrirlas todas.",
+   "price": 1.0,
+   "kind": "is",
+   "defaults": {
+    "title": "Un frasco de razones para quererte ✨",
+    "subtitleInitial": "toca cada estrella para descubrir una",
+    "reasons": [
+     "Porque tu risa se siente como un cafecito calentito en la mañana ☕",
+     "Porque cuando hablamos el tiempo se me pasa volando ⏳",
+     "Porque tienes esa manera única de hacer que todo se sienta más ligero 🌤️",
+     "Porque tu forma de ver la vida me inspira a disfrutar lo cotidiano 🌸",
+     "Porque cada mensaje tuyo me saca una sonrisa sin que te des cuenta 😊",
+     "Porque eres de las personas que hacen que un lugar cualquiera se sienta especial 🏡",
+     "Porque tienes un montón de detalles pequeños que te hacen única ✨",
+     "Porque me encanta tu energía incluso en los días difíciles 💪",
+     "Porque contigo hasta las conversaciones más simples se vuelven mis favoritas 💬",
+     "Porque simplemente... quería que supieras todo esto 💛"
+    ],
+    "finalMessage": "Gracias por dejarme quererte así, un poquito cada día."
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "title",
+       "label": "Título principal",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "subtitleInitial",
+       "label": "Subtítulo inicial",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "finalMessage",
+       "label": "Mensaje final (al abrir todas las estrellas)",
+       "type": "textarea",
+       "max": 200,
+       "rows": 3
+      }
+     ]
+    },
+    {
+     "title": "Razones (una por estrella)",
+     "fields": [
+      {
+       "key": "reasons",
+       "label": "Razones",
+       "type": "list",
+       "max": 20,
+       "itemMax": 140,
+       "addLabel": "Agregar razón"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "regalo-caja-carrusel",
+   "name": "Un Regalo Para Ti",
+   "emoji": "🎁",
+   "tag": "Sorpresa",
+   "dim": "3D",
+   "desc": "Una caja de regalo 3D que se abre con un estallido de corazones y pasa a un carrusel de fotos: cada una se voltea y revela un mensaje.",
+   "price": 1.0,
+   "kind": "is",
+   "defaults": {
+    "boxTitle": "Para Ti",
+    "boxHint": "Toca la caja para abrir tu regalo",
+    "carTitle": "Nuestros Recuerdos",
+    "carHint": "Toca la foto principal para leer",
+    "slides": [
+     {
+      "photo": "",
+      "message": "Cada foto de estas guarda un momento que quiero recordar contigo."
+     },
+     {
+      "photo": "",
+      "message": "Gracias por hacer mis días más bonitos."
+     },
+     {
+      "photo": "",
+      "message": "Contigo hasta lo simple se vuelve especial."
+     },
+     {
+      "photo": "",
+      "message": "Cuánto más tiempo estoy contigo, más te amo."
+     },
+     {
+      "photo": "",
+      "message": "Escribe aquí tu mensaje."
+     },
+     {
+      "photo": "",
+      "message": "Escribe aquí tu mensaje."
+     },
+     {
+      "photo": "",
+      "message": "Escribe aquí tu mensaje."
+     },
+     {
+      "photo": "",
+      "message": "Escribe aquí tu mensaje."
+     },
+     {
+      "photo": "",
+      "message": "Escribe aquí tu mensaje."
+     },
+     {
+      "photo": "",
+      "message": "Escribe aquí tu mensaje."
+     }
+    ]
+   },
+   "groups": [
+    {
+     "title": "Caja de regalo",
+     "fields": [
+      {
+       "key": "boxTitle",
+       "label": "Título arriba de la caja",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "boxHint",
+       "label": "Texto de pista (debajo de la caja)",
+       "type": "text",
+       "max": 60
+      }
+     ]
+    },
+    {
+     "title": "Carrusel",
+     "fields": [
+      {
+       "key": "carTitle",
+       "label": "Título del carrusel",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "carHint",
+       "label": "Texto de pista",
+       "type": "text",
+       "max": 60
+      }
+     ]
+    },
+    {
+     "title": "Fotos y mensajes",
+     "fields": [
+      {
+       "key": "slides",
+       "label": "Fotos del carrusel (se voltean y muestran tu mensaje)",
+       "type": "cards",
+       "of": [
+        {
+         "key": "photo",
+         "label": "Foto",
+         "type": "photo"
+        },
+        {
+         "key": "message",
+         "label": "Mensaje detrás de la foto",
+         "type": "textarea",
+         "max": 180,
+         "rows": 3
+        }
+       ],
+       "min": 1,
+       "max": 10,
+       "itemLabel": "Foto",
+       "addLabel": "Agregar foto"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "nuestra-historia",
+   "name": "Nuestra Historia",
+   "emoji": "📖",
+   "tag": "Amor",
+   "dim": "2D",
+   "desc": "Un libro interactivo: dedicatoria, línea del tiempo, galería de recuerdos, medidor de amor, ruleta de planes y un quiz de '¿cuánto me conoces?'.",
+   "price": 2.99,
+   "kind": "is",
+   "defaults": {
+    "coverSub": "EDICIÓN PARA DOS",
+    "coverTitle": "Nuestra Historia",
+    "coverMsg": "Un pequeño libro con nuestros recuerdos, hecho para ti.",
+    "dedTitle": "Para ti, que me acompañas",
+    "dedFrom": "Tu nombre",
+    "dedMsg1": "Escribí este libro para guardar, en un mismo lugar, las razones por las que te quiero y algunas sorpresas para que juegues conmigo.",
+    "dedMsg2": "Pasa la página cuando quieras. No hay prisa, tenemos todo el tiempo.",
+    "timeline": [
+     {
+      "date": "EL PRIMER DÍA",
+      "title": "Cuando te conocí",
+      "desc": "Escribe aquí cómo empezó todo."
+     },
+     {
+      "date": "LA PRIMERA VEZ",
+      "title": "Nuestra primera salida",
+      "desc": "Ese recuerdo que no se te olvida."
+     },
+     {
+      "date": "UN MOMENTO CLAVE",
+      "title": "Cuando supe que eras tú",
+      "desc": "Cuenta qué pasó ese día."
+     },
+     {
+      "date": "HOY",
+      "title": "Este aniversario",
+      "desc": "Y seguimos escribiendo la historia."
+     }
+    ],
+    "gallery": [
+     {
+      "icon": "🌅",
+      "photo": "",
+      "caption": "Nuestro inicio",
+      "message": "El día que todo comenzó, sin saber que sería así de bonito."
+     },
+     {
+      "icon": "🎶",
+      "photo": "",
+      "caption": "Nuestra canción",
+      "message": "La que suena y me hace pensar en ti al instante."
+     },
+     {
+      "icon": "🍜",
+      "photo": "",
+      "caption": "Esa cena",
+      "message": "La cita en la que nos reímos hasta que dolió la cara."
+     },
+     {
+      "icon": "✈️",
+      "photo": "",
+      "caption": "Un viaje",
+      "message": "El lugar al que quiero ir contigo la próxima vez."
+     }
+    ],
+    "meterTitle": "Medidor de amor",
+    "meterPrompt": "Toca el corazón para llenarlo por completo.",
+    "wheelTitle": "Ruleta de planes",
+    "wheelPrompt": "Gira para decidir qué haremos esta semana.",
+    "wheelOptions": [
+     "Noche de películas",
+     "Cena en casa",
+     "Salir a caminar",
+     "Postre favorito",
+     "Cita sorpresa",
+     "Noche de juegos"
+    ],
+    "quizTitle": "¿Cuánto me conoces?",
+    "quizPrompt": "Responde y descubre tu puntaje.",
+    "quiz": [
+     {
+      "q": "¿Cuál es mi comida favorita?",
+      "opts": [
+       "La que tú cocinas",
+       "Comida rápida",
+       "No come",
+       "Solo postres"
+      ],
+      "correct": 0
+     },
+     {
+      "q": "¿Qué hacemos en nuestra cita ideal?",
+      "opts": [
+       "Ver una serie",
+       "Pasar tiempo juntos, sin importar qué",
+       "Ir de compras",
+       "Nada"
+      ],
+      "correct": 1
+     },
+     {
+      "q": "¿Qué es lo que más me gusta de ti?",
+      "opts": [
+       "Nada en especial",
+       "Tu forma de ser tú",
+       "Solo tu apariencia",
+       "No sé"
+      ],
+      "correct": 1
+     }
+    ],
+    "epiTitle": "Gracias por ser tú",
+    "epiMsg": "Este libro es pequeño, pero lo que siento por ti no cabe en ninguna página. Feliz aniversario."
+   },
+   "groups": [
+    {
+     "title": "Portada",
+     "fields": [
+      {
+       "key": "coverSub",
+       "label": "Etiqueta pequeña",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "coverTitle",
+       "label": "Título",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "coverMsg",
+       "label": "Mensaje corto",
+       "type": "textarea",
+       "max": 140,
+       "rows": 3
+      }
+     ]
+    },
+    {
+     "title": "Dedicatoria",
+     "fields": [
+      {
+       "key": "dedTitle",
+       "label": "Título",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "dedFrom",
+       "label": "De (tu nombre)",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "dedMsg1",
+       "label": "Primer párrafo",
+       "type": "textarea",
+       "max": 220,
+       "rows": 4
+      },
+      {
+       "key": "dedMsg2",
+       "label": "Segundo párrafo",
+       "type": "textarea",
+       "max": 220,
+       "rows": 4
+      }
+     ]
+    },
+    {
+     "title": "Capítulo I · Línea del tiempo",
+     "fields": [
+      {
+       "key": "timeline",
+       "label": "Momentos",
+       "type": "cards",
+       "of": [
+        {
+         "key": "date",
+         "label": "Etiqueta (ej: EL PRIMER DÍA)",
+         "type": "text",
+         "max": 30
+        },
+        {
+         "key": "title",
+         "label": "Título",
+         "type": "text",
+         "max": 50
+        },
+        {
+         "key": "desc",
+         "label": "Descripción",
+         "type": "textarea",
+         "max": 200,
+         "rows": 3
+        }
+       ],
+       "min": 1,
+       "max": 6,
+       "itemLabel": "Momento",
+       "addLabel": "Agregar momento"
+      }
+     ]
+    },
+    {
+     "title": "Capítulo II · Galería de recuerdos",
+     "fields": [
+      {
+       "key": "gallery",
+       "label": "Tarjetas (la foto se voltea y muestra el mensaje)",
+       "type": "cards",
+       "of": [
+        {
+         "key": "photo",
+         "label": "Foto (opcional)",
+         "type": "photo"
+        },
+        {
+         "key": "icon",
+         "label": "Ícono (si no hay foto)",
+         "type": "text",
+         "max": 4
+        },
+        {
+         "key": "caption",
+         "label": "Título de la tarjeta",
+         "type": "text",
+         "max": 30
+        },
+        {
+         "key": "message",
+         "label": "Mensaje oculto",
+         "type": "textarea",
+         "max": 160,
+         "rows": 3
+        }
+       ],
+       "min": 1,
+       "max": 6,
+       "itemLabel": "Tarjeta",
+       "addLabel": "Agregar tarjeta"
+      }
+     ]
+    },
+    {
+     "title": "Capítulo III · Medidor de amor",
+     "fields": [
+      {
+       "key": "meterTitle",
+       "label": "Título",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "meterPrompt",
+       "label": "Texto de instrucción",
+       "type": "text",
+       "max": 80
+      }
+     ]
+    },
+    {
+     "title": "Capítulo IV · Ruleta de planes",
+     "fields": [
+      {
+       "key": "wheelTitle",
+       "label": "Título",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "wheelPrompt",
+       "label": "Texto de instrucción",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "wheelOptions",
+       "label": "Opciones de la ruleta (3 a 8)",
+       "type": "list",
+       "max": 8,
+       "itemMax": 30,
+       "addLabel": "Agregar opción"
+      }
+     ]
+    },
+    {
+     "title": "Capítulo V · ¿Cuánto me conoces?",
+     "fields": [
+      {
+       "key": "quizTitle",
+       "label": "Título",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "quizPrompt",
+       "label": "Texto de instrucción",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "quiz",
+       "label": "Preguntas",
+       "type": "cards",
+       "of": [
+        {
+         "key": "q",
+         "label": "Pregunta",
+         "type": "text",
+         "max": 90
+        },
+        {
+         "key": "opts",
+         "label": "Respuestas (4)",
+         "type": "list",
+         "max": 4,
+         "itemMax": 60,
+         "fixed": true
+        },
+        {
+         "key": "correct",
+         "label": "Respuesta correcta",
+         "type": "select",
+         "options": [
+          {
+           "v": "0",
+           "l": "Respuesta 1"
+          },
+          {
+           "v": "1",
+           "l": "Respuesta 2"
+          },
+          {
+           "v": "2",
+           "l": "Respuesta 3"
+          },
+          {
+           "v": "3",
+           "l": "Respuesta 4"
+          }
+         ],
+         "num": true
+        }
+       ],
+       "min": 1,
+       "max": 5,
+       "itemLabel": "Pregunta",
+       "addLabel": "Agregar pregunta",
+       "def_item": {
+        "q": "",
+        "opts": [
+         "",
+         "",
+         "",
+         ""
+        ],
+        "correct": 0
+       }
+      }
+     ]
+    },
+    {
+     "title": "Epílogo",
+     "fields": [
+      {
+       "key": "epiTitle",
+       "label": "Título",
+       "type": "text",
+       "max": 50
+      },
+      {
+       "key": "epiMsg",
+       "label": "Mensaje final",
+       "type": "textarea",
+       "max": 300,
+       "rows": 4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "maquina-amor",
+   "name": "Máquina de Amor",
+   "emoji": "🎰",
+   "tag": "Amor",
+   "dim": "2D",
+   "desc": "Una máquina expendedora con 9 casilleros: cada uno puede ser una frase, una foto o un 'rasca y descubre' sorpresa.",
+   "price": 1.0,
+   "kind": "is",
+   "defaults": {
+    "title": "Máquina de Amor",
+    "subtitle": "Elige un número y descubre tu sorpresa",
+    "slots": [
+     {
+      "code": "A1",
+      "type": "frase",
+      "text": "Eres lo mejor que me ha pasado.",
+      "photo": "",
+      "caption": "",
+      "scratchMsg": ""
+     },
+     {
+      "code": "A2",
+      "type": "foto",
+      "photo": "",
+      "caption": "Ese día contigo",
+      "text": "",
+      "scratchMsg": ""
+     },
+     {
+      "code": "A3",
+      "type": "juego",
+      "scratchMsg": "¡Sorpresa! Te amo más de lo que imaginas.",
+      "text": "",
+      "photo": "",
+      "caption": ""
+     },
+     {
+      "code": "B1",
+      "type": "frase",
+      "text": "Contigo hasta lo simple se vuelve especial.",
+      "photo": "",
+      "caption": "",
+      "scratchMsg": ""
+     },
+     {
+      "code": "B2",
+      "type": "frase",
+      "text": "Gracias por elegirme cada día.",
+      "photo": "",
+      "caption": "",
+      "scratchMsg": ""
+     },
+     {
+      "code": "B3",
+      "type": "foto",
+      "photo": "",
+      "caption": "Nuestra aventura favorita",
+      "text": "",
+      "scratchMsg": ""
+     },
+     {
+      "code": "C1",
+      "type": "juego",
+      "scratchMsg": "Rasca y encontrarás lo mucho que te quiero.",
+      "text": "",
+      "photo": "",
+      "caption": ""
+     },
+     {
+      "code": "C2",
+      "type": "frase",
+      "text": "Mi lugar favorito es a tu lado.",
+      "photo": "",
+      "caption": "",
+      "scratchMsg": ""
+     },
+     {
+      "code": "C3",
+      "type": "frase",
+      "text": "Feliz día, te amo.",
+      "photo": "",
+      "caption": "",
+      "scratchMsg": ""
+     }
+    ]
+   },
+   "groups": [
+    {
+     "title": "Encabezado",
+     "fields": [
+      {
+       "key": "title",
+       "label": "Título",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "subtitle",
+       "label": "Instrucción",
+       "type": "text",
+       "max": 70
+      }
+     ]
+    },
+    {
+     "title": "Los 9 casilleros",
+     "fields": [
+      {
+       "key": "slots",
+       "label": "Casilleros (elige si cada uno es frase, foto o juego de rascar)",
+       "type": "cards",
+       "of": [
+        {
+         "key": "type",
+         "label": "Tipo de sorpresa",
+         "type": "select",
+         "options": [
+          {
+           "v": "frase",
+           "l": "💌 Frase"
+          },
+          {
+           "v": "foto",
+           "l": "📸 Foto"
+          },
+          {
+           "v": "juego",
+           "l": "🎟 Rasca y descubre"
+          }
+         ],
+         "rebuild": true
+        },
+        {
+         "key": "text",
+         "label": "Frase",
+         "type": "textarea",
+         "max": 200,
+         "rows": 3,
+         "showIf": {
+          "key": "type",
+          "in": [
+           "frase"
+          ]
+         }
+        },
+        {
+         "key": "photo",
+         "label": "Foto",
+         "type": "photo",
+         "showIf": {
+          "key": "type",
+          "in": [
+           "foto"
+          ]
+         }
+        },
+        {
+         "key": "caption",
+         "label": "Descripción de la foto",
+         "type": "text",
+         "max": 60,
+         "showIf": {
+          "key": "type",
+          "in": [
+           "foto"
+          ]
+         }
+        },
+        {
+         "key": "scratchMsg",
+         "label": "Mensaje oculto (se rasca)",
+         "type": "textarea",
+         "max": 160,
+         "rows": 3,
+         "showIf": {
+          "key": "type",
+          "in": [
+           "juego"
+          ]
+         }
+        }
+       ],
+       "min": 9,
+       "max": 9,
+       "itemLabel": "Casillero",
+       "addLabel": "Agregar"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "anniversary-times",
+   "name": "The Anniversary Times",
+   "emoji": "📰",
+   "tag": "Aniversario",
+   "dim": "2D",
+   "desc": "Un periódico de una sola edición con titular, foto y cita destacada, sopa de letras, rasca y gana, encuesta y memorama del amor.",
+   "price": 2.99,
+   "kind": "is",
+   "defaults": {
+    "masthead": "THE ANNIVERSARY TIMES",
+    "volInfo": "VOL. I · Nº 1",
+    "priceInfo": "PRECIO: UN BESO",
+    "headline": "¡EL MUNDO SE DETIENE: HOY CELEBRAMOS NUESTRO ANIVERSARIO!",
+    "subhead": "Expertos no logran explicar cómo alguien puede seguir viéndose tan perfecta después de todo este tiempo juntos.",
+    "leadPhoto": "",
+    "leadCaption": "Imagen exclusiva, brindada por muchos aniversarios más.",
+    "quote": "Feliz aniversario. Te amo no solo por lo que eres, sino por lo que soy cuando estoy contigo.",
+    "sidebarTitle": "CONFIRMADO: MI CORAZÓN ES CADA VEZ MÁS TUYO",
+    "sidebarText": "Desde que nos conocimos, nuestra historia solo ha crecido a niveles de felicidad nunca antes vistos.",
+    "loveIndex": [
+     {
+      "label": "Año 1",
+      "value": 30
+     },
+     {
+      "label": "Año 2",
+      "value": 55
+     },
+     {
+      "label": "Año 3",
+      "value": 75
+     },
+     {
+      "label": "Hoy",
+      "value": 100
+     }
+    ],
+    "wsIntro": "Encuentra la palabra escondida tocando las letras en orden.",
+    "wsWord": "AMOR",
+    "scratchMsg": "¡Feliz aniversario, mi amor! Gracias por elegirme cada día.",
+    "gallery": [
+     {
+      "photo": "",
+      "caption": "Ese día..."
+     },
+     {
+      "photo": "",
+      "caption": "Tú y yo"
+     },
+     {
+      "photo": "",
+      "caption": "Aventuras"
+     },
+     {
+      "photo": "",
+      "caption": "Siempre juntos"
+     }
+    ],
+    "pollQ": "¿Qué tanto me amas hoy?",
+    "pollOptions": [
+     "Mucho",
+     "Infinito",
+     "Más que ayer"
+    ],
+    "memEmojis": [
+     "💖",
+     "🌹",
+     "💌",
+     "✨",
+     "🥂",
+     "💍"
+    ],
+    "closingTitle": "Gracias por ser tú",
+    "closingMsg": "Este periódico tiene una sola edición, una sola portada y un solo protagonista de mi corazón: tú. Feliz aniversario."
+   },
+   "groups": [
+    {
+     "title": "Portada",
+     "fields": [
+      {
+       "key": "masthead",
+       "label": "Nombre del periódico",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "volInfo",
+       "label": "Vol / Nº",
+       "type": "text",
+       "max": 30
+      },
+      {
+       "key": "priceInfo",
+       "label": "Precio",
+       "type": "text",
+       "max": 30
+      }
+     ]
+    },
+    {
+     "title": "Titular",
+     "fields": [
+      {
+       "key": "headline",
+       "label": "Titular principal",
+       "type": "textarea",
+       "max": 140,
+       "rows": 3
+      },
+      {
+       "key": "subhead",
+       "label": "Bajada / subtítulo",
+       "type": "textarea",
+       "max": 200,
+       "rows": 3
+      },
+      {
+       "key": "leadPhoto",
+       "label": "Foto principal",
+       "type": "photo"
+      },
+      {
+       "key": "leadCaption",
+       "label": "Pie de foto",
+       "type": "text",
+       "max": 80
+      },
+      {
+       "key": "quote",
+       "label": "Frase / cita destacada",
+       "type": "textarea",
+       "max": 180,
+       "rows": 3
+      }
+     ]
+    },
+    {
+     "title": "Columna \"Confirmado\"",
+     "fields": [
+      {
+       "key": "sidebarTitle",
+       "label": "Título",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "sidebarText",
+       "label": "Texto",
+       "type": "textarea",
+       "max": 260,
+       "rows": 4
+      }
+     ]
+    },
+    {
+     "title": "Índice de amor",
+     "fields": [
+      {
+       "key": "loveIndex",
+       "label": "Barras (0 a 100)",
+       "type": "cards",
+       "of": [
+        {
+         "key": "label",
+         "label": "Etiqueta",
+         "type": "text",
+         "max": 14
+        },
+        {
+         "key": "value",
+         "label": "Nivel de amor",
+         "type": "range",
+         "min": 0,
+         "max": 100,
+         "step": 5
+        }
+       ],
+       "min": 1,
+       "max": 6,
+       "itemLabel": "Barra",
+       "addLabel": "Agregar barra",
+       "def_item": {
+        "label": "",
+        "value": 50
+       }
+      }
+     ]
+    },
+    {
+     "title": "Sopa de aniversario",
+     "fields": [
+      {
+       "key": "wsIntro",
+       "label": "Texto de instrucción",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "wsWord",
+       "label": "Palabra a encontrar (máx. 9 letras)",
+       "type": "text",
+       "max": 9
+      }
+     ]
+    },
+    {
+     "title": "Rasca y descubre",
+     "fields": [
+      {
+       "key": "scratchMsg",
+       "label": "Mensaje oculto",
+       "type": "textarea",
+       "max": 90,
+       "rows": 2
+      }
+     ]
+    },
+    {
+     "title": "Archivo fotográfico",
+     "fields": [
+      {
+       "key": "gallery",
+       "label": "Fotos",
+       "type": "cards",
+       "of": [
+        {
+         "key": "photo",
+         "label": "Foto",
+         "type": "photo"
+        },
+        {
+         "key": "caption",
+         "label": "Pie de foto",
+         "type": "text",
+         "max": 40
+        }
+       ],
+       "min": 1,
+       "max": 6,
+       "itemLabel": "Foto",
+       "addLabel": "Agregar foto"
+      }
+     ]
+    },
+    {
+     "title": "Encuesta",
+     "fields": [
+      {
+       "key": "pollQ",
+       "label": "Pregunta",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "pollOptions",
+       "label": "Opciones (2 a 5)",
+       "type": "list",
+       "max": 5,
+       "itemMax": 30,
+       "addLabel": "Agregar opción"
+      }
+     ]
+    },
+    {
+     "title": "Memorama",
+     "fields": [
+      {
+       "key": "memEmojis",
+       "label": "Símbolos / emojis (uno por pareja)",
+       "type": "list",
+       "max": 8,
+       "itemMax": 4,
+       "addLabel": "Agregar símbolo"
+      }
+     ]
+    },
+    {
+     "title": "Cierre",
+     "fields": [
+      {
+       "key": "closingTitle",
+       "label": "Título",
+       "type": "text",
+       "max": 50
+      },
+      {
+       "key": "closingMsg",
+       "label": "Mensaje final",
+       "type": "textarea",
+       "max": 260,
+       "rows": 4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "flores",
+   "name": "Flores Amarillas",
+   "emoji": "🌻",
+   "tag": "Amor",
+   "dim": "2D",
+   "desc": "Un jardín de girasoles que florece en forma de corazón, con tus frases y música de fondo.",
+   "price": 1.99,
+   "kind": "is",
+   "defaults": {
+    "phrases": [
+     "Elegí girasoles porque también giran buscando lo que aman.",
+     "Cada pétalo amarillo es una forma distinta de decir te quiero.",
+     "Sembré este jardín para no dejar de pensar en ti.",
+     "Contigo hasta el invierno empieza a parecer primavera.",
+     "No conozco una flor que alcance para explicar lo que siento.",
+     "Un jardín entero, y aun así pensé primero en ti."
+    ],
+    "music": "",
+    "musicName": ""
+   },
+   "groups": [
+    {
+     "title": "Frases del jardín",
+     "fields": [
+      {
+       "key": "phrases",
+       "label": "Frases",
+       "type": "list",
+       "max": 20,
+       "itemMax": 90,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "music",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "musicName"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "caja",
+   "name": "Caja Sorpresa",
+   "emoji": "🎁",
+   "tag": "Sorpresa",
+   "dim": "3D",
+   "desc": "Una caja de regalo que se abre y libera una nube de luz con tu mensaje adentro.",
+   "price": 2.99,
+   "kind": "is",
+   "defaults": {
+    "color": "#26e0c8",
+    "font": "quicksand",
+    "shape": "heart",
+    "centerTexts": [
+     "FELIZ CUMPLEAÑOS",
+     "TE QUIERO MUCHO",
+     "♥"
+    ],
+    "centerInterval": 2.6,
+    "orbitWords": [
+     "SORPRESA",
+     "PARA TI",
+     "FELICIDADES",
+     "GRACIAS",
+     "✦",
+     "TE QUIERO",
+     "♥",
+     "DISFRUTA"
+    ],
+    "images": [],
+    "music": "",
+    "musicName": ""
+   },
+   "groups": [
+    {
+     "title": "Frase central",
+     "fields": [
+      {
+       "key": "centerTexts",
+       "label": "Frases que aparecen en el centro, una tras otra",
+       "type": "list",
+       "max": 12,
+       "itemMax": 40,
+       "addLabel": "Agregar frase"
+      },
+      {
+       "key": "centerInterval",
+       "label": "Velocidad de cambio (segundos)",
+       "type": "range",
+       "min": 1,
+       "max": 6,
+       "step": 0.2
+      }
+     ]
+    },
+    {
+     "title": "Palabras orbitando",
+     "fields": [
+      {
+       "key": "orbitWords",
+       "label": "Palabras cortas que giran alrededor",
+       "type": "list",
+       "max": 20,
+       "itemMax": 18,
+       "addLabel": "Agregar palabra"
+      }
+     ]
+    },
+    {
+     "title": "Fotos flotando",
+     "fields": [
+      {
+       "key": "images",
+       "label": "Fotos (se ven pequeñas y semitransparentes)",
+       "type": "photos",
+       "max": 6,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "music",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "musicName"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "poppins",
+         "l": "Moderna"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de las ráfagas al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "fenix",
+   "name": "Fénix Renaciente",
+   "emoji": "🔥",
+   "tag": "Renacer",
+   "dim": "3D",
+   "desc": "Un Fénix de fuego que renace desde las cenizas, con tu mensaje en el pecho.",
+   "price": 2.99,
+   "kind": "is",
+   "defaults": {
+    "color": "#ff7a1a",
+    "font": "quicksand",
+    "shape": "heart",
+    "centerTexts": [
+     "FELIZ CUMPLEAÑOS",
+     "TE QUIERO MUCHO",
+     "♥"
+    ],
+    "centerInterval": 2.6,
+    "orbitWords": [
+     "SORPRESA",
+     "PARA TI",
+     "FELICIDADES",
+     "GRACIAS",
+     "✦",
+     "TE QUIERO",
+     "♥",
+     "DISFRUTA"
+    ],
+    "images": [],
+    "music": "",
+    "musicName": ""
+   },
+   "groups": [
+    {
+     "title": "Frase central",
+     "fields": [
+      {
+       "key": "centerTexts",
+       "label": "Frases que aparecen en el centro, una tras otra",
+       "type": "list",
+       "max": 12,
+       "itemMax": 40,
+       "addLabel": "Agregar frase"
+      },
+      {
+       "key": "centerInterval",
+       "label": "Velocidad de cambio (segundos)",
+       "type": "range",
+       "min": 1,
+       "max": 6,
+       "step": 0.2
+      }
+     ]
+    },
+    {
+     "title": "Palabras orbitando",
+     "fields": [
+      {
+       "key": "orbitWords",
+       "label": "Palabras cortas que giran alrededor",
+       "type": "list",
+       "max": 20,
+       "itemMax": 18,
+       "addLabel": "Agregar palabra"
+      }
+     ]
+    },
+    {
+     "title": "Fotos flotando",
+     "fields": [
+      {
+       "key": "images",
+       "label": "Fotos (se ven pequeñas y semitransparentes)",
+       "type": "photos",
+       "max": 6,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "music",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "musicName"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "poppins",
+         "l": "Moderna"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de las ráfagas al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "rosa",
+   "name": "Rosa Eterna",
+   "emoji": "🌹",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Una rosa 3D que florece por completo, con frases y fotos flotando alrededor.",
+   "price": 2.99,
+   "kind": "is",
+   "defaults": {
+    "color": "#c81d43",
+    "font": "dancing",
+    "shape": "heart",
+    "centerTexts": [
+     "FLORECE PARA TI",
+     "ERES HERMOSA",
+     "CON CARIÑO",
+     "♥"
+    ],
+    "centerInterval": 2.4,
+    "orbitWords": [
+     "ROSA",
+     "AMOR",
+     "BELLEZA",
+     "PARA TI",
+     "✦",
+     "GRACIAS",
+     "ETERNA",
+     "ESPECIAL"
+    ],
+    "images": [],
+    "music": "",
+    "musicName": ""
+   },
+   "groups": [
+    {
+     "title": "Frase central",
+     "fields": [
+      {
+       "key": "centerTexts",
+       "label": "Frases que aparecen en el centro, una tras otra",
+       "type": "list",
+       "max": 12,
+       "itemMax": 40,
+       "addLabel": "Agregar frase"
+      },
+      {
+       "key": "centerInterval",
+       "label": "Velocidad de cambio (segundos)",
+       "type": "range",
+       "min": 1,
+       "max": 6,
+       "step": 0.2
+      }
+     ]
+    },
+    {
+     "title": "Palabras orbitando",
+     "fields": [
+      {
+       "key": "orbitWords",
+       "label": "Palabras cortas que giran alrededor",
+       "type": "list",
+       "max": 20,
+       "itemMax": 18,
+       "addLabel": "Agregar palabra"
+      }
+     ]
+    },
+    {
+     "title": "Fotos flotando",
+     "fields": [
+      {
+       "key": "images",
+       "label": "Fotos (se ven pequeñas y semitransparentes)",
+       "type": "photos",
+       "max": 6,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "music",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "musicName"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "poppins",
+         "l": "Moderna"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de las ráfagas al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "saturno",
+   "name": "Saturno de Recuerdos",
+   "emoji": "🪐",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Un planeta 3D interactivo con mensajes, fotos y palabras orbitando alrededor.",
+   "price": 2.99,
+   "kind": "is",
+   "defaults": {
+    "color": "#40e0d0",
+    "font": "quicksand",
+    "shape": "heart",
+    "centerTexts": [
+     "PARA TI",
+     "TE QUIERO",
+     "GRACIAS POR ESTAR",
+     "♥"
+    ],
+    "centerInterval": 2.4,
+    "orbitWords": [
+     "PARA TI",
+     "TE QUIERO",
+     "GRACIAS",
+     "SIEMPRE",
+     "✦",
+     "ESPECIAL",
+     "♥",
+     "MI PLANETA",
+     "CONTIGO",
+     "ETERNO",
+     "✦",
+     "TE AMO"
+    ],
+    "images": [],
+    "music": "",
+    "musicName": ""
+   },
+   "groups": [
+    {
+     "title": "Frase central",
+     "fields": [
+      {
+       "key": "centerTexts",
+       "label": "Frases que aparecen en el centro, una tras otra",
+       "type": "list",
+       "max": 12,
+       "itemMax": 40,
+       "addLabel": "Agregar frase"
+      },
+      {
+       "key": "centerInterval",
+       "label": "Velocidad de cambio (segundos)",
+       "type": "range",
+       "min": 1,
+       "max": 6,
+       "step": 0.2
+      }
+     ]
+    },
+    {
+     "title": "Palabras orbitando",
+     "fields": [
+      {
+       "key": "orbitWords",
+       "label": "Palabras cortas que giran alrededor",
+       "type": "list",
+       "max": 20,
+       "itemMax": 18,
+       "addLabel": "Agregar palabra"
+      }
+     ]
+    },
+    {
+     "title": "Fotos flotando",
+     "fields": [
+      {
+       "key": "images",
+       "label": "Fotos (se ven pequeñas y semitransparentes)",
+       "type": "photos",
+       "max": 6,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "music",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "musicName"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "poppins",
+         "l": "Moderna"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de las ráfagas al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "galaxia-rosa-roja",
+   "name": "Galaxia Espiral del Corazón",
+   "emoji": "🌌",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Una galaxia espiral que converge en un corazón de partículas, con rosas y ramos orbitando y ráfagas al tocar la pantalla.",
+   "price": 2.99,
+   "kind": "is",
+   "defaults": {
+    "color": "#ff5a45",
+    "font": "dancing",
+    "burstShape": "heart",
+    "loveText": "Te amo",
+    "labels": [
+     "MI GIRASOL",
+     "PARA SIEMPRE",
+     "TU AMOR",
+     "MI SOL",
+     "ETERNO",
+     "GRATITUD",
+     "MI CIELO",
+     "TE AMO"
+    ],
+    "images": [],
+    "music": "",
+    "musicName": ""
+   },
+   "groups": [
+    {
+     "title": "Texto de amor",
+     "fields": [
+      {
+       "key": "loveText",
+       "label": "Texto principal que flota en el centro",
+       "type": "text",
+       "max": 28
+      }
+     ]
+    },
+    {
+     "title": "Palabras orbitando",
+     "fields": [
+      {
+       "key": "labels",
+       "label": "Palabras cortas que giran con la espiral",
+       "type": "list",
+       "max": 20,
+       "itemMax": 18,
+       "addLabel": "Agregar palabra"
+      }
+     ]
+    },
+    {
+     "title": "Fotos flotando",
+     "fields": [
+      {
+       "key": "images",
+       "label": "Fotos (se ven pequeñas y semitransparentes)",
+       "type": "photos",
+       "max": 6,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "music",
+       "label": "Música de fondo",
+       "type": "audio",
+       "nameKey": "musicName"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "poppins",
+         "l": "Moderna"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "burstShape",
+       "label": "Forma de las ráfagas al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "mariposa-infinita-pro",
+   "name": "Mariposa Infinita PRO",
+   "emoji": "🦋",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Una mariposa de partículas que aletea y se transforma en el símbolo del infinito, entre pétalos que suben, estrellas fugaces y una aurora de color.",
+   "price": 3.99,
+   "kind": "le",
+   "defaults": {
+    "titulo": "Para siempre 🦋",
+    "tapTexto": "Toca para iniciar",
+    "mensaje": "Hay personas que llegan sin avisar y le cambian el color a todo. Vos sos eso para mí.\n\nSi pudiera elegir mil veces, mil veces te elegiría. No por costumbre, sino porque a tu lado hasta lo simple se vuelve bonito.\n\nQue esta mariposa nunca deje de volar, igual que lo que siento por vos.\n\nTe quiero, hoy y siempre. ∞",
+    "frases": [
+     "Contigo hasta el infinito ∞",
+     "Mi lugar favorito eres tú",
+     "Cada día te elijo",
+     "Volamos juntos 🦋",
+     "Mi para siempre",
+     "Tu risa lo arregla todo",
+     "Eres mi mejor casualidad",
+     "Mi calma y mi locura",
+     "Nunca dejes de volar",
+     "Contigo todo es más bonito",
+     "Mi sueño despierto",
+     "Te pienso siempre",
+     "Eres mi razón favorita",
+     "Nuestro amor no tiene final",
+     "Mi hogar eres tú",
+     "Gracias por quedarte",
+     "Contigo el tiempo vuela",
+     "Eres mi milagro diario",
+     "Mi alma te reconoce",
+     "Para toda la vida 💜"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#c86bff",
+    "figuraA": "mariposa",
+    "figuraB": "infinito",
+    "aleteo": 1.6,
+    "aleteoAmp": 0.42,
+    "fugaces": true,
+    "font": "dancing",
+    "shape": "heart",
+    "burst": true,
+    "trail": true,
+    "burstCount": 80,
+    "petalos": true
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje de la carta",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases que orbitan",
+       "type": "list",
+       "max": 30,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos flotando",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "figuraA",
+       "label": "Primera figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "mariposa",
+         "l": "Mariposa"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "figuraB",
+       "label": "Segunda figura (en la que se transforma)",
+       "type": "select",
+       "options": [
+        {
+         "v": "mariposa",
+         "l": "Mariposa"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        }
+       ]
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Chispas"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro que sigue al puntero",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Intensidad de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 160,
+       "step": 10
+      },
+      {
+       "key": "aleteo",
+       "label": "Velocidad del aleteo",
+       "type": "range",
+       "min": 0,
+       "max": 4,
+       "step": 0.1
+      },
+      {
+       "key": "aleteoAmp",
+       "label": "Fuerza del aleteo",
+       "type": "range",
+       "min": 0,
+       "max": 1.2,
+       "step": 0.02
+      },
+      {
+       "key": "petalos",
+       "label": "Pétalos flotando",
+       "type": "switch"
+      },
+      {
+       "key": "fugaces",
+       "label": "Estrellas fugaces",
+       "type": "switch"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "girasol-eterno-pro",
+   "name": "Girasol Eterno PRO",
+   "emoji": "🌻",
+   "tag": "Amistad",
+   "dim": "3D",
+   "desc": "Un girasol de partículas que se abre al atardecer y se transforma en corazón, entre polen dorado, luciérnagas y estrellas fugaces, con una corona de flores y tus frases y fotos orbitando.",
+   "price": 3.99,
+   "kind": "le",
+   "defaults": {
+    "titulo": "Para alguien especial 🌻",
+    "tapTexto": "Toca para iniciar",
+    "mensaje": "Hay personas que llegan y, sin darse cuenta, hacen que muchos de tus días sean mejores. Así eres tú para mí.\n\nNo hace falta una fecha en el calendario para decírtelo: simplemente quería que supieras lo bien que se siente tenerte cerca, como amigo, como familia o como lo que seas en mi vida.\n\nEste girasol se abre siempre buscando la luz, igual que yo te busco a ti cuando quiero un buen día.\n\nGracias por estar. Espero verte crecer y brillar, siempre.",
+    "frases": [
+     "Gracias por estar 🌻",
+     "Mi persona favorita",
+     "Contigo todo es más fácil",
+     "Que nunca falte tu risa",
+     "Eres luz en mis días",
+     "Me alegra tenerte cerca",
+     "Siempre floreces donde estás",
+     "Mi lugar seguro",
+     "Te deseo lo mejor siempre",
+     "Contigo hasta lo simple brilla",
+     "Gracias por tanto",
+     "Mi persona de confianza",
+     "Que la vida te sonría",
+     "Eres de las buenas personas",
+     "Un girasol para ti",
+     "Gracias por quedarte",
+     "Eres un regalo",
+     "Que sigas brillando así",
+     "Mi cariño de siempre",
+     "Para ti, siempre 🌻"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#ffb703",
+    "figuraA": "girasol",
+    "figuraB": "corazon",
+    "corona": true,
+    "luciernagasOn": true,
+    "luciernagas": 80,
+    "fugaces": true,
+    "polen": true,
+    "font": "quicksand",
+    "shape": "flower",
+    "burst": true,
+    "trail": true,
+    "burstCount": 70
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje de la carta",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases que orbitan",
+       "type": "list",
+       "max": 30,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos flotando",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "figuraA",
+       "label": "Primera figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "girasol",
+         "l": "Girasol"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "capullo",
+         "l": "Capullo"
+        },
+        {
+         "v": "rosaAbierta",
+         "l": "Rosa"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        },
+        {
+         "v": "mariposa",
+         "l": "Mariposa"
+        }
+       ]
+      },
+      {
+       "key": "figuraB",
+       "label": "Segunda figura (en la que se transforma)",
+       "type": "select",
+       "options": [
+        {
+         "v": "girasol",
+         "l": "Girasol"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "capullo",
+         "l": "Capullo"
+        },
+        {
+         "v": "rosaAbierta",
+         "l": "Rosa"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        },
+        {
+         "v": "mariposa",
+         "l": "Mariposa"
+        }
+       ]
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Chispas"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro que sigue al puntero",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Intensidad de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 160,
+       "step": 10
+      },
+      {
+       "key": "corona",
+       "label": "Corona de flores",
+       "type": "switch"
+      },
+      {
+       "key": "luciernagasOn",
+       "label": "Luciérnagas",
+       "type": "switch"
+      },
+      {
+       "key": "luciernagas",
+       "label": "Cantidad de luciérnagas",
+       "type": "range",
+       "min": 0,
+       "max": 160,
+       "step": 5
+      },
+      {
+       "key": "polen",
+       "label": "Polen dorado",
+       "type": "switch"
+      },
+      {
+       "key": "fugaces",
+       "label": "Destellos en el cielo",
+       "type": "switch"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "corazon-cristal-pro",
+   "name": "Corazón de Cristal PRO",
+   "emoji": "💎",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Una gema de corazón tallada envuelta en una cinta de luz en espiral, con gemas orbitando, confeti de cristal cayendo y una figura de partículas que pasa de flor a estrella, entre tus frases.",
+   "price": 3.99,
+   "kind": "le",
+   "defaults": {
+    "titulo": "Mi joya más preciada 💎",
+    "tapTexto": "Toca para iniciar",
+    "mensaje": "Hay cosas que el tiempo no debería poder tocar. Vos sos una de ellas para mí.\n\nPor eso guardé esto en un corazón de cristal: para que, pase lo que pase, esto que siento quede protegido, como una joya que no se rompe ni se opaca.\n\nCada faceta de este corazón es un motivo distinto para quererte. Y son muchas.\n\nGracias por ser, para mí, lo más valioso que tengo.",
+    "frases": [
+     "Mi joya más preciada 💎",
+     "Nada vale más que vos",
+     "Te guardo como un tesoro",
+     "Mi para siempre",
+     "Contigo todo brilla más",
+     "Eres irremplazable",
+     "Mi lugar favorito eres tú",
+     "Cada día te elijo",
+     "Gracias por quedarte",
+     "Mi tesoro más grande",
+     "Nunca dejes de brillar",
+     "Mi mejor hallazgo",
+     "Contigo el tiempo se detiene",
+     "Mi corazón es tuyo",
+     "Eres mi milagro diario",
+     "Te cuido como cristal fino",
+     "Mi alma te reconoce",
+     "Un amor sin fecha de vencimiento",
+     "Contigo hasta lo simple es precioso",
+     "Para toda la vida 💎"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#ff3d78",
+    "figuraA": "flor",
+    "figuraB": "estrella",
+    "cupula": true,
+    "cinta": true,
+    "gemasOn": true,
+    "gemas": 60,
+    "confeti": true,
+    "fugaces": true,
+    "font": "playfair",
+    "shape": "star",
+    "burst": true,
+    "trail": true,
+    "burstCount": 75
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje de la carta",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases que orbitan",
+       "type": "list",
+       "max": 30,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos flotando",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "figuraA",
+       "label": "Primera figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "capullo",
+         "l": "Capullo"
+        },
+        {
+         "v": "rosaAbierta",
+         "l": "Rosa"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        },
+        {
+         "v": "mariposa",
+         "l": "Mariposa"
+        }
+       ]
+      },
+      {
+       "key": "figuraB",
+       "label": "Segunda figura (en la que se transforma)",
+       "type": "select",
+       "options": [
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "capullo",
+         "l": "Capullo"
+        },
+        {
+         "v": "rosaAbierta",
+         "l": "Rosa"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        },
+        {
+         "v": "mariposa",
+         "l": "Mariposa"
+        }
+       ]
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Chispas"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro que sigue al puntero",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Intensidad de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 160,
+       "step": 10
+      },
+      {
+       "key": "cupula",
+       "label": "Corazón de cristal",
+       "type": "switch"
+      },
+      {
+       "key": "cinta",
+       "label": "Cinta de luz",
+       "type": "switch"
+      },
+      {
+       "key": "gemasOn",
+       "label": "Gemas orbitando",
+       "type": "switch"
+      },
+      {
+       "key": "gemas",
+       "label": "Cantidad de gemas",
+       "type": "range",
+       "min": 0,
+       "max": 110,
+       "step": 5
+      },
+      {
+       "key": "confeti",
+       "label": "Confeti de cristal",
+       "type": "switch"
+      },
+      {
+       "key": "fugaces",
+       "label": "Destellos de fondo",
+       "type": "switch"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "rosa-cristal-pro",
+   "name": "Rosa de Cristal PRO",
+   "emoji": "🌹",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Una rosa de partículas que abre sus pétalos dentro de una cúpula de cristal, en un jardín nocturno con luciérnagas, luna y estrellas fugaces.",
+   "price": 3.99,
+   "kind": "le",
+   "defaults": {
+    "titulo": "Mi rosa eterna 🌹",
+    "tapTexto": "Toca para iniciar",
+    "mensaje": "Hay flores que se marchitan. Esta no.\n\nLa encerré en cristal para que el tiempo no le gane, igual que quiero que pase con lo nuestro.\n\nCada pétalo que se abre es una razón para quererte: tu risa, tu forma de cuidar, los días simples que contigo se vuelven especiales.\n\nQue esta rosa se abra una y otra vez, para siempre, como este cariño.",
+    "frases": [
+     "Mi rosa eterna 🌹",
+     "Nunca te vas a marchitar",
+     "Cada pétalo es un te quiero",
+     "Mi para siempre",
+     "Contigo florece todo",
+     "Eres mi jardín favorito",
+     "Te elijo cada día",
+     "Mi calma en las noches",
+     "Gracias por quedarte",
+     "Mi lugar favorito eres tú",
+     "Eterna como esta rosa",
+     "Mi milagro diario",
+     "Contigo todo es más bonito",
+     "Nuestro amor no se marchita",
+     "Mi hogar eres tú",
+     "Te pienso siempre",
+     "Mi mejor casualidad",
+     "Bajo esta cúpula, para siempre",
+     "Mi alma te reconoce",
+     "Para toda la vida 🌹"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#e0245e",
+    "figuraA": "capullo",
+    "figuraB": "rosaAbierta",
+    "cupula": true,
+    "luciernagasOn": true,
+    "luciernagas": 80,
+    "fugaces": true,
+    "font": "dancing",
+    "shape": "heart",
+    "burst": true,
+    "trail": true,
+    "burstCount": 80,
+    "petalos": true
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje de la carta",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases que orbitan",
+       "type": "list",
+       "max": 30,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos flotando",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "figuraA",
+       "label": "Primera figura",
+       "type": "select",
+       "options": [
+        {
+         "v": "capullo",
+         "l": "Capullo"
+        },
+        {
+         "v": "rosaAbierta",
+         "l": "Rosa"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        },
+        {
+         "v": "mariposa",
+         "l": "Mariposa"
+        }
+       ]
+      },
+      {
+       "key": "figuraB",
+       "label": "Segunda figura (en la que se transforma)",
+       "type": "select",
+       "options": [
+        {
+         "v": "capullo",
+         "l": "Capullo"
+        },
+        {
+         "v": "rosaAbierta",
+         "l": "Rosa"
+        },
+        {
+         "v": "corazon",
+         "l": "Corazón"
+        },
+        {
+         "v": "infinito",
+         "l": "Infinito"
+        },
+        {
+         "v": "flor",
+         "l": "Flor"
+        },
+        {
+         "v": "estrella",
+         "l": "Estrella"
+        },
+        {
+         "v": "luna",
+         "l": "Luna"
+        },
+        {
+         "v": "mariposa",
+         "l": "Mariposa"
+        }
+       ]
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Chispas"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro que sigue al puntero",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Intensidad de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 160,
+       "step": 10
+      },
+      {
+       "key": "cupula",
+       "label": "Cúpula de cristal",
+       "type": "switch"
+      },
+      {
+       "key": "luciernagasOn",
+       "label": "Luciérnagas",
+       "type": "switch"
+      },
+      {
+       "key": "luciernagas",
+       "label": "Cantidad de luciérnagas",
+       "type": "range",
+       "min": 0,
+       "max": 160,
+       "step": 5
+      },
+      {
+       "key": "petalos",
+       "label": "Pétalos flotando",
+       "type": "switch"
+      },
+      {
+       "key": "fugaces",
+       "label": "Estrellas fugaces",
+       "type": "switch"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "corazon-galactico-pro",
+   "name": "Corazón Galáctico PRO",
+   "emoji": "❤️",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Un corazón de partículas brillante flotando sobre una galaxia espiral de cuatro brazos, con fotos y frases orbitando alrededor.",
+   "price": 3.99,
+   "kind": "le",
+   "defaults": {
+    "tapTexto": "Toca para iniciar",
+    "titulo": "TE AMO ❤️",
+    "frases": [
+     "Eres mi lugar favorito 🏡",
+     "Contigo todo es mejor ✨",
+     "Mi felicidad tiene tu nombre 💖",
+     "Amor sin límites ♾️",
+     "Hasta las estrellas y más allá 🌠",
+     "Un universo juntos 🌌",
+     "Tú y yo contra el mundo 🌍",
+     "Magia en cada instante 🪄",
+     "Mi presente y mi futuro ⏳",
+     "Mi refugio perfecto 🕊️",
+     "Cada día te elijo a ti 📅",
+     "Conexión del alma 🔗",
+     "Mi sueño hecho realidad 🌙",
+     "Para siempre 💍",
+     "Mi razón de ser 🌟",
+     "Eres todo 🌹",
+     "Mi otra mitad 🧩",
+     "Brillas más que cualquier estrella ⭐",
+     "Mi corazón te pertenece ❤️",
+     "Para toda la eternidad 🪐"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#ff3399",
+    "font": "playfair",
+    "shape": "heart",
+    "burst": true,
+    "trail": true,
+    "burstCount": 70
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 40
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases que orbitan",
+       "type": "list",
+       "max": 30,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos flotando",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Chispas"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro que sigue al puntero",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Intensidad de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 160,
+       "step": 10
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "flores-amarillas-pro",
+   "name": "Flores Amarillas PRO",
+   "emoji": "💛",
+   "tag": "Amor",
+   "dim": "3D",
+   "desc": "Una galaxia dorada donde un corazón de partículas se transforma en una flor y vuelve a corazón, con fotos y frases para el Día de las Flores Amarillas.",
+   "price": 3.99,
+   "kind": "le",
+   "defaults": {
+    "titulo": "Feliz Día de las Flores Amarillas 🌻",
+    "mensaje": "Hay personas que llegan y, sin darse cuenta, hacen que muchos de tus días sean mejores. Así eres tú para mí.\n\nGracias por cada momento compartido, por las risas y por estar ahí incluso en lo simple. Quiero que sepas cuánto vales y cuánto significas para mí.\n\nQue esta flor amarilla te recuerde, hoy y siempre, lo especial que eres.",
+    "frases": [
+     "🌻 Como el girasol, miro hacia ti",
+     "🌼 Gracias por ser mi sol de siempre",
+     "🌻 Contigo hasta lo simple brilla",
+     "🌼 Hoy el amarillo lleva tu nombre",
+     "🌻 Esta flor te recuerda cuánto vales",
+     "🌼 Tu amistad, mi lugar favorito",
+     "🌻 21 de septiembre, contigo siempre",
+     "🌼 Un girasol para quien ilumina",
+     "🌻 Gracias por quedarte siempre",
+     "🌼 Contigo el día pesa menos",
+     "🌻 Un gracias que no necesita fecha",
+     "🌼 Tu risa le hace bien a mis días",
+     "🌻 Hoy celebro tenerte cerca",
+     "🌼 Apareces cuando más hace falta",
+     "🌻 Pétalos dorados solo para ti",
+     "🌼 Feliz día, pienso en ti con cariño",
+     "🌻 Contigo todo lugar es bonito",
+     "🌼 Un ramo de gracias por estar ahí",
+     "🌻 Que esta flor te alcance hoy",
+     "🌼 Miras lo bueno, como el girasol",
+     "🌻 El campo entero te manda saludos",
+     "🌼 Tu cariño no pasa de moda",
+     "🌻 Contigo las tardes se hacen cortas",
+     "🌼 Esta flor guarda un abrazo para ti",
+     "🌻 No necesito un motivo para quererte",
+     "🌼 Quiero que sepas cuánto importas",
+     "🌻 El amarillo también dice te quiero",
+     "🌼 Gracias por sumar luz a mis días",
+     "🌻 Aquí siempre tienes un lugar",
+     "🌼 Feliz día, contigo todo es mejor"
+    ],
+    "fotos": [],
+    "musica": "",
+    "color": "#ffc93d",
+    "font": "indie",
+    "shape": "flower",
+    "burst": true,
+    "trail": true,
+    "burstCount": 70
+   },
+   "groups": [
+    {
+     "title": "Textos",
+     "fields": [
+      {
+       "key": "titulo",
+       "label": "Título",
+       "type": "text",
+       "max": 60
+      },
+      {
+       "key": "tapTexto",
+       "label": "Texto de la pantalla de inicio",
+       "type": "text",
+       "max": 40
+      },
+      {
+       "key": "mensaje",
+       "label": "Mensaje de la carta",
+       "type": "textarea",
+       "max": 1500,
+       "rows": 6
+      }
+     ]
+    },
+    {
+     "title": "Frases",
+     "fields": [
+      {
+       "key": "frases",
+       "label": "Frases que orbitan",
+       "type": "list",
+       "max": 30,
+       "itemMax": 70,
+       "addLabel": "Agregar frase"
+      }
+     ]
+    },
+    {
+     "title": "Fotos",
+     "fields": [
+      {
+       "key": "fotos",
+       "label": "Fotos flotando",
+       "type": "photos",
+       "max": 10,
+       "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Música",
+     "fields": [
+      {
+       "key": "musica",
+       "label": "Música de fondo",
+       "type": "audio"
+      }
+     ]
+    },
+    {
+     "title": "Colores y estilo",
+     "fields": [
+      {
+       "key": "color",
+       "label": "Color principal",
+       "type": "color"
+      },
+      {
+       "key": "font",
+       "label": "Tipografía",
+       "type": "select",
+       "options": [
+        {
+         "v": "indie",
+         "l": "Manuscrita"
+        },
+        {
+         "v": "playfair",
+         "l": "Elegante"
+        },
+        {
+         "v": "dancing",
+         "l": "Romántica"
+        },
+        {
+         "v": "pacifico",
+         "l": "Divertida"
+        },
+        {
+         "v": "quicksand",
+         "l": "Redonda"
+        },
+        {
+         "v": "montserrat",
+         "l": "Bold"
+        }
+       ]
+      },
+      {
+       "key": "shape",
+       "label": "Forma de la ráfaga al tocar",
+       "type": "select",
+       "options": [
+        {
+         "v": "heart",
+         "l": "Corazón"
+        },
+        {
+         "v": "star",
+         "l": "Estrella"
+        },
+        {
+         "v": "flower",
+         "l": "Flor"
+        },
+        {
+         "v": "burst",
+         "l": "Chispas"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Efectos",
+     "fields": [
+      {
+       "key": "burst",
+       "label": "Ráfaga al tocar",
+       "type": "switch"
+      },
+      {
+       "key": "trail",
+       "label": "Rastro que sigue al puntero",
+       "type": "switch"
+      },
+      {
+       "key": "burstCount",
+       "label": "Intensidad de la ráfaga",
+       "type": "range",
+       "min": 20,
+       "max": 160,
+       "step": 10
       }
      ]
     }

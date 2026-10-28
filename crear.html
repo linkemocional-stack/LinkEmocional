@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="thumbs.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js">
 <script src="protection.js"></script>
 </head>
 <body>
@@ -95,9 +97,9 @@
       r.readAsDataURL(file);
     });
   }
-  function pickFiles(multiple) {
+  function pickFiles(multiple, accept) {
     return new Promise(function (res) {
-      var i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*'; i.multiple = !!multiple;
+      var i = document.createElement('input'); i.type = 'file'; i.accept = accept || 'image/*'; i.multiple = !!multiple;
       i.onchange = function () { res(Array.prototype.slice.call(i.files || [])); };
       i.click();
     });
@@ -143,7 +145,7 @@
       var s = h('select', 'in');
       spec.options.forEach(function (o) { var op = h('option'); op.value = o.v; op.textContent = o.l; s.appendChild(op); });
       s.value = obj[key];
-      s.onchange = function () { obj[key] = s.value; changed(); };
+      s.onchange = function () { obj[key] = spec.num ? Number(s.value) : s.value; if (spec.rebuild && spec.rebuild.call) spec.rebuild(); changed(); };
       w.appendChild(s);
     }
     else if (type === 'switch') {
@@ -173,9 +175,9 @@
           var row = h('div', 'item'), i = h('input', 'in'); i.maxLength = spec.itemMax || 70; i.value = v;
           i.oninput = function () { obj[key][n] = i.value; changed(); };
           var x = h('button', 'x', '✕'); x.type = 'button'; x.onclick = function () { obj[key].splice(n, 1); build(); changed(); };
-          row.appendChild(i); row.appendChild(x); w.appendChild(row);
+          row.appendChild(i); if (!spec.fixed) row.appendChild(x); w.appendChild(row);
         });
-        if (obj[key].length < (spec.max || 20)) {
+        if (!spec.fixed && obj[key].length < (spec.max || 20)) {
           var a = h('button', 'btn ghost sm', '＋ ' + E(spec.addLabel || 'Agregar')); a.type = 'button';
           a.onclick = function () { obj[key].push(''); build(); changed(); var ins = w.querySelectorAll('.item .in'); if (ins.length) ins[ins.length - 1].focus(); };
           w.appendChild(a);
@@ -197,12 +199,17 @@
             var x = h('button', 'x', '✕'); x.type = 'button'; x.onclick = function () { obj[key].splice(n, 1); build(); changed(); }; ctr.appendChild(x);
           }
           hd.appendChild(ctr); card.appendChild(hd);
-          spec.of.forEach(function (sf) { card.appendChild(field(sf, it, sf.key)); });
+          spec.of.forEach(function (sf) {
+            if (sf.showIf && sf.showIf.in.indexOf(it[sf.showIf.key]) < 0) return;
+            var sp = sf;
+            if (sf.type === 'select' && sf.rebuild) { sp = Object.assign({}, sf, { rebuild: build }); }
+            card.appendChild(field(sp, it, sf.key));
+          });
           w.appendChild(card);
         });
         if (obj[key].length < (spec.max || 12)) {
           var a = h('button', 'btn ghost sm', '＋ ' + E(spec.addLabel || 'Agregar')); a.type = 'button';
-          a.onclick = function () { var b = {}; spec.of.forEach(function (sf) { b[sf.key] = ''; }); obj[key].push(b); build(); changed(); };
+          a.onclick = function () { var b = spec.def_item ? clone(spec.def_item) : {}; if (!spec.def_item) spec.of.forEach(function (sf) { b[sf.key] = sf.type === 'list' ? [] : ''; }); obj[key].push(b); build(); changed(); };
           w.appendChild(a);
         }
       })();
@@ -231,6 +238,52 @@
             });
           };
           w.appendChild(a);
+        }
+      })();
+    }
+    else if (type === 'photo') {
+      (function build() {
+        w.innerHTML = '<label class="l">' + E(spec.label) + '</label>';
+        var pc = h('div', 'pc'), pic = h('div', 'pic', obj[key] ? '' : '📷');
+        if (obj[key]) pic.style.backgroundImage = 'url(' + obj[key] + ')';
+        pic.onclick = function () {
+          pickFiles(false).then(function (f) { if (!f[0]) return; return photo(f[0]).then(function (d) { obj[key] = d; build(); changed(); }, function () { LE.toast('No se pudo leer esa foto', true); }); });
+        };
+        pc.appendChild(pic);
+        var info = h('span', 'muted', obj[key] ? 'Toca la foto para cambiarla' : 'Toca el cuadro para subir una foto (opcional)');
+        info.style.flex = '1'; pc.appendChild(info);
+        if (obj[key]) { var x = h('button', 'x', '✕'); x.type = 'button'; x.onclick = function () { obj[key] = ''; build(); changed(); }; pc.appendChild(x); }
+        w.appendChild(pc);
+      })();
+    }
+    else if (type === 'audio') {
+      (function build() {
+        var nameKey = spec.nameKey;
+        w.innerHTML = '<label class="l">' + E(spec.label) + '</label>';
+        if (obj[key]) {
+          var row = h('div', 'item'), nm = h('input', 'in'); nm.readOnly = true; nm.value = '🎵 ' + ((nameKey && obj[nameKey]) || 'cancion.mp3');
+          var x = h('button', 'x', '✕'); x.type = 'button';
+          x.onclick = function () { obj[key] = ''; if (nameKey) obj[nameKey] = ''; build(); changed(); };
+          row.appendChild(nm); row.appendChild(x); w.appendChild(row);
+        } else {
+          var a = h('button', 'btn ghost sm', '🎵 Elegir canción (MP3)'); a.type = 'button';
+          a.onclick = function () {
+            pickFiles(false, 'audio/mpeg,audio/mp3,audio/mp4,audio/aac,audio/ogg,audio/wav,.mp3,.m4a').then(function (f) {
+              var file = f[0]; if (!file) return;
+              if (file.size > 1250 * 1024) { LE.toast('Tu canción pesa ' + (file.size / 1048576).toFixed(1) + ' MB. El máximo es 1.2 MB: usa un MP3 más corto o comprimido.', true); return; }
+              a.disabled = true; a.textContent = 'Cargando…';
+              var r = new FileReader();
+              r.onerror = function () { LE.toast('No se pudo leer esa canción', true); build(); };
+              r.onload = function () {
+                var d = String(r.result || '');
+                if (!/^data:audio\//.test(d)) d = d.replace(/^data:[^;]*;/, 'data:audio/mpeg;');
+                obj[key] = d; if (nameKey) obj[nameKey] = file.name.slice(0, 60); build(); changed();
+              };
+              r.readAsDataURL(file);
+            });
+          };
+          w.appendChild(a);
+          w.appendChild(h('p', 'muted', 'Opcional · máximo 1.2 MB. Suena al tocar la pantalla.'));
         }
       })();
     }
@@ -333,7 +386,7 @@
     var g = $('grid'); g.innerHTML = '';
     TPLS.forEach(function (t) {
       var w = h('div', 'tpw');
-      var b = h('button', 'tp', '<span class="lt" data-thumb="' + t.slug + '"></span><b>' + E(t.name) + '</b><small>' + E(t.desc) + '</small>' +
+      var b = h('button', 'tp', '<span class="lt" data-thumb="' + t.slug + '" data-emoji="' + E(t.emoji || '') + '"></span><b>' + E(t.name) + '</b><small>' + E(t.desc) + '</small>' +
         '<span class="tags"><span class="chip">' + E(t.tag) + '</span><span class="chip">' + E(t.dim) + '</span><span class="chip ok">' + LE.price(t.price).usd + '</span></span>');
       b.type = 'button'; b.onclick = function () { openEditor(t.slug); };
       var d = h('button', 'demo', '▶ Demo'); d.type = 'button'; d.onclick = function () { fullscreen('previews/' + t.slug + '.html'); };
@@ -389,6 +442,26 @@
   };
 
   /* ======================= cupo de paginas gratis ======================= */
+  /* cronometro hasta que se recarga una pagina gratis */
+  function cdText(iso) {
+    var ms = Math.max(0, new Date(iso) - Date.now()), t = Math.floor(ms / 1000);
+    var d = Math.floor(t / 86400), h = Math.floor(t % 86400 / 3600), m = Math.floor(t % 3600 / 60), sc = t % 60;
+    var z = function (n) { return (n < 10 ? '0' : '') + n; };
+    return (d ? d + ' d ' : '') + z(h) + ':' + z(m) + ':' + z(sc);
+  }
+  function cd(iso) { return '<span class="cdq" data-t="' + iso + '">' + cdText(iso) + '</span>'; }
+  var cdTimer = null;
+  function startCd() {
+    if (cdTimer) clearInterval(cdTimer);
+    cdTimer = setInterval(function () {
+      var els = document.querySelectorAll('.cdq[data-t]'), done = false;
+      if (!els.length) { clearInterval(cdTimer); cdTimer = null; return; }
+      [].forEach.call(els, function (el) {
+        if (new Date(el.dataset.t) - Date.now() <= 0) done = true; else el.textContent = cdText(el.dataset.t);
+      });
+      if (done) { clearInterval(cdTimer); cdTimer = null; showQuota(); }
+    }, 1000);
+  }
   function showQuota() {
     var b = $('qbanner');
     if (qs.get('edit')) { b.innerHTML = ''; return; }
@@ -407,10 +480,10 @@
           : '<div class="banner bad">Ya usaste tu página de prueba. <b>Inicia sesión</b> y tienes ' + pagsCuenta + ' ' + cadaCuenta + '.<div class="r2">' + login + '</div></div>';
       } else {
         h = q.remaining > 0
-          ? '<div class="banner">👤 Sesión iniciada. Tienes <b>' + q.remaining + (q.remaining === 1 ? ' página gratis</b> disponible' : ' páginas gratis</b> disponibles') + ' (' + q.limit + ' ' + cada + ').</div>'
-          : '<div class="banner bad">Ya usaste ' + (q.limit === 1 ? 'tu página gratis' : 'tus páginas gratis') + '. Puedes crear otra en <b>' + (q.resetAt ? LE.left(q.resetAt) : 'unos días') + '</b>. Mientras tanto, puedes hacer permanente alguna de las tuyas.</div>';
+          ? '<div class="banner">👤 Sesión iniciada. Tienes <b>' + q.remaining + (q.remaining === 1 ? ' página gratis</b> disponible' : ' páginas gratis</b> disponibles') + ' (' + q.limit + ' ' + cada + ').' + (q.resetAt ? '<br>⏳ Se te recarga <b>1 página</b> en ' + cd(q.resetAt) : '') + '</div>'
+          : '<div class="banner bad">Ya usaste ' + (q.limit === 1 ? 'tu página gratis' : 'tus páginas gratis') + '. Puedes crear otra en ' + (q.resetAt ? cd(q.resetAt) : '<b>unos días</b>') + '. Mientras tanto, puedes hacer permanente alguna de las tuyas.</div>';
       }
-      b.innerHTML = h;
+      b.innerHTML = h; startCd();
       var ql = $('qLogin');
       if (ql) ql.onclick = function () { saveDraft(); location.href = 'login.html?next=' + encodeURIComponent('crear.html?resume=1'); };
     }).catch(function () { });

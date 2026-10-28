@@ -1,5 +1,5 @@
 /* ===== Link Emocional: sistema de paginas (crear.html) ===== */
-window.LE_TEMPLATE_SLUGS = ["arbol-amor", "constelacion-amor-pro", "cosmos-pro", "cumple-soplar", "linternas-deseo-pro", "luciernagas", "medusa-bio", "nuestro-aniversario", "nuestro-cielo", "rosa-eterna-pro", "rosa-eterna-ultra", "rosa-imperial", "tendedero-recuerdos", "ventana-lluvia", "ventana-magica"];
+window.LE_TEMPLATE_SLUGS = ["anniversary-times", "arbol-amor", "buzon-cartas", "caja", "capsula-tiempo", "cielo-farolillos", "constelacion", "constelacion-amor-pro", "corazon-cristal-pro", "corazon-galactico-pro", "cosmos-pro", "cumple-soplar", "fenix", "flores", "flores-amarillas-pro", "frasco-razones", "galaxia-rosa-roja", "girasol-eterno-pro", "linternas-deseo-pro", "luciernagas", "maquina-amor", "mariposa-infinita-pro", "medusa-bio", "nuestra-historia", "nuestro-aniversario", "nuestro-cielo", "regalo-caja-carrusel", "rosa", "rosa-cristal-pro", "rosa-eterna-pro", "rosa-eterna-ultra", "rosa-imperial", "saturno", "tendedero-recuerdos", "ventana-lluvia", "ventana-magica"];
 (function(){var st=document.createElement('style');st.textContent='.le-crear{display:block;width:100%;box-sizing:border-box;text-align:center;margin-bottom:12px;padding:15px 18px;border-radius:16px;font-weight:800;font-size:15px;text-decoration:none;color:#0d0a1e;background:linear-gradient(120deg,#6fd6e8 0%,#8b6ff0 55%,#6f5bc0 100%);box-shadow:0 10px 26px rgba(139,111,240,.28)}.le-crear:active{transform:scale(.97)}';document.head.appendChild(st);})();
 /* ===================== DATOS DE PRODUCTOS ===================== */
 var WHATSAPP_NUMBER = "59178550176";
@@ -63,7 +63,7 @@ ordenNoPersonalizado: 0,
 videoUrl: "https://www.tiktok.com/@linkemocional1/video/7687281721162681621",
 isPro: true,
 features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Figura que se transforma: capullo → rosa abierta","Cúpula de cristal","Luciérnagas ajustables","Pétalos flotando y estrellas fugaces"],
-preview: "three-rosa-cristal-pro"
+preview: "frame-rosa-cristal-pro"
 },
 {
 id: "mariposa-infinita-pro",
@@ -80,7 +80,7 @@ ordenNoPersonalizado: 0.1,
 videoUrl: "https://www.tiktok.com/@linkemocional1/video/7688203058559356181?is_from_webapp=1&sender_device=pc&web_id=7680607510172780049",
 isPro: true,
 features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Figura que se transforma: mariposa → infinito","Velocidad y fuerza del aleteo ajustables","Pétalos flotando y estrellas fugaces"],
-preview: "three-mariposa-infinita-pro"
+preview: "frame-mariposa-infinita-pro"
 },
 {
 id: "flores-amarillas-pro",
@@ -97,7 +97,7 @@ ordenNoPersonalizado: 0.2,
 videoUrl: null,
 isPro: true,
 features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Galaxia dorada de fondo","Corazón de partículas que se transforma en flor"],
-preview: "three-flores-amarillas-pro"
+preview: "frame-flores-amarillas-pro"
 },
 {
 id: "corazon-galactico-pro",
@@ -114,7 +114,7 @@ ordenNoPersonalizado: 0.3,
 videoUrl: null,
 isPro: true,
 features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Galaxia espiral de fondo","Corazón de partículas brillante"],
-preview: "three-corazon-galactico-pro"
+preview: "frame-corazon-galactico-pro"
 },
 {
 id: "girasol-eterno-pro",
@@ -131,7 +131,7 @@ ordenNoPersonalizado: 0.05,
 videoUrl: "https://www.tiktok.com/@linkemocional1/video/7687275360957779221",
 isPro: true,
 features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Figura que se transforma: girasol → corazón (9 figuras a elegir)","Corona de flores","Luciérnagas ajustables","Polen dorado y estrellas fugaces","Carta con mensaje personalizado"],
-preview: "three-girasol-eterno-pro"
+preview: "frame-girasol-eterno-pro"
 },
 {
     id: "corazon-cristal-pro",
@@ -146,7 +146,7 @@ preview: "three-girasol-eterno-pro"
     videoUrl: "https://www.tiktok.com/@linkemocional1/video/7688207773812657428?is_from_webapp=1&sender_device=pc&web_id=7680607510172780049",
     isPro: true,
     features: ["Color principal editable","6 tipografías","Frases que orbitan ilimitadas","Fotos flotando (hasta 10)","Música de fondo opcional","Ráfaga y rastro al tocar (4 formas)","Figura que se transforma: flor → estrella (9 figuras a elegir)","Gema de corazón tallada con cinta de luz","Gemas orbitando ajustables","Confeti de cristal y estrellas fugaces","Carta con mensaje personalizado"],
-    preview: "three-corazon-cristal-pro"
+    preview: "frame-corazon-cristal-pro"
 },
 {
 id: "saturno",
@@ -162,7 +162,7 @@ ordenPersonalizado: 4,
 ordenNoPersonalizado: 12,
 videoUrl: null,
 features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
-preview: "three-saturno"
+preview: "frame-saturno"
 },
 {
 id: "rosa",
@@ -178,7 +178,7 @@ ordenPersonalizado: 3,
 ordenNoPersonalizado: 13,
 videoUrl: "https://www.tiktok.com/@linkemocional1/video/7687799323014319381?is_from_webapp=1&sender_device=pc&web_id=7680607510172780049",
 features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
-preview: "three-rosa"
+preview: "frame-rosa"
 },
 {
 id: "fenix",
@@ -194,7 +194,7 @@ ordenPersonalizado: 7,
 ordenNoPersonalizado: 15,
 videoUrl: null,
 features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
-preview: "three-fenix"
+preview: "frame-fenix"
 },
 {
 id: "caja",
@@ -210,7 +210,7 @@ ordenPersonalizado: 9,
 ordenNoPersonalizado: 14,
 videoUrl: "https://www.tiktok.com/@linkemocional1/video/7687799323014319381?is_from_webapp=1&sender_device=pc&web_id=7680607510172780049",
 features: ["Color y paleta","6 tipografías","Ráfagas: corazón o estrella","Frases centrales ilimitadas","Palabras orbitando","Hasta 6 fotos flotantes","Música de fondo opcional","Velocidad de frases ajustable"],
-preview: "three-caja"
+preview: "frame-caja"
 },
 {
 id: "flores",
@@ -226,7 +226,7 @@ ordenPersonalizado: 15,
 ordenNoPersonalizado: 10,
 videoUrl: null,
 features: ["Frases personalizadas ilimitadas","Música de fondo opcional"],
-preview: "flores2d"
+preview: "frame-flores"
 },
 {
 id: "corazon-particulas",
@@ -293,7 +293,7 @@ ordenPersonalizado: 12,
 ordenNoPersonalizado: 99,
 videoUrl: null,
 features: ["Título e instrucción editables","Entre 1 y 8 cartas","Etiqueta y mensaje por carta","Foto opcional por carta","Confeti al abrir cada carta"],
-preview: "buzon2d"
+preview: "frame-buzon-cartas"
 },
 {
 id: "capsula-tiempo",
@@ -309,7 +309,7 @@ ordenPersonalizado: 14,
 ordenNoPersonalizado: 99,
 videoUrl: null,
 features: ["Título e instrucción editables","Entre 1 y 8 cartas","Fecha de apertura opcional por carta","Foto opcional por carta","Confeti al abrir"],
-preview: "capsula2d"
+preview: "frame-capsula-tiempo"
 },
 {
 id: "regalo-caja-carrusel",
@@ -325,7 +325,7 @@ ordenPersonalizado: 8,
 ordenNoPersonalizado: 99,
 videoUrl: null,
 features: ["Título y pistas editables","Entre 1 y 10 fotos","Mensaje al voltear cada foto","Animación de apertura con corazones"],
-preview: "regalo2d"
+preview: "frame-regalo-caja-carrusel"
 },
 {
 id: "nuestra-historia",
@@ -341,7 +341,7 @@ ordenPersonalizado: 6,
 ordenNoPersonalizado: 99,
 videoUrl: null,
 features: ["Portada y dedicatoria editables","Línea del tiempo (hasta 6 momentos)","Galería con mensajes ocultos","Ruleta de planes personalizable","Quiz de '¿cuánto me conoces?' con puntaje"],
-preview: "libro2d"
+preview: "frame-nuestra-historia"
 },
 {
 id: "maquina-amor",
@@ -357,7 +357,7 @@ ordenPersonalizado: 10,
 ordenNoPersonalizado: 99,
 videoUrl: null,
 features: ["Título e instrucción editables","9 casilleros personalizables","Cada casillero: frase, foto o rasca y descubre","Confeti al dispensar"],
-preview: "maquina2d"
+preview: "frame-maquina-amor"
 },
 {
 id: "anniversary-times",
@@ -373,7 +373,7 @@ ordenPersonalizado: 2,
 ordenNoPersonalizado: 99,
 videoUrl: null,
 features: ["Titular, foto y cita editables","Índice de amor con barras","Sopa de letras con tu palabra","Rasca y descubre","Galería de hasta 6 fotos","Encuesta y memorama personalizables"],
-preview: "periodico2d"
+preview: "frame-anniversary-times"
 },
 {
 id: "rama-floreciente",
@@ -423,7 +423,7 @@ ordenPersonalizado: 5,
 ordenNoPersonalizado: 9,
 videoUrl: null,
 features: ["Título e instrucción editables","Color de las estrellas (paleta o personalizado)","3 formas de constelación: corazón, estrella o círculo","Mensajes editables (uno por estrella, hasta agregar los que quieras)","Mensaje final al completar la constelación"],
-preview: "three-constelacion"
+preview: "frame-constelacion"
 },
 {
 id: "galaxia-rosa-roja",
@@ -439,7 +439,7 @@ ordenPersonalizado: 1,
 ordenNoPersonalizado: 11,
 videoUrl: "https://www.tiktok.com/@linkemocional1/video/7687861562094259476?is_from_webapp=1&sender_device=pc&web_id=7680607510172780049",
 features: ["Color principal editable","Forma de las ráfagas: corazón o estrella","6 tipografías para el texto y las palabras","Texto de amor central editable","Palabras orbitando personalizables","Hasta 6 fotos flotando","Música de fondo opcional (mp3)"],
-preview: "three-galaxia-rosa"
+preview: "frame-galaxia-rosa-roja"
 },
 {
 id: "cielo-farolillos",
@@ -455,7 +455,7 @@ ordenPersonalizado: 11,
 ordenNoPersonalizado: 4,
 videoUrl: null,
 features: ["Título e instrucción editables","Color de los farolillos","Deseos editables (uno por farolillo)","Mensaje final al soltarlos todos"],
-preview: "farolillos2d"
+preview: "frame-cielo-farolillos"
 },
 {
 id: "frasco-razones",
@@ -471,7 +471,7 @@ ordenPersonalizado: 13,
 ordenNoPersonalizado: 8,
 videoUrl: null,
 features: ["Título e instrucción editables","Razones editables (una por estrella, hasta agregar las que quieras)","Mensaje final al abrir todas"],
-preview: "frasco2d"
+preview: "frame-frasco-razones"
 },
 {
 id: "quieres-salir-conmigo",

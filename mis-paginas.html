@@ -42,6 +42,7 @@
       '<div class="hd"><div class="em">' + E(p.emoji) + '</div><div style="flex:1;min-width:0"><h3>' + E(p.titulo || p.template_name) + '</h3>' +
       '<small>' + E(p.template_name) + ' · creada ' + new Date(p.created_at).toLocaleDateString('es', { day: 'numeric', month: 'short' }) + '</small></div></div>' +
       '<div>' + stateChip(p) + (p.slug ? ' <span class="chip">/s/' + E(p.slug) + '</span>' : '') + '</div>' +
+      (p.state !== 'permanent' && p.state !== 'expired' ? '<div class="ex" data-exp="' + new Date(p.expires_at).getTime() + '" data-start="' + new Date(p.created_at).getTime() + '"><div class="ex-bar"><i></i></div><p class="ex-msg" hidden>⚠️ ¡Se vence pronto! Hazla permanente para que tu regalo no se caiga.</p></div>' : '') +
       '<div class="actions">' +
         (exp ? '' : '<a class="btn ghost sm" href="' + E(url) + '" target="_blank" rel="noopener">👁 Ver</a>') +
         '<button class="btn ghost sm" data-a="copy" data-u="' + E(url) + '">🔗 Copiar</button>' +
@@ -59,8 +60,19 @@
       return;
     }
     $('list').innerHTML = pages.map(card).join('');
+    tickEx();
+  }
+  function tickEx() {
+    Array.prototype.forEach.call(document.querySelectorAll('.ex'), function (ex) {
+      var exp = Number(ex.dataset.exp), st = Number(ex.dataset.start), left = exp - LE.now(), tot = Math.max(1, exp - st);
+      var pct = Math.max(0, Math.min(100, left / tot * 100)), urgent = left > 0 && left < 2 * 3600000;
+      ex.querySelector('i').style.width = pct + '%';
+      ex.querySelector('.ex-msg').hidden = !urgent;
+      ex.closest('.pg-card').classList.toggle('urgent', urgent);
+    });
   }
   setInterval(function () {
+    tickEx();
     Array.prototype.forEach.call(document.querySelectorAll('.cd'), function (el) {
       var left = Number(el.dataset.exp) - LE.now();
       if (left <= 0) { el.textContent = '00:00:00'; if (!el.dataset.r) { el.dataset.r = 1; setTimeout(boot, 1200); } } else el.textContent = LE.hms(left);
@@ -113,6 +125,7 @@
   boot();
 })();
 </script>
+<script src="wa-fab.js"></script>
 <script src="brand-icons.js"></script>
 </body>
 </html>
