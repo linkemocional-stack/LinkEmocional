@@ -1,0 +1,718 @@
+
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Un frasco de razones ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; height: 100%; overflow: hidden;
+    font-family: 'Quicksand', sans-serif;
+    background: radial-gradient(ellipse at 50% 20%, #3a2d64, #1c1436 55%, #0f0a24 100%);
+  }
+
+  canvas#sky { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+  .firefly {
+    position: fixed; z-index: 1; border-radius: 50%;
+    background: radial-gradient(circle, #ffe9a8, transparent 70%);
+    pointer-events: none; opacity: 0;
+    animation: fireflyFloat linear infinite;
+  }
+  @keyframes fireflyFloat {
+    0%   { opacity: 0; transform: translate(0,0); }
+    12%  { opacity: 0.85; }
+    50%  { transform: translate(var(--fdx), calc(-1 * var(--fdy))); }
+    88%  { opacity: 0.7; }
+    100% { opacity: 0; transform: translate(var(--fdx2), calc(-1 * var(--fdy2))); }
+  }
+
+  .sound-toggle {
+    position: fixed; top: 16px; left: 16px; z-index: 950;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); cursor: pointer;
+    font-size: 17px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease; color: #fff;
+  }
+  .sound-toggle:active { transform: scale(0.9); }
+
+  .stage { position: relative; z-index: 5; min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 26px 18px; text-align: center; }
+
+  h1.title {
+    font-family: 'Baloo 2', sans-serif; font-size: 21px; color: #ffe9c7;
+    margin: 0 0 4px; text-shadow: 0 0 18px rgba(255,220,150,0.4);
+  }
+  p.subtitle { margin: 0 0 4px; font-size: 13.5px; color: #cbb9e8; font-weight: 600; min-height: 18px; }
+
+  .progress-wrap { width: 200px; margin: 6px 0 18px; }
+  .progress-track { height: 8px; border-radius: 999px; background: rgba(255,255,255,0.12); overflow: hidden; }
+  .progress-fill { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, #ffd98a, #ff9fc0); transition: width 0.5s cubic-bezier(.3,.9,.3,1.1); }
+  .progress-text { font-size: 10.5px; color: #cbb9e8; margin-top: 5px; letter-spacing: 0.3px; }
+
+  /* ================= FRASCO ================= */
+  .jar-wrap { position: relative; width: 216px; margin: 4px auto 0; filter: drop-shadow(0 26px 40px rgba(0,0,0,0.45)); }
+  .jar-lid {
+    width: 92px; height: 22px; margin: 0 auto; position: relative; z-index: 4;
+    border-radius: 9px 9px 3px 3px;
+    background: repeating-linear-gradient(180deg, #e9c56a 0 3px, #d6a53e 3px 6px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.35), inset 0 -3px 6px rgba(0,0,0,0.2);
+  }
+  .jar-neck {
+    width: 72px; height: 10px; margin: 0 auto; position: relative; z-index: 3;
+    background: linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0.08));
+    border-left: 2px solid rgba(255,255,255,0.35); border-right: 2px solid rgba(255,255,255,0.35);
+  }
+  .jar-body {
+    width: 216px; height: 232px; margin: -2px auto 0; position: relative; z-index: 2;
+    border-radius: 20px 20px 46px 46px; overflow: hidden;
+    background: linear-gradient(160deg, rgba(255,255,255,0.16), rgba(255,255,255,0.03) 60%);
+    border: 2px solid rgba(255,255,255,0.32);
+    box-shadow: inset 0 0 46px rgba(255,214,140,0.18), inset 0 -30px 40px rgba(0,0,0,0.15);
+    transition: box-shadow 0.8s ease;
+  }
+  .jar-body.glowing { box-shadow: inset 0 0 70px rgba(255,214,140,0.55), inset 0 -20px 40px rgba(255,180,100,0.2), 0 0 60px rgba(255,200,120,0.5); }
+  .jar-shine {
+    position: absolute; top: 6%; left: 12%; width: 22%; height: 82%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0));
+    border-radius: 50%; transform: rotate(8deg); pointer-events: none; z-index: 3;
+  }
+  .jar-stars { position: absolute; inset: 0; z-index: 2; }
+
+  .star-item {
+    position: absolute; background: none; border: none; padding: 0; cursor: pointer;
+    font-size: 24px; line-height: 1; filter: drop-shadow(0 0 6px rgba(255,224,150,0.85));
+    animation: starFloat ease-in-out infinite;
+    transition: opacity 0.4s ease, transform 0.3s ease, filter 0.4s ease;
+  }
+  .star-item:active { transform: scale(0.85); }
+  @keyframes starFloat {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50%      { transform: translateY(-10px) rotate(4deg); }
+  }
+  .star-item.collected {
+    opacity: 0.28; filter: none; cursor: default; pointer-events: none;
+    animation: none; transform: none;
+  }
+  .star-item.launching { animation: none; z-index: 40; transition: transform 0.55s cubic-bezier(.3,.6,.3,1), opacity 0.4s ease 0.3s; }
+
+  .jar-hint { margin-top: 16px; font-size: 11.5px; color: #b6a4dd; opacity: 0.85; }
+
+  /* ================= TARJETA DE NOTA ================= */
+  .note-overlay {
+    position: fixed; inset: 0; z-index: 800; display: flex; align-items: center; justify-content: center;
+    background: rgba(10,6,26,0.55); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+    opacity: 0; pointer-events: none; transition: opacity 0.35s ease;
+  }
+  .note-overlay.show { opacity: 1; pointer-events: auto; }
+  .note-card {
+    width: min(300px, 84vw); background: linear-gradient(165deg, #fffaf0, #fff2df);
+    border-radius: 18px; padding: 28px 22px 24px; text-align: center; position: relative;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+    transform: scale(0.4); opacity: 0; transition: transform 0.4s cubic-bezier(.2,.9,.3,1.25), opacity 0.3s ease;
+  }
+  .note-overlay.show .note-card { transform: scale(1); opacity: 1; }
+  .note-card .note-star { font-size: 30px; display: block; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,200,120,0.8)); animation: noteStarPop 0.5s ease 0.15s both; }
+  @keyframes noteStarPop { 0% { transform: scale(0); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+  .note-card p { font-family: 'Caveat', cursive; font-size: 22px; line-height: 1.35; color: #7a4a2a; margin: 0; }
+  .note-close {
+    margin-top: 18px; border: none; border-radius: 999px; padding: 9px 22px; font-size: 13px;
+    font-family: 'Baloo 2', sans-serif; font-weight: 700; cursor: pointer; color: #fff;
+    background: linear-gradient(135deg, #ffb37a, #ff8fb3); box-shadow: 0 8px 18px rgba(255,140,150,0.4);
+  }
+
+  /* ================= GRAN FINAL ================= */
+  .grand-final {
+    position: fixed; inset: 0; z-index: 850; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at 50% 40%, rgba(60,40,100,0.55), rgba(10,6,26,0.85));
+    opacity: 0; pointer-events: none; transition: opacity 0.6s ease;
+  }
+  .grand-final.show { opacity: 1; pointer-events: auto; }
+  .grand-card { width: min(340px, 86vw); text-align: center; padding: 10px; }
+  .grand-card .big-heart { font-size: 56px; display: inline-block; animation: heartPop 0.7s ease, heartBeat 1.2s ease-in-out 0.7s infinite; filter: drop-shadow(0 0 18px rgba(255,150,180,0.7)); }
+  @keyframes heartPop { 0% { transform: scale(0); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+  @keyframes heartBeat { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+  .grand-card h2 {
+    font-family: 'Baloo 2', sans-serif; font-size: 22px; margin: 10px 0 8px;
+    background: linear-gradient(90deg, #ffd98a, #ff9fc0, #ffd98a); background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shineText 2.6s linear infinite;
+  }
+  @keyframes shineText { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+  .grand-card p.msg { font-family: 'Caveat', cursive; font-size: 21px; line-height: 1.4; color: #f3e6ff; margin: 0; }
+  .grand-card p.msg span { display: inline-block; opacity: 0; animation: letterIn 0.4s ease forwards; }
+  @keyframes letterIn { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(6px); } }
+
+  .confetti-piece { position: fixed; top: -20px; z-index: 1000; pointer-events: none; animation: confettiFall linear forwards; }
+  @keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(600deg); opacity: 0.9; } }
+  .firework-emoji { position: fixed; z-index: 999; pointer-events: none; font-size: 20px; animation: fwOut 0.9s ease-out forwards; }
+  @keyframes fwOut { 0% { transform: translate(-50%,-50%) scale(0.3); opacity: 1; } 100% { transform: translate(calc(-50% + var(--fx)), calc(-50% + var(--fy))) scale(1.1); opacity: 0; } }
+
+  /* ================= BOTÓN EDITAR ================= */
+  .edit-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 950;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3); transition: transform 0.2s ease;
+  }
+  .edit-toggle:active { transform: scale(0.9); }
+  .edit-toggle svg { width: 18px; height: 18px; }
+
+  /* ================= EDITOR ================= */
+  .editor-overlay {
+    position: fixed; inset: 0; z-index: 1500; display: flex; flex-direction: column;
+    background: radial-gradient(ellipse at 50% 0%, #3a2d64, #1c1436 55%, #0f0a24 100%);
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .editor-overlay.show { opacity: 1; pointer-events: auto; }
+
+  .editor-topbar {
+    display: flex; align-items: center; gap: 14px; padding: 16px 18px;
+    background: rgba(15,10,36,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.12); flex: 0 0 auto;
+  }
+  .back-btn {
+    width: 38px; height: 38px; flex: 0 0 auto; border-radius: 50%;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.16); }
+  .back-btn svg { width: 18px; height: 18px; }
+  .editor-topbar-titles h2 { font-family: 'Baloo 2', sans-serif; font-size: 15px; margin: 0; color: #ffe9c7; }
+  .editor-topbar-titles p { font-size: 11px; margin: 2px 0 0; color: #b6a4dd; }
+  .ed-brand-watermark {
+    margin-left: auto; flex: 0 0 auto;
+    font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.3px;
+    white-space: nowrap;
+    background: linear-gradient(90deg, #72cbe9, #745fc9);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    pointer-events: none; user-select: none;
+  }
+
+  /* FIX SCROLL: el contenedor con scroll ahora ocupa el ancho completo,
+     y el max-width/centrado se movió a un div interno (.editor-body-inner).
+     Antes .editor-body tenía max-width+margin:auto Y overflow-y:auto a la vez,
+     así que la barra de scroll del navegador quedaba pegada al borde de esa
+     columna angosta centrada (en el medio de la pantalla) en vez del borde
+     real de la pantalla. */
+  .editor-body { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+  .editor-body-inner { max-width: 480px; margin: 0 auto; padding: 20px 18px 40px; }
+  .edit-section { margin-bottom: 24px; }
+  .edit-section h3 { font-family: 'Baloo 2', sans-serif; font-size: 13.5px; margin: 0 0 3px; color: #ffe9c7; }
+  .edit-section p.hint-text { font-size: 11.5px; color: #b6a4dd; margin: 0 0 10px; line-height: 1.5; }
+  .edit-section input[type=text], .edit-section textarea {
+    width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18);
+    color: #f3e6ff; padding: 10px 11px; border-radius: 8px; font-family: 'Quicksand', sans-serif;
+    font-size: 13.5px; box-sizing: border-box;
+  }
+  .edit-section textarea { resize: vertical; min-height: 60px; }
+
+  .reason-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .reason-row .reason-num { flex: 0 0 auto; width: 20px; text-align: center; font-size: 12px; color: #b6a4dd; }
+  .reason-row input[type=text] { flex: 1 1 auto; min-width: 0; }
+  .reason-row button {
+    flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; border: none; cursor: pointer;
+    background: rgba(255,255,255,0.08); color: #cbb9e8; font-size: 13px;
+  }
+  .reason-row button:hover { background: rgba(255,140,150,0.25); color: #ff8fa8; }
+
+  .add-row { display: flex; gap: 8px; margin-top: 4px; }
+  .add-row input[type=text] { flex: 1 1 auto; min-width: 0; }
+  .btn { border: none; border-radius: 8px; padding: 10px 16px; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 13px; cursor: pointer; }
+  .btn-add { background: rgba(255,217,138,0.16); color: #ffd98a; border: 1px solid rgba(255,217,138,0.4); flex: 0 0 auto; }
+  .btn-download { width: 100%; background: linear-gradient(135deg, #ffb37a, #ff8fb3); color: #4a2a1a; padding: 13px 16px; font-size: 14px; border-radius: 10px; box-shadow: 0 8px 18px rgba(255,140,150,0.3); }
+
+  .panel-footer { margin-top: 8px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.12); }
+  .editor-checkbox-row { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 14px; }
+  .editor-checkbox-row input { margin-top: 3px; flex: 0 0 auto; }
+  .editor-checkbox-row label { font-size: 11.5px; color: #b6a4dd; line-height: 1.5; }
+  .filename-row { margin-top: 12px; }
+  .save-note { font-size: 11px; color: #8a7ab0; line-height: 1.5; margin-top: 12px; }
+
+  body.no-editor .edit-toggle { display: none !important; }
+</style>
+<style id="le-noeditor">#pencilBtn,.pencil-btn,.top-toolbar,#editToggle,.edit-toggle,#leEditToggle,.le-edit-toggle,.le-edit-hint,#editorOverlay,#editorPage,.editor-page,.le-editor-page,#pen,#ed{display:none!important}</style></head>
+<body class="no-editor">
+
+<canvas id="sky"></canvas>
+<button class="sound-toggle" id="soundToggle" title="sonido">🔊</button>
+<button class="edit-toggle" id="editToggle" title="Personalizar">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#ffe9c7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+</button>
+
+<div class="stage">
+  <h1 class="title" id="mainTitle">Un frasco de razones para quererte ✨</h1>
+  <p class="subtitle" id="subtitle">toca cada estrella para descubrir una</p>
+
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">0 de 10 estrellas descubiertas</div>
+  </div>
+
+  <div class="jar-wrap">
+    <div class="jar-lid"></div>
+    <div class="jar-neck"></div>
+    <div class="jar-body" id="jarBody">
+      <div class="jar-shine"></div>
+      <div class="jar-stars" id="jarStars"></div>
+    </div>
+  </div>
+
+  <div class="jar-hint" id="jarHint">cada estrellita guarda un motivo 💛</div>
+</div>
+
+<!-- tarjeta de nota individual -->
+<div class="note-overlay" id="noteOverlay">
+  <div class="note-card" id="noteCard">
+    <span class="note-star">⭐</span>
+    <p id="noteText"></p>
+    <button class="note-close" id="noteClose">cerrar</button>
+  </div>
+</div>
+
+<!-- gran final -->
+<div class="grand-final" id="grandFinal">
+  <div class="grand-card">
+    <div class="big-heart">💛</div>
+    <h2>Ya las abriste todas...</h2>
+    <p class="msg" id="grandMsg"></p>
+  </div>
+</div>
+
+<!-- editor -->
+<div class="editor-overlay" id="editorOverlay">
+  <div class="editor-topbar">
+    <button class="back-btn" id="backBtn" title="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ffe9c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="editor-topbar-titles">
+      <h2>Editor de tu regalo</h2>
+      <p>Los cambios se ven al instante</p>
+    </div>
+    <div class="ed-brand-watermark">Link Emocional</div>
+  </div>
+  <div class="editor-body">
+    <div class="editor-body-inner">
+      <div class="edit-section">
+        <h3>Título principal</h3>
+        <input type="text" id="editTitleInput" maxlength="60">
+      </div>
+      <div class="edit-section">
+        <h3>Subtítulo inicial</h3>
+        <input type="text" id="editSubtitleInput" maxlength="60">
+      </div>
+      <div class="edit-section">
+        <h3>Razones (una por estrella)</h3>
+        <p class="hint-text">Edita, borra o agrega razones. Cada una aparece al tocar una estrella del frasco.</p>
+        <div id="editReasonsList"></div>
+        <div class="add-row">
+          <input type="text" id="editReasonAddInput" placeholder="Escribe una nueva razón" maxlength="140">
+          <button class="btn btn-add" id="editReasonAddBtn">Agregar</button>
+        </div>
+      </div>
+      <div class="edit-section">
+        <h3>Mensaje final</h3>
+        <p class="hint-text">Aparece cuando se abren todas las estrellas.</p>
+        <textarea id="editFinalMessageInput" maxlength="200"></textarea>
+      </div>
+      <div class="panel-footer">
+        <div class="editor-checkbox-row">
+          <input type="checkbox" id="includeEditorCheckbox">
+          <label for="includeEditorCheckbox">Incluir el editor (el lápiz) en este archivo. Dejalo desactivado para la versión final que le envíes a la persona — así no le aparece el lápiz. Actívalo solo si querés seguir editando este mismo archivo descargado más adelante.</label>
+        </div>
+        <button class="btn btn-download" id="downloadBtn">Descargar mi regalo personalizado</button>
+        <div class="filename-row">
+          <input type="text" id="filenameInput" value="mi-frasco-personalizado.html">
+        </div>
+        <p class="save-note">"Descargar" genera un HTML nuevo y completo con tus cambios ya aplicados, listo para enviarlo o retocarlo después.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script id="initial-state" type="application/json">{"title": "Un frasco de razones para quererte ✨", "subtitleInitial": "toca cada estrella para descubrir una", "reasons": ["Porque tu risa se siente como un cafecito calentito en la mañana ☕", "Porque cuando hablamos el tiempo se me pasa volando ⏳", "Porque tienes esa manera única de hacer que todo se sienta más ligero 🌤️", "Porque tu forma de ver la vida me inspira a disfrutar lo cotidiano 🌸", "Porque cada mensaje tuyo me saca una sonrisa sin que te des cuenta 😊", "Porque eres de las personas que hacen que un lugar cualquiera se sienta especial 🏡", "Porque tienes un montón de detalles pequeños que te hacen única ✨", "Porque me encanta tu energía incluso en los días difíciles 💪", "Porque contigo hasta las conversaciones más simples se vuelven mis favoritas 💬", "Porque simplemente... quería que supieras todo esto 💛"], "finalMessage": "Gracias por dejarme quererte así, un poquito cada día."}</script>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============ sonido sutil (WebAudio) ============ */
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+  var actx = null, soundOn = true;
+  function ensureAudio(){ if (!actx && AudioCtx) { try { actx = new AudioCtx(); } catch(e){} } }
+  function blip(freq, dur, type, vol){
+    if (!soundOn || !AudioCtx) return;
+    ensureAudio(); if (!actx) return;
+    var osc = actx.createOscillator(), gain = actx.createGain();
+    osc.type = type || "sine"; osc.frequency.value = freq; gain.gain.value = 0;
+    osc.connect(gain); gain.connect(actx.destination);
+    var now = actx.currentTime;
+    gain.gain.linearRampToValueAtTime(vol || 0.06, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + (dur || 0.18));
+    osc.start(now); osc.stop(now + (dur || 0.18) + 0.02);
+  }
+  function playOpen(){ blip(720, 0.16, "sine", 0.05); setTimeout(function(){ blip(920, 0.16, "sine", 0.045); }, 90); }
+  function playChime(){
+    [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach(function(f, i){
+      setTimeout(function(){ blip(f, 0.35, "sine", 0.06); }, i * 100);
+    });
+  }
+  document.getElementById("soundToggle").addEventListener("click", function(){
+    soundOn = !soundOn; this.textContent = soundOn ? "🔊" : "🔇"; ensureAudio();
+  });
+
+  /* ============ cielo estrellado de fondo ============ */
+  var canvas = document.getElementById("sky");
+  var ctx = canvas.getContext("2d");
+  var bgStars = [];
+  function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  function initStars(){
+    bgStars = [];
+    for (var i = 0; i < 90; i++) {
+      bgStars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.3 + 0.3, phase: Math.random() * Math.PI * 2, speed: 0.015 + Math.random() * 0.025 });
+    }
+  }
+  function draw(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < bgStars.length; i++) {
+      var s = bgStars[i]; s.phase += s.speed;
+      var tw = (Math.sin(s.phase) + 1) / 2;
+      ctx.beginPath(); ctx.globalAlpha = 0.3 + tw * 0.7; ctx.fillStyle = "#fff3d6";
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  }
+  resize(); initStars(); draw();
+  window.addEventListener("resize", function(){ resize(); initStars(); });
+
+  /* ============ luciernagas ambientales ============ */
+  function spawnFirefly(){
+    var f = document.createElement("div");
+    f.className = "firefly";
+    var size = 4 + Math.random() * 5;
+    f.style.width = size + "px"; f.style.height = size + "px";
+    f.style.left = (Math.random() * 100) + "vw";
+    f.style.top = (30 + Math.random() * 60) + "vh";
+    var dur = 9 + Math.random() * 7;
+    f.style.animationDuration = dur + "s";
+    f.style.setProperty("--fdx", (Math.random() * 80 - 40) + "px");
+    f.style.setProperty("--fdy", (Math.random() * 40 - 10) + "px");
+    f.style.setProperty("--fdx2", (Math.random() * 120 - 60) + "px");
+    f.style.setProperty("--fdy2", (Math.random() * 60 - 20) + "px");
+    document.body.appendChild(f);
+    setTimeout(function(){ f.remove(); }, dur * 1000 + 300);
+  }
+  for (var fi = 0; fi < 8; fi++) setTimeout(spawnFirefly, fi * 700);
+  setInterval(spawnFirefly, 1400);
+
+  /* ============ estado editable ============ */
+  var DEFAULT_REASONS = [
+    "Porque tu risa se siente como un cafecito calentito en la mañana ☕",
+    "Porque cuando hablamos el tiempo se me pasa volando ⏳",
+    "Porque tienes esa manera única de hacer que todo se sienta más ligero 🌤️",
+    "Porque tu forma de ver la vida me inspira a disfrutar lo cotidiano 🌸",
+    "Porque cada mensaje tuyo me saca una sonrisa sin que te des cuenta 😊",
+    "Porque eres de las personas que hacen que un lugar cualquiera se sienta especial 🏡",
+    "Porque tienes un montón de detalles pequeños que te hacen única ✨",
+    "Porque me encanta tu energía incluso en los días difíciles 💪",
+    "Porque contigo hasta las conversaciones más simples se vuelven mis favoritas 💬",
+    "Porque simplemente... quería que supieras todo esto 💛"
+  ];
+
+  var stateEl = document.getElementById("initial-state");
+  var state;
+  try { state = JSON.parse(stateEl.textContent); } catch (e) { state = {}; }
+  state.title = state.title || "Un frasco de razones para quererte ✨";
+  state.subtitleInitial = state.subtitleInitial || "toca cada estrella para descubrir una";
+  state.reasons = (state.reasons && state.reasons.length) ? state.reasons : DEFAULT_REASONS.slice();
+  state.finalMessage = state.finalMessage || "Gracias por dejarme quererte así, un poquito cada día.";
+
+  function persistState(){
+    stateEl.textContent = JSON.stringify(state);
+  }
+
+  // misma referencia que state.reasons: se muta con push/splice/[i]=
+  var REASONS = state.reasons;
+
+  // posiciones relativas dentro del frasco (%), pensadas para no encimarse
+  var POSITIONS = [
+    [18,64],[62,70],[38,50],[74,44],[14,36],
+    [50,28],[80,60],[26,20],[58,58],[42,76]
+  ];
+
+  var jarStars = document.getElementById("jarStars");
+  var jarBody = document.getElementById("jarBody");
+  var progressFill = document.getElementById("progressFill");
+  var progressText = document.getElementById("progressText");
+  var jarHint = document.getElementById("jarHint");
+  var subtitle = document.getElementById("subtitle");
+  var mainTitle = document.getElementById("mainTitle");
+
+  mainTitle.textContent = state.title;
+  subtitle.textContent = state.subtitleInitial;
+
+  var collectedCount = 0;
+  var starEls = [];
+
+  function clearStars(){
+    jarStars.innerHTML = "";
+    starEls = [];
+  }
+
+  function buildStars(){
+    clearStars();
+    REASONS.forEach(function(text, i){
+      var btn = document.createElement("button");
+      btn.className = "star-item";
+      btn.textContent = "⭐";
+      var pos = POSITIONS[i % POSITIONS.length];
+      btn.style.left = pos[0] + "%";
+      btn.style.top = pos[1] + "%";
+      btn.style.animationDuration = (2.4 + Math.random() * 1.6) + "s";
+      btn.style.animationDelay = (Math.random() * 2) + "s";
+      btn.dataset.index = i;
+      btn.addEventListener("click", function(){ openStar(i, btn); });
+      jarStars.appendChild(btn);
+      starEls.push(btn);
+    });
+  }
+
+  function rebuildStars(){
+    buildStars();
+    collectedCount = 0;
+    jarBody.classList.remove("glowing");
+    subtitle.textContent = state.subtitleInitial;
+    updateProgress();
+  }
+
+  var noteOverlay = document.getElementById("noteOverlay");
+  var noteText = document.getElementById("noteText");
+  var noteClose = document.getElementById("noteClose");
+  var activeStar = null;
+
+  function openStar(i, btn){
+    if (btn.classList.contains("collected") || btn.classList.contains("launching")) return;
+    activeStar = btn;
+    btn.classList.add("launching");
+    playOpen();
+    noteText.textContent = REASONS[i];
+    setTimeout(function(){
+      noteOverlay.classList.add("show");
+    }, 160);
+  }
+
+  function closeNote(){
+    noteOverlay.classList.remove("show");
+    if (activeStar) {
+      activeStar.classList.remove("launching");
+      activeStar.classList.add("collected");
+      activeStar = null;
+      collectedCount++;
+      updateProgress();
+    }
+  }
+  noteClose.addEventListener("click", closeNote);
+  noteOverlay.addEventListener("click", function(e){ if (e.target === noteOverlay) closeNote(); });
+
+  function updateProgress(){
+    var total = REASONS.length;
+    var pct = total ? Math.round((collectedCount / total) * 100) : 0;
+    progressFill.style.width = pct + "%";
+    progressText.textContent = collectedCount + " de " + total + " estrellas descubiertas";
+    if (total && collectedCount >= total) {
+      jarHint.textContent = "abriste todas las estrellitas 🌟";
+      subtitle.textContent = "espera un momentito...";
+      jarBody.classList.add("glowing");
+      setTimeout(showGrandFinal, 900);
+    } else {
+      var left = total - collectedCount;
+      jarHint.textContent = left === 1 ? "solo queda 1 estrellita ✨" : "quedan " + left + " estrellitas por abrir";
+    }
+  }
+
+  buildStars();
+  updateProgress();
+
+  /* ============ confeti y fuegos artificiales ============ */
+  var CONFETTI_COLORS = ["#ffd98a","#ff9fc0","#a06bff","#7cf5ff","#ffe9a8"];
+  var CONFETTI_SHAPES = ["⭐","💛","✨",null,null];
+  function burstConfetti(){
+    for (var i = 0; i < 90; i++) {
+      (function(){
+        var p = document.createElement("div");
+        p.className = "confetti-piece";
+        var shape = CONFETTI_SHAPES[Math.floor(Math.random() * CONFETTI_SHAPES.length)];
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.animationDuration = (2.2 + Math.random() * 1.8) + "s";
+        p.style.animationDelay = (Math.random() * 0.6) + "s";
+        if (shape) { p.textContent = shape; p.style.fontSize = (12 + Math.random() * 10) + "px"; }
+        else {
+          p.style.width = "9px"; p.style.height = "14px";
+          p.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+          p.style.borderRadius = Math.random() < 0.5 ? "50%" : "2px";
+        }
+        document.body.appendChild(p);
+        setTimeout(function(){ p.remove(); }, 5000);
+      })();
+    }
+  }
+  var FW_EMOJIS = ["💛","✨","🌟","💫","⭐"];
+  function burstFireworks(){
+    var cx = window.innerWidth / 2, cy = window.innerHeight / 2.6;
+    for (var i = 0; i < 16; i++) {
+      (function(){
+        var f = document.createElement("div");
+        f.className = "firework-emoji";
+        f.textContent = FW_EMOJIS[Math.floor(Math.random() * FW_EMOJIS.length)];
+        var angle = Math.random() * Math.PI * 2, dist = 80 + Math.random() * 160;
+        f.style.left = cx + "px"; f.style.top = cy + "px";
+        f.style.setProperty("--fx", Math.cos(angle) * dist + "px");
+        f.style.setProperty("--fy", Math.sin(angle) * dist + "px");
+        document.body.appendChild(f);
+        setTimeout(function(){ f.remove(); }, 950);
+      })();
+    }
+  }
+
+  /* ============ gran final ============ */
+  function showGrandFinal(){
+    var grandFinal = document.getElementById("grandFinal");
+    var grandMsg = document.getElementById("grandMsg");
+    grandMsg.innerHTML = "";
+    (state.finalMessage || "").split("").forEach(function(ch, i){
+      var span = document.createElement("span");
+      span.textContent = ch === " " ? "\u00A0" : ch;
+      span.style.animationDelay = (0.4 + i * 0.025) + "s";
+      grandMsg.appendChild(span);
+    });
+    grandFinal.classList.add("show");
+    playChime();
+    burstConfetti();
+    burstFireworks();
+    setTimeout(burstConfetti, 450);
+    setTimeout(burstFireworks, 650);
+  }
+
+  /* ============ editor ============ */
+  var editToggle = document.getElementById("editToggle");
+  var editorOverlay = document.getElementById("editorOverlay");
+  var backBtn = document.getElementById("backBtn");
+  var editTitleInput = document.getElementById("editTitleInput");
+  var editSubtitleInput = document.getElementById("editSubtitleInput");
+  var editReasonsList = document.getElementById("editReasonsList");
+  var editReasonAddInput = document.getElementById("editReasonAddInput");
+  var editReasonAddBtn = document.getElementById("editReasonAddBtn");
+  var editFinalMessageInput = document.getElementById("editFinalMessageInput");
+  var includeEditorCheckbox = document.getElementById("includeEditorCheckbox");
+  var filenameInput = document.getElementById("filenameInput");
+  var downloadBtn = document.getElementById("downloadBtn");
+
+  function renderReasonsEditor(){
+    editReasonsList.innerHTML = "";
+    REASONS.forEach(function(text, idx){
+      var row = document.createElement("div");
+      row.className = "reason-row";
+      var num = document.createElement("span");
+      num.className = "reason-num";
+      num.textContent = (idx + 1) + ".";
+      var input = document.createElement("input");
+      input.type = "text";
+      input.value = text;
+      input.maxLength = 140;
+      input.addEventListener("input", function(){
+        REASONS[idx] = input.value;
+        persistState();
+      });
+      var del = document.createElement("button");
+      del.innerHTML = "&#10005;";
+      del.title = "Eliminar";
+      del.addEventListener("click", function(){
+        REASONS.splice(idx, 1);
+        renderReasonsEditor();
+        rebuildStars();
+        persistState();
+      });
+      row.appendChild(num);
+      row.appendChild(input);
+      row.appendChild(del);
+      editReasonsList.appendChild(row);
+    });
+  }
+
+  function renderEditorFields(){
+    editTitleInput.value = state.title;
+    editSubtitleInput.value = state.subtitleInitial;
+    editFinalMessageInput.value = state.finalMessage;
+    renderReasonsEditor();
+  }
+
+  editTitleInput.addEventListener("input", function(){
+    state.title = editTitleInput.value;
+    mainTitle.textContent = state.title;
+    persistState();
+  });
+  editSubtitleInput.addEventListener("input", function(){
+    state.subtitleInitial = editSubtitleInput.value;
+    if (collectedCount < REASONS.length) subtitle.textContent = state.subtitleInitial;
+    persistState();
+  });
+  editFinalMessageInput.addEventListener("input", function(){
+    state.finalMessage = editFinalMessageInput.value;
+    persistState();
+  });
+  editReasonAddBtn.addEventListener("click", function(){
+    var v = editReasonAddInput.value.trim();
+    if (!v) return;
+    REASONS.push(v);
+    editReasonAddInput.value = "";
+    renderReasonsEditor();
+    rebuildStars();
+    persistState();
+  });
+  editReasonAddInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter") editReasonAddBtn.click();
+  });
+
+  function openEditor(){
+    renderEditorFields();
+    editorOverlay.classList.add("show");
+  }
+  function closeEditor(){
+    editorOverlay.classList.remove("show");
+  }
+  editToggle.addEventListener("click", openEditor);
+  backBtn.addEventListener("click", closeEditor);
+
+  downloadBtn.addEventListener("click", function(){
+    persistState();
+    var keepEditor = includeEditorCheckbox.checked;
+    closeEditor();
+    setTimeout(function(){
+      if (!keepEditor) document.body.classList.add("no-editor");
+      var html = "<!doctype html>\n" + document.documentElement.outerHTML;
+      if (!keepEditor) document.body.classList.remove("no-editor");
+      var blob = new Blob([html], { type: "text/html" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      var name = filenameInput.value.trim() || "mi-frasco-personalizado.html";
+      if (!name.toLowerCase().endsWith(".html")) name += ".html";
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    }, 60);
+  });
+
+})();
+</script>
+</body>
+</html>

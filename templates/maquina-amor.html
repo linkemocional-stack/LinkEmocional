@@ -1,0 +1,645 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Máquina de Amor</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Work+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap');
+
+  :root{
+    --bg1:#280818; --bg2:#5c1436; --bg3:#a4234f;
+    --machine:#3a0f28; --machine-2:#521a3a; --machine-edge:#1c0713;
+    --glass:#170a12;
+    --gold:#f0cf8c; --gold-soft:#f7e2ae; --gold-dark:#a9772f; --gold-deep:#7a5620;
+    --pink:#ff7fa1; --pink-dark:#c8305a;
+    --paper:#f9eed9; --paper-2:#efdfbb; --ink:#2b1d16;
+    --line:rgba(240,207,140,0.32);
+    --shadow-deep: rgba(6,1,4,0.65);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh; overflow-x:hidden;
+    font-family:'Work Sans', sans-serif; color:#fbeee0;
+    background:
+      radial-gradient(ellipse at 18% -4%, rgba(240,207,140,0.14), transparent 52%),
+      radial-gradient(ellipse at 88% 104%, rgba(255,127,161,0.2), transparent 52%),
+      linear-gradient(165deg, var(--bg1), var(--bg2) 55%, var(--bg3) 130%);
+    display:flex; align-items:center; justify-content:center; padding:32px 14px;
+  }
+  body.editing{ display:block; overflow-y:auto; background:#170812; }
+
+  .ambient{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0;}
+  .heart{position:absolute; top:-8%; color:rgba(255,190,205,0.4); animation:drift linear infinite; will-change:transform,opacity;}
+  @keyframes drift{
+    0%{transform:translateY(-10vh) translateX(0) rotate(0deg) scale(.9); opacity:0;}
+    10%{opacity:var(--op,0.6);}
+    50%{transform:translateY(50vh) translateX(var(--sway,24px)) rotate(120deg) scale(1);}
+    88%{opacity:calc(var(--op,0.6) * 0.55);}
+    100%{transform:translateY(114vh) translateX(calc(var(--sway,24px) * -0.4)) rotate(230deg) scale(.85); opacity:0;}
+  }
+
+  .stage{ position:relative; z-index:1; width:100%; max-width:380px; animation:stageIn .7s cubic-bezier(.2,.8,.3,1) both; }
+  body.editing .stage{ display:none; }
+  @keyframes stageIn{ from{ opacity:0; transform:translateY(14px) scale(.98);} to{ opacity:1; transform:translateY(0) scale(1);} }
+
+  .top-toolbar{ position:fixed; top:16px; right:16px; z-index:50; }
+  body.editing .top-toolbar{ display:none; }
+  .pencil-btn{
+    width:44px; height:44px; border-radius:50%;
+    border:1px solid var(--line);
+    background:linear-gradient(155deg, rgba(255,255,255,0.09), rgba(0,0,0,0.25)), rgba(20,6,14,0.55);
+    backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; cursor:pointer;
+    box-shadow:0 6px 16px -6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.12);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .pencil-btn:hover{ transform:translateY(-2px); box-shadow:0 8px 22px -6px rgba(240,207,140,0.5), inset 0 1px 0 rgba(255,255,255,0.18); }
+  .pencil-btn:active{ transform:translateY(0); }
+  .pencil-btn svg{ width:17px; height:17px; }
+
+  .title-area{ text-align:center; margin-bottom:22px; }
+  .title-area h1{
+    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:25px; margin:0 0 7px; color:var(--gold-soft);
+    text-shadow:0 0 18px rgba(240,207,140,0.35), 0 2px 0 rgba(0,0,0,0.3);
+  }
+  .title-area p{ font-size:12.5px; color:rgba(255,255,255,0.72); margin:0; }
+
+  /* ============ MACHINE SHELL ============ */
+  .machine-wrap{ position:relative; padding-bottom:16px; }
+  .machine-shadow{
+    position:absolute; left:14%; right:14%; bottom:0; height:16px; border-radius:50%;
+    background:radial-gradient(ellipse, rgba(0,0,0,0.55), transparent 72%); filter:blur(2px);
+  }
+  .machine{
+    position:relative;
+    background:linear-gradient(160deg, var(--machine), var(--machine-2) 60%, var(--machine));
+    border-radius:26px; padding:18px 17px 22px; border:1px solid var(--machine-edge);
+    box-shadow:
+      0 30px 60px -20px rgba(0,0,0,0.65),
+      inset 0 0 0 2px rgba(240,207,140,0.1),
+      inset 0 2px 0 rgba(255,255,255,0.06),
+      inset 0 -18px 30px -20px rgba(0,0,0,0.5);
+  }
+  .machine::before, .machine::after{
+    content:''; position:absolute; top:14px; width:7px; height:7px; border-radius:50%;
+    background:radial-gradient(circle at 32% 30%, #fff7de, var(--gold-dark) 65%, #6b4a1f 100%);
+    box-shadow:0 1px 2px rgba(0,0,0,0.5);
+  }
+  .machine::before{ left:14px; }
+  .machine::after{ right:14px; }
+  .rivet-bottom{ position:absolute; bottom:14px; width:7px; height:7px; border-radius:50%;
+    background:radial-gradient(circle at 32% 30%, #fff7de, var(--gold-dark) 65%, #6b4a1f 100%);
+    box-shadow:0 1px 2px rgba(0,0,0,0.5); }
+  .rivet-bottom.left{ left:14px; } .rivet-bottom.right{ right:14px; }
+
+  .machine-header{
+    display:flex; align-items:center; justify-content:center; gap:7px;
+    text-align:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12.5px; letter-spacing:1.4px;
+    color:var(--gold-soft); margin-bottom:12px; padding:8px 10px; border-radius:999px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.12));
+    border:1px solid rgba(240,207,140,0.28);
+    text-shadow:0 0 10px rgba(240,207,140,0.5);
+  }
+  .bulb{ width:4px; height:4px; border-radius:50%; background:var(--gold-soft); flex:0 0 auto;
+    animation: bulbPulse 1.8s ease-in-out infinite; }
+  .bulb.b2{ animation-delay:.9s; }
+  @keyframes bulbPulse{
+    0%,100%{ opacity:.55; box-shadow:0 0 5px 1.5px rgba(247,226,174,0.85); }
+    50%{ opacity:1; box-shadow:0 0 10px 3px rgba(247,226,174,1); }
+  }
+
+  .glass{
+    position:relative; overflow:hidden;
+    background:
+      linear-gradient(145deg, rgba(255,255,255,0.05), transparent 40%),
+      radial-gradient(ellipse at 30% 15%, rgba(255,255,255,0.06), transparent 60%), var(--glass);
+    border-radius:16px 16px 10px 10px; border:3px solid var(--machine-edge);
+    box-shadow:inset 0 3px 10px rgba(0,0,0,0.6), inset 0 -2px 0 rgba(255,255,255,0.03);
+    padding:13px; margin-bottom:12px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:9px;
+  }
+  .glass::after{
+    content:''; position:absolute; top:0; left:-30%; width:40%; height:100%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,0.09) 45%, transparent 70%);
+    pointer-events:none; transform:skewX(-12deg);
+    animation: glassShine 5.5s ease-in-out infinite;
+  }
+  @keyframes glassShine{
+    0%,15%{ left:-30%; }
+    55%,100%{ left:130%; }
+  }
+  .glass-slot{
+    aspect-ratio:1; border-radius:9px; position:relative; overflow:hidden;
+    background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18));
+    border:1px solid rgba(240,207,140,0.14);
+    box-shadow:inset 0 -6px 8px -4px rgba(0,0,0,0.55), inset 0 2px 3px rgba(255,255,255,0.05);
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+    transition:border-color .3s ease, box-shadow .3s ease;
+  }
+  .glass-slot .icon-wrap{
+    width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle at 32% 28%, rgba(255,255,255,0.16), rgba(255,255,255,0.02) 70%);
+    border:1px solid rgba(240,207,140,0.22);
+    transition:transform .5s cubic-bezier(.5,0,.75,0), opacity .3s;
+    font-size:16px;
+  }
+  .glass-slot.dropping .icon-wrap{ transform:translateY(180%); opacity:0.25; }
+  .glass-slot .code-tag{
+    position:absolute; bottom:3px; right:5px; font-size:8px; letter-spacing:.5px;
+    color:rgba(240,207,140,0.55); font-family:'Work Sans',sans-serif; font-weight:600;
+  }
+
+  .tray{
+    position:relative; height:30px; margin:-2px 0 16px;
+    background:linear-gradient(180deg, var(--machine-edge), #0d040a);
+    border-radius:0 0 13px 13px; border:1px solid rgba(240,207,140,0.16); border-top:none;
+    box-shadow:inset 0 4px 8px rgba(0,0,0,0.55);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .tray .flap{
+    width:64%; height:6px; border-radius:4px;
+    background:linear-gradient(180deg, rgba(240,207,140,0.55), rgba(169,119,47,0.35));
+    box-shadow:0 1px 0 rgba(255,255,255,0.15);
+    animation: flapShine 3.2s ease-in-out infinite;
+  }
+  @keyframes flapShine{ 0%,100%{ opacity:.95; } 50%{ opacity:.55; } }
+
+  .keypad{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+  .key-btn{
+    position:relative;
+    background:linear-gradient(180deg,var(--paper), var(--paper-2) 70%, #e6cf9d);
+    border:1px solid rgba(122,86,32,0.4); border-radius:11px; padding:13px 4px 10px;
+    font-family:'Baloo 2',sans-serif; font-weight:700; font-size:14px; color:var(--ink); cursor:pointer;
+    box-shadow:0 4px 0 var(--gold-deep), 0 9px 16px -7px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.6);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .key-btn::after{
+    content:''; display:block; width:4px; height:4px; border-radius:50%; margin:5px auto 0;
+    background:var(--pink-dark); opacity:0.55;
+  }
+  .key-btn:hover:not(:disabled){
+    transform:translateY(-2px);
+    box-shadow:0 6px 0 var(--gold-deep), 0 15px 22px -9px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.65);
+  }
+  .key-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 var(--gold-deep), inset 0 1px 0 rgba(255,255,255,0.5); }
+  .key-btn[disabled]{ opacity:0.5; cursor:default; }
+
+  /* ============ RESULT OVERLAY ============ */
+  .result-overlay{
+    position:fixed; inset:0; z-index:150; display:none; align-items:center; justify-content:center;
+    background:rgba(8,2,6,0.78); backdrop-filter:blur(5px); padding:22px;
+  }
+  .result-overlay.show{ display:flex; }
+  .result-card{
+    position:relative;
+    background:linear-gradient(175deg, var(--paper), var(--paper-2) 85%); color:var(--ink); border-radius:4px 4px 14px 14px;
+    max-width:330px; width:100%; padding:28px 22px 22px; text-align:center;
+    box-shadow:0 34px 60px -16px rgba(0,0,0,0.65); animation:cardPop .45s cubic-bezier(.24,1.4,.4,1);
+  }
+  .result-card::before{
+    content:''; position:absolute; top:-6px; left:0; right:0; height:12px;
+    background-image:radial-gradient(circle, var(--bg1) 5px, transparent 5.5px);
+    background-size:16px 16px; background-position:0 0; background-repeat:repeat-x;
+  }
+  @keyframes cardPop{ from{ transform:scale(0.6) rotate(-1.5deg); opacity:0; } to{ transform:scale(1) rotate(0); opacity:1; } }
+  .result-close{
+    position:absolute; top:12px; right:12px; width:26px; height:26px; border-radius:50%; border:1px solid rgba(43,29,22,0.25);
+    background:rgba(43,29,22,0.06); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px; color:var(--ink);
+    transition:transform .15s ease, background .15s ease;
+  }
+  .result-close:hover{ transform:rotate(90deg); background:rgba(43,29,22,0.14); }
+  .result-icon{ font-size:36px; margin-bottom:8px; filter:drop-shadow(0 3px 4px rgba(0,0,0,0.15));
+    animation: iconPop .55s cubic-bezier(.34,1.56,.64,1) both; }
+  @keyframes iconPop{
+    0%{ transform:scale(0) rotate(-18deg); opacity:0; }
+    65%{ transform:scale(1.18) rotate(6deg); opacity:1; }
+    100%{ transform:scale(1) rotate(0); }
+  }
+  .result-text{ font-family:'Caveat',cursive; font-weight:700; font-size:23px; line-height:1.4; color:var(--pink-dark); padding:0 4px; }
+  .result-photo-frame{
+    background:#fff; padding:8px 8px 26px; border-radius:3px; box-shadow:0 8px 18px -6px rgba(0,0,0,0.3);
+    transform:rotate(-1.4deg); margin:2px auto 14px; max-width:230px;
+  }
+  .result-photo{ width:100%; display:block; border-radius:1px; max-height:190px; object-fit:cover; }
+  .result-caption{ font-family:'Caveat',cursive; font-size:16px; font-weight:600; color:#6b5136; margin-top:6px; display:block; }
+
+  .scratch-wrap{ position:relative; width:100%; height:112px; border-radius:9px; overflow:hidden; margin-top:8px; box-shadow:0 3px 10px -3px rgba(0,0,0,0.25); }
+  .scratch-message{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:12px; text-align:center;
+    font-family:'Caveat',cursive; font-size:20px; font-weight:700; color:var(--pink-dark); background:#fff;}
+  .scratch-canvas{ position:absolute; inset:0; cursor:pointer; touch-action:none; }
+  .scratch-hint{ font-size:11px; color:#8a6b45; margin-top:9px; letter-spacing:.2px; }
+
+  .confetti{ position:fixed; top:-10px; z-index:199; pointer-events:none; animation:fall linear forwards;}
+  @keyframes fall{ to{ transform:translateY(105vh) rotate(400deg); opacity:0.2; } }
+
+  /* ===================== EDITOR ===================== */
+  .editor{ display:none; position:fixed; inset:0; z-index:200; overflow-y:auto; background:linear-gradient(180deg, #170812, #0c0409 60%); color:#fbeee0; font-family:'Work Sans',sans-serif;}
+  body.editing .editor{ display:block; }
+  .ed-topbar{ position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:12px; padding:16px 18px; background:rgba(20,6,14,0.92); backdrop-filter:blur(8px); border-bottom:1px solid rgba(240,207,140,0.25);}
+  .ed-back{ width:36px; height:36px; border-radius:50%; border:1px solid rgba(240,207,140,0.3); background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#fbeee0; flex:0 0 auto; transition:transform .15s ease;}
+  .ed-back:hover{ transform:translateX(-3px); }
+  .ed-back svg{ width:16px; height:16px;}
+  .ed-titles h1{ font-size:16px; margin:0; font-family:'Baloo 2',sans-serif; color:var(--gold);}
+  .ed-titles p{ font-size:11px; margin:2px 0 0; color:rgba(251,238,224,0.5);}
+  .ed-body{ max-width:600px; margin:0 auto; padding:20px 18px 70px;}
+  .ed-section{ margin-bottom:22px; border:1px solid rgba(240,207,140,0.22); border-radius:12px; padding:16px 16px 14px; background:linear-gradient(160deg, rgba(255,255,255,0.02), transparent);}
+  .ed-section h3{ font-size:12px; letter-spacing:1.2px; color:var(--gold); margin:0 0 3px; text-transform:uppercase; font-weight:700;}
+  .ed-section .ed-hint{ font-size:11.5px; color:rgba(251,238,224,0.45); margin:0 0 12px; line-height:1.5;}
+  .ed-field{ margin-bottom:10px; }
+  .ed-field label{ display:block; font-size:11px; color:rgba(251,238,224,0.6); margin-bottom:5px;}
+  .ed-field input[type=text], .ed-field textarea, .ed-field select{
+    width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(240,207,140,0.25); color:#fbeee0;
+    padding:9px 10px; border-radius:8px; font-family:'Work Sans',sans-serif; font-size:13.5px; resize:vertical;
+    transition:border-color .15s ease, background .15s ease;}
+  .ed-field input[type=text]:focus, .ed-field textarea:focus, .ed-field select:focus{ outline:2px solid var(--gold); outline-offset:1px; }
+  .ed-field textarea{ min-height:50px; }
+  .ed-slot-card{ border:1px dashed rgba(240,207,140,0.32); border-radius:10px; padding:13px; margin-bottom:12px; background:rgba(255,255,255,0.02);}
+  .ed-slot-card h4{ margin:0 0 8px; font-size:12.5px; color:var(--gold); font-family:'Baloo 2',sans-serif;}
+  .ed-photo-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+  .ed-photo-preview{ width:50px; height:50px; border-radius:9px; background-size:cover; background-position:center; border:1px solid rgba(240,207,140,0.25); display:flex; align-items:center; justify-content:center; font-size:9px; color:rgba(251,238,224,0.4); flex:0 0 auto; text-align:center;}
+  .ed-small-btn{ background:rgba(255,255,255,0.05); border:1px solid rgba(240,207,140,0.25); color:#fbeee0; padding:6px 12px; border-radius:14px; font-size:11px; cursor:pointer; transition:background .15s ease;}
+  .ed-small-btn:hover{ background:rgba(255,255,255,0.1); }
+  .ed-footer{ border-top:1px solid rgba(240,207,140,0.2); padding-top:20px; margin-top:6px;}
+  .ed-checkbox-row{ display:flex; align-items:flex-start; gap:9px; margin-bottom:16px;}
+  .ed-checkbox-row input{ margin-top:3px; flex:0 0 auto;}
+  .ed-checkbox-row label{ font-size:11.5px; color:rgba(251,238,224,0.6); line-height:1.5;}
+  .ed-download{ width:100%; background:linear-gradient(180deg, var(--gold), var(--gold-dark)); color:#2b1607; border:none; padding:14px; border-radius:11px; font-size:14px; font-weight:700; cursor:pointer; box-shadow:0 4px 0 var(--gold-deep); transition:transform .15s ease;}
+  .ed-download:hover{ transform:translateY(-1px); }
+  .ed-download:active{ transform:translateY(3px); box-shadow:none; }
+  .ed-filename input{ width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(240,207,140,0.25); color:#fbeee0; padding:9px 10px; border-radius:8px; font-size:12px; margin-top:10px;}
+  .ed-note{ font-size:11px; color:rgba(251,238,224,0.4); margin-top:12px; line-height:1.5;}
+
+  body.no-pencil .top-toolbar{ display:none !important; }
+
+  @media (prefers-reduced-motion: reduce){
+    .stage, .heart, .confetti, .result-card, .bulb, .glass::after, .tray .flap, .result-icon{ animation:none !important; }
+  }
+</style>
+<style id="le-noeditor">#pencilBtn,.pencil-btn,.top-toolbar,#editToggle,.edit-toggle,#leEditToggle,.le-edit-toggle,.le-edit-hint,#editorOverlay,#editorPage,.editor-page,.le-editor-page,#pen,#ed{display:none!important}</style></head>
+<body class="no-pencil">
+
+<div class="ambient" id="ambient"></div>
+
+<div class="top-toolbar">
+  <button class="pencil-btn" id="pencilBtn" title="Personalizar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#f0cf8c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+  </button>
+</div>
+
+<div class="stage">
+  <div class="title-area">
+    <h1 id="titleView"></h1>
+    <p id="subtitleView"></p>
+  </div>
+
+  <div class="machine-wrap">
+    <div class="machine">
+      <div class="rivet-bottom left"></div>
+      <div class="rivet-bottom right"></div>
+      <div class="machine-header"><span class="bulb"></span>♡ MÁQUINA DE AMOR ♡<span class="bulb b2"></span></div>
+      <div class="glass" id="glassGrid"></div>
+      <div class="tray"><div class="flap"></div></div>
+      <div class="keypad" id="keypad"></div>
+    </div>
+    <div class="machine-shadow"></div>
+  </div>
+</div>
+
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card" id="resultCard"></div>
+</div>
+
+<!-- ===================== EDITOR ===================== -->
+<div class="editor" id="editorOverlay">
+  <div class="ed-topbar">
+    <button class="ed-back" id="edBack">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="ed-titles"><h1>Editor de la máquina</h1><p>Los cambios se ven al volver</p></div>
+  </div>
+  <div class="ed-body">
+
+    <div class="ed-section">
+      <h3>Encabezado</h3>
+      <div class="ed-field"><label>Título</label><input type="text" id="fTitle" maxlength="40"></div>
+      <div class="ed-field"><label>Instrucción</label><input type="text" id="fSubtitle" maxlength="70"></div>
+    </div>
+
+    <div class="ed-section">
+      <h3>9 casilleros</h3>
+      <p class="ed-hint">Elige qué sorpresa cae en cada número: una frase, una foto o un "rasca y descubre".</p>
+      <div id="slotsEditList"></div>
+    </div>
+
+    <div class="ed-footer">
+      <div class="ed-checkbox-row">
+        <input type="checkbox" id="includeEditorCheckbox">
+        <label for="includeEditorCheckbox">Incluir el editor (el lápiz) en el archivo descargado. Déjalo desactivado para la versión final que le envíes a la persona — así no le aparece el lápiz. Actívalo si quieres poder seguir editando este mismo archivo más adelante.</label>
+      </div>
+      <button class="ed-download" id="downloadBtn">Descargar mi máquina personalizada</button>
+      <div class="ed-filename"><input type="text" id="filenameInput" value="maquina-de-amor-personalizada.html"></div>
+      <p class="ed-note">"Descargar" genera un archivo HTML nuevo y completo con todos tus cambios y fotos ya incluidos, listo para enviar o abrir desde cualquier navegador.</p>
+    </div>
+  </div>
+</div>
+
+<script id="initial-state" type="application/json">{"title": "Máquina de Amor", "subtitle": "Elige un número y descubre tu sorpresa", "slots": [{"code": "A1", "type": "frase", "text": "Eres lo mejor que me ha pasado.", "photo": "", "caption": "", "scratchMsg": ""}, {"code": "A2", "type": "foto", "photo": "", "caption": "Ese día contigo", "text": "", "scratchMsg": ""}, {"code": "A3", "type": "juego", "scratchMsg": "¡Sorpresa! Te amo más de lo que imaginas.", "text": "", "photo": "", "caption": ""}, {"code": "B1", "type": "frase", "text": "Contigo hasta lo simple se vuelve especial.", "photo": "", "caption": "", "scratchMsg": ""}, {"code": "B2", "type": "frase", "text": "Gracias por elegirme cada día.", "photo": "", "caption": "", "scratchMsg": ""}, {"code": "B3", "type": "foto", "photo": "", "caption": "Nuestra aventura favorita", "text": "", "scratchMsg": ""}, {"code": "C1", "type": "juego", "scratchMsg": "Rasca y encontrarás lo mucho que te quiero.", "text": "", "photo": "", "caption": ""}, {"code": "C2", "type": "frase", "text": "Mi lugar favorito es a tu lado.", "photo": "", "caption": "", "scratchMsg": ""}, {"code": "C3", "type": "frase", "text": "Feliz día, te amo.", "photo": "", "caption": "", "scratchMsg": ""}]}</script>
+
+<script>
+(function(){
+  var stateEl = document.getElementById('initial-state');
+  var state;
+  try { state = JSON.parse(stateEl.textContent); } catch(e){ state = {}; }
+  function persistState(){ stateEl.textContent = JSON.stringify(state); }
+  function escapeHtml(str){ var d=document.createElement('div'); d.textContent = str==null?'':str; return d.innerHTML; }
+  var TYPE_ICON = { frase:'💌', foto:'📸', juego:'🎁' };
+
+  /* ambient falling background — corazones y destellos */
+  var ambient = document.getElementById('ambient');
+  var heartSymbols = ['♡','❀','✦','✧'];
+  var heartColors = ['rgba(255,190,205,0.5)','rgba(240,207,140,0.42)','rgba(255,127,161,0.4)','rgba(255,255,255,0.3)'];
+  var AMBIENT_COUNT = 22;
+  for(var i=0;i<AMBIENT_COUNT;i++){
+    var h=document.createElement('div');
+    h.className='heart';
+    h.textContent = heartSymbols[i % heartSymbols.length];
+    h.style.left=(Math.random()*100)+'vw';
+    h.style.fontSize=(10+Math.random()*18)+'px';
+    h.style.color = heartColors[i % heartColors.length];
+    h.style.setProperty('--op', (0.3+Math.random()*0.4).toFixed(2));
+    h.style.setProperty('--sway', (Math.random()<0.5?-1:1)*(14+Math.random()*40)+'px');
+    h.style.animationDuration=(10+Math.random()*12)+'s';
+    h.style.animationDelay=(Math.random()*14)+'s';
+    ambient.appendChild(h);
+  }
+
+  function renderHeader(){
+    document.getElementById('titleView').textContent = state.title;
+    document.getElementById('subtitleView').textContent = state.subtitle;
+  }
+
+  function renderGlassAndKeypad(){
+    var glass = document.getElementById('glassGrid');
+    var keys = document.getElementById('keypad');
+    glass.innerHTML=''; keys.innerHTML='';
+    state.slots.forEach(function(slot, idx){
+      var gslot = document.createElement('div');
+      gslot.className = 'glass-slot';
+      gslot.id = 'gslot-'+idx;
+      gslot.innerHTML = '<div class="icon-wrap">'+(TYPE_ICON[slot.type]||'💌')+'</div><div class="code-tag">'+slot.code+'</div>';
+      glass.appendChild(gslot);
+
+      var btn = document.createElement('button');
+      btn.className='key-btn'; btn.textContent = slot.code;
+      btn.addEventListener('click', function(){ dispense(idx, btn); });
+      keys.appendChild(btn);
+    });
+  }
+
+  function dispense(idx, btn){
+    var slot = state.slots[idx];
+    var gslot = document.getElementById('gslot-'+idx);
+    gslot.classList.add('dropping');
+    var allKeys = document.querySelectorAll('.key-btn');
+    allKeys.forEach(function(k){ k.disabled = true; });
+    setTimeout(function(){
+      gslot.classList.remove('dropping');
+      allKeys.forEach(function(k){ k.disabled = false; });
+      showResult(slot);
+      if(slot.type === 'frase') burstConfetti(24);
+    }, 520);
+  }
+
+  function showResult(slot){
+    var overlay = document.getElementById('resultOverlay');
+    var card = document.getElementById('resultCard');
+    var html = '<button class="result-close" id="resultCloseBtn">&#10005;</button>';
+    if(slot.type === 'frase'){
+      html += '<div class="result-icon">💌</div><div class="result-text">"'+escapeHtml(slot.text)+'"</div>';
+    } else if(slot.type === 'foto'){
+      html += slot.photo
+        ? '<div class="result-photo-frame"><img class="result-photo" src="'+slot.photo+'"><span class="result-caption">'+escapeHtml(slot.caption||'')+'</span></div>'
+        : '<div class="result-icon">📸</div><div class="result-caption">'+escapeHtml(slot.caption||'')+'</div>';
+    } else if(slot.type === 'juego'){
+      html += '<div class="result-icon">🎁</div><div class="scratch-wrap" id="scratchWrap">' +
+        '<div class="scratch-message">'+escapeHtml(slot.scratchMsg)+'</div>' +
+        '<canvas class="scratch-canvas" id="dispenseScratchCanvas"></canvas></div>' +
+        '<div class="scratch-hint">Rasca para descubrir tu sorpresa</div>';
+    }
+    card.innerHTML = html;
+    overlay.classList.add('show');
+    document.getElementById('resultCloseBtn').addEventListener('click', function(){
+      overlay.classList.remove('show');
+    });
+    if(slot.type === 'juego'){ setupScratch(); }
+  }
+
+  function setupScratch(){
+    var canvas = document.getElementById('dispenseScratchCanvas');
+    var wrap = canvas.parentElement;
+    requestAnimationFrame(function(){
+      var w = wrap.clientWidth, h = wrap.clientHeight;
+      canvas.width = w; canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      var grad = ctx.createLinearGradient(0,0,w,h);
+      grad.addColorStop(0,'#f0cf8c'); grad.addColorStop(0.5,'#d99cae'); grad.addColorStop(1,'#a9772f');
+      ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+      ctx.fillStyle = 'rgba(255,255,255,0.16)';
+      for(var yy=0; yy<h; yy+=6){ ctx.fillRect(0, yy, w, 1); }
+      ctx.fillStyle = 'rgba(255,255,255,0.92)';
+      ctx.font = '700 13px "Baloo 2", sans-serif';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('♡ RASCA AQUÍ ♡', w/2, h/2);
+      ctx.globalCompositeOperation = 'destination-out';
+
+      var drawing=false, checked=false;
+      function scratchAt(x,y){ ctx.beginPath(); ctx.arc(x,y,18,0,Math.PI*2); ctx.fill(); }
+      function getPos(e){
+        var rect = canvas.getBoundingClientRect();
+        var cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        var cy = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+        return {x:cx, y:cy};
+      }
+      function checkCleared(){
+        if(checked) return;
+        var data = ctx.getImageData(0,0,w,h).data;
+        var transparent=0, total=0;
+        for(var p=3;p<data.length;p+=40){ total++; if(data[p]===0) transparent++; }
+        if(transparent/total > 0.45){
+          checked = true;
+          canvas.style.transition='opacity .5s ease';
+          canvas.style.opacity='0';
+          setTimeout(function(){ canvas.style.pointerEvents='none'; burstConfetti(20); }, 500);
+        }
+      }
+      function start(e){ drawing=true; var p=getPos(e); scratchAt(p.x,p.y); }
+      function move(e){ if(!drawing) return; var p=getPos(e); scratchAt(p.x,p.y); checkCleared(); }
+      function end(){ drawing=false; }
+      canvas.onmousedown=start; canvas.onmousemove=move; window.addEventListener('mouseup', end);
+      canvas.ontouchstart=function(e){ start(e); };
+      canvas.ontouchmove=function(e){ move(e); };
+      canvas.ontouchend=end;
+    });
+  }
+
+  function burstConfetti(count){
+    var colors = ['#f0cf8c','#ff7fa1','#a9772f','#fff'];
+    for(var i=0;i<count;i++){
+      var c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random()*100+'vw';
+      var size = (5+Math.random()*4);
+      c.style.width = size+'px';
+      c.style.height = size+'px';
+      c.style.borderRadius = Math.random()<0.5 ? '50%' : '2px';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDuration = (2+Math.random()*1.5)+'s';
+      document.body.appendChild(c);
+      setTimeout(function(el){ return function(){ el.remove(); }; }(c), 3800);
+    }
+  }
+
+  function renderAll(){ renderHeader(); renderGlassAndKeypad(); }
+
+  /* ================= EDITOR ================= */
+  var pencilBtn = document.getElementById('pencilBtn');
+  var edBack = document.getElementById('edBack');
+  pencilBtn.addEventListener('click', function(){
+    document.body.classList.add('editing');
+    fillSimpleFields();
+    renderSlotsEditor();
+    window.scrollTo(0,0);
+  });
+  edBack.addEventListener('click', function(){
+    document.body.classList.remove('editing');
+    document.getElementById('resultOverlay').classList.remove('show');
+    renderAll();
+  });
+
+  function bindText(id, key){
+    var el = document.getElementById(id);
+    el.value = state[key];
+    el.addEventListener('input', function(){ state[key] = el.value; persistState(); });
+  }
+  function fillSimpleFields(){
+    bindText('fTitle','title'); bindText('fSubtitle','subtitle');
+  }
+
+  function fileToCompressedDataUrl(file, maxSize){
+    maxSize = maxSize || 400;
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var img = new Image();
+        img.onload = function(){
+          var w=img.width, h=img.height;
+          var scale = Math.min(1, maxSize/Math.max(w,h));
+          w = Math.round(w*scale); h = Math.round(h*scale);
+          var c = document.createElement('canvas'); c.width=w; c.height=h;
+          c.getContext('2d').drawImage(img,0,0,w,h);
+          resolve(c.toDataURL('image/jpeg', 0.85));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderSlotsEditor(){
+    var wrap = document.getElementById('slotsEditList');
+    wrap.innerHTML='';
+    state.slots.forEach(function(slot, idx){
+      var card = document.createElement('div');
+      card.className = 'ed-slot-card';
+      var typeOptsHtml = ['frase','foto','juego'].map(function(t){
+        var labels = {frase:'Frase', foto:'Foto', juego:'Rasca y descubre'};
+        return '<option value="'+t+'"'+(slot.type===t?' selected':'')+'>'+labels[t]+'</option>';
+      }).join('');
+      card.innerHTML =
+        '<h4>Casillero '+slot.code+'</h4>' +
+        '<div class="ed-field"><label>Tipo de sorpresa</label><select class="s-type">'+typeOptsHtml+'</select></div>' +
+        '<div class="s-fields"></div>';
+      wrap.appendChild(card);
+
+      var typeSelect = card.querySelector('.s-type');
+      var fieldsWrap = card.querySelector('.s-fields');
+
+      function renderFields(){
+        fieldsWrap.innerHTML='';
+        if(slot.type === 'frase'){
+          fieldsWrap.innerHTML = '<div class="ed-field"><label>Mensaje</label><textarea class="s-text" maxlength="140"></textarea></div>';
+          var ta = fieldsWrap.querySelector('.s-text');
+          ta.value = slot.text || '';
+          ta.addEventListener('input', function(e){ slot.text = e.target.value; persistState(); });
+        } else if(slot.type === 'foto'){
+          fieldsWrap.innerHTML =
+            '<div class="ed-photo-row"><div class="ed-photo-preview" id="prev-'+idx+'">Sin foto</div>' +
+            '<div style="display:flex; flex-direction:column; gap:6px;">' +
+            '<label class="ed-small-btn">Subir foto<input type="file" accept="image/*" class="s-photo" style="display:none;"></label>' +
+            '<button class="ed-small-btn s-remove-photo">Quitar foto</button></div></div>' +
+            '<div class="ed-field"><label>Pie de foto</label><input type="text" class="s-caption" maxlength="60"></div>';
+          var preview = fieldsWrap.querySelector('#prev-'+idx);
+          function updatePrev(){
+            if(slot.photo){ preview.style.backgroundImage='url('+slot.photo+')'; preview.textContent=''; }
+            else { preview.style.backgroundImage='none'; preview.textContent='Sin foto'; }
+          }
+          updatePrev();
+          fieldsWrap.querySelector('.s-caption').value = slot.caption || '';
+          fieldsWrap.querySelector('.s-caption').addEventListener('input', function(e){ slot.caption = e.target.value; persistState(); });
+          fieldsWrap.querySelector('.s-photo').addEventListener('change', function(e){
+            var file = e.target.files && e.target.files[0];
+            if(!file) return;
+            fileToCompressedDataUrl(file).then(function(dataUrl){ slot.photo = dataUrl; persistState(); updatePrev(); });
+          });
+          fieldsWrap.querySelector('.s-remove-photo').addEventListener('click', function(){ slot.photo=null; persistState(); updatePrev(); });
+        } else if(slot.type === 'juego'){
+          fieldsWrap.innerHTML = '<div class="ed-field"><label>Mensaje oculto (se revela al rascar)</label><textarea class="s-scratch" maxlength="100"></textarea></div>';
+          var ta2 = fieldsWrap.querySelector('.s-scratch');
+          ta2.value = slot.scratchMsg || '';
+          ta2.addEventListener('input', function(e){ slot.scratchMsg = e.target.value; persistState(); });
+        }
+      }
+      renderFields();
+      typeSelect.addEventListener('change', function(){
+        slot.type = typeSelect.value;
+        if(slot.type === 'frase' && !slot.text) slot.text = 'Escribe aquí tu mensaje.';
+        if(slot.type === 'foto' && slot.caption === undefined) slot.caption = 'Nuestro recuerdo';
+        if(slot.type === 'juego' && !slot.scratchMsg) slot.scratchMsg = 'Escribe aquí el mensaje sorpresa.';
+        persistState();
+        renderFields();
+      });
+    });
+  }
+
+  /* ---- download ---- */
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+    persistState();
+    var keepEditor = document.getElementById('includeEditorCheckbox').checked;
+    document.body.classList.remove('editing');
+    document.getElementById('resultOverlay').classList.remove('show');
+    renderAll();
+    setTimeout(function(){
+      if(!keepEditor) document.body.classList.add('no-pencil');
+      var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      if(!keepEditor) document.body.classList.remove('no-pencil');
+      var blob = new Blob([html], {type:'text/html'});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      var name = document.getElementById('filenameInput').value.trim() || 'maquina-de-amor-personalizada.html';
+      if(!name.toLowerCase().endsWith('.html')) name += '.html';
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    }, 60);
+  });
+
+  /* ================= INIT ================= */
+  renderAll();
+})();
+</script>
+</body>
+</html>

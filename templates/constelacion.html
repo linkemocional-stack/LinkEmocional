@@ -1,0 +1,1015 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Tu constelación ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; height: 100%; overflow: hidden;
+    font-family: 'Quicksand', sans-serif;
+    background: #04030c;
+  }
+
+  #c {
+    position: fixed; inset: 0; z-index: 0; display: block; background: #04030c;
+    opacity: 0; transition: opacity 1.4s ease;
+  }
+  #c.ready { opacity: 1; }
+
+  .vignette {
+    position: fixed; inset: 0; pointer-events: none; z-index: 2;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 50%, rgba(3,2,10,0.65) 100%);
+  }
+
+  .sound-toggle {
+    position: fixed; top: 16px; left: 16px; z-index: 950;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(180,200,255,0.28); cursor: pointer;
+    font-size: 17px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4); transition: transform 0.2s ease; color: #fff;
+  }
+  .sound-toggle:active { transform: scale(0.9); }
+
+  .edit-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 950;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(180,200,255,0.28); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4); transition: transform 0.2s ease;
+  }
+  .edit-toggle:active { transform: scale(0.9); }
+  .edit-toggle svg { width: 18px; height: 18px; }
+
+  .hud {
+    position: fixed; top: 20px; left: 0; right: 0; z-index: 5;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    pointer-events: none;
+  }
+  h1.title {
+    font-family: 'Baloo 2', sans-serif; font-size: 19px; color: #eaf2ff;
+    margin: 0 0 4px; text-shadow: 0 0 18px rgba(140,180,255,0.45);
+  }
+  p.subtitle { margin: 0 0 4px; font-size: 12.5px; color: #b9c6ea; font-weight: 600; min-height: 18px; }
+
+  .progress-wrap { width: 190px; margin: 8px 0 4px; }
+  .progress-track { height: 7px; border-radius: 999px; background: rgba(255,255,255,0.13); overflow: hidden; }
+  .progress-fill { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, #8ec5ff, #ffe9a8); transition: width 0.5s cubic-bezier(.3,.9,.3,1.1); }
+  .progress-text { font-size: 10px; color: #b9c6ea; margin-top: 5px; letter-spacing: 0.3px; }
+  .hud-hint { margin-top: 4px; font-size: 11px; color: #9aa8d6; opacity: 0.9; }
+
+  /* ================= TARJETA DE NOTA ================= */
+  .note-overlay {
+    position: fixed; inset: 0; z-index: 800; display: flex; align-items: center; justify-content: center;
+    background: rgba(3,2,12,0.6); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+    opacity: 0; pointer-events: none; transition: opacity 0.35s ease;
+  }
+  .note-overlay.show { opacity: 1; pointer-events: auto; }
+  .note-card {
+    width: min(300px, 84vw); background: linear-gradient(165deg, #fffaf0, #fff2df);
+    border-radius: 18px; padding: 28px 22px 24px; text-align: center; position: relative;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    transform: scale(0.4); opacity: 0; transition: transform 0.4s cubic-bezier(.2,.9,.3,1.25), opacity 0.3s ease;
+  }
+  .note-overlay.show .note-card { transform: scale(1); opacity: 1; }
+  .note-card .note-icon { font-size: 30px; display: block; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,220,150,0.8)); animation: noteIconPop 0.5s ease 0.15s both; }
+  @keyframes noteIconPop { 0% { transform: scale(0); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+  .note-card p { font-family: 'Caveat', cursive; font-size: 22px; line-height: 1.35; color: #7a4a2a; margin: 0; }
+  .note-close {
+    margin-top: 18px; border: none; border-radius: 999px; padding: 9px 22px; font-size: 13px;
+    font-family: 'Baloo 2', sans-serif; font-weight: 700; cursor: pointer; color: #fff;
+    background: linear-gradient(135deg, #8ec5ff, #b39ddb); box-shadow: 0 8px 18px rgba(140,160,255,0.4);
+  }
+
+  /* ================= GRAN FINAL ================= */
+  .grand-final {
+    position: fixed; inset: 0; z-index: 850; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at 50% 40%, rgba(60,60,110,0.5), rgba(3,2,12,0.9));
+    opacity: 0; pointer-events: none; transition: opacity 0.6s ease;
+  }
+  .grand-final.show { opacity: 1; pointer-events: auto; }
+  .grand-card { width: min(340px, 86vw); text-align: center; padding: 10px; }
+  .grand-card .big-icon { font-size: 52px; display: inline-block; animation: iconPop 0.7s ease, iconFloat 2.4s ease-in-out 0.7s infinite; filter: drop-shadow(0 0 18px rgba(180,200,255,0.7)); }
+  @keyframes iconPop { 0% { transform: scale(0); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+  @keyframes iconFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .grand-card h2 {
+    font-family: 'Baloo 2', sans-serif; font-size: 20px; margin: 10px 0 8px;
+    background: linear-gradient(90deg, #8ec5ff, #ffe9a8, #8ec5ff); background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shineText 2.6s linear infinite;
+  }
+  @keyframes shineText { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+  .grand-card p.msg { font-family: 'Caveat', cursive; font-size: 21px; line-height: 1.4; color: #f0f3ff; margin: 0; }
+  .grand-card p.msg span { display: inline-block; opacity: 0; animation: letterIn 0.4s ease forwards; }
+  @keyframes letterIn { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(6px); } }
+
+  .confetti-piece { position: fixed; top: -20px; z-index: 1000; pointer-events: none; animation: confettiFall linear forwards; }
+  @keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(600deg); opacity: 0.9; } }
+  .firework-emoji { position: fixed; z-index: 999; pointer-events: none; font-size: 20px; animation: fwOut 0.9s ease-out forwards; }
+  @keyframes fwOut { 0% { transform: translate(-50%,-50%) scale(0.3); opacity: 1; } 100% { transform: translate(calc(-50% + var(--fx)), calc(-50% + var(--fy))) scale(1.1); opacity: 0; } }
+
+  /* ================= AVISO DE ERROR ================= */
+  .load-error {
+    display: none; position: fixed; inset: 0; z-index: 2000; background: #05060a; color: #eaf2ff;
+    align-items: center; justify-content: center; padding: 32px; text-align: center;
+  }
+  .load-error.visible { display: flex; }
+  .load-error-box { max-width: 380px; }
+  .load-error-box h2 { font-size: 17px; margin: 0 0 10px; }
+  .load-error-box p { font-size: 13.5px; color: #9fb0c9; line-height: 1.6; margin: 0 0 18px; }
+  .load-error-box button { background: #8ec5ff; color: #0a1626; border: none; border-radius: 9px; padding: 11px 20px; font-weight: 700; font-size: 13.5px; cursor: pointer; font-family: inherit; }
+
+  /* ================= EDITOR ================= */
+  .editor-overlay {
+    position: fixed; inset: 0; z-index: 1500; display: flex; flex-direction: column;
+    background: linear-gradient(180deg, #0a0e22 0%, #1a1f3d 45%, #241a3f 100%);
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .editor-overlay.show { opacity: 1; pointer-events: auto; }
+
+  .editor-topbar {
+    display: flex; align-items: center; gap: 14px; padding: 16px 18px;
+    background: rgba(8,10,28,0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(180,200,255,0.14); flex: 0 0 auto;
+  }
+  .back-btn {
+    width: 38px; height: 38px; flex: 0 0 auto; border-radius: 50%;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(180,200,255,0.2);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.16); }
+  .back-btn svg { width: 18px; height: 18px; }
+  .editor-topbar-titles h2 { font-family: 'Baloo 2', sans-serif; font-size: 15px; margin: 0; color: #eaf2ff; }
+  .editor-topbar-titles p { font-size: 11px; margin: 2px 0 0; color: #a7b3dd; }
+  .ed-brand-watermark {
+    margin-left: auto; flex: 0 0 auto;
+    font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.3px;
+    white-space: nowrap;
+    background: linear-gradient(90deg, #72cbe9, #745fc9);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    pointer-events: none; user-select: none;
+  }
+
+  /* FIX SCROLL: separamos el contenedor que scrollea (ancho completo) del
+     contenedor que centra el contenido (max-width 480px). Antes ambos roles
+     estaban en el mismo elemento y la barra de scroll del navegador quedaba
+     pegada al borde de esa columna angosta centrada, en vez del borde real
+     de la pantalla. */
+  .editor-body { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+  .editor-body-inner { max-width: 480px; margin: 0 auto; padding: 20px 18px 40px; }
+  .edit-section { margin-bottom: 24px; }
+  .edit-section h3 { font-family: 'Baloo 2', sans-serif; font-size: 13.5px; margin: 0 0 3px; color: #eaf2ff; }
+  .edit-section p.hint-text { font-size: 11.5px; color: #a7b3dd; margin: 0 0 10px; line-height: 1.5; }
+  .edit-section input[type=text], .edit-section textarea {
+    width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(180,200,255,0.2);
+    color: #eef1ff; padding: 10px 11px; border-radius: 8px; font-family: 'Quicksand', sans-serif;
+    font-size: 13.5px; box-sizing: border-box;
+  }
+  .edit-section textarea { resize: vertical; min-height: 60px; }
+
+  .color-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .color-row input[type=color] { width: 42px; height: 42px; border: 2px solid rgba(180,200,255,0.2); border-radius: 10px; background: none; cursor: pointer; padding: 0; flex: 0 0 auto; }
+  .swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+  .swatch { width: 26px; height: 26px; border-radius: 8px; border: 2px solid rgba(180,200,255,0.15); cursor: pointer; transition: transform .12s ease; flex-shrink: 0; }
+  .swatch:hover { transform: scale(1.12); }
+  .swatch.active { border-color: #fff; }
+
+  .shape-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .shape-opt { flex: 1 1 110px; background: rgba(255,255,255,0.04); border: 1px solid rgba(180,200,255,0.18); border-radius: 9px; padding: 11px; text-align: center; cursor: pointer; font-size: 13px; font-weight: 600; color: #a7b3dd; }
+  .shape-opt.active { border-color: #8ec5ff; color: #8ec5ff; background: rgba(142,197,255,0.12); }
+
+  .msg-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .msg-row .msg-num { flex: 0 0 auto; width: 20px; text-align: center; font-size: 12px; color: #a7b3dd; }
+  .msg-row input[type=text] { flex: 1 1 auto; min-width: 0; }
+  .msg-row button {
+    flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%; border: none; cursor: pointer;
+    background: rgba(255,255,255,0.08); color: #c5cdec; font-size: 13px;
+  }
+  .msg-row button:hover { background: rgba(255,140,150,0.25); color: #ff8fa8; }
+
+  .add-row { display: flex; gap: 8px; margin-top: 4px; }
+  .add-row input[type=text] { flex: 1 1 auto; min-width: 0; }
+  .btn { border: none; border-radius: 8px; padding: 10px 16px; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 13px; cursor: pointer; }
+  .btn-add { background: rgba(142,197,255,0.16); color: #8ec5ff; border: 1px solid rgba(142,197,255,0.4); flex: 0 0 auto; }
+  .btn-download { width: 100%; background: linear-gradient(135deg, #8ec5ff, #b39ddb); color: #14172c; padding: 13px 16px; font-size: 14px; border-radius: 10px; box-shadow: 0 8px 18px rgba(140,160,255,0.3); }
+
+  .panel-footer { margin-top: 8px; padding-top: 18px; border-top: 1px solid rgba(180,200,255,0.14); }
+  .editor-checkbox-row { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 14px; }
+  .editor-checkbox-row input { margin-top: 3px; flex: 0 0 auto; }
+  .editor-checkbox-row label { font-size: 11.5px; color: #a7b3dd; line-height: 1.5; }
+  .filename-row { margin-top: 12px; }
+  .save-note { font-size: 11px; color: #7480a8; line-height: 1.5; margin-top: 12px; }
+
+  body.no-editor .edit-toggle { display: none !important; }
+</style>
+<style id="le-noeditor">#pencilBtn,.pencil-btn,.top-toolbar,#editToggle,.edit-toggle,#leEditToggle,.le-edit-toggle,.le-edit-hint,#editorOverlay,#editorPage,.editor-page,.le-editor-page,#pen,#ed{display:none!important}</style></head>
+<body class="no-editor">
+
+<canvas id="c"></canvas>
+<div class="vignette"></div>
+
+<button class="sound-toggle" id="soundToggle" title="sonido">🔊</button>
+<button class="edit-toggle" id="editToggle" title="Personalizar">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#eaf2ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+</button>
+
+<div class="hud">
+  <h1 class="title" id="mainTitle">Una constelación solo para ti ✨</h1>
+  <p class="subtitle" id="subtitle">gira el cielo, toca una estrella para descubrirla</p>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">0 de 10 estrellas encendidas</div>
+  </div>
+  <div class="hud-hint" id="hudHint">quedan 10 estrellas por descubrir</div>
+</div>
+
+<!-- tarjeta de nota individual -->
+<div class="note-overlay" id="noteOverlay">
+  <div class="note-card">
+    <span class="note-icon">⭐</span>
+    <p id="noteText"></p>
+    <button class="note-close" id="noteClose">guardar en la constelación ✨</button>
+  </div>
+</div>
+
+<!-- gran final -->
+<div class="grand-final" id="grandFinal">
+  <div class="grand-card">
+    <div class="big-icon">✨</div>
+    <h2>Tu constelación está completa...</h2>
+    <p class="msg" id="grandMsg"></p>
+  </div>
+</div>
+
+<!-- aviso si no carga -->
+<div class="load-error" id="loadError">
+  <div class="load-error-box">
+    <h2>No se pudo cargar la animación</h2>
+    <p>Esto puede pasar por falta de internet al abrir el archivo, por abrirlo dentro de una app (como un chat) que bloquea la carga, o porque el navegador tiene desactivada la aceleración gráfica (WebGL). Probá con internet activo, en un navegador normal (Chrome, Edge, Safari), y con la aceleración de hardware activada.</p>
+    <button id="reloadBtn">Reintentar</button>
+  </div>
+</div>
+
+<!-- editor -->
+<div class="editor-overlay" id="editorOverlay">
+  <div class="editor-topbar">
+    <button class="back-btn" id="backBtn" title="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#eaf2ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="editor-topbar-titles">
+      <h2>Editor de tu regalo</h2>
+      <p>Los cambios se ven al instante</p>
+    </div>
+    <div class="ed-brand-watermark">Link Emocional</div>
+  </div>
+  <div class="editor-body">
+    <div class="editor-body-inner">
+      <div class="edit-section">
+        <h3>Título principal</h3>
+        <input type="text" id="editTitleInput" maxlength="60">
+      </div>
+      <div class="edit-section">
+        <h3>Subtítulo inicial</h3>
+        <input type="text" id="editSubtitleInput" maxlength="70">
+      </div>
+      <div class="edit-section">
+        <h3>Color de las estrellas</h3>
+        <p class="hint-text">Cambia el color y el brillo de la constelación.</p>
+        <div class="color-row">
+          <input type="color" id="colorPicker" value="#ffe9a8">
+        </div>
+        <div class="swatches" id="swatches"></div>
+      </div>
+      <div class="edit-section">
+        <h3>Forma de la constelación</h3>
+        <p class="hint-text">Cómo se acomodan las estrellas en el espacio.</p>
+        <div class="shape-row">
+          <div class="shape-opt" data-shape="heart">&#9829; Corazón</div>
+          <div class="shape-opt" data-shape="star">&#10022; Estrella</div>
+          <div class="shape-opt" data-shape="circle">&#9711; Círculo</div>
+        </div>
+      </div>
+      <div class="edit-section">
+        <h3>Mensajes (uno por estrella)</h3>
+        <p class="hint-text">Edita, borra o agrega mensajes. Cada uno aparece al tocar una estrella.</p>
+        <div id="editMsgList"></div>
+        <div class="add-row">
+          <input type="text" id="editMsgAddInput" placeholder="Escribe un nuevo mensaje" maxlength="160">
+          <button class="btn btn-add" id="editMsgAddBtn">Agregar</button>
+        </div>
+      </div>
+      <div class="edit-section">
+        <h3>Mensaje final</h3>
+        <p class="hint-text">Aparece cuando se encienden todas las estrellas.</p>
+        <textarea id="editFinalMessageInput" maxlength="220"></textarea>
+      </div>
+      <div class="panel-footer">
+        <div class="editor-checkbox-row">
+          <input type="checkbox" id="includeEditorCheckbox">
+          <label for="includeEditorCheckbox">Incluir el editor (el lápiz) en este archivo. Dejalo desactivado para la versión final que le envíes a la persona — así no le aparece el lápiz. Actívalo solo si querés seguir editando este mismo archivo descargado más adelante.</label>
+        </div>
+        <button class="btn btn-download" id="downloadBtn">Descargar mi regalo personalizado</button>
+        <div class="filename-row">
+          <input type="text" id="filenameInput" value="mi-constelacion.html">
+        </div>
+        <p class="save-note">"Descargar" genera un HTML nuevo y completo con tus cambios ya aplicados, listo para enviarlo o retocarlo después.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script id="initial-state" type="application/json">{"title": "Una constelación solo para ti ✨", "subtitleInitial": "gira el cielo, toca una estrella para descubrirla", "color": "#ffe9a8", "shape": "heart", "messages": ["La primera vez que hablamos ya sabía que ibas a brillar en mi vida ✨", "Ese día que nos reímos tanto que ya ni recordábamos de qué 😂", "Cuando me escuchaste sin decir nada, y fue justo lo que necesitaba 💫", "La vez que me mandaste ese mensaje random y me alegró el día entero 📱", "Cada plan pequeño contigo termina siendo mi momento favorito de la semana", "Esa conversación de madrugada que no queríamos que terminara 🌙", "Cuando celebraste mis logros como si fueran tuyos 🎉", "La forma en la que apareces justo cuando hace falta 🤍", "Todas las veces que me hiciste ver las cosas distinto, mejor", "Esta constelación, como todo lo demás, es porque existes tú ⭐"], "finalMessage": "Cada estrella de esta constelación eres tú, en un momento distinto. Gracias por brillar así, siempre."}</script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
+<script>
+if (typeof THREE === "undefined") {
+    document.write('<script src="https://unpkg.com/three@0.148.0/build/three.min.js"><\/script>');
+}
+</script>
+<script>
+if (typeof THREE === "undefined") {
+    document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"><\/script>');
+}
+</script>
+<script>
+(function(){
+  "use strict";
+
+  /* ============ sonido sutil (WebAudio) ============ */
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+  var actx = null, soundOn = true;
+  function ensureAudio(){ if (!actx && AudioCtx) { try { actx = new AudioCtx(); } catch(e){} } }
+  function blip(freq, dur, type, vol){
+    if (!soundOn || !AudioCtx) return;
+    ensureAudio(); if (!actx) return;
+    var osc = actx.createOscillator(), gain = actx.createGain();
+    osc.type = type || "sine"; osc.frequency.value = freq; gain.gain.value = 0;
+    osc.connect(gain); gain.connect(actx.destination);
+    var now = actx.currentTime;
+    gain.gain.linearRampToValueAtTime(vol || 0.06, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + (dur || 0.18));
+    osc.start(now); osc.stop(now + (dur || 0.18) + 0.02);
+  }
+  function playIgnite(){ blip(740, 0.16, "sine", 0.05); setTimeout(function(){ blip(1040, 0.18, "sine", 0.045); }, 90); }
+  function playChime(){
+    [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach(function(f, i){
+      setTimeout(function(){ blip(f, 0.35, "sine", 0.06); }, i * 100);
+    });
+  }
+  document.getElementById("soundToggle").addEventListener("click", function(){
+    soundOn = !soundOn; this.textContent = soundOn ? "🔊" : "🔇"; ensureAudio();
+  });
+
+  /* ============ confeti y fuegos artificiales (DOM, celebración final) ============ */
+  var CONFETTI_COLORS = ["#8ec5ff","#ffe9a8","#b39ddb","#7cf5ff","#ff9fc0"];
+  var CONFETTI_SHAPES = ["⭐","✨","💫",null,null];
+  function burstConfetti(){
+    for (var i = 0; i < 80; i++) {
+      (function(){
+        var p = document.createElement("div");
+        p.className = "confetti-piece";
+        var shape = CONFETTI_SHAPES[Math.floor(Math.random() * CONFETTI_SHAPES.length)];
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.animationDuration = (2.2 + Math.random() * 1.8) + "s";
+        p.style.animationDelay = (Math.random() * 0.6) + "s";
+        if (shape) { p.textContent = shape; p.style.fontSize = (12 + Math.random() * 10) + "px"; }
+        else {
+          p.style.width = "9px"; p.style.height = "14px";
+          p.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+          p.style.borderRadius = Math.random() < 0.5 ? "50%" : "2px";
+        }
+        document.body.appendChild(p);
+        setTimeout(function(){ p.remove(); }, 5000);
+      })();
+    }
+  }
+  var FW_EMOJIS = ["⭐","✨","🌟","💫"];
+  function burstFireworks(){
+    var cx = window.innerWidth / 2, cy = window.innerHeight / 2.6;
+    for (var i = 0; i < 16; i++) {
+      (function(){
+        var f = document.createElement("div");
+        f.className = "firework-emoji";
+        f.textContent = FW_EMOJIS[Math.floor(Math.random() * FW_EMOJIS.length)];
+        var angle = Math.random() * Math.PI * 2, dist = 80 + Math.random() * 160;
+        f.style.left = cx + "px"; f.style.top = cy + "px";
+        f.style.setProperty("--fx", Math.cos(angle) * dist + "px");
+        f.style.setProperty("--fy", Math.sin(angle) * dist + "px");
+        document.body.appendChild(f);
+        setTimeout(function(){ f.remove(); }, 950);
+      })();
+    }
+  }
+
+  /* ============ helpers de color ============ */
+  function clampByte(v){ return Math.max(0, Math.min(255, Math.round(v))); }
+  function hexToRgb(hex){
+    hex = (hex || "#ffe9a8").replace("#", "");
+    if (hex.length === 3) hex = hex.split("").map(function(c){ return c + c; }).join("");
+    var num = parseInt(hex, 16);
+    return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+  }
+
+  /* ============ estado editable ============ */
+  var DEFAULT_MESSAGES = [
+    "La primera vez que hablamos ya sabía que ibas a brillar en mi vida ✨",
+    "Ese día que nos reímos tanto que ya ni recordábamos de qué 😂",
+    "Cuando me escuchaste sin decir nada, y fue justo lo que necesitaba 💫",
+    "La vez que me mandaste ese mensaje random y me alegró el día entero 📱",
+    "Cada plan pequeño contigo termina siendo mi momento favorito de la semana",
+    "Esa conversación de madrugada que no queríamos que terminara 🌙",
+    "Cuando celebraste mis logros como si fueran tuyos 🎉",
+    "La forma en la que apareces justo cuando hace falta 🤍",
+    "Todas las veces que me hiciste ver las cosas distinto, mejor",
+    "Esta constelación, como todo lo demás, es porque existes tú ⭐"
+  ];
+
+  var stateEl = document.getElementById("initial-state");
+  var state;
+  try { state = JSON.parse(stateEl.textContent); } catch (e) { state = {}; }
+  state.title = state.title || "Una constelación solo para ti ✨";
+  state.subtitleInitial = state.subtitleInitial || "gira el cielo, toca una estrella para descubrirla";
+  state.color = state.color || "#ffe9a8";
+  state.shape = state.shape || "heart";
+  state.messages = (state.messages && state.messages.length) ? state.messages : DEFAULT_MESSAGES.slice();
+  state.finalMessage = state.finalMessage || "Cada estrella de esta constelación eres tú, en un momento distinto. Gracias por brillar así, siempre.";
+
+  function persistState(){
+    stateEl.textContent = JSON.stringify(state);
+  }
+
+  // misma referencia que state.messages: se muta con push/splice/[i]=
+  var MESSAGES = state.messages;
+
+  var mainTitle = document.getElementById("mainTitle");
+  var subtitle = document.getElementById("subtitle");
+  var progressFill = document.getElementById("progressFill");
+  var progressText = document.getElementById("progressText");
+  var hudHint = document.getElementById("hudHint");
+
+  mainTitle.textContent = state.title;
+  subtitle.textContent = state.subtitleInitial;
+
+  var litCount = 0;
+
+  function showLoadError(err){
+    try { console.error("Constelación - error al iniciar:", err); } catch(e){}
+    var el = document.getElementById("loadError");
+    if (el) el.classList.add("visible");
+    var btn = document.getElementById("reloadBtn");
+    if (btn) btn.addEventListener("click", function(){ window.location.reload(); });
+  }
+
+  if (typeof THREE === "undefined") {
+    showLoadError(new Error("THREE.js no se pudo cargar"));
+    return;
+  }
+
+  try {
+
+  /* ============ escena base ============ */
+  var canvas = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x04030c);
+  var camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 4000);
+
+  var LOOK_TARGET = new THREE.Vector3(0, 0, 0);
+  var targetDist = 230, currentDist = 420, rotX = 0.1, rotY = 0.4;
+  var autoRotate = true;
+
+  function doResize(){
+    var w = window.innerWidth, h = window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+  doResize();
+  window.addEventListener("resize", doResize);
+  window.addEventListener("orientationchange", function(){ setTimeout(doResize, 150); });
+
+  /* ============ texturas ============ */
+  function makeGlowTexture(size){
+    size = size || 128;
+    var c = document.createElement("canvas");
+    c.width = c.height = size;
+    var ctx = c.getContext("2d");
+    var g = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+    g.addColorStop(0, "rgba(255,255,255,1)");
+    g.addColorStop(0.35, "rgba(255,255,255,0.75)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+  }
+  var glowTex = makeGlowTexture();
+
+  /* ============ campo de estrellas de fondo ============ */
+  (function(count, maxR){
+    count = count || 3200; maxR = maxR || 2200;
+    var geo = new THREE.BufferGeometry();
+    var pos = new Float32Array(3 * count);
+    for (var i = 0; i < count; i++) {
+      var r = maxR * (0.35 + 0.65 * Math.random());
+      var theta = Math.random() * Math.PI * 2;
+      var phi = Math.acos(2 * Math.random() - 1);
+      pos[3*i]   = r * Math.sin(phi) * Math.cos(theta);
+      pos[3*i+1] = r * Math.cos(phi);
+      pos[3*i+2] = r * Math.sin(phi) * Math.sin(theta);
+    }
+    geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    var mat = new THREE.PointsMaterial({ map: glowTex, size: 3.4, color: 0xffffff, transparent: true, opacity: 0.75, depthWrite: false, sizeAttenuation: true, blending: THREE.AdditiveBlending });
+    scene.add(new THREE.Points(geo, mat));
+  })();
+
+  /* ============ lucecitas de colores de fondo (ambiente) ============ */
+  var ambientLightsMat = (function(count){
+    count = count || 320;
+    var geo = new THREE.BufferGeometry();
+    var pos = new Float32Array(3 * count);
+    var col = new Float32Array(3 * count);
+    var palette = [
+      [0.56, 0.77, 1.00],  // azul suave
+      [1.00, 0.91, 0.66],  // dorado calido
+      [1.00, 0.62, 0.75],  // rosa
+      [0.72, 0.60, 0.86]   // lavanda
+    ];
+    for (var i = 0; i < count; i++) {
+      var r = 260 + Math.random() * 900;
+      var theta = Math.random() * Math.PI * 2;
+      var phi = Math.acos(2 * Math.random() - 1);
+      pos[3*i]   = r * Math.sin(phi) * Math.cos(theta);
+      pos[3*i+1] = r * Math.cos(phi);
+      pos[3*i+2] = r * Math.sin(phi) * Math.sin(theta);
+      var c = palette[Math.floor(Math.random() * palette.length)];
+      col[3*i] = c[0]; col[3*i+1] = c[1]; col[3*i+2] = c[2];
+    }
+    geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+    var mat = new THREE.PointsMaterial({ map: glowTex, size: 6.5, vertexColors: true, transparent: true, opacity: 0.5, depthWrite: false, sizeAttenuation: true, blending: THREE.AdditiveBlending });
+    scene.add(new THREE.Points(geo, mat));
+    return mat;
+  })();
+
+  scene.add(new THREE.AmbientLight(0x223055, 1.2));
+
+  /* ============ grupo de la constelación ============ */
+  var constellationGroup = new THREE.Group();
+  scene.add(constellationGroup);
+
+  var starSprites = [];
+  var lines = [];
+  var litOrder = [];
+
+  function clearGroup(){
+    while (constellationGroup.children.length) {
+      var obj = constellationGroup.children.pop();
+      if (obj.material) {
+        if (obj.material.map && obj.material.map !== glowTex) obj.material.map.dispose();
+        obj.material.dispose();
+      }
+      if (obj.geometry) obj.geometry.dispose();
+    }
+    starSprites = [];
+    lines = [];
+    litOrder = [];
+  }
+
+  function heartPoint(t, scale){
+    var x = 16 * Math.pow(Math.sin(t), 3);
+    var y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+    return { x: (x / 16) * scale, y: (y / 16) * scale };
+  }
+  function starPoint(t, scale, points, outerR, innerR){
+    // formula continua (sin depender de que las muestras caigan justo en los
+    // vertices): el radio ondula suavemente entre innerR y outerR con "points"
+    // picos, y se eleva a una potencia para que las puntas queden marcadas
+    // y los huecos entre puntas se redondeen, en vez de dar un promedio raro.
+    points = points || 5; outerR = outerR === undefined ? 1 : outerR; innerR = innerR === undefined ? 0.42 : innerR;
+    var wave = (Math.cos(points * t) + 1) / 2; // 0..1
+    var shaped = Math.pow(wave, 1.7);
+    var r = innerR + (outerR - innerR) * shaped;
+    return { x: r * Math.cos(t) * scale, y: r * Math.sin(t) * scale };
+  }
+  function circlePoint(t, scale){
+    return { x: Math.cos(t) * scale, y: Math.sin(t) * scale };
+  }
+
+  function shapePosition(i, total){
+    var t = (i / Math.max(1, total)) * Math.PI * 2;
+    var scale = 62;
+    var p, zJitter;
+    if (state.shape === "star") { p = starPoint(t, scale); zJitter = 12; }
+    else if (state.shape === "circle") { p = circlePoint(t, scale * 0.85); zJitter = 8; }
+    else { p = heartPoint(t, scale); zJitter = 26; }
+    var z = (Math.random() - 0.5) * zJitter;
+    return new THREE.Vector3(p.x, p.y + 6, z);
+  }
+
+  function buildConstellation(){
+    clearGroup();
+    var total = MESSAGES.length;
+    MESSAGES.forEach(function(text, i){
+      var pos = shapePosition(i, total);
+      var mat = new THREE.SpriteMaterial({ map: glowTex, color: 0x8892b8, transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending });
+      var sprite = new THREE.Sprite(mat);
+      sprite.position.copy(pos);
+      sprite.scale.set(10, 10, 1);
+      sprite.userData.index = i;
+      sprite.userData.basePos = pos.clone();
+      sprite.userData.lit = false;
+      sprite.userData.pulsePhase = Math.random() * Math.PI * 2;
+      constellationGroup.add(sprite);
+      starSprites.push(sprite);
+    });
+  }
+
+  function resetProgress(){
+    litCount = 0;
+    subtitle.textContent = state.subtitleInitial;
+    updateProgress();
+  }
+
+  function rebuildConstellation(){
+    buildConstellation();
+    resetProgress();
+  }
+
+  function applyStarColor(){
+    var rgb = hexToRgb(state.color);
+    var hex = (rgb.r << 16) | (rgb.g << 8) | rgb.b;
+    starSprites.forEach(function(sprite){
+      if (sprite.userData.lit) sprite.material.color.setHex(hex);
+    });
+    lines.forEach(function(line){
+      line.material.color.setHex(hex);
+    });
+  }
+
+  buildConstellation();
+  updateProgressPlaceholder();
+  function updateProgressPlaceholder(){ updateProgress(); }
+
+  function addConnectionLine(fromPos, toPos){
+    var geo = new THREE.BufferGeometry();
+    var arr = new Float32Array([fromPos.x, fromPos.y, fromPos.z, toPos.x, toPos.y, toPos.z]);
+    geo.setAttribute("position", new THREE.BufferAttribute(arr, 3));
+    var rgb = hexToRgb(state.color);
+    var hex = (rgb.r << 16) | (rgb.g << 8) | rgb.b;
+    var mat = new THREE.LineBasicMaterial({ color: hex, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
+    var line = new THREE.Line(geo, mat);
+    constellationGroup.add(line);
+    lines.push(line);
+  }
+
+  function lightStar(sprite){
+    if (sprite.userData.lit) return;
+    sprite.userData.lit = true;
+    var rgb = hexToRgb(state.color);
+    var hex = (rgb.r << 16) | (rgb.g << 8) | rgb.b;
+    sprite.material.color.setHex(hex);
+    sprite.material.opacity = 1;
+    sprite.scale.set(16, 16, 1);
+    if (litOrder.length) {
+      var prevSprite = litOrder[litOrder.length - 1];
+      addConnectionLine(prevSprite.position, sprite.position);
+    }
+    litOrder.push(sprite);
+    litCount++;
+    updateProgress();
+  }
+
+  function updateProgress(){
+    var total = MESSAGES.length;
+    var pct = total ? Math.round((litCount / total) * 100) : 0;
+    progressFill.style.width = pct + "%";
+    progressText.textContent = litCount + " de " + total + " estrellas encendidas";
+    if (total && litCount >= total) {
+      hudHint.textContent = "tu constelación está completa 🌟";
+      subtitle.textContent = "gira el cielo y mírala entera...";
+      setTimeout(showGrandFinal, 900);
+    } else {
+      var left = total - litCount;
+      hudHint.textContent = left === 1 ? "solo queda 1 estrella por descubrir" : "quedan " + left + " estrellas por descubrir";
+    }
+  }
+
+  /* ============ nota / interacción ============ */
+  var noteOverlay = document.getElementById("noteOverlay");
+  var noteText = document.getElementById("noteText");
+  var noteClose = document.getElementById("noteClose");
+  var activeSprite = null;
+
+  function openStarNote(sprite){
+    if (sprite.userData.lit || activeSprite) return;
+    activeSprite = sprite;
+    playIgnite();
+    noteText.textContent = MESSAGES[sprite.userData.index];
+    setTimeout(function(){ noteOverlay.classList.add("show"); }, 180);
+  }
+  function closeNote(){
+    noteOverlay.classList.remove("show");
+    if (activeSprite) {
+      lightStar(activeSprite);
+      activeSprite = null;
+    }
+  }
+  noteClose.addEventListener("click", closeNote);
+  noteOverlay.addEventListener("click", function(e){ if (e.target === noteOverlay) closeNote(); });
+
+  function showGrandFinal(){
+    var grandFinal = document.getElementById("grandFinal");
+    var grandMsg = document.getElementById("grandMsg");
+    grandMsg.innerHTML = "";
+    (state.finalMessage || "").split("").forEach(function(ch, i){
+      var span = document.createElement("span");
+      span.textContent = ch === " " ? "\u00A0" : ch;
+      span.style.animationDelay = (0.4 + i * 0.025) + "s";
+      grandMsg.appendChild(span);
+    });
+    grandFinal.classList.add("show");
+    playChime();
+    burstConfetti();
+    burstFireworks();
+    setTimeout(burstConfetti, 450);
+    setTimeout(burstFireworks, 650);
+  }
+
+  /* ============ raycasting + controles de cámara (arrastrar para rotar) ============ */
+  var raycaster = new THREE.Raycaster();
+  function pointerNDC(clientX, clientY){
+    var rect = canvas.getBoundingClientRect();
+    var x = ((clientX - rect.left) / rect.width) * 2 - 1;
+    var y = -((clientY - rect.top) / rect.height) * 2 + 1;
+    return new THREE.Vector2(x, y);
+  }
+
+  var dragging = false, lastX = 0, lastY = 0, downX = 0, downY = 0, downTime = 0, moved = 0;
+
+  function onDown(e){
+    dragging = true; moved = 0; autoRotate = false;
+    var t = e.touches ? e.touches[0] : e;
+    lastX = downX = t.clientX;
+    lastY = downY = t.clientY;
+    downTime = performance.now();
+  }
+  function onMove(e){
+    if (!dragging) return;
+    var t = e.touches ? e.touches[0] : e;
+    var nX = (t.clientX - lastX) / window.innerWidth;
+    var nY = (t.clientY - lastY) / window.innerHeight;
+    rotY -= 3 * nX;
+    rotX = Math.max(-1.1, Math.min(1.1, rotX - 2.2 * nY));
+    moved += Math.abs(t.clientX - lastX) + Math.abs(t.clientY - lastY);
+    lastX = t.clientX; lastY = t.clientY;
+  }
+  function onUp(e){
+    if (!dragging) return;
+    dragging = false;
+    var wasQuickTap = moved < 12 && (performance.now() - downTime) < 500;
+    if (wasQuickTap) {
+      var ndc = pointerNDC(downX, downY);
+      raycaster.setFromCamera(ndc, camera);
+      var hits = raycaster.intersectObjects(starSprites, false);
+      if (hits.length) openStarNote(hits[0].object);
+    }
+    setTimeout(function(){ autoRotate = true; }, 2200);
+  }
+  window.addEventListener("mousedown", onDown);
+  window.addEventListener("mousemove", onMove);
+  window.addEventListener("mouseup", onUp);
+  window.addEventListener("touchstart", onDown, { passive: true });
+  window.addEventListener("touchmove", onMove, { passive: true });
+  window.addEventListener("touchend", onUp, { passive: true });
+
+  window.addEventListener("wheel", function(e){
+    targetDist += 0.2 * e.deltaY;
+    targetDist = Math.max(140, Math.min(600, targetDist));
+  }, { passive: true });
+
+  var pinch = 0;
+  window.addEventListener("touchmove", function(e){
+    if (e.touches && e.touches.length === 2) {
+      var dX = e.touches[0].clientX - e.touches[1].clientX;
+      var dY = e.touches[0].clientY - e.touches[1].clientY;
+      var dist = Math.hypot(dX, dY);
+      if (pinch) {
+        targetDist += 0.5 * (pinch - dist);
+        targetDist = Math.max(140, Math.min(600, targetDist));
+      }
+      pinch = dist;
+    }
+  }, { passive: true });
+  window.addEventListener("touchend", function(){ pinch = 0; }, { passive: true });
+
+  /* ============ loop ============ */
+  var timeClock = 0;
+  var lastFrame = performance.now();
+  var readyFired = false;
+
+  function tick(){
+    requestAnimationFrame(tick);
+    var now = performance.now();
+    var dt = Math.min((now - lastFrame) / 1000, 0.05);
+    lastFrame = now;
+    timeClock += dt;
+
+    if (autoRotate) rotY += 0.06 * dt;
+
+    ambientLightsMat.opacity = 0.35 + 0.25 * (0.5 + 0.5 * Math.sin(timeClock * 0.6));
+
+    starSprites.forEach(function(sprite){
+      var ud = sprite.userData;
+      var pulse = 1 + 0.12 * Math.sin(2.2 * timeClock + ud.pulsePhase);
+      var baseScale = ud.lit ? 16 : 9;
+      sprite.scale.set(baseScale * pulse, baseScale * pulse, 1);
+      if (!ud.lit) {
+        sprite.material.opacity = 0.35 + 0.25 * (0.5 + 0.5 * Math.sin(1.6 * timeClock + ud.pulsePhase));
+      }
+    });
+
+    currentDist += 0.05 * (targetDist - currentDist);
+    var cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+    var cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+    camera.position.set(
+      LOOK_TARGET.x + currentDist * sinY * cosX,
+      LOOK_TARGET.y + currentDist * sinX,
+      LOOK_TARGET.z + currentDist * cosY * cosX
+    );
+    camera.lookAt(LOOK_TARGET);
+
+    renderer.render(scene, camera);
+
+    if (!readyFired) {
+      readyFired = true;
+      requestAnimationFrame(function(){ canvas.classList.add("ready"); });
+    }
+  }
+  tick();
+
+  /* ============ editor ============ */
+  var editToggle = document.getElementById("editToggle");
+  var editorOverlay = document.getElementById("editorOverlay");
+  var backBtn = document.getElementById("backBtn");
+  var editTitleInput = document.getElementById("editTitleInput");
+  var editSubtitleInput = document.getElementById("editSubtitleInput");
+  var colorPicker = document.getElementById("colorPicker");
+  var swatchesEl = document.getElementById("swatches");
+  var editMsgList = document.getElementById("editMsgList");
+  var editMsgAddInput = document.getElementById("editMsgAddInput");
+  var editMsgAddBtn = document.getElementById("editMsgAddBtn");
+  var editFinalMessageInput = document.getElementById("editFinalMessageInput");
+  var includeEditorCheckbox = document.getElementById("includeEditorCheckbox");
+  var filenameInput = document.getElementById("filenameInput");
+  var downloadBtn = document.getElementById("downloadBtn");
+
+  var PRESET_COLORS = ["#ffe9a8", "#8ec5ff", "#ff9fc0", "#b39ddb", "#7cf5ff", "#ffffff", "#ffb37a", "#c9ff9a", "#ff6f91", "#a0e6ff"];
+  swatchesEl.innerHTML = "";
+  PRESET_COLORS.forEach(function(hex){
+    var sw = document.createElement("div");
+    sw.className = "swatch";
+    sw.style.background = hex;
+    sw.title = hex;
+    sw.addEventListener("click", function(){ setColor(hex); });
+    swatchesEl.appendChild(sw);
+  });
+  function refreshSwatchActive(){
+    Array.prototype.forEach.call(swatchesEl.children, function(sw, i){
+      sw.classList.toggle("active", PRESET_COLORS[i].toLowerCase() === state.color.toLowerCase());
+    });
+  }
+  function setColor(hex){
+    if (!/^#([0-9a-fA-F]{6})$/.test(hex)) return;
+    state.color = hex;
+    colorPicker.value = hex;
+    applyStarColor();
+    refreshSwatchActive();
+    persistState();
+  }
+  colorPicker.addEventListener("input", function(){ setColor(colorPicker.value); });
+
+  document.querySelectorAll(".shape-opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      state.shape = opt.dataset.shape;
+      document.querySelectorAll(".shape-opt").forEach(function(o){ o.classList.toggle("active", o === opt); });
+      rebuildConstellation();
+      persistState();
+    });
+    if (opt.dataset.shape === state.shape) opt.classList.add("active");
+  });
+
+  function renderMsgEditor(){
+    editMsgList.innerHTML = "";
+    MESSAGES.forEach(function(text, idx){
+      var row = document.createElement("div");
+      row.className = "msg-row";
+      var num = document.createElement("span");
+      num.className = "msg-num";
+      num.textContent = (idx + 1) + ".";
+      var input = document.createElement("input");
+      input.type = "text";
+      input.value = text;
+      input.maxLength = 160;
+      input.addEventListener("input", function(){
+        MESSAGES[idx] = input.value;
+        persistState();
+      });
+      var del = document.createElement("button");
+      del.innerHTML = "&#10005;";
+      del.title = "Eliminar";
+      del.addEventListener("click", function(){
+        MESSAGES.splice(idx, 1);
+        renderMsgEditor();
+        rebuildConstellation();
+        persistState();
+      });
+      row.appendChild(num);
+      row.appendChild(input);
+      row.appendChild(del);
+      editMsgList.appendChild(row);
+    });
+  }
+
+  function renderEditorFields(){
+    editTitleInput.value = state.title;
+    editSubtitleInput.value = state.subtitleInitial;
+    editFinalMessageInput.value = state.finalMessage;
+    colorPicker.value = state.color;
+    refreshSwatchActive();
+    renderMsgEditor();
+  }
+
+  editTitleInput.addEventListener("input", function(){
+    state.title = editTitleInput.value;
+    mainTitle.textContent = state.title;
+    persistState();
+  });
+  editSubtitleInput.addEventListener("input", function(){
+    state.subtitleInitial = editSubtitleInput.value;
+    if (litCount < MESSAGES.length) subtitle.textContent = state.subtitleInitial;
+    persistState();
+  });
+  editFinalMessageInput.addEventListener("input", function(){
+    state.finalMessage = editFinalMessageInput.value;
+    persistState();
+  });
+  editMsgAddBtn.addEventListener("click", function(){
+    var v = editMsgAddInput.value.trim();
+    if (!v) return;
+    MESSAGES.push(v);
+    editMsgAddInput.value = "";
+    renderMsgEditor();
+    rebuildConstellation();
+    persistState();
+  });
+  editMsgAddInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter") editMsgAddBtn.click();
+  });
+
+  function openEditor(){
+    renderEditorFields();
+    editorOverlay.classList.add("show");
+  }
+  function closeEditor(){
+    editorOverlay.classList.remove("show");
+  }
+  editToggle.addEventListener("click", openEditor);
+  backBtn.addEventListener("click", closeEditor);
+
+  downloadBtn.addEventListener("click", function(){
+    persistState();
+    var keepEditor = includeEditorCheckbox.checked;
+    closeEditor();
+    setTimeout(function(){
+      if (!keepEditor) document.body.classList.add("no-editor");
+      var html = "<!doctype html>\n" + document.documentElement.outerHTML;
+      if (!keepEditor) document.body.classList.remove("no-editor");
+      var blob = new Blob([html], { type: "text/html" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      var name = filenameInput.value.trim() || "mi-constelacion.html";
+      if (!name.toLowerCase().endsWith(".html")) name += ".html";
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    }, 60);
+  });
+
+  } catch (err) {
+    showLoadError(err);
+  }
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,503 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Buzón de Cartas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap');
+
+  :root{
+    --bg1:#0e1a30; --bg2:#193a5c; --bg3:#2a5c8f;
+    --mailbox:#a4172a; --mailbox-dark:#7a1220; --mailbox-light:#c8354a;
+    --gold:#e2c07d; --gold-dark:#b8863b;
+    --paper:#f7ecd9; --ink:#2b1d16;
+    --line:rgba(226,192,125,0.28);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh; overflow-x:hidden; font-family:'Work Sans', sans-serif; color:#eaf0ff;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(226,192,125,0.10), transparent 55%),
+      radial-gradient(ellipse at 85% 100%, rgba(90,160,255,0.16), transparent 55%),
+      linear-gradient(170deg, var(--bg1), var(--bg2) 55%, var(--bg3) 100%);
+  }
+  body.editing{ overflow-y:auto; background:#0a0f1f; }
+
+  .ambient{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0;}
+  .spark{position:absolute; top:-6%; color:rgba(226,192,125,0.5); animation:drift linear infinite;}
+  @keyframes drift{
+    0%{transform:translateY(-10vh) translateX(0) rotate(0deg); opacity:0;}
+    8%{opacity:0.7;} 92%{opacity:0.3;}
+    100%{transform:translateY(112vh) translateX(26px) rotate(160deg); opacity:0;}
+  }
+
+  /* ============ COVER ============ */
+  .cover-screen{
+    position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; padding:30px 20px;
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .cover-screen.hide{ opacity:0; transform:scale(0.9); pointer-events:none; position:fixed; inset:0; }
+  .mini-box{ width:70px; height:56px; margin:0 auto 26px; position:relative; animation:boxFloat 3.4s ease-in-out infinite; }
+  @keyframes boxFloat{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-7px);} }
+  .mini-box .body{ position:absolute; inset:0; top:14px; background:linear-gradient(160deg, var(--mailbox-light), var(--mailbox-dark)); border-radius:6px; border:2px solid var(--gold);}
+  .mini-box .lid{ position:absolute; top:0; left:0; right:0; height:22px; background:linear-gradient(160deg, var(--mailbox-light), var(--mailbox)); border-radius:30px 30px 0 0; border:2px solid var(--gold); border-bottom:none;}
+  .mini-box .flag{ position:absolute; right:-4px; top:6px; width:4px; height:16px; background:var(--gold); border-radius:1px; }
+  .mini-box .flag:before{ content:''; position:absolute; top:-8px; left:0; width:10px; height:8px; background:var(--gold); clip-path:polygon(0 0,100% 50%,0 100%); }
+  .cover-screen .eyebrow{ font-size:11px; letter-spacing:3px; color:var(--gold); margin-bottom:8px;}
+  .cover-screen h1{ font-family:'Cormorant Garamond',serif; font-weight:700; font-style:italic; font-size:30px; margin:0 0 10px; color:#fff;}
+  .cover-screen p.sub{ font-size:13.5px; color:rgba(255,255,255,0.75); max-width:280px; margin:0 auto 26px; line-height:1.5;}
+  .open-btn{
+    background:linear-gradient(180deg, var(--gold), var(--gold-dark)); color:#2b1607; border:none;
+    padding:14px 30px; border-radius:30px; font-size:13px; letter-spacing:1px; font-weight:700; cursor:pointer;
+    box-shadow:0 10px 22px -8px rgba(184,134,59,0.6); transition:transform .15s;
+  }
+  .open-btn:active{ transform:scale(0.96); }
+
+  /* ============ MAIN ============ */
+  .main-wrap{ position:relative; z-index:1; min-height:100vh; padding:30px 16px 60px; opacity:0; transform:scale(0.85); }
+  .main-wrap.enter{ animation:riseIn .7s cubic-bezier(.2,.7,.3,1) forwards; }
+  @keyframes riseIn{ to{ opacity:1; transform:scale(1); } }
+  body.editing .main-wrap{ display:none; }
+
+  .top-toolbar{ position:fixed; top:14px; right:14px; z-index:50; }
+  body.editing .top-toolbar{ display:none; }
+  .pencil-btn{ width:42px; height:42px; border-radius:50%; border:1px solid var(--line); background:rgba(0,0,0,0.3); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .pencil-btn svg{ width:17px; height:17px; }
+
+  .title-area{ text-align:center; margin-bottom:20px; max-width:460px; margin-left:auto; margin-right:auto;}
+  .title-area h1{ font-family:'Cormorant Garamond',serif; font-weight:700; font-style:italic; font-size:26px; margin:0 0 8px; color:#fff;}
+  .title-area p{ font-size:13px; color:rgba(255,255,255,0.7); margin:0; line-height:1.5;}
+
+  /* ---- 3D mailbox ---- */
+  .mailbox-stage{ perspective:900px; display:flex; justify-content:center; margin-bottom:10px; }
+  .mailbox3d{ position:relative; width:150px; height:170px; transform-style:preserve-3d; cursor:pointer; transition:transform .3s; }
+  .mailbox3d:active{ transform:scale(0.97); }
+  .mb-post{ position:absolute; bottom:-40px; left:50%; width:14px; height:70px; background:linear-gradient(90deg,#5a4326,#3a2c18); transform:translateX(-50%); border-radius:3px;}
+  .mb-body{
+    position:absolute; inset:0; top:34px; border-radius:14px 14px 8px 8px;
+    background:linear-gradient(160deg, var(--mailbox-light), var(--mailbox-dark));
+    border:2px solid var(--gold); box-shadow:0 20px 40px -14px rgba(0,0,0,0.6);
+  }
+  .mb-lid{
+    position:absolute; top:0; left:0; right:0; height:44px; border-radius:75px 75px 0 0;
+    background:linear-gradient(160deg, var(--mailbox-light), var(--mailbox));
+    border:2px solid var(--gold); border-bottom:none;
+  }
+  .mb-door{
+    position:absolute; left:14px; right:14px; bottom:16px; top:56px; border-radius:6px;
+    background:linear-gradient(160deg, #d94a5c, var(--mailbox-dark));
+    border:2px solid rgba(226,192,125,0.6); transform-origin:left center; transition:transform .7s cubic-bezier(.4,.1,.3,1);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .mb-door .slot{ width:60%; height:5px; background:rgba(0,0,0,0.35); border-radius:3px;}
+  .mailbox3d.open .mb-door{ transform:rotateY(-115deg); }
+  .mb-flag{ position:absolute; right:-6px; top:44px; width:6px; height:34px; background:var(--gold); border-radius:2px; transform-origin:bottom center; transition:transform .5s ease; }
+  .mb-flag:before{ content:''; position:absolute; top:-14px; left:0; width:20px; height:14px; background:var(--gold); clip-path:polygon(0 0,100% 50%,0 100%); }
+  .mailbox3d.open .mb-flag{ transform:rotate(-35deg); }
+  .mailbox-hint{ text-align:center; font-size:11.5px; color:rgba(234,240,255,0.55); margin-bottom:22px; }
+
+  /* ---- envelope grid ---- */
+  .envelope-grid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:16px; max-width:460px; margin:0 auto;
+    max-height:0; opacity:0; overflow:hidden; transition:max-height .6s ease, opacity .6s ease;
+  }
+  .envelope-grid.show{ max-height:1400px; opacity:1; }
+  @media(min-width:480px){ .envelope-grid{ grid-template-columns:repeat(3,1fr); } }
+
+  .envelope-card{ position:relative; perspective:500px; }
+  .envelope-tap{ cursor:pointer; }
+  .envelope-body{
+    position:relative; aspect-ratio:4/3; border-radius:0 0 8px 8px; overflow:hidden;
+    background:linear-gradient(160deg,#fff8ec,#f0dbb0); border:1px solid var(--line);
+  }
+  .envelope-flap{
+    position:absolute; top:0; left:0; right:0; height:62%;
+    background:linear-gradient(160deg,#ffe9c9,#e5c187);
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top center; transition:transform .55s cubic-bezier(.4,.1,.2,1);
+    z-index:2;
+  }
+  .envelope-card.open .envelope-flap{ transform:rotateX(180deg); }
+  .envelope-seal{
+    position:absolute; top:32%; left:50%; transform:translate(-50%,-50%); width:26px; height:26px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #d1445a, var(--mailbox-dark)); z-index:3;
+    display:flex; align-items:center; justify-content:center; font-size:12px; color:#fbe3e6; transition:opacity .2s;
+  }
+  .envelope-card.open .envelope-seal{ opacity:0; }
+  .envelope-stamp{
+    position:absolute; top:6px; right:6px; width:20px; height:16px; border:1.5px dashed rgba(43,29,22,0.4);
+    background:rgba(255,255,255,0.4); z-index:1;
+  }
+  .envelope-label{ font-size:11.5px; font-weight:600; text-align:center; margin-top:8px; color:#eaf0ff; line-height:1.3; padding:0 4px;}
+
+  /* ============ LETTER OVERLAY ============ */
+  .letter-overlay{ position:fixed; inset:0; z-index:150; display:none; align-items:center; justify-content:center; background:rgba(4,8,20,0.75); backdrop-filter:blur(4px); padding:20px; }
+  .letter-overlay.show{ display:flex; }
+  .letter-card{
+    background:linear-gradient(170deg, var(--paper), #ece0c4); color:var(--ink); border-radius:10px;
+    max-width:360px; width:100%; padding:26px 22px; position:relative; text-align:center;
+    box-shadow:0 30px 60px -14px rgba(0,0,0,0.6); animation:letterPop .45s cubic-bezier(.25,1.3,.4,1);
+    max-height:85vh; overflow-y:auto;
+  }
+  @keyframes letterPop{ from{ transform:translateY(30px) scale(0.85); opacity:0; } to{ transform:translateY(0) scale(1); opacity:1; } }
+  .letter-close{ position:absolute; top:10px; right:10px; width:26px; height:26px; border-radius:50%; border:1px solid rgba(43,29,22,0.3); background:rgba(0,0,0,0.05); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:13px; color:var(--ink); }
+  .letter-label{ font-size:10.5px; letter-spacing:1.5px; color:var(--mailbox); text-transform:uppercase; margin-bottom:8px;}
+  .letter-photo{ width:100%; border-radius:8px; margin-bottom:12px; max-height:200px; object-fit:cover; }
+  .letter-text{ font-family:'Caveat',cursive; font-size:21px; line-height:1.5; color:#4a3524; white-space:pre-wrap; }
+
+  .confetti{ position:fixed; top:-10px; z-index:199; border-radius:2px; pointer-events:none; animation:fall linear forwards;}
+  @keyframes fall{ to{ transform:translateY(105vh) rotate(400deg); opacity:0.2; } }
+
+  /* ===================== EDITOR ===================== */
+  .editor{ display:none; position:fixed; inset:0; z-index:200; overflow-y:auto; background:linear-gradient(180deg, #0a0f1f, #070a14 60%); color:#eaf0ff; font-family:'Work Sans',sans-serif;}
+  body.editing .editor{ display:block; }
+  .ed-topbar{ position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:12px; padding:16px 18px; background:rgba(8,12,26,0.9); backdrop-filter:blur(8px); border-bottom:1px solid rgba(226,192,125,0.22);}
+  .ed-back{ width:36px; height:36px; border-radius:50%; border:1px solid rgba(226,192,125,0.3); background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#eaf0ff; flex:0 0 auto;}
+  .ed-back svg{ width:16px; height:16px;}
+  .ed-titles h1{ font-size:16px; margin:0; font-family:'Cormorant Garamond',serif; color:var(--gold);}
+  .ed-titles p{ font-size:11px; margin:2px 0 0; color:rgba(234,240,255,0.5);}
+
+  /* ---- Marca de agua "Link Emocional" (solo visible dentro del editor) ---- */
+  .ed-brand-watermark{
+    margin-left:auto;
+    flex:0 0 auto;
+    font-family:'Work Sans', sans-serif; font-weight:700; font-size:14px; letter-spacing:0.4px;
+    white-space:nowrap;
+    background:linear-gradient(90deg, #72CBE9, #745FC9);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    pointer-events:none; user-select:none;
+  }
+
+  .ed-body{ max-width:600px; margin:0 auto; padding:18px 18px 70px;}
+  .ed-section{ margin-bottom:22px; border:1px solid rgba(226,192,125,0.22); border-radius:10px; padding:16px;}
+  .ed-section h3{ font-size:12.5px; letter-spacing:1.2px; color:var(--gold); margin:0 0 3px; text-transform:uppercase; font-weight:700;}
+  .ed-section .ed-hint{ font-size:11.5px; color:rgba(234,240,255,0.45); margin:0 0 12px; line-height:1.5;}
+  .ed-field{ margin-bottom:10px; }
+  .ed-field label{ display:block; font-size:11px; color:rgba(234,240,255,0.6); margin-bottom:5px;}
+  .ed-field input[type=text], .ed-field textarea{
+    width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(226,192,125,0.22); color:#eaf0ff;
+    padding:9px 10px; border-radius:7px; font-family:'Work Sans',sans-serif; font-size:13.5px; resize:vertical;}
+  .ed-field textarea{ min-height:60px; }
+  .ed-card{ border:1px dashed rgba(226,192,125,0.28); border-radius:9px; padding:12px; margin-bottom:12px; position:relative; background:rgba(255,255,255,0.02);}
+  .ed-card h4{ margin:0 0 8px; font-size:12.5px; color:var(--gold); font-family:'Cormorant Garamond',serif; font-style:italic;}
+  .ed-card-remove{ position:absolute; top:8px; right:8px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,0.3); border:1px solid rgba(226,192,125,0.25); color:#eaf0ff; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+  .ed-add-btn{ background:rgba(226,192,125,0.12); border:1px solid var(--gold); color:var(--gold); padding:9px 16px; border-radius:20px; font-size:12px; cursor:pointer;}
+  .ed-add-btn[disabled]{ opacity:0.35; cursor:default; }
+  .ed-photo-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+  .ed-photo-preview{ width:50px; height:50px; border-radius:8px; background-size:cover; background-position:center; border:1px solid rgba(226,192,125,0.25); display:flex; align-items:center; justify-content:center; font-size:9px; color:rgba(234,240,255,0.4); flex:0 0 auto; text-align:center;}
+  .ed-small-btn{ background:rgba(255,255,255,0.05); border:1px solid rgba(226,192,125,0.25); color:#eaf0ff; padding:6px 12px; border-radius:14px; font-size:11px; cursor:pointer;}
+  .ed-footer{ border-top:1px solid rgba(226,192,125,0.2); padding-top:20px; margin-top:6px;}
+  .ed-checkbox-row{ display:flex; align-items:flex-start; gap:9px; margin-bottom:16px;}
+  .ed-checkbox-row input{ margin-top:3px; flex:0 0 auto;}
+  .ed-checkbox-row label{ font-size:11.5px; color:rgba(234,240,255,0.6); line-height:1.5;}
+  .ed-download{ width:100%; background:linear-gradient(180deg, var(--gold), var(--gold-dark)); color:#2b1607; border:none; padding:14px; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer;}
+  .ed-filename input{ width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(226,192,125,0.25); color:#eaf0ff; padding:9px 10px; border-radius:7px; font-size:12px; margin-top:10px;}
+  .ed-note{ font-size:11px; color:rgba(234,240,255,0.4); margin-top:12px; line-height:1.5;}
+
+  body.no-pencil .top-toolbar{ display:none !important; }
+</style>
+<style id="le-noeditor">#pencilBtn,.pencil-btn,.top-toolbar,#editToggle,.edit-toggle,#leEditToggle,.le-edit-toggle,.le-edit-hint,#editorOverlay,#editorPage,.editor-page,.le-editor-page,#pen,#ed{display:none!important}</style></head>
+<body class="no-pencil">
+
+<div class="ambient" id="ambient"></div>
+
+<div class="cover-screen" id="coverScreen">
+  <div class="mini-box"><div class="lid"></div><div class="body"></div><div class="flag"></div></div>
+  <div class="eyebrow">TIENES CARTAS NUEVAS</div>
+  <h1>Buzón de Cartas</h1>
+  <p class="sub">Un buzón de un solo destinatario: tú. Ábrelo y elige qué carta leer primero.</p>
+  <button class="open-btn" id="openBtn">ABRIR EL BUZÓN</button>
+</div>
+
+<div class="top-toolbar">
+  <button class="pencil-btn" id="pencilBtn" title="Personalizar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#e2c07d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+  </button>
+</div>
+
+<div class="main-wrap" id="mainWrap">
+  <div class="title-area">
+    <h1 id="titleView"></h1>
+    <p id="subtitleView"></p>
+  </div>
+
+  <div class="mailbox-stage">
+    <div class="mailbox3d" id="mailbox3d">
+      <div class="mb-lid"></div>
+      <div class="mb-body"></div>
+      <div class="mb-door"><div class="slot"></div></div>
+      <div class="mb-flag"></div>
+      <div class="mb-post"></div>
+    </div>
+  </div>
+  <div class="mailbox-hint" id="mailboxHint">Toca el buzón para abrir la puerta</div>
+
+  <div class="envelope-grid" id="envelopeGrid"></div>
+</div>
+
+<div class="letter-overlay" id="letterOverlay">
+  <div class="letter-card" id="letterCard"></div>
+</div>
+
+<!-- ===================== EDITOR ===================== -->
+<div class="editor" id="editorOverlay">
+  <div class="ed-topbar">
+    <button class="ed-back" id="edBack">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="ed-titles"><h1>Editor del buzón</h1><p>Los cambios se ven al volver</p></div>
+    <div class="ed-brand-watermark">Link Emocional</div>
+  </div>
+  <div class="ed-body">
+
+    <div class="ed-section">
+      <h3>Encabezado</h3>
+      <div class="ed-field"><label>Título</label><input type="text" id="fTitle" maxlength="40"></div>
+      <div class="ed-field"><label>Instrucción</label><input type="text" id="fSubtitle" maxlength="120"></div>
+    </div>
+
+    <div class="ed-section">
+      <h3>Cartas</h3>
+      <p class="ed-hint">Cada carta tiene una etiqueta, un mensaje y opcionalmente una foto. Mínimo 1, máximo 8.</p>
+      <div id="envelopesEditList"></div>
+      <button class="ed-add-btn" id="addEnvBtn">+ Agregar carta</button>
+    </div>
+
+    <div class="ed-footer">
+      <div class="ed-checkbox-row">
+        <input type="checkbox" id="includeEditorCheckbox">
+        <label for="includeEditorCheckbox">Incluir el editor (el lápiz) en el archivo descargado. Déjalo desactivado para la versión final que le envíes a la persona — así no le aparece el lápiz. Actívalo si quieres poder seguir editando este mismo archivo más adelante.</label>
+      </div>
+      <button class="ed-download" id="downloadBtn">Descargar mi buzón personalizado</button>
+      <div class="ed-filename"><input type="text" id="filenameInput" value="buzon-de-cartas-personalizado.html"></div>
+      <p class="ed-note">"Descargar" genera un archivo HTML nuevo y completo con todos tus cambios y fotos ya incluidos, listo para enviar o abrir desde cualquier navegador.</p>
+    </div>
+  </div>
+</div>
+
+<script id="initial-state" type="application/json">{"title": "Buzón de Cartas", "subtitle": "Abre el buzón y elige una carta para leer", "envelopes": [{"label": "Para cuando me extrañes", "text": "Aunque no esté cerca, mi corazón siempre está contigo.", "photo": ""}, {"label": "Para un mal día", "text": "Respira. Esto también va a pasar, y yo sigo aquí para ti.", "photo": ""}, {"label": "Para celebrar juntos", "text": "Cada logro tuyo también es una fiesta para mí.", "photo": ""}, {"label": "Solo porque sí", "text": "No necesito una razón para decirte que te amo. Aquí tienes una carta sin motivo, solo cariño.", "photo": ""}]}</script>
+
+<script>
+(function(){
+  var MIN_ENV=1, MAX_ENV=8;
+  var stateEl = document.getElementById('initial-state');
+  var state;
+  try { state = JSON.parse(stateEl.textContent); } catch(e){ state = {}; }
+  function persistState(){ stateEl.textContent = JSON.stringify(state); }
+  function escapeHtml(str){ var d=document.createElement('div'); d.textContent = str==null?'':str; return d.innerHTML; }
+
+  /* ambient */
+  var ambient = document.getElementById('ambient');
+  for(var i=0;i<14;i++){
+    var s=document.createElement('div');
+    s.className='spark'; s.textContent = i%2===0 ? '✧':'♡';
+    s.style.left=(Math.random()*100)+'vw';
+    s.style.fontSize=(11+Math.random()*13)+'px';
+    s.style.animationDuration=(12+Math.random()*10)+'s';
+    s.style.animationDelay=(Math.random()*12)+'s';
+    ambient.appendChild(s);
+  }
+
+  document.getElementById('openBtn').addEventListener('click', function(){
+    document.getElementById('coverScreen').classList.add('hide');
+    document.getElementById('mainWrap').classList.add('enter');
+  });
+
+  var mailboxOpened = false;
+  document.getElementById('mailbox3d').addEventListener('click', function(){
+    if(mailboxOpened) return;
+    mailboxOpened = true;
+    this.classList.add('open');
+    document.getElementById('mailboxHint').textContent = '¡Tienes correo! Elige una carta.';
+    setTimeout(function(){
+      document.getElementById('envelopeGrid').classList.add('show');
+    }, 300);
+  });
+
+  function renderHeader(){
+    document.getElementById('titleView').textContent = state.title;
+    document.getElementById('subtitleView').textContent = state.subtitle;
+  }
+
+  function renderEnvelopes(){
+    var grid = document.getElementById('envelopeGrid');
+    grid.innerHTML='';
+    state.envelopes.forEach(function(env, idx){
+      var wrap = document.createElement('div');
+      wrap.className = 'envelope-card';
+      wrap.innerHTML =
+        '<div class="envelope-tap">' +
+          '<div class="envelope-body">' +
+            '<div class="envelope-stamp"></div>' +
+            '<div class="envelope-flap"></div>' +
+            '<div class="envelope-seal">♡</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="envelope-label">'+escapeHtml(env.label)+'</div>';
+      wrap.querySelector('.envelope-tap').addEventListener('click', function(){
+        if(wrap.classList.contains('open')) { openLetter(env); return; }
+        wrap.classList.add('open');
+        setTimeout(function(){ openLetter(env); }, 480);
+      });
+      grid.appendChild(wrap);
+    });
+  }
+
+  function openLetter(env){
+    var overlay = document.getElementById('letterOverlay');
+    var card = document.getElementById('letterCard');
+    var html = '<button class="letter-close" id="letterCloseBtn">&#10005;</button>';
+    html += '<div class="letter-label">'+escapeHtml(env.label)+'</div>';
+    if(env.photo) html += '<img class="letter-photo" src="'+env.photo+'">';
+    html += '<div class="letter-text">'+escapeHtml(env.text)+'</div>';
+    card.innerHTML = html;
+    overlay.classList.add('show');
+    document.getElementById('letterCloseBtn').addEventListener('click', function(){ overlay.classList.remove('show'); });
+    burstConfetti(18);
+  }
+
+  function burstConfetti(count){
+    var colors = ['#e2c07d','#a4172a','#eaf0ff','#b8863b'];
+    for(var i=0;i<count;i++){
+      var c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random()*100+'vw';
+      c.style.width = (5+Math.random()*4)+'px';
+      c.style.height = (5+Math.random()*4)+'px';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDuration = (2+Math.random()*1.5)+'s';
+      document.body.appendChild(c);
+      setTimeout(function(el){ return function(){ el.remove(); }; }(c), 3800);
+    }
+  }
+
+  function renderAll(){ renderHeader(); renderEnvelopes(); }
+
+  /* ================= EDITOR ================= */
+  var pencilBtn = document.getElementById('pencilBtn');
+  var edBack = document.getElementById('edBack');
+  pencilBtn.addEventListener('click', function(){
+    document.body.classList.add('editing');
+    fillSimpleFields();
+    renderEnvelopesEditor();
+    window.scrollTo(0,0);
+  });
+  edBack.addEventListener('click', function(){
+    document.body.classList.remove('editing');
+    document.getElementById('letterOverlay').classList.remove('show');
+    renderAll();
+  });
+
+  function bindText(id, key){
+    var el = document.getElementById(id);
+    el.value = state[key];
+    el.addEventListener('input', function(){ state[key] = el.value; persistState(); });
+  }
+  function fillSimpleFields(){
+    bindText('fTitle','title'); bindText('fSubtitle','subtitle');
+  }
+
+  function fileToCompressedDataUrl(file, maxSize){
+    maxSize = maxSize || 400;
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var img = new Image();
+        img.onload = function(){
+          var w=img.width, h=img.height;
+          var scale = Math.min(1, maxSize/Math.max(w,h));
+          w = Math.round(w*scale); h = Math.round(h*scale);
+          var c = document.createElement('canvas'); c.width=w; c.height=h;
+          c.getContext('2d').drawImage(img,0,0,w,h);
+          resolve(c.toDataURL('image/jpeg', 0.85));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderEnvelopesEditor(){
+    var wrap = document.getElementById('envelopesEditList');
+    wrap.innerHTML='';
+    state.envelopes.forEach(function(env, idx){
+      var card = document.createElement('div');
+      card.className = 'ed-card';
+      card.innerHTML =
+        '<button class="ed-card-remove" data-idx="'+idx+'">&#10005;</button>' +
+        '<h4>Carta '+(idx+1)+'</h4>' +
+        '<div class="ed-field"><label>Etiqueta</label><input type="text" class="e-label" maxlength="50"></div>' +
+        '<div class="ed-field"><label>Mensaje</label><textarea class="e-text" maxlength="260"></textarea></div>' +
+        '<div class="ed-photo-row"><div class="ed-photo-preview" id="ePrev'+idx+'">Sin foto</div>' +
+        '<div style="display:flex; flex-direction:column; gap:6px;">' +
+        '<label class="ed-small-btn">Subir foto<input type="file" accept="image/*" class="e-photo" style="display:none;"></label>' +
+        '<button class="ed-small-btn e-remove-photo">Quitar foto</button></div></div>';
+      wrap.appendChild(card);
+
+      card.querySelector('.e-label').value = env.label;
+      card.querySelector('.e-text').value = env.text;
+      card.querySelector('.e-label').addEventListener('input', function(ev){ env.label = ev.target.value; persistState(); });
+      card.querySelector('.e-text').addEventListener('input', function(ev){ env.text = ev.target.value; persistState(); });
+
+      var preview = card.querySelector('#ePrev'+idx);
+      function updatePrev(){
+        if(env.photo){ preview.style.backgroundImage='url('+env.photo+')'; preview.textContent=''; }
+        else { preview.style.backgroundImage='none'; preview.textContent='Sin foto'; }
+      }
+      updatePrev();
+      card.querySelector('.e-photo').addEventListener('change', function(ev){
+        var file = ev.target.files && ev.target.files[0];
+        if(!file) return;
+        fileToCompressedDataUrl(file).then(function(dataUrl){ env.photo = dataUrl; persistState(); updatePrev(); });
+      });
+      card.querySelector('.e-remove-photo').addEventListener('click', function(){ env.photo=null; persistState(); updatePrev(); });
+
+      card.querySelector('.ed-card-remove').addEventListener('click', function(){
+        if(state.envelopes.length<=MIN_ENV) return;
+        state.envelopes.splice(idx,1); persistState(); renderEnvelopesEditor();
+      });
+    });
+    document.getElementById('addEnvBtn').disabled = state.envelopes.length>=MAX_ENV;
+  }
+  document.getElementById('addEnvBtn').addEventListener('click', function(){
+    if(state.envelopes.length>=MAX_ENV) return;
+    state.envelopes.push({label:'Nueva carta', text:'Escribe aquí tu mensaje.', photo:null});
+    persistState(); renderEnvelopesEditor();
+  });
+
+  /* ---- download ---- */
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+    persistState();
+    var keepEditor = document.getElementById('includeEditorCheckbox').checked;
+    document.body.classList.remove('editing');
+    document.getElementById('letterOverlay').classList.remove('show');
+    document.getElementById('coverScreen').classList.add('hide');
+    document.getElementById('mainWrap').classList.add('enter');
+    renderAll();
+    setTimeout(function(){
+      if(!keepEditor) document.body.classList.add('no-pencil');
+      var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      if(!keepEditor) document.body.classList.remove('no-pencil');
+      var blob = new Blob([html], {type:'text/html'});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      var name = document.getElementById('filenameInput').value.trim() || 'buzon-de-cartas-personalizado.html';
+      if(!name.toLowerCase().endsWith('.html')) name += '.html';
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    }, 60);
+  });
+
+  /* ================= INIT ================= */
+  renderAll();
+})();
+</script>
+</body>
+</html>

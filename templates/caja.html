@@ -1,0 +1,1696 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>REGALO VIRTUAL 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Poppins:wght@600;700;800&family=Playfair+Display:wght@700;800&family=Pacifico&family=Dancing+Script:wght@700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body, html {
+    margin: 0;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    user-select: none;
+    font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
+}
+body.mode-editor {
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #060b0d;
+}
+
+#c { display: block; background: #000; }
+#c.stage-full { position: fixed; top: 0; left: 0; z-index: 1; }
+#c.stage-preview { position: relative; display: block; }
+
+.vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%);
+    z-index: 500;
+}
+
+.hint {
+    position: fixed;
+    top: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #d8fff8;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-shadow: 0 0 10px #26e0c8;
+    background: rgba(4, 20, 18, 0.35);
+    border: 1px solid rgba(90, 255, 235, 0.35);
+    padding: 8px 16px;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    z-index: 900;
+    opacity: 0;
+    animation: hintIn 1s ease forwards 4.5s, hintOut 1s ease forwards 11s;
+    pointer-events: none;
+    text-align: center;
+}
+@keyframes hintIn { to { opacity: 1; } }
+@keyframes hintOut { to { opacity: 0; } }
+
+body.mode-editor .vignette,
+body.mode-editor .hint,
+body.mode-editor .edit-toggle,
+body.mode-editor .music-toggle {
+    display: none;
+}
+
+/* ==== boton lapiz (solo en vista completa) ==== */
+.edit-toggle{
+    position:fixed;
+    top:18px; right:18px;
+    width:50px; height:50px;
+    border-radius:50%;
+    background:rgba(6,16,16,0.45);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(150,255,235,0.28);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    z-index:1000;
+    box-shadow:0 0 22px rgba(38,224,200,0.16);
+    transition:transform .15s ease, background .15s ease;
+}
+.edit-toggle:hover{ transform:scale(1.07); background:rgba(6,16,16,0.65); }
+.edit-toggle svg{ width:20px; height:20px; }
+
+/* ==== boton de musica (solo en vista completa, solo si hay mp3 cargado) ==== */
+.music-toggle{
+    display:none;
+    position:fixed;
+    bottom:22px; left:22px;
+    width:50px; height:50px;
+    border-radius:50%;
+    background:rgba(6,16,16,0.45);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(150,255,235,0.28);
+    align-items:center; justify-content:center;
+    cursor:pointer;
+    z-index:1000;
+    box-shadow:0 0 22px rgba(38,224,200,0.16);
+    transition:transform .15s ease, background .15s ease;
+}
+.music-toggle.visible{ display:flex; }
+.music-toggle:hover{ transform:scale(1.07); background:rgba(6,16,16,0.65); }
+.music-toggle svg{ width:20px; height:20px; }
+.music-toggle .icon-pause{ display:none; }
+.music-toggle.playing .icon-play{ display:none; }
+.music-toggle.playing .icon-pause{ display:block; }
+
+/* ==== aviso si la animacion no pudo cargar (sin internet / bloqueado) ==== */
+.load-error{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    background:#05080a;
+    color:#eafffb;
+    align-items:center;
+    justify-content:center;
+    padding:32px;
+    text-align:center;
+    font-family:'Quicksand','Segoe UI',Arial,sans-serif;
+}
+.load-error.visible{ display:flex; }
+.load-error-box{ max-width:380px; }
+.load-error-box h2{ font-size:17px; margin:0 0 10px; }
+.load-error-box p{ font-size:13.5px; color:#9fb3b0; line-height:1.6; margin:0 0 18px; }
+.load-error-box button{ background:#26e0c8; color:#04211d; border:none; border-radius:9px; padding:11px 20px; font-weight:700; font-size:13.5px; cursor:pointer; font-family:inherit; }
+
+/* ==== pagina del editor ==== */
+.editor-page{
+    display:none;
+    position:relative;
+    z-index: 50;
+    min-height:100%;
+    color:#eafffb;
+    font-family:'Quicksand',sans-serif;
+}
+body.mode-editor .editor-page{ display:block; }
+
+.editor-topbar{
+    position:sticky;
+    top:0;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px 20px;
+    background:rgba(6,11,13,0.88);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(150,255,235,0.14);
+    z-index:60;
+}
+.back-btn{
+    width:40px; height:40px;
+    flex:0 0 auto;
+    border-radius:50%;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(150,255,235,0.22);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    color:#eafffb;
+}
+.back-btn:hover{ background:rgba(255,255,255,0.12); }
+.back-btn svg{ width:19px; height:19px; }
+.editor-topbar-titles h1{ font-size:16px; margin:0; font-weight:700; }
+.editor-topbar-titles p{ font-size:11.5px; margin:2px 0 0; color:#8fa3a0; }
+
+/* ---- Marca de agua "Link Emocional" (solo visible dentro del editor) ---- */
+.ed-brand-watermark{
+    margin-left:auto;
+    flex:0 0 auto;
+    font-family:'Quicksand', sans-serif; font-weight:700; font-size:14px; letter-spacing:0.4px;
+    white-space:nowrap;
+    background:linear-gradient(90deg, #72CBE9, #745FC9);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    pointer-events:none; user-select:none;
+}
+
+.editor-body{
+    max-width:640px;
+    margin:0 auto;
+    padding:18px 20px 60px;
+}
+
+.preview-box{
+    position:relative;
+    width:100%;
+    aspect-ratio:4/3;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid rgba(150,255,235,0.18);
+    background:#02050a;
+    box-shadow:0 0 30px rgba(38,224,200,0.10) inset, 0 10px 30px rgba(0,0,0,0.4);
+    margin-bottom:26px;
+}
+.preview-box .preview-tag{
+    position:absolute;
+    top:10px; left:12px;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:#26e0c8;
+    background:rgba(4,16,15,0.55);
+    border:1px solid rgba(38,224,200,0.35);
+    padding:4px 9px;
+    border-radius:999px;
+    pointer-events:none;
+    z-index:5;
+}
+
+.edit-section{ margin-bottom:26px; }
+.edit-section h3{ font-size:13.5px; font-weight:700; margin:0 0 3px; color:#eafffb; }
+.edit-section p{ font-size:12px; color:#8fa3a0; margin:0 0 12px; line-height:1.5; }
+
+.color-row{ display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+.color-row input[type=color]{ width:44px; height:44px; border:2px solid rgba(150,255,235,0.2); border-radius:11px; background:none; cursor:pointer; padding:0; flex:0 0 auto; }
+.color-row input[type=text]{ flex:1 1 140px; min-width:0; background:rgba(255,255,255,0.05); border:1px solid rgba(150,255,235,0.18); color:#eafffb; padding:11px; border-radius:8px; font-family:'Quicksand',sans-serif; font-size:14px; font-weight:600; }
+.swatches{ display:flex; gap:8px; flex-wrap:wrap; }
+.swatch{ width:28px; height:28px; border-radius:8px; border:2px solid rgba(150,255,235,0.15); cursor:pointer; transition:transform .12s ease; flex-shrink:0; }
+.swatch:hover{ transform:scale(1.12); }
+.swatch.active{ border-color:#fff; }
+
+.shape-row{ display:flex; gap:10px; flex-wrap:wrap; }
+.shape-opt{ flex:1 1 120px; background:rgba(255,255,255,0.04); border:1px solid rgba(150,255,235,0.16); border-radius:9px; padding:12px; text-align:center; cursor:pointer; font-size:13.5px; font-weight:600; color:#8fa3a0; }
+.shape-opt.active{ border-color:#26e0c8; color:#26e0c8; background:rgba(38,224,200,0.12); }
+
+.font-row{ display:flex; flex-wrap:wrap; gap:8px; }
+.font-opt{ flex:1 1 90px; background:rgba(255,255,255,0.04); border:1px solid rgba(150,255,235,0.16); border-radius:9px; padding:11px 8px; cursor:pointer; font-size:15px; color:#eafffb; text-align:center; line-height:1.2; }
+.font-opt small{ display:block; font-size:9.5px; font-weight:600; color:#8fa3a0; margin-top:3px; letter-spacing:0.02em; }
+.font-opt.active{ border-color:#26e0c8; color:#26e0c8; background:rgba(38,224,200,0.12); }
+.font-opt.active small{ color:#26e0c8; opacity:0.8; }
+
+.chip-list{ display:flex; flex-direction:column; gap:7px; margin-bottom:10px; }
+.chip{ display:flex; align-items:center; gap:9px; background:rgba(255,255,255,0.045); border:1px solid rgba(150,255,235,0.14); border-radius:8px; padding:10px 9px 10px 13px; }
+.chip span{ flex:1; font-size:13.5px; font-weight:600; word-break:break-word; }
+.chip button{ background:none; border:none; color:#8fa3a0; font-size:16px; cursor:pointer; padding:3px 6px; border-radius:5px; }
+.chip button:hover{ color:#ff8fa8; }
+.empty-note{ font-size:12px; color:#607370; font-style:italic; padding:5px 2px; }
+
+.add-row{ display:flex; gap:8px; flex-wrap:wrap; }
+.add-row input[type=text]{ flex:1 1 160px; min-width:0; background:rgba(255,255,255,0.05); border:1px solid rgba(150,255,235,0.18); color:#eafffb; padding:11px; border-radius:8px; font-family:'Quicksand',sans-serif; font-size:14px; }
+.btn{ border:none; border-radius:8px; padding:11px 16px; font-family:'Quicksand',sans-serif; font-weight:700; font-size:13px; cursor:pointer; }
+.btn-add{ background:rgba(38,224,200,0.14); color:#26e0c8; border:1px solid rgba(38,224,200,0.35); flex:0 0 auto; }
+.btn-clear{ background:none; color:#8fa3a0; border:1px solid rgba(150,255,235,0.14); font-size:11.5px; padding:8px 12px; margin-top:8px; }
+.btn-clear:hover{ color:#ff8fa8; border-color:#ff8fa8; }
+
+.range-row input[type=range]{ width:100%; accent-color:#26e0c8; }
+.range-row .label{ font-size:12px; color:#8fa3a0; margin-bottom:6px; }
+
+.images-grid{ display:flex; flex-wrap:wrap; gap:9px; margin-bottom:10px; }
+.img-thumb{ width:60px; height:60px; border-radius:16px; background-size:cover; background-position:center; position:relative; border:1px solid rgba(150,255,235,0.18); }
+.img-thumb button{ position:absolute; top:-6px; right:-6px; width:21px; height:21px; border-radius:50%; background:#1a1f28; border:1px solid rgba(150,255,235,0.3); color:#eafffb; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+.add-image-tile{ width:60px; height:60px; border-radius:16px; border:1.5px dashed rgba(150,255,235,0.3); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#8fa3a0; font-size:24px; flex-shrink:0; }
+.add-image-tile.disabled{ opacity:0.35; pointer-events:none; }
+.add-image-tile input{ display:none; }
+.images-note{ font-size:11px; color:#607370; margin-top:2px; }
+
+.panel-footer{ margin-top:6px; padding-top:20px; border-top:1px solid rgba(150,255,235,0.12); }
+.btn-download{ width:100%; background:#26e0c8; color:#04211d; padding:15px 16px; font-size:14.5px; border-radius:10px; }
+.btn-download:hover{ filter:brightness(1.08); }
+.filename-row{ margin-top:12px; }
+.filename-row input{ width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(150,255,235,0.18); color:#eafffb; padding:10px 11px; border-radius:7px; font-family:'Quicksand',sans-serif; font-size:12.5px; box-sizing:border-box; }
+.save-note{ font-size:11.5px; color:#607370; line-height:1.5; margin-top:14px; font-family:'Quicksand',sans-serif; }
+
+.editor-checkbox-row{ display:flex; align-items:flex-start; gap:9px; margin-bottom:14px; }
+.editor-checkbox-row input{ margin-top:3px; flex:0 0 auto; }
+.editor-checkbox-row label{ font-size:12px; color:#9fb3b0; line-height:1.5; }
+
+.load-error-detail{ font-size:10.5px; color:#5c7370; margin-top:14px; word-break:break-word; text-align:left; background:rgba(255,255,255,0.04); border-radius:8px; padding:8px 10px; font-family:monospace; }
+
+body.no-editor .edit-toggle{ display:none !important; }
+</style>
+<style id="le-noeditor">#pencilBtn,.pencil-btn,.top-toolbar,#editToggle,.edit-toggle,#leEditToggle,.le-edit-toggle,.le-edit-hint,#editorOverlay,#editorPage,.editor-page,.le-editor-page,#pen,#ed{display:none!important}</style></head>
+<body class="no-editor">
+<canvas id="c" class="stage-full"></canvas>
+<div class="vignette"></div>
+
+<div class="edit-toggle" id="editToggle" title="Personalizar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#eafffb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+</div>
+
+<div class="music-toggle" id="musicToggle" title="Reproducir musica">
+    <svg class="icon-play" viewBox="0 0 24 24" fill="#eafffb"><path d="M8 5v14l11-7z"/></svg>
+    <svg class="icon-pause" viewBox="0 0 24 24" fill="#eafffb"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+</div>
+<audio id="bgAudio" loop preload="none"></audio>
+
+<div class="load-error" id="loadError">
+    <div class="load-error-box">
+        <h2>No se pudo cargar la animacion</h2>
+        <p>Esto puede pasar por falta de internet al abrir el archivo, por abrirlo dentro de una app (como un chat) que bloquea la carga, o porque el navegador tiene desactivada la aceleracion grafica (WebGL). Probá con internet activo, en un navegador normal (Chrome, Edge, Safari), y con la aceleracion de hardware activada en su configuracion.</p>
+        <button id="reloadBtn">Reintentar</button>
+        <div class="load-error-detail" id="loadErrorDetail" style="display:none;"></div>
+    </div>
+</div>
+
+<div class="editor-page" id="editorPage">
+    <div class="editor-topbar">
+        <button class="back-btn" id="backBtn" title="Volver a la animacion">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#eafffb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="editor-topbar-titles">
+            <h1>Editor de tu regalo</h1>
+            <p>Los cambios se ven al instante en la vista previa</p>
+        </div>
+        <div class="ed-brand-watermark">Link Emocional</div>
+    </div>
+
+    <div class="editor-body">
+        <div class="preview-box" id="previewBox">
+            <div class="preview-tag">Vista previa en vivo</div>
+        </div>
+
+        <div class="edit-section">
+            <h3>Color principal</h3>
+            <p>Cambia el brillo, la caja y el resplandor de toda la escena.</p>
+            <div class="color-row">
+                <input type="color" id="colorPicker" value="#26e0c8">
+                <input type="text" id="colorText" value="#26e0c8" maxlength="7">
+            </div>
+            <div class="swatches" id="swatches"></div>
+        </div>
+
+        <div class="edit-section">
+            <h3>Tipografia</h3>
+            <p>El estilo de letra de los mensajes y palabras.</p>
+            <div class="font-row" id="fontRow"></div>
+        </div>
+
+        <div class="edit-section">
+            <h3>Forma de las rafagas</h3>
+            <p>Se lanza al tocar la pantalla en la vista completa.</p>
+            <div class="shape-row">
+                <div class="shape-opt" data-shape="heart">&#9829; Corazon</div>
+                <div class="shape-opt" data-shape="star">&#10022; Estrella</div>
+            </div>
+        </div>
+
+        <div class="edit-section">
+            <h3>Frase central</h3>
+            <p>Mensajes que aparecen flotando en el centro, uno tras otro.</p>
+            <div class="chip-list" id="centerList"></div>
+            <div class="add-row">
+                <input type="text" id="centerInput" placeholder="Escribe una frase" maxlength="40">
+                <button class="btn btn-add" id="centerAdd">Agregar</button>
+            </div>
+            <button class="btn btn-clear" id="centerClear">Eliminar todas las frases centrales</button>
+            <div class="range-row" style="margin-top:16px;">
+                <div class="label">Velocidad de cambio: <span id="intervalVal">2.6s</span></div>
+                <input type="range" id="intervalRange" min="1" max="6" step="0.2" value="2.6">
+            </div>
+        </div>
+
+        <div class="edit-section">
+            <h3>Palabras orbitando</h3>
+            <p>Palabras cortas que giran alrededor del mensaje central.</p>
+            <div class="chip-list" id="orbitList"></div>
+            <div class="add-row">
+                <input type="text" id="orbitInput" placeholder="Escribe una palabra" maxlength="18">
+                <button class="btn btn-add" id="orbitAdd">Agregar</button>
+            </div>
+            <button class="btn btn-clear" id="orbitClear">Eliminar todas las palabras orbitando</button>
+        </div>
+
+        <div class="edit-section">
+            <h3>Fotos flotando</h3>
+            <p>Fotos pequeñas y semitransparentes con bordes en degradado, giran junto a las palabras. Hasta 6.</p>
+            <div class="images-grid" id="imagesList"></div>
+            <label class="add-image-tile" id="addImageTile">
+                +
+                <input type="file" id="imageInput" accept="image/*" multiple>
+            </label>
+            <div class="images-note" id="imagesNote"></div>
+            <button class="btn btn-clear" id="imagesClear" style="margin-top:10px;">Eliminar todas las fotos</button>
+        </div>
+
+        <div class="edit-section">
+            <h3>Musica de fondo</h3>
+            <p>Un MP3 opcional. Si lo agregas, aparece un boton de reproduccion discreto en la vista completa; si no agregas ninguno, ese boton no se muestra.</p>
+            <div class="chip-list" id="musicList"></div>
+            <label class="btn btn-add" id="addMusicTile" style="display:inline-block;">
+                Elegir archivo MP3
+                <input type="file" id="musicInput" accept="audio/mpeg,audio/mp3,.mp3" style="display:none;">
+            </label>
+        </div>
+
+        <div class="panel-footer">
+            <div class="editor-checkbox-row">
+                <input type="checkbox" id="includeEditorCheckbox">
+                <label for="includeEditorCheckbox">Incluir el editor (el lapiz) en este archivo. Dejalo desactivado para la versión final que le envíes a la persona — así no le aparece el lápiz. Actívalo solo si querés seguir editando este mismo archivo descargado más adelante.</label>
+            </div>
+            <button class="btn btn-download" id="downloadBtn">Descargar mi regalo personalizado</button>
+            <div class="filename-row">
+                <input type="text" id="filenameInput" value="mi-regalo-personalizado.html">
+            </div>
+            <p class="save-note">El navegador no puede sobrescribir este archivo por seguridad. "Descargar" genera un HTML nuevo y completo con tus cambios ya aplicados (incluidas las fotos, cancion, etc) y sigue trayendo este mismo editor adentro, listo para enviarlo o retocarlo despues.</p>
+        </div>
+    </div>
+</div>
+
+<script id="initial-state" type="application/json">{"color": "#26e0c8", "font": "quicksand", "shape": "heart", "centerTexts": ["FELIZ CUMPLEAÑOS", "TE QUIERO MUCHO", "♥"], "centerInterval": 2.6, "orbitWords": ["SORPRESA", "PARA TI", "FELICIDADES", "GRACIAS", "✦", "TE QUIERO", "♥", "DISFRUTA"], "images": [], "music": "", "musicName": ""}</script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
+<script>
+if (typeof THREE === "undefined") {
+    document.write('<script src="https://unpkg.com/three@0.148.0/build/three.min.js"><\/script>');
+}
+</script>
+<script>
+if (typeof THREE === "undefined") {
+    document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"><\/script>');
+}
+</script>
+<script>
+(function(){
+"use strict";
+
+function showLoadError(err){
+    try { console.error("Regalo 3D - error al iniciar:", err); } catch(e){}
+    var el = document.getElementById("loadError");
+    if (el) el.classList.add("visible");
+    var btn = document.getElementById("reloadBtn");
+    if (btn) btn.addEventListener("click", function(){ window.location.reload(); });
+    var detail = document.getElementById("loadErrorDetail");
+    if (detail && err) {
+        var msg = (err && err.message) ? err.message : String(err);
+        var line = (err && err.stack) ? err.stack.split("\n")[0] : "";
+        detail.textContent = msg + (line && line !== msg ? " (" + line + ")" : "");
+        detail.style.display = "block";
+    }
+}
+
+if (typeof THREE === "undefined") {
+    showLoadError(new Error("THREE.js no se pudo cargar"));
+    return;
+}
+
+try {
+
+/* ============================================================
+   CONFIGURACION DE FUENTES DISPONIBLES
+   ============================================================ */
+var FONTS = [
+    { id: "quicksand",  label: "Redonda",   sub: "Aa", family: "'Quicksand', sans-serif",       weight: "800" },
+    { id: "poppins",    label: "Moderna",   sub: "Aa", family: "'Poppins', sans-serif",          weight: "800" },
+    { id: "playfair",   label: "Elegante",  sub: "Aa", family: "'Playfair Display', serif",      weight: "800" },
+    { id: "pacifico",   label: "Divertida", sub: "Aa", family: "'Pacifico', cursive",             weight: "400" },
+    { id: "dancing",    label: "Romantica", sub: "Aa", family: "'Dancing Script', cursive",       weight: "700" },
+    { id: "montserrat", label: "Bold",      sub: "Aa", family: "'Montserrat', sans-serif",        weight: "800" }
+];
+function fontById(id){
+    for (var i = 0; i < FONTS.length; i++) if (FONTS[i].id === id) return FONTS[i];
+    return FONTS[0];
+}
+
+var PRESET_COLORS = [
+    "#26e0c8","#ff6fa5","#ffd166","#a06bff","#5ec2ff",
+    "#ff5757","#6bffb0","#ffffff","#ff9f4a","#ff4ecb",
+    "#7cf5ff","#c9ff4e","#ff2e63","#6a5acd","#ffe066",
+    "#00c2a8","#f78fb3","#ffd3a5","#a8e6cf","#d4a5ff"
+];
+
+var MAX_IMAGES = 6;
+
+/* ============================================================
+   ESTADO INICIAL
+   ============================================================ */
+var stateEl = document.getElementById("initial-state");
+var state;
+try {
+    state = JSON.parse(stateEl.textContent);
+} catch (e) {
+    state = {};
+}
+state.color = state.color || "#26e0c8";
+state.font = state.font || "quicksand";
+state.shape = state.shape || "heart";
+state.centerTexts = state.centerTexts && state.centerTexts.length ? state.centerTexts : ["FELIZ CUMPLEA\u00d1OS", "TE QUIERO MUCHO", "\u2665"];
+state.centerInterval = state.centerInterval || 2.6;
+state.orbitWords = state.orbitWords && state.orbitWords.length ? state.orbitWords : ["SORPRESA", "PARA TI", "FELICIDADES", "GRACIAS"];
+state.images = state.images || [];
+state.music = state.music || null;
+state.musicName = state.musicName || null;
+
+function persistState(){
+    stateEl.textContent = JSON.stringify(state);
+}
+
+/* ---------- vista actual: 'full' (animacion completa) o 'editor' ---------- */
+var currentView = "full";
+
+/* ---------- three.js escena base ---------- */
+var canvas = document.getElementById("c"),
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+var scene = new THREE.Scene(),
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
+
+var LOOK_TARGET = new THREE.Vector3(0, 15, 0);
+var targetDist = 260, currentDist = 900, rotX = 0.18, rotY = 0.35;
+
+scene.background = new THREE.Color(0x00020a);
+
+var previewBox = document.getElementById("previewBox");
+
+function doResize(){
+    var w, h;
+    if (currentView === "editor") {
+        var r = previewBox.getBoundingClientRect();
+        w = Math.max(1, Math.round(r.width));
+        h = Math.max(1, Math.round(r.height));
+    } else {
+        w = window.innerWidth;
+        h = window.innerHeight;
+    }
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+}
+doResize();
+
+/* ---------- paleta derivada del color elegido ---------- */
+function toRgbTriplet(threeColor) {
+    return Math.round(threeColor.r * 255) + "," + Math.round(threeColor.g * 255) + "," + Math.round(threeColor.b * 255);
+}
+function lighten(hex, amt) {
+    var c = new THREE.Color(hex);
+    c.lerp(new THREE.Color(0xffffff), amt);
+    return c;
+}
+function generatePalette(baseHex, n) {
+    var base = new THREE.Color(baseHex);
+    var hsl = {};
+    base.getHSL(hsl);
+    var arr = [];
+    for (var i = 0; i < n; i++) {
+        var l = Math.min(0.9, Math.max(0.4, hsl.l + (Math.random() - 0.5) * 0.3));
+        var h = (hsl.h + (Math.random() - 0.5) * 0.05 + 1) % 1;
+        var c = new THREE.Color();
+        c.setHSL(h, Math.min(1, hsl.s * 1.05 || 0.7), l);
+        arr.push("#" + c.getHexString());
+    }
+    return arr;
+}
+var COLORS = generatePalette(state.color, 10);
+var INNER_GLOW_RGB = toRgbTriplet(lighten(state.color, 0.7));
+var OUTER_GLOW_RGB = toRgbTriplet(new THREE.Color(state.color));
+
+/* ---------- textura de polvo compartida ---------- */
+function makeDustTexture(size) {
+    size = size || 128;
+    var c = document.createElement("canvas");
+    c.width = c.height = size;
+    var ctx = c.getContext("2d"),
+        gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    gradient.addColorStop(0, "rgba(255,255,255,1)");
+    gradient.addColorStop(0.35, "rgba(255,255,255,0.8)");
+    gradient.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+}
+var dustTex = makeDustTexture();
+
+/* ---------- muestreo de puntos: corazon y estrella (rafagas) ---------- */
+function heartSamplePoint(scale) {
+    scale = scale || 1;
+    var x = 0, y = 0, inside = false, tries = 0;
+    while (!inside && tries < 30) {
+        x = (Math.random() * 2 - 1) * 1.3;
+        y = (Math.random() * 2 - 1) * 1.3;
+        var val = Math.pow(x * x + y * y - 1, 3) - x * x * Math.pow(y, 3);
+        inside = val <= 0;
+        tries++;
+    }
+    return { x: x * scale, y: y * scale };
+}
+function heartOutlinePoint(scale, jitter) {
+    scale = scale || 1; jitter = jitter === undefined ? 0.05 : jitter;
+    var t = Math.random() * Math.PI * 2;
+    var x = 16 * Math.pow(Math.sin(t), 3);
+    var y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+    var nx = x / 16 + (Math.random() - 0.5) * jitter;
+    var ny = y / 16 + (Math.random() - 0.5) * jitter;
+    return { x: nx * scale, y: ny * scale };
+}
+function starOutlinePoint(scale, jitter, points, outerR, innerR) {
+    scale = scale || 1; jitter = jitter === undefined ? 0.05 : jitter;
+    points = points || 5; outerR = outerR || 1; innerR = innerR === undefined ? 0.42 : innerR;
+    var totalVerts = points * 2,
+        vertAngle = (Math.PI * 2) / totalVerts,
+        k = Math.floor(Math.random() * totalVerts),
+        t = Math.random(),
+        r0 = k % 2 === 0 ? outerR : innerR,
+        r1 = (k + 1) % 2 === 0 ? outerR : innerR,
+        a0 = -Math.PI / 2 + k * vertAngle,
+        a1 = -Math.PI / 2 + (k + 1) * vertAngle,
+        r = r0 + (r1 - r0) * t,
+        a = a0 + (a1 - a0) * t;
+    return {
+        x: (r * Math.cos(a) + (Math.random() - 0.5) * jitter) * scale,
+        y: (r * Math.sin(a) + (Math.random() - 0.5) * jitter) * scale
+    };
+}
+function starSamplePoint(scale, points, outerR, innerR) {
+    scale = scale || 1; points = points || 5; outerR = outerR || 1; innerR = innerR === undefined ? 0.42 : innerR;
+    var totalVerts = points * 2, vertAngle = (Math.PI * 2) / totalVerts;
+    var a = Math.random() * Math.PI * 2;
+    var norm = ((a + Math.PI / 2) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+    var k = Math.floor(norm / vertAngle) % totalVerts;
+    var r0 = k % 2 === 0 ? outerR : innerR;
+    var rr = Math.sqrt(Math.random()) * r0;
+    return { x: rr * Math.cos(a) * scale, y: rr * Math.sin(a) * scale };
+}
+function shapePoint(scale, fillRatio) {
+    scale = scale || 1; fillRatio = fillRatio === undefined ? 0.3 : fillRatio;
+    if (state.shape === "star") {
+        return Math.random() < fillRatio ? starSamplePoint(scale) : starOutlinePoint(scale);
+    }
+    return Math.random() < fillRatio ? heartSamplePoint(scale) : heartOutlinePoint(scale);
+}
+
+/* ---------- estrellas de fondo ---------- */
+(function (starsCount, maxRadius) {
+    starsCount = starsCount || 2500; maxRadius = maxRadius || 3500;
+    var geometry = new THREE.BufferGeometry(),
+        positions = new Float32Array(3 * starsCount);
+    for (var i = 0; i < starsCount; i++) {
+        var r = maxRadius * (0.3 + 0.7 * Math.random()),
+            theta = Math.random() * Math.PI * 2,
+            phi = Math.acos(2 * Math.random() - 1);
+        positions[3 * i] = r * Math.sin(phi) * Math.cos(theta);
+        positions[3 * i + 1] = r * Math.cos(phi);
+        positions[3 * i + 2] = r * Math.sin(phi) * Math.sin(theta);
+    }
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    scene.add(new THREE.Points(geometry, new THREE.PointsMaterial({ size: 1.8, color: 0xffffff, depthWrite: false })));
+})();
+
+var shootingStarsCount = 40;
+var shootingStarGeo = new THREE.BufferGeometry();
+var shootingStarPos = new Float32Array(shootingStarsCount * 3);
+var shootingStarVels = [];
+for (var si = 0; si < shootingStarsCount; si++) {
+    shootingStarPos[3 * si] = (Math.random() - 0.5) * 800;
+    shootingStarPos[3 * si + 1] = (Math.random() - 0.5) * 800;
+    shootingStarPos[3 * si + 2] = (Math.random() - 0.5) * 800;
+    shootingStarVels.push(new THREE.Vector3(-1.5 - Math.random() * 2, -1 - Math.random(), (Math.random() - 0.5) * 0.5));
+}
+shootingStarGeo.setAttribute("position", new THREE.BufferAttribute(shootingStarPos, 3));
+var shootingStarParticles = new THREE.Points(shootingStarGeo, new THREE.PointsMaterial({ color: 0xa0fff0, size: 2.5, transparent: true, opacity: 0.8 }));
+scene.add(shootingStarParticles);
+
+/* ---------- luces suaves ---------- */
+scene.add(new THREE.AmbientLight(0x123330, 1.2));
+var rimLight = new THREE.PointLight(new THREE.Color(state.color).getHex(), 1.4, 1200);
+rimLight.position.set(140, 220, 220);
+scene.add(rimLight);
+
+var BOX_HALF = 18, BOX_H = 30, CENTER_Y = BOX_H * 0.85;
+
+function sampleEdgeParticles(edges, perEdge, jitter) {
+    jitter = jitter === undefined ? 0.4 : jitter;
+    var total = edges.length * perEdge;
+    var positions = new Float32Array(total * 3);
+    var idx = 0;
+    edges.forEach(function(pair){
+        var p0 = pair[0], p1 = pair[1];
+        for (var i = 0; i < perEdge; i++) {
+            var t = Math.random();
+            positions[idx++] = p0[0] + (p1[0] - p0[0]) * t + (Math.random() - 0.5) * jitter;
+            positions[idx++] = p0[1] + (p1[1] - p0[1]) * t + (Math.random() - 0.5) * jitter;
+            positions[idx++] = p0[2] + (p1[2] - p0[2]) * t + (Math.random() - 0.5) * jitter;
+        }
+    });
+    return positions;
+}
+
+var h = BOX_HALF, H = BOX_H;
+var corners = {
+    b00: [-h, 0, -h], b10: [h, 0, -h], b11: [h, 0, h], b01: [-h, 0, h],
+    t00: [-h, H, -h], t10: [h, H, -h], t11: [h, H, h], t01: [-h, H, h]
+};
+var baseEdges = [
+    [corners.b00, corners.b10], [corners.b10, corners.b11], [corners.b11, corners.b01], [corners.b01, corners.b00],
+    [corners.b00, corners.t00], [corners.b10, corners.t10], [corners.b11, corners.t11], [corners.b01, corners.t01]
+];
+var basePositions = sampleEdgeParticles(baseEdges, 26);
+var baseGeo = new THREE.BufferGeometry();
+baseGeo.setAttribute("position", new THREE.BufferAttribute(basePositions, 3));
+var baseMat = new THREE.PointsMaterial({
+    map: dustTex, size: 3.2, color: new THREE.Color(state.color),
+    transparent: true, depthWrite: false, sizeAttenuation: true,
+    blending: THREE.AdditiveBlending, opacity: 0
+});
+var boxBase = new THREE.Points(baseGeo, baseMat);
+scene.add(boxBase);
+
+var lidEdgesLocal = [
+    [[-h, 0, 0], [h, 0, 0]],
+    [[h, 0, 0], [h, 0, 2 * h]],
+    [[h, 0, 2 * h], [-h, 0, 2 * h]],
+    [[-h, 0, 2 * h], [-h, 0, 0]]
+];
+var lidPositions = sampleEdgeParticles(lidEdgesLocal, 26);
+var lidGeo = new THREE.BufferGeometry();
+lidGeo.setAttribute("position", new THREE.BufferAttribute(lidPositions, 3));
+var lidMat = new THREE.PointsMaterial({
+    map: dustTex, size: 3.2, color: lighten(state.color, 0.3),
+    transparent: true, depthWrite: false, sizeAttenuation: true,
+    blending: THREE.AdditiveBlending, opacity: 0
+});
+var lidPoints = new THREE.Points(lidGeo, lidMat);
+var lidGroup = new THREE.Group();
+lidGroup.position.set(0, H, -h);
+lidGroup.add(lidPoints);
+scene.add(lidGroup);
+
+var CLOUD_PARTICLES = 1400;
+var cloudGeo = new THREE.BufferGeometry();
+var cloudTargetPos = new Float32Array(CLOUD_PARTICLES * 3);
+var cloudScatterPos = new Float32Array(CLOUD_PARTICLES * 3);
+var cloudCurrentPos = new Float32Array(CLOUD_PARTICLES * 3);
+for (var ci = 0; ci < CLOUD_PARTICLES; ci++) {
+    var cr = 26 + Math.random() * 16,
+        ctheta = Math.random() * Math.PI * 2,
+        cphi = Math.acos(2 * Math.random() - 1);
+    cloudTargetPos[3 * ci] = cr * Math.sin(cphi) * Math.cos(ctheta);
+    cloudTargetPos[3 * ci + 1] = CENTER_Y + cr * Math.cos(cphi) * 0.7;
+    cloudTargetPos[3 * ci + 2] = cr * Math.sin(cphi) * Math.sin(ctheta);
+    cloudScatterPos[3 * ci] = (Math.random() - 0.5) * 2 * h;
+    cloudScatterPos[3 * ci + 1] = Math.random() * H;
+    cloudScatterPos[3 * ci + 2] = (Math.random() - 0.5) * 2 * h;
+}
+cloudCurrentPos.set(cloudScatterPos);
+cloudGeo.setAttribute("position", new THREE.BufferAttribute(cloudCurrentPos, 3));
+var cloudMat = new THREE.PointsMaterial({
+    map: dustTex, size: 3, color: lighten(state.color, 0.15),
+    transparent: true, depthWrite: false, sizeAttenuation: true,
+    blending: THREE.AdditiveBlending, opacity: 0
+});
+var ambientCloud = new THREE.Points(cloudGeo, cloudMat);
+scene.add(ambientCloud);
+
+function makeGlowTexture(size) {
+    size = size || 768;
+    var c = document.createElement("canvas");
+    c.width = c.height = size;
+    var ctx = c.getContext("2d"),
+        gradient = ctx.createRadialGradient(size / 2, size / 2, 0.04 * size, size / 2, size / 2, 0.5 * size);
+    gradient.addColorStop(0, "rgba(" + INNER_GLOW_RGB + ",0.9)");
+    gradient.addColorStop(0.4, "rgba(" + OUTER_GLOW_RGB + ",0.45)");
+    gradient.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+}
+var glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeGlowTexture(), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
+glow.scale.set(260, 260, 1);
+glow.position.set(0, CENTER_Y, 0);
+scene.add(glow);
+
+/* ---------- textos centrales (dependen de color + fuente) ---------- */
+function makeCenterTextTexture(text, themeColor, fontFamily, fontWeight) {
+    var c = document.createElement("canvas");
+    c.width = 512; c.height = 512;
+    var ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+    var fontSize = text.length > 14 ? 46 : 64;
+    ctx.font = fontWeight + " " + fontSize + "px " + fontFamily;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#ffffff";
+    ctx.shadowColor = themeColor;
+    ctx.shadowBlur = 45;
+    ctx.fillText(text, c.width / 2, c.height / 2);
+    return new THREE.CanvasTexture(c);
+}
+var centerTextures = [];
+var centerMat = new THREE.SpriteMaterial({ map: null, transparent: true, opacity: 0 });
+var centerSprite = new THREE.Sprite(centerMat);
+centerSprite.scale.set(72, 72, 1);
+centerSprite.position.set(0, CENTER_Y, 0);
+centerSprite.renderOrder = 999;
+scene.add(centerSprite);
+
+function rebuildCenterTextures(){
+    centerTextures.forEach(function(t){ t.dispose(); });
+    var f = fontById(state.font);
+    var texts = state.centerTexts.length ? state.centerTexts : ["\u2665"];
+    centerTextures = texts.map(function(t){ return makeCenterTextTexture(t, state.color, f.family, f.weight); });
+    centerMat.map = centerTextures[0];
+    centerMat.needsUpdate = true;
+}
+
+/* ---------- palabras orbitando ---------- */
+function makeTextTexture(text, shadowColor, fontFamily, fontWeight) {
+    var c = document.createElement("canvas");
+    c.width = 512; c.height = 128;
+    var ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.font = fontWeight + " 50px " + fontFamily;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#ffffff";
+    ctx.shadowColor = shadowColor;
+    ctx.shadowBlur = 28;
+    ctx.fillText(text, c.width / 2, c.height / 2);
+    return new THREE.CanvasTexture(c);
+}
+var textGroup = new THREE.Group();
+textGroup.position.set(0, CENTER_Y, 0);
+scene.add(textGroup);
+
+function clearGroup(group){
+    while (group.children.length) {
+        var obj = group.children.pop();
+        if (obj.material) {
+            if (obj.material.map) obj.material.map.dispose();
+            obj.material.dispose();
+        }
+        group.remove(obj);
+    }
+}
+
+function rebuildOrbitWords(){
+    clearGroup(textGroup);
+    var f = fontById(state.font);
+    var words = [];
+    var base = state.orbitWords.length ? state.orbitWords : ["\u2665"];
+    for (var e = 0; e < 5; e++) words = words.concat(base);
+    for (var i = 0; i < words.length; i++) {
+        var phi = Math.acos(2 * Math.random() - 1),
+            theta = Math.random() * Math.PI * 2,
+            radius = 90 + 85 * Math.random(),
+            tex = makeTextTexture(words[i], COLORS[i % COLORS.length], f.family, f.weight),
+            obj = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0 }));
+        obj.scale.set(46, 14, 1);
+        obj.position.set(radius * Math.sin(phi) * Math.cos(theta), radius * Math.cos(phi) * 0.55, radius * Math.sin(phi) * Math.sin(theta));
+        obj.userData.phi = phi;
+        obj.userData.theta = theta;
+        obj.userData.radius = radius;
+        obj.userData.speed = 0.0007 + 0.0011 * Math.random();
+        obj.userData.pulsePhase = Math.random() * Math.PI * 2;
+        obj.userData.introFade = introDone ? 1 : 0;
+        textGroup.add(obj);
+    }
+}
+
+/* ---------- fotos flotando (con borde en degradado) ---------- */
+var imageGroup = new THREE.Group();
+imageGroup.position.set(0, CENTER_Y, 0);
+scene.add(imageGroup);
+
+function loadFeatheredImageTexture(dataUrl){
+    return new Promise(function(resolve, reject){
+        var img = new Image();
+        img.onload = function(){
+            var size = 300;
+            var c = document.createElement("canvas");
+            c.width = c.height = size;
+            var ctx = c.getContext("2d");
+            var scale = Math.max(size / img.width, size / img.height);
+            var w = img.width * scale, hh = img.height * scale;
+            ctx.drawImage(img, (size - w) / 2, (size - hh) / 2, w, hh);
+            ctx.globalCompositeOperation = "destination-in";
+            var grad = ctx.createRadialGradient(size / 2, size / 2, size * 0.24, size / 2, size / 2, size * 0.5);
+            grad.addColorStop(0, "rgba(255,255,255,1)");
+            grad.addColorStop(0.65, "rgba(255,255,255,0.85)");
+            grad.addColorStop(1, "rgba(255,255,255,0)");
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, size, size);
+            ctx.globalCompositeOperation = "source-over";
+            resolve(new THREE.CanvasTexture(c));
+        };
+        img.onerror = reject;
+        img.src = dataUrl;
+    });
+}
+
+function rebuildImages(){
+    clearGroup(imageGroup);
+    state.images.forEach(function(dataUrl){
+        loadFeatheredImageTexture(dataUrl).then(function(tex){
+            var phi = Math.acos(2 * Math.random() - 1),
+                theta = Math.random() * Math.PI * 2,
+                radius = 105 + 70 * Math.random(),
+                obj = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, opacity: 0 }));
+            obj.scale.set(30, 30, 1);
+            obj.position.set(radius * Math.sin(phi) * Math.cos(theta), radius * Math.cos(phi) * 0.55, radius * Math.sin(phi) * Math.sin(theta));
+            obj.userData.phi = phi;
+            obj.userData.theta = theta;
+            obj.userData.radius = radius;
+            obj.userData.speed = 0.0004 + 0.0007 * Math.random();
+            obj.userData.pulsePhase = Math.random() * Math.PI * 2;
+            obj.userData.targetOpacity = 0.62;
+            obj.userData.introFade = introDone ? 1 : 0;
+            imageGroup.add(obj);
+        }).catch(function(){});
+    });
+}
+
+/* ---------- humo (explosion inicial) ---------- */
+var SMOKE_POOL_SIZE = 420;
+var smokePool = [];
+for (var smi = 0; smi < SMOKE_POOL_SIZE; smi++) {
+    var smat = new THREE.SpriteMaterial({ map: dustTex, color: new THREE.Color(state.color), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+    var sspr = new THREE.Sprite(smat);
+    sspr.visible = false;
+    sspr.userData.alive = false;
+    scene.add(sspr);
+    smokePool.push(sspr);
+}
+var smokeTriggered = false;
+function triggerSmokeExplosion() {
+    for (var i = 0; i < SMOKE_POOL_SIZE; i++) {
+        var sprite = smokePool[i];
+        var px = (Math.random() - 0.5) * 2 * h * 0.8;
+        var pz = (Math.random() - 0.5) * 2 * h * 0.8;
+        var py = Math.random() * H * 0.6;
+        sprite.position.set(px, py, pz);
+        var outward = new THREE.Vector3(px, 0, pz);
+        if (outward.lengthSq() < 0.01) outward.set(Math.random() - 0.5, 0, Math.random() - 0.5);
+        outward.normalize().multiplyScalar(6 + Math.random() * 14);
+        outward.y = 14 + Math.random() * 22;
+        sprite.userData.velocity = outward;
+        sprite.userData.life = 1;
+        sprite.userData.maxLife = 3.2 + Math.random() * 1.8;
+        sprite.userData.baseScale = 5 + Math.random() * 5;
+        sprite.userData.alive = true;
+        sprite.material.color.setStyle(COLORS[i % COLORS.length]);
+        sprite.material.opacity = 1;
+        sprite.visible = true;
+        sprite.scale.set(1, 1, 1);
+    }
+}
+
+/* ---------- rafagas al tocar ---------- */
+var BURST_POOL_SIZE = 260;
+var burstPool = [];
+for (var bi = 0; bi < BURST_POOL_SIZE; bi++) {
+    var bmat = new THREE.SpriteMaterial({ map: dustTex, color: new THREE.Color(state.color), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+    var bspr = new THREE.Sprite(bmat);
+    bspr.visible = false;
+    bspr.userData.alive = false;
+    scene.add(bspr);
+    burstPool.push(bspr);
+}
+var burstCursor = 0;
+var corePulseBoost = 0;
+
+function spawnBurst(worldPos, count, big) {
+    count = count || 70;
+    var shapeScale = big ? 42 : 28;
+    for (var n = 0; n < count; n++) {
+        var sprite = burstPool[burstCursor];
+        burstCursor = (burstCursor + 1) % BURST_POOL_SIZE;
+        var p = shapePoint(shapeScale);
+        var offset = new THREE.Vector3(p.x, p.y, (Math.random() - 0.5) * shapeScale * 0.4);
+        sprite.position.copy(worldPos).add(offset);
+        var outward = offset.lengthSq() > 0.0001 ? offset.clone().normalize() : new THREE.Vector3(0, 1, 0);
+        outward.multiplyScalar((big ? 55 : 34) + Math.random() * (big ? 45 : 30));
+        sprite.userData.velocity = outward;
+        sprite.userData.life = 1.0;
+        sprite.userData.maxLife = (big ? 1.5 : 1.1) + Math.random() * 0.6;
+        sprite.userData.baseScale = (big ? 6.5 : 4.5) + Math.random() * (big ? 4.5 : 3.5);
+        sprite.userData.alive = true;
+        sprite.material.color.setStyle(COLORS[n % COLORS.length]);
+        sprite.material.opacity = 1;
+        sprite.visible = true;
+        sprite.scale.set(1, 1, 1);
+    }
+    corePulseBoost = big ? 0.5 : 0.25;
+}
+
+function worldPositionFromPointer(clientX, clientY, distance) {
+    var rect = canvas.getBoundingClientRect();
+    var ndcX = ((clientX - rect.left) / rect.width) * 2 - 1;
+    var ndcY = -((clientY - rect.top) / rect.height) * 2 + 1;
+    var vector = new THREE.Vector3(ndcX, ndcY, 0.5).unproject(camera);
+    var dir = vector.sub(camera.position).normalize();
+    return camera.position.clone().add(dir.multiplyScalar(distance));
+}
+
+/* ---------- rastro de polvo del cursor ---------- */
+var TRAIL_POOL_SIZE = 220;
+var trailPool = [];
+for (var ti = 0; ti < TRAIL_POOL_SIZE; ti++) {
+    var tmat = new THREE.SpriteMaterial({ map: dustTex, color: lighten(state.color, 0.2), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+    var tspr = new THREE.Sprite(tmat);
+    tspr.visible = false;
+    tspr.userData.alive = false;
+    scene.add(tspr);
+    trailPool.push(tspr);
+}
+var trailCursor = 0, lastTrailX = null, lastTrailY = null;
+
+function spawnTrailDust(clientX, clientY) {
+    var worldPos = worldPositionFromPointer(clientX, clientY, currentDist * 0.55);
+    var sprite = trailPool[trailCursor];
+    trailCursor = (trailCursor + 1) % TRAIL_POOL_SIZE;
+    sprite.position.copy(worldPos);
+    sprite.userData.velocity = new THREE.Vector3((Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4 + 1, (Math.random() - 0.5) * 4);
+    sprite.userData.life = 1.0;
+    sprite.userData.maxLife = 0.6 + Math.random() * 0.4;
+    sprite.userData.baseScale = 2 + Math.random() * 2.5;
+    sprite.userData.alive = true;
+    sprite.material.color.setStyle(COLORS[Math.floor(Math.random() * COLORS.length)]);
+    sprite.material.opacity = 1;
+    sprite.visible = true;
+    sprite.scale.set(1, 1, 1);
+}
+
+function handlePointerTrail(clientX, clientY) {
+    if (lastTrailX === null) { lastTrailX = clientX; lastTrailY = clientY; return; }
+    var dist = Math.hypot(clientX - lastTrailX, clientY - lastTrailY);
+    if (dist > 10) {
+        spawnTrailDust(clientX, clientY);
+        lastTrailX = clientX; lastTrailY = clientY;
+    }
+}
+
+/* ---------- controles: arrastrar para rotar, tocar para lanzar rafaga (solo vista completa) ---------- */
+var dragging = false, lastX = 0, lastY = 0, downX = 0, downY = 0, downTime = 0, moved = 0;
+
+function onDown(e) {
+    if (currentView !== "full") return;
+    dragging = true;
+    moved = 0;
+    var t = e.touches ? e.touches[0] : e;
+    lastX = downX = t.clientX;
+    lastY = downY = t.clientY;
+    downTime = performance.now();
+}
+function onMove(e) {
+    if (currentView !== "full") return;
+    if (!dragging) return;
+    var t = e.touches ? e.touches[0] : e,
+        nX = (t.clientX - lastX) / window.innerWidth,
+        nY = (t.clientY - lastY) / window.innerHeight;
+    rotY -= 3 * nX;
+    rotX = Math.max(-1.2, Math.min(1.2, rotX - 2.2 * nY));
+    moved += Math.abs(t.clientX - lastX) + Math.abs(t.clientY - lastY);
+    lastX = t.clientX; lastY = t.clientY;
+}
+function onUp(e) {
+    if (currentView !== "full") return;
+    if (!dragging) return;
+    dragging = false;
+    var wasQuickTap = moved < 12 && (performance.now() - downTime) < 500;
+    if (wasQuickTap) {
+        var pos = worldPositionFromPointer(downX, downY, currentDist * 0.55);
+        spawnBurst(pos, 65, false);
+    }
+}
+
+window.addEventListener("mousedown", onDown);
+window.addEventListener("mousemove", onMove);
+window.addEventListener("mouseup", onUp);
+window.addEventListener("touchstart", onDown, { passive: true });
+window.addEventListener("touchmove", onMove, { passive: true });
+window.addEventListener("touchend", onUp, { passive: true });
+
+window.addEventListener("mousemove", function(e){
+    if (currentView === "full") handlePointerTrail(e.clientX, e.clientY);
+});
+window.addEventListener("touchmove", function(e){
+    if (currentView !== "full") return;
+    var t = e.touches && e.touches[0];
+    if (t) handlePointerTrail(t.clientX, t.clientY);
+}, { passive: true });
+
+window.addEventListener("dblclick", function(e){
+    if (currentView !== "full") return;
+    var pos = worldPositionFromPointer(e.clientX, e.clientY, currentDist * 0.55);
+    spawnBurst(pos, 110, true);
+});
+var lastTapTime = 0;
+window.addEventListener("touchend", function(e){
+    if (currentView !== "full") return;
+    var now = performance.now();
+    if (now - lastTapTime < 320 && moved < 12) {
+        var t = e.changedTouches && e.changedTouches[0];
+        if (t) {
+            var pos = worldPositionFromPointer(t.clientX, t.clientY, currentDist * 0.55);
+            spawnBurst(pos, 110, true);
+        }
+    }
+    lastTapTime = now;
+}, { passive: true });
+
+window.addEventListener("wheel", function(e){
+    if (currentView !== "full") return;
+    targetDist += 0.25 * e.deltaY;
+    targetDist = Math.max(140, Math.min(650, targetDist));
+}, { passive: true });
+
+var pinch = 0;
+window.addEventListener("touchmove", function(e){
+    if (currentView !== "full") return;
+    if (e.touches && e.touches.length === 2) {
+        e.preventDefault();
+        var dX = e.touches[0].clientX - e.touches[1].clientX,
+            dY = e.touches[0].clientY - e.touches[1].clientY,
+            dist = Math.hypot(dX, dY);
+        if (pinch) {
+            targetDist += 0.5 * (pinch - dist);
+            targetDist = Math.max(140, Math.min(650, targetDist));
+        }
+        pinch = dist;
+    }
+}, { passive: false });
+window.addEventListener("touchend", function(){ pinch = 0; }, { passive: true });
+
+window.addEventListener("resize", doResize);
+window.addEventListener("orientationchange", function(){ setTimeout(doResize, 150); });
+
+/* ---------- timings de la intro ---------- */
+var BOX_FADE_IN_END        = 900;
+var LID_OPEN_START         = 1600;
+var LID_OPEN_DURATION      = 1600;
+var EXPLOSION_START        = 2500;
+var CLOUD_CONVERGE_START   = 2600;
+var CLOUD_CONVERGE_DURATION = 4200;
+var BOX_FADE_OUT_START     = 3300;
+var BOX_FADE_OUT_DURATION  = 1800;
+var TEXT_FADE_START        = 4900;
+var TEXT_FADE_DURATION     = 1800;
+var WORDS_FADE_START       = 5500;
+var WORDS_FADE_DURATION    = 2000;
+var INTRO_DONE_AT          = 7600;
+
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+
+var introDone = false;
+var introStartTime = performance.now();
+
+var timeClock = 0;
+var lastFrame = performance.now();
+
+function tick() {
+    requestAnimationFrame(tick);
+    var now = performance.now();
+    var dt = Math.min((now - lastFrame) / 1000, 0.05);
+    lastFrame = now;
+    timeClock += 0.01;
+
+    if (!introDone) {
+        var elapsed = now - introStartTime;
+
+        baseMat.opacity = clamp01(elapsed / BOX_FADE_IN_END);
+        lidMat.opacity = clamp01(elapsed / BOX_FADE_IN_END);
+
+        var lidT = clamp01((elapsed - LID_OPEN_START) / LID_OPEN_DURATION);
+        var lidEase = easeOutCubic(lidT);
+        lidGroup.rotation.x = -lidEase * Math.PI * 0.62;
+        if (lidT > 0) lidMat.opacity = clamp01(1 - lidEase * 1.1);
+
+        if (!smokeTriggered && elapsed >= EXPLOSION_START) {
+            triggerSmokeExplosion();
+            smokeTriggered = true;
+        }
+
+        var cloudT = clamp01((elapsed - CLOUD_CONVERGE_START) / CLOUD_CONVERGE_DURATION);
+        var cloudEase = easeOutCubic(cloudT);
+        for (var i = 0; i < CLOUD_PARTICLES * 3; i++) {
+            cloudCurrentPos[i] = cloudScatterPos[i] + (cloudTargetPos[i] - cloudScatterPos[i]) * cloudEase;
+        }
+        cloudGeo.attributes.position.needsUpdate = true;
+        cloudMat.opacity = 0.9 * cloudEase;
+        glow.material.opacity = cloudEase;
+
+        var boxOutT = clamp01((elapsed - BOX_FADE_OUT_START) / BOX_FADE_OUT_DURATION);
+        baseMat.opacity = clamp01(baseMat.opacity - boxOutT);
+        lidMat.opacity = clamp01(lidMat.opacity - boxOutT);
+
+        var textT = clamp01((elapsed - TEXT_FADE_START) / TEXT_FADE_DURATION);
+        centerMat.opacity = easeOutCubic(textT);
+
+        var wordsT = clamp01((elapsed - WORDS_FADE_START) / WORDS_FADE_DURATION);
+        var wordsEase = easeOutCubic(wordsT);
+        textGroup.children.forEach(function(obj){ obj.userData.introFade = wordsEase; });
+        imageGroup.children.forEach(function(obj){ obj.userData.introFade = wordsEase; });
+
+        if (elapsed >= INTRO_DONE_AT) {
+            introDone = true;
+            boxBase.visible = false;
+            lidGroup.visible = false;
+        }
+    }
+
+    var posArr = shootingStarParticles.geometry.attributes.position.array;
+    for (var ssi = 0; ssi < shootingStarsCount; ssi++) {
+        posArr[3 * ssi] += shootingStarVels[ssi].x;
+        posArr[3 * ssi + 1] += shootingStarVels[ssi].y;
+        posArr[3 * ssi + 2] += shootingStarVels[ssi].z;
+        if (posArr[3 * ssi] < -400 || posArr[3 * ssi + 1] < -400) {
+            posArr[3 * ssi] = (Math.random() - 0.5) * 800 + 200;
+            posArr[3 * ssi + 1] = (Math.random() - 0.5) * 800 + 200;
+            posArr[3 * ssi + 2] = (Math.random() - 0.5) * 800;
+        }
+    }
+    shootingStarParticles.geometry.attributes.position.needsUpdate = true;
+
+    corePulseBoost *= 0.9;
+    var glowPulse = 1 + 0.05 * Math.sin(0.5 * timeClock) + corePulseBoost * 0.6;
+    glow.scale.set(260 * glowPulse, 260 * glowPulse, 1);
+    var textPulse = 1 + 0.04 * Math.sin(1.4 * timeClock) + corePulseBoost * 0.4;
+    centerSprite.scale.set(72 * textPulse, 72 * textPulse, 1);
+
+    textGroup.children.forEach(function(obj){
+        var ud = obj.userData;
+        ud.theta += ud.speed;
+        obj.position.x = ud.radius * Math.sin(ud.phi) * Math.cos(ud.theta);
+        obj.position.z = ud.radius * Math.sin(ud.phi) * Math.sin(ud.theta);
+        var base = 0.78;
+        var fade = ud.introFade !== undefined ? ud.introFade : 1;
+        obj.material.opacity = fade * (base + (1 - base) * (0.5 + 0.5 * Math.sin(2 * timeClock + (ud.pulsePhase || 0))));
+    });
+
+    imageGroup.children.forEach(function(obj){
+        var ud = obj.userData;
+        ud.theta += ud.speed;
+        obj.position.x = ud.radius * Math.sin(ud.phi) * Math.cos(ud.theta);
+        obj.position.z = ud.radius * Math.sin(ud.phi) * Math.sin(ud.theta);
+        var target = ud.targetOpacity || 0.6;
+        var fade = ud.introFade !== undefined ? ud.introFade : 1;
+        obj.material.opacity = fade * (target * 0.7 + target * 0.3 * (0.5 + 0.5 * Math.sin(1.6 * timeClock + (ud.pulsePhase || 0))));
+    });
+
+    for (var smj = 0; smj < SMOKE_POOL_SIZE; smj++) {
+        var ssprite = smokePool[smj];
+        if (!ssprite.userData.alive) continue;
+        ssprite.userData.velocity.y -= 3 * dt;
+        ssprite.userData.velocity.multiplyScalar(0.985);
+        ssprite.position.addScaledVector(ssprite.userData.velocity, dt);
+        ssprite.userData.life -= dt / ssprite.userData.maxLife;
+        if (ssprite.userData.life <= 0) {
+            ssprite.userData.alive = false;
+            ssprite.visible = false;
+            continue;
+        }
+        var ss = ssprite.userData.baseScale * Math.min(1, ssprite.userData.life * 1.4 + 0.4);
+        ssprite.scale.set(ss, ss, 1);
+        ssprite.material.opacity = Math.min(1, ssprite.userData.life * 1.6);
+    }
+
+    for (var bj = 0; bj < BURST_POOL_SIZE; bj++) {
+        var bsprite = burstPool[bj];
+        if (!bsprite.userData.alive) continue;
+        bsprite.userData.velocity.y -= 18 * dt;
+        bsprite.userData.velocity.multiplyScalar(0.985);
+        bsprite.position.addScaledVector(bsprite.userData.velocity, dt);
+        bsprite.userData.life -= dt / bsprite.userData.maxLife;
+        if (bsprite.userData.life <= 0) {
+            bsprite.userData.alive = false;
+            bsprite.visible = false;
+            continue;
+        }
+        var bs = bsprite.userData.baseScale * Math.min(1, bsprite.userData.life * 1.6);
+        bsprite.scale.set(bs, bs, 1);
+        bsprite.material.opacity = Math.min(1, bsprite.userData.life * 1.8);
+    }
+
+    for (var tj = 0; tj < TRAIL_POOL_SIZE; tj++) {
+        var tsprite = trailPool[tj];
+        if (!tsprite.userData.alive) continue;
+        tsprite.userData.velocity.y -= 6 * dt;
+        tsprite.userData.velocity.multiplyScalar(0.96);
+        tsprite.position.addScaledVector(tsprite.userData.velocity, dt);
+        tsprite.userData.life -= dt / tsprite.userData.maxLife;
+        if (tsprite.userData.life <= 0) {
+            tsprite.userData.alive = false;
+            tsprite.visible = false;
+            continue;
+        }
+        var ts = tsprite.userData.baseScale * Math.min(1, tsprite.userData.life * 1.5 + 0.3);
+        tsprite.scale.set(ts, ts, 1);
+        tsprite.material.opacity = Math.min(1, tsprite.userData.life * 1.6);
+    }
+
+    currentDist += 0.045 * (targetDist - currentDist);
+    var cosX = Math.cos(rotX), sinX = Math.sin(rotX),
+        cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+    camera.position.set(
+        LOOK_TARGET.x + currentDist * sinY * cosX,
+        LOOK_TARGET.y + currentDist * sinX,
+        LOOK_TARGET.z + currentDist * cosY * cosX
+    );
+    camera.lookAt(LOOK_TARGET);
+
+    var textIndex = Math.floor(timeClock / state.centerInterval) % centerTextures.length;
+    if (centerTextures.length) centerMat.map = centerTextures[textIndex];
+
+    renderer.render(scene, camera);
+}
+
+/* ============================================================
+   NAVEGACION: vista completa <-> editor
+   ============================================================ */
+var editToggle = document.getElementById("editToggle");
+var backBtn = document.getElementById("backBtn");
+
+function enterEditor(){
+    currentView = "editor";
+    document.body.classList.add("mode-editor");
+    canvas.classList.remove("stage-full");
+    canvas.classList.add("stage-preview");
+    previewBox.appendChild(canvas);
+    document.getElementById("editorPage").scrollTop = 0;
+    window.scrollTo(0, 0);
+    requestAnimationFrame(doResize);
+}
+function exitEditor(){
+    currentView = "full";
+    document.body.classList.remove("mode-editor");
+    canvas.classList.remove("stage-preview");
+    canvas.classList.add("stage-full");
+    document.body.insertBefore(canvas, document.body.firstChild);
+    requestAnimationFrame(doResize);
+}
+
+editToggle.addEventListener("click", enterEditor);
+backBtn.addEventListener("click", exitEditor);
+
+/* --- color --- */
+var swatchesEl = document.getElementById("swatches");
+swatchesEl.innerHTML = "";
+PRESET_COLORS.forEach(function(hex){
+    var sw = document.createElement("div");
+    sw.className = "swatch";
+    sw.style.background = hex;
+    sw.title = hex;
+    sw.addEventListener("click", function(){ setColor(hex); });
+    swatchesEl.appendChild(sw);
+});
+function refreshSwatchActive(){
+    Array.prototype.forEach.call(swatchesEl.children, function(sw, i){
+        sw.classList.toggle("active", PRESET_COLORS[i].toLowerCase() === state.color.toLowerCase());
+    });
+}
+var colorPicker = document.getElementById("colorPicker");
+var colorText = document.getElementById("colorText");
+function setColor(hex){
+    if(!/^#([0-9a-fA-F]{6})$/.test(hex)) return;
+    state.color = hex;
+    colorPicker.value = hex;
+    colorText.value = hex;
+    refreshSwatchActive();
+    applyColorChange();
+    persistState();
+}
+colorPicker.addEventListener("input", function(){ setColor(colorPicker.value); });
+colorText.addEventListener("change", function(){ setColor(colorText.value.trim()); });
+colorPicker.value = state.color;
+colorText.value = state.color;
+refreshSwatchActive();
+
+function applyColorChange(){
+    COLORS = generatePalette(state.color, 10);
+    INNER_GLOW_RGB = toRgbTriplet(lighten(state.color, 0.7));
+    OUTER_GLOW_RGB = toRgbTriplet(new THREE.Color(state.color));
+    rimLight.color.set(state.color);
+    baseMat.color.set(state.color);
+    lidMat.color.set(lighten(state.color, 0.3));
+    cloudMat.color.set(lighten(state.color, 0.15));
+    if (glow.material.map) glow.material.map.dispose();
+    glow.material.map = makeGlowTexture();
+    glow.material.needsUpdate = true;
+    rebuildCenterTextures();
+    rebuildOrbitWords();
+}
+
+/* --- fuente --- */
+var fontRow = document.getElementById("fontRow");
+fontRow.innerHTML = "";
+FONTS.forEach(function(f){
+    var opt = document.createElement("div");
+    opt.className = "font-opt";
+    opt.style.fontFamily = f.family;
+    opt.innerHTML = f.label + "<small>" + f.sub + "</small>";
+    opt.addEventListener("click", function(){
+        state.font = f.id;
+        refreshFontActive();
+        rebuildCenterTextures();
+        rebuildOrbitWords();
+        persistState();
+    });
+    fontRow.appendChild(opt);
+});
+function refreshFontActive(){
+    Array.prototype.forEach.call(fontRow.children, function(opt, i){
+        opt.classList.toggle("active", FONTS[i].id === state.font);
+    });
+}
+refreshFontActive();
+
+/* --- forma --- */
+document.querySelectorAll(".shape-opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+        state.shape = opt.dataset.shape;
+        document.querySelectorAll(".shape-opt").forEach(function(o){ o.classList.toggle("active", o === opt); });
+        persistState();
+    });
+    if (opt.dataset.shape === state.shape) opt.classList.add("active");
+});
+
+/* --- intervalo frase central --- */
+var intervalRange = document.getElementById("intervalRange");
+var intervalVal = document.getElementById("intervalVal");
+intervalRange.value = state.centerInterval;
+intervalVal.textContent = state.centerInterval.toFixed(1) + "s";
+intervalRange.addEventListener("input", function(){
+    state.centerInterval = parseFloat(intervalRange.value);
+    intervalVal.textContent = state.centerInterval.toFixed(1) + "s";
+    persistState();
+});
+intervalRange.addEventListener("change", persistState);
+
+/* --- listas genericas --- */
+function renderList(containerId, arr, emptyMsg){
+    var el = document.getElementById(containerId);
+    el.innerHTML = "";
+    if(arr.length === 0){
+        var p = document.createElement("div");
+        p.className = "empty-note";
+        p.textContent = emptyMsg;
+        el.appendChild(p);
+        return;
+    }
+    arr.forEach(function(word, idx){
+        var chip = document.createElement("div");
+        chip.className = "chip";
+        var span = document.createElement("span");
+        span.textContent = word;
+        var btn = document.createElement("button");
+        btn.innerHTML = "&#10005;";
+        btn.title = "Eliminar";
+        btn.addEventListener("click", function(){
+            arr.splice(idx, 1);
+            renderList(containerId, arr, emptyMsg);
+            onListChanged(containerId);
+        });
+        chip.appendChild(span);
+        chip.appendChild(btn);
+        el.appendChild(chip);
+    });
+}
+function onListChanged(containerId){
+    if (containerId === "centerList") rebuildCenterTextures();
+    if (containerId === "orbitList") rebuildOrbitWords();
+    persistState();
+}
+function wireAdder(inputId, btnId, arr, containerId, emptyMsg){
+    var input = document.getElementById(inputId);
+    var btn = document.getElementById(btnId);
+    function add(){
+        var v = input.value.trim();
+        if(!v) return;
+        arr.push(v);
+        input.value = "";
+        renderList(containerId, arr, emptyMsg);
+        onListChanged(containerId);
+    }
+    btn.addEventListener("click", add);
+    input.addEventListener("keydown", function(e){ if(e.key === "Enter") add(); });
+}
+
+var CENTER_EMPTY = "Sin frases centrales \u2014 agrega al menos una.";
+var ORBIT_EMPTY = "Sin palabras orbitando \u2014 agrega al menos una.";
+renderList("centerList", state.centerTexts, CENTER_EMPTY);
+renderList("orbitList", state.orbitWords, ORBIT_EMPTY);
+wireAdder("centerInput", "centerAdd", state.centerTexts, "centerList", CENTER_EMPTY);
+wireAdder("orbitInput", "orbitAdd", state.orbitWords, "orbitList", ORBIT_EMPTY);
+
+document.getElementById("centerClear").addEventListener("click", function(){
+    state.centerTexts.length = 0;
+    renderList("centerList", state.centerTexts, CENTER_EMPTY);
+    onListChanged("centerList");
+});
+document.getElementById("orbitClear").addEventListener("click", function(){
+    state.orbitWords.length = 0;
+    renderList("orbitList", state.orbitWords, ORBIT_EMPTY);
+    onListChanged("orbitList");
+});
+
+/* --- fotos flotando --- */
+var imagesList = document.getElementById("imagesList");
+var addImageTile = document.getElementById("addImageTile");
+var imageInput = document.getElementById("imageInput");
+var imagesNote = document.getElementById("imagesNote");
+
+function renderImagesList(){
+    imagesList.innerHTML = "";
+    state.images.forEach(function(dataUrl, idx){
+        var thumb = document.createElement("div");
+        thumb.className = "img-thumb";
+        thumb.style.backgroundImage = "url(" + dataUrl + ")";
+        var btn = document.createElement("button");
+        btn.innerHTML = "&#10005;";
+        btn.addEventListener("click", function(){
+            state.images.splice(idx, 1);
+            renderImagesList();
+            rebuildImages();
+            persistState();
+        });
+        thumb.appendChild(btn);
+        imagesList.appendChild(thumb);
+    });
+    addImageTile.classList.toggle("disabled", state.images.length >= MAX_IMAGES);
+    imagesNote.textContent = state.images.length + " / " + MAX_IMAGES + " fotos";
+}
+renderImagesList();
+
+function fileToCompressedDataUrl(file){
+    return new Promise(function(resolve, reject){
+        var reader = new FileReader();
+        reader.onload = function(e){
+            var img = new Image();
+            img.onload = function(){
+                var maxSize = 320;
+                var w = img.width, ih = img.height;
+                var scale = Math.min(1, maxSize / Math.max(w, ih));
+                w = Math.round(w * scale); ih = Math.round(ih * scale);
+                var c = document.createElement("canvas");
+                c.width = w; c.height = ih;
+                var ctx = c.getContext("2d");
+                ctx.drawImage(img, 0, 0, w, ih);
+                resolve(c.toDataURL("image/jpeg", 0.82));
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+imageInput.addEventListener("change", function(){
+    var files = Array.prototype.slice.call(imageInput.files || []);
+    var remaining = MAX_IMAGES - state.images.length;
+    files = files.slice(0, Math.max(0, remaining));
+    Promise.all(files.map(fileToCompressedDataUrl)).then(function(dataUrls){
+        state.images = state.images.concat(dataUrls);
+        renderImagesList();
+        rebuildImages();
+        persistState();
+    });
+    imageInput.value = "";
+});
+
+document.getElementById("imagesClear").addEventListener("click", function(){
+    state.images = [];
+    renderImagesList();
+    rebuildImages();
+    persistState();
+});
+
+/* --- musica de fondo --- */
+var bgAudio = document.getElementById("bgAudio");
+var musicToggle = document.getElementById("musicToggle");
+var musicList = document.getElementById("musicList");
+var musicInput = document.getElementById("musicInput");
+var MUSIC_EMPTY = "Sin musica agregada.";
+
+function renderMusicUI(){
+    musicList.innerHTML = "";
+    if (!state.music) {
+        var p = document.createElement("div");
+        p.className = "empty-note";
+        p.textContent = MUSIC_EMPTY;
+        musicList.appendChild(p);
+        return;
+    }
+    var chip = document.createElement("div");
+    chip.className = "chip";
+    var span = document.createElement("span");
+    span.textContent = state.musicName || "cancion.mp3";
+    var btn = document.createElement("button");
+    btn.innerHTML = "&#10005;";
+    btn.title = "Quitar musica";
+    btn.addEventListener("click", function(){
+        state.music = null;
+        state.musicName = null;
+        renderMusicUI();
+        rebuildAudio();
+        persistState();
+    });
+    chip.appendChild(span);
+    chip.appendChild(btn);
+    musicList.appendChild(chip);
+}
+
+function rebuildAudio(){
+    var wasPlaying = !bgAudio.paused;
+    bgAudio.pause();
+    if (state.music) {
+        bgAudio.src = state.music;
+        musicToggle.classList.add("visible");
+        if (wasPlaying) bgAudio.play().catch(function(){});
+    } else {
+        bgAudio.removeAttribute("src");
+        bgAudio.load();
+        musicToggle.classList.remove("visible", "playing");
+    }
+}
+
+musicInput.addEventListener("change", function(){
+    var file = musicInput.files && musicInput.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+        state.music = e.target.result;
+        state.musicName = file.name;
+        renderMusicUI();
+        rebuildAudio();
+        persistState();
+    };
+    reader.readAsDataURL(file);
+    musicInput.value = "";
+});
+
+musicToggle.addEventListener("click", function(){
+    if (!state.music) return;
+    if (bgAudio.paused) {
+        bgAudio.play().then(function(){
+            musicToggle.classList.add("playing");
+        }).catch(function(){});
+    } else {
+        bgAudio.pause();
+        musicToggle.classList.remove("playing");
+    }
+});
+bgAudio.addEventListener("pause", function(){ musicToggle.classList.remove("playing"); });
+bgAudio.addEventListener("play", function(){ musicToggle.classList.add("playing"); });
+
+renderMusicUI();
+if (state.music) rebuildAudio();
+
+/* --- descargar --- */
+var filenameInput = document.getElementById("filenameInput");
+var includeEditorCheckbox = document.getElementById("includeEditorCheckbox");
+document.getElementById("downloadBtn").addEventListener("click", function(){
+    persistState();
+    var keepEditor = includeEditorCheckbox.checked;
+    exitEditor();
+    setTimeout(function(){
+        if (!keepEditor) document.body.classList.add("no-editor");
+        var html = "<!doctype html>\n" + document.documentElement.outerHTML;
+        if (!keepEditor) document.body.classList.remove("no-editor");
+        var blob = new Blob([html], { type: "text/html" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        var name = filenameInput.value.trim() || "mi-regalo-personalizado.html";
+        if(!name.toLowerCase().endsWith(".html")) name += ".html";
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    }, 60);
+});
+
+/* ============================================================
+   ARRANQUE: precargar fuentes y luego construir texturas
+   ============================================================ */
+function preloadFonts(){
+    var specs = FONTS.map(function(f){ return f.weight + " 64px " + f.family; });
+    if (!document.fonts || !document.fonts.load) return Promise.resolve();
+    return Promise.all(specs.map(function(s){
+        return document.fonts.load(s).catch(function(){});
+    })).catch(function(){});
+}
+
+preloadFonts().then(function(){
+    rebuildCenterTextures();
+    rebuildOrbitWords();
+    if (state.images.length) rebuildImages();
+    tick();
+});
+
+} catch (err) {
+    showLoadError(err);
+}
+
+})();
+</script>
+</body>
+</html>

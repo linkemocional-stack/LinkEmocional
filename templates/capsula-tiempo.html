@@ -1,0 +1,477 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Cápsula del Tiempo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap');
+
+  :root{
+    --bg1:#0a1330; --bg2:#12245c; --bg3:#1c3a8f;
+    --capsule:#0e1a3f; --capsule2:#16265e;
+    --gold:#e2c07d; --gold-dark:#b8863b;
+    --wax:#a4172a; --wax-dark:#7a1220;
+    --paper:#f7ecd9; --ink:#2b1d16;
+    --line:rgba(226,192,125,0.28);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh; overflow-x:hidden; font-family:'Work Sans', sans-serif; color:#eaf0ff;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(226,192,125,0.10), transparent 55%),
+      radial-gradient(ellipse at 85% 100%, rgba(90,140,255,0.18), transparent 55%),
+      linear-gradient(170deg, var(--bg1), var(--bg2) 55%, var(--bg3) 100%);
+  }
+  body.editing{ overflow-y:auto; background:#0a0f1f; }
+
+  .ambient{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0;}
+  .spark{position:absolute; top:-6%; color:rgba(226,192,125,0.5); animation:drift linear infinite;}
+  @keyframes drift{
+    0%{transform:translateY(-10vh) translateX(0) rotate(0deg); opacity:0;}
+    8%{opacity:0.7;} 92%{opacity:0.3;}
+    100%{transform:translateY(112vh) translateX(26px) rotate(160deg); opacity:0;}
+  }
+
+  /* ============ COVER ============ */
+  .cover-screen{
+    position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; padding:30px 20px;
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .cover-screen.hide{ opacity:0; transform:scale(0.9); pointer-events:none; position:fixed; inset:0; }
+  .capsule-teaser{
+    width:120px; height:170px; margin:0 auto 26px; border-radius:60px 60px 24px 24px;
+    background:linear-gradient(160deg, rgba(226,192,125,0.25), rgba(226,192,125,0.05));
+    border:2px solid var(--gold); position:relative; box-shadow:0 0 40px rgba(226,192,125,0.25) inset, 0 20px 40px -14px rgba(0,0,0,0.6);
+    animation:capFloat 3.6s ease-in-out infinite;
+  }
+  @keyframes capFloat{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-8px);} }
+  .capsule-teaser:before{ content:'♡'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:34px; color:var(--gold-light,var(--gold)); opacity:0.8; }
+  .cover-screen .eyebrow{ font-size:11px; letter-spacing:3px; color:var(--gold); margin-bottom:8px;}
+  .cover-screen h1{ font-family:'Cormorant Garamond',serif; font-weight:700; font-style:italic; font-size:30px; margin:0 0 10px; color:#fff;}
+  .cover-screen p.sub{ font-size:13.5px; color:rgba(255,255,255,0.75); max-width:280px; margin:0 auto 26px; line-height:1.5;}
+  .open-btn{
+    background:linear-gradient(180deg, var(--gold), var(--gold-dark)); color:#2b1607; border:none;
+    padding:14px 30px; border-radius:30px; font-size:13px; letter-spacing:1px; font-weight:700; cursor:pointer;
+    box-shadow:0 10px 22px -8px rgba(184,134,59,0.6); transition:transform .15s;
+  }
+  .open-btn:active{ transform:scale(0.96); }
+
+  /* ============ MAIN ============ */
+  .main-wrap{
+    position:relative; z-index:1; min-height:100vh; padding:30px 16px 60px;
+    opacity:0; transform:scale(0.85);
+  }
+  .main-wrap.enter{ animation:riseIn .7s cubic-bezier(.2,.7,.3,1) forwards; }
+  @keyframes riseIn{ to{ opacity:1; transform:scale(1); } }
+  body.editing .main-wrap{ display:none; }
+
+  .top-toolbar{ position:fixed; top:14px; right:14px; z-index:50; }
+  body.editing .top-toolbar{ display:none; }
+  .pencil-btn{
+    width:42px; height:42px; border-radius:50%; border:1px solid var(--line);
+    background:rgba(0,0,0,0.3); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .pencil-btn svg{ width:17px; height:17px; }
+
+  .title-area{ text-align:center; margin-bottom:22px; max-width:460px; margin-left:auto; margin-right:auto;}
+  .title-area h1{ font-family:'Cormorant Garamond',serif; font-weight:700; font-style:italic; font-size:26px; margin:0 0 8px; color:#fff;}
+  .title-area p{ font-size:13px; color:rgba(255,255,255,0.7); margin:0; line-height:1.5;}
+
+  .envelope-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; max-width:460px; margin:0 auto; }
+  @media(min-width:480px){ .envelope-grid{ grid-template-columns:repeat(3,1fr); } }
+
+  .envelope{
+    position:relative; aspect-ratio:4/3; cursor:pointer; border-radius:8px;
+    background:linear-gradient(160deg, var(--capsule2), var(--capsule));
+    border:1px solid var(--line); display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:10px; text-align:center; transition:transform .15s;
+  }
+  .envelope:active{ transform:scale(0.96); }
+  .envelope.locked{ opacity:0.65; }
+  .envelope .seal{
+    width:30px; height:30px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #d1445a, var(--wax-dark));
+    display:flex; align-items:center; justify-content:center; font-size:13px; color:#fbe3e6; margin-bottom:8px;
+    box-shadow:0 4px 8px -2px rgba(0,0,0,0.5);
+  }
+  .envelope.locked .seal{ background:radial-gradient(circle at 35% 30%, #6a7590, #3a4260); }
+  .envelope .label{ font-size:11.5px; font-weight:600; color:#eaf0ff; line-height:1.3; }
+  .envelope .status{ font-size:9.5px; color:rgba(234,240,255,0.55); margin-top:4px; }
+  .envelope.shake{ animation:shake .4s; }
+  @keyframes shake{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-4px);} 75%{transform:translateX(4px);} }
+
+  /* ============ LETTER OVERLAY ============ */
+  .letter-overlay{
+    position:fixed; inset:0; z-index:150; display:none; align-items:center; justify-content:center;
+    background:rgba(4,8,20,0.75); backdrop-filter:blur(4px); padding:20px;
+  }
+  .letter-overlay.show{ display:flex; }
+  .letter-card{
+    background:linear-gradient(170deg, var(--paper), #ece0c4); color:var(--ink); border-radius:10px;
+    max-width:360px; width:100%; padding:26px 22px; position:relative; text-align:center;
+    box-shadow:0 30px 60px -14px rgba(0,0,0,0.6); animation:letterPop .45s cubic-bezier(.25,1.3,.4,1);
+    max-height:85vh; overflow-y:auto;
+  }
+  @keyframes letterPop{ from{ transform:translateY(30px) scale(0.85); opacity:0; } to{ transform:translateY(0) scale(1); opacity:1; } }
+  .letter-close{
+    position:absolute; top:10px; right:10px; width:26px; height:26px; border-radius:50%; border:1px solid rgba(43,29,22,0.3);
+    background:rgba(0,0,0,0.05); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:13px; color:var(--ink);
+  }
+  .letter-label{ font-size:10.5px; letter-spacing:1.5px; color:var(--wax); text-transform:uppercase; margin-bottom:8px;}
+  .letter-photo{ width:100%; border-radius:8px; margin-bottom:12px; max-height:200px; object-fit:cover; }
+  .letter-text{ font-family:'Caveat',cursive; font-size:21px; line-height:1.5; color:#4a3524; white-space:pre-wrap; }
+
+  .confetti{ position:fixed; top:-10px; z-index:199; border-radius:2px; pointer-events:none; animation:fall linear forwards;}
+  @keyframes fall{ to{ transform:translateY(105vh) rotate(400deg); opacity:0.2; } }
+
+  /* ===================== EDITOR ===================== */
+  .editor{ display:none; position:fixed; inset:0; z-index:200; overflow-y:auto; background:linear-gradient(180deg, #0a0f1f, #070a14 60%); color:#eaf0ff; font-family:'Work Sans',sans-serif;}
+  body.editing .editor{ display:block; }
+  .ed-topbar{ position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:12px; padding:16px 18px; background:rgba(8,12,26,0.9); backdrop-filter:blur(8px); border-bottom:1px solid rgba(226,192,125,0.22);}
+  .ed-back{ width:36px; height:36px; border-radius:50%; border:1px solid rgba(226,192,125,0.3); background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#eaf0ff; flex:0 0 auto;}
+  .ed-back svg{ width:16px; height:16px;}
+  .ed-titles h1{ font-size:16px; margin:0; font-family:'Cormorant Garamond',serif; color:var(--gold);}
+  .ed-titles p{ font-size:11px; margin:2px 0 0; color:rgba(234,240,255,0.5);}
+
+  /* ---- Marca de agua "Link Emocional" (solo visible dentro del editor) ---- */
+  .ed-brand-watermark{
+    margin-left:auto;
+    flex:0 0 auto;
+    font-family:'Work Sans', sans-serif; font-weight:700; font-size:14px; letter-spacing:0.4px;
+    white-space:nowrap;
+    background:linear-gradient(90deg, #72CBE9, #745FC9);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    pointer-events:none; user-select:none;
+  }
+
+  .ed-body{ max-width:600px; margin:0 auto; padding:18px 18px 70px;}
+  .ed-section{ margin-bottom:22px; border:1px solid rgba(226,192,125,0.22); border-radius:10px; padding:16px;}
+  .ed-section h3{ font-size:12.5px; letter-spacing:1.2px; color:var(--gold); margin:0 0 3px; text-transform:uppercase; font-weight:700;}
+  .ed-section .ed-hint{ font-size:11.5px; color:rgba(234,240,255,0.45); margin:0 0 12px; line-height:1.5;}
+  .ed-field{ margin-bottom:10px; }
+  .ed-field label{ display:block; font-size:11px; color:rgba(234,240,255,0.6); margin-bottom:5px;}
+  .ed-field input[type=text], .ed-field input[type=date], .ed-field textarea{
+    width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(226,192,125,0.22); color:#eaf0ff;
+    padding:9px 10px; border-radius:7px; font-family:'Work Sans',sans-serif; font-size:13.5px; resize:vertical;}
+  .ed-field textarea{ min-height:60px; }
+  .ed-card{ border:1px dashed rgba(226,192,125,0.28); border-radius:9px; padding:12px; margin-bottom:12px; position:relative; background:rgba(255,255,255,0.02);}
+  .ed-card h4{ margin:0 0 8px; font-size:12.5px; color:var(--gold); font-family:'Cormorant Garamond',serif; font-style:italic;}
+  .ed-card-remove{ position:absolute; top:8px; right:8px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,0.3); border:1px solid rgba(226,192,125,0.25); color:#eaf0ff; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+  .ed-add-btn{ background:rgba(226,192,125,0.12); border:1px solid var(--gold); color:var(--gold); padding:9px 16px; border-radius:20px; font-size:12px; cursor:pointer;}
+  .ed-add-btn[disabled]{ opacity:0.35; cursor:default; }
+  .ed-photo-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+  .ed-photo-preview{ width:50px; height:50px; border-radius:8px; background-size:cover; background-position:center; border:1px solid rgba(226,192,125,0.25); display:flex; align-items:center; justify-content:center; font-size:9px; color:rgba(234,240,255,0.4); flex:0 0 auto; text-align:center;}
+  .ed-small-btn{ background:rgba(255,255,255,0.05); border:1px solid rgba(226,192,125,0.25); color:#eaf0ff; padding:6px 12px; border-radius:14px; font-size:11px; cursor:pointer;}
+  .ed-clear-date{ background:none; border:none; color:rgba(234,240,255,0.5); font-size:10.5px; text-decoration:underline; cursor:pointer; margin-top:4px; padding:0; }
+  .ed-footer{ border-top:1px solid rgba(226,192,125,0.2); padding-top:20px; margin-top:6px;}
+  .ed-checkbox-row{ display:flex; align-items:flex-start; gap:9px; margin-bottom:16px;}
+  .ed-checkbox-row input{ margin-top:3px; flex:0 0 auto;}
+  .ed-checkbox-row label{ font-size:11.5px; color:rgba(234,240,255,0.6); line-height:1.5;}
+  .ed-download{ width:100%; background:linear-gradient(180deg, var(--gold), var(--gold-dark)); color:#2b1607; border:none; padding:14px; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer;}
+  .ed-filename input{ width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(226,192,125,0.25); color:#eaf0ff; padding:9px 10px; border-radius:7px; font-size:12px; margin-top:10px;}
+  .ed-note{ font-size:11px; color:rgba(234,240,255,0.4); margin-top:12px; line-height:1.5;}
+
+  body.no-pencil .top-toolbar{ display:none !important; }
+</style>
+<style id="le-noeditor">#pencilBtn,.pencil-btn,.top-toolbar,#editToggle,.edit-toggle,#leEditToggle,.le-edit-toggle,.le-edit-hint,#editorOverlay,#editorPage,.editor-page,.le-editor-page,#pen,#ed{display:none!important}</style></head>
+<body class="no-pencil">
+
+<div class="ambient" id="ambient"></div>
+
+<div class="cover-screen" id="coverScreen">
+  <div class="capsule-teaser"></div>
+  <div class="eyebrow">PARA GUARDAR Y ABRIR CON EL TIEMPO</div>
+  <h1>Cápsula del Tiempo</h1>
+  <p class="sub">Cartas selladas para abrir en el momento justo. Algunas están listas ahora, otras esperan su fecha.</p>
+  <button class="open-btn" id="openBtn">ABRIR LA CÁPSULA</button>
+</div>
+
+<div class="top-toolbar">
+  <button class="pencil-btn" id="pencilBtn" title="Personalizar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#e2c07d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+  </button>
+</div>
+
+<div class="main-wrap" id="mainWrap">
+  <div class="title-area">
+    <h1 id="titleView"></h1>
+    <p id="subtitleView"></p>
+  </div>
+  <div class="envelope-grid" id="envelopeGrid"></div>
+</div>
+
+<div class="letter-overlay" id="letterOverlay">
+  <div class="letter-card" id="letterCard"></div>
+</div>
+
+<!-- ===================== EDITOR ===================== -->
+<div class="editor" id="editorOverlay">
+  <div class="ed-topbar">
+    <button class="ed-back" id="edBack">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="ed-titles"><h1>Editor de la cápsula</h1><p>Los cambios se ven al volver</p></div>
+    <div class="ed-brand-watermark">Link Emocional</div>
+  </div>
+  <div class="ed-body">
+
+    <div class="ed-section">
+      <h3>Encabezado</h3>
+      <div class="ed-field"><label>Título</label><input type="text" id="fTitle" maxlength="40"></div>
+      <div class="ed-field"><label>Instrucción</label><input type="text" id="fSubtitle" maxlength="120"></div>
+    </div>
+
+    <div class="ed-section">
+      <h3>Cartas selladas</h3>
+      <p class="ed-hint">Cada carta tiene una etiqueta (ej: "Abrir cuando extrañes", "Abrir en nuestro aniversario"), un mensaje, y opcionalmente una fecha: si la pones, la carta queda bloqueada hasta ese día. Déjala vacía para que se pueda abrir en cualquier momento. Mínimo 1, máximo 8.</p>
+      <div id="envelopesEditList"></div>
+      <button class="ed-add-btn" id="addEnvBtn">+ Agregar carta</button>
+    </div>
+
+    <div class="ed-footer">
+      <div class="ed-checkbox-row">
+        <input type="checkbox" id="includeEditorCheckbox">
+        <label for="includeEditorCheckbox">Incluir el editor (el lápiz) en el archivo descargado. Déjalo desactivado para la versión final que le envíes a la persona — así no le aparece el lápiz. Actívalo si quieres poder seguir editando este mismo archivo más adelante.</label>
+      </div>
+      <button class="ed-download" id="downloadBtn">Descargar mi cápsula personalizada</button>
+      <div class="ed-filename"><input type="text" id="filenameInput" value="capsula-del-tiempo-personalizada.html"></div>
+      <p class="ed-note">"Descargar" genera un archivo HTML nuevo y completo con todos tus cambios y fotos ya incluidos, listo para enviar o abrir desde cualquier navegador. Las fechas se comparan con la fecha del dispositivo de quien lo abre.</p>
+    </div>
+  </div>
+</div>
+
+<script id="initial-state" type="application/json">{"title": "Nuestra Cápsula del Tiempo", "subtitle": "Toca una carta para abrirla. Las que tienen candado se abren solas en su fecha.", "envelopes": [{"label": "Abrir cuando me extrañes", "date": "", "text": "Aunque no esté cerca, mi corazón siempre está contigo.", "photo": ""}, {"label": "Abrir en nuestro aniversario", "date": "", "text": "Un año más a tu lado y sigo eligiéndote todos los días.", "photo": ""}, {"label": "Abrir cuando quieras reír", "date": "", "text": "Recuerda esa vez que nos reímos hasta que dolió la panza. Te amo, tonto/a.", "photo": ""}, {"label": "Abrir hoy", "date": "", "text": "Esta carta no tiene fecha: ábrela cuando quieras sentir un poco de cariño extra.", "photo": ""}]}</script>
+
+<script>
+(function(){
+  var MIN_ENV=1, MAX_ENV=8;
+  var stateEl = document.getElementById('initial-state');
+  var state;
+  try { state = JSON.parse(stateEl.textContent); } catch(e){ state = {}; }
+  function persistState(){ stateEl.textContent = JSON.stringify(state); }
+  function escapeHtml(str){ var d=document.createElement('div'); d.textContent = str==null?'':str; return d.innerHTML; }
+
+  /* ambient sparks */
+  var ambient = document.getElementById('ambient');
+  for(var i=0;i<14;i++){
+    var s=document.createElement('div');
+    s.className='spark'; s.textContent = i%2===0 ? '✧':'♡';
+    s.style.left=(Math.random()*100)+'vw';
+    s.style.fontSize=(11+Math.random()*13)+'px';
+    s.style.animationDuration=(12+Math.random()*10)+'s';
+    s.style.animationDelay=(Math.random()*12)+'s';
+    ambient.appendChild(s);
+  }
+
+  document.getElementById('openBtn').addEventListener('click', function(){
+    document.getElementById('coverScreen').classList.add('hide');
+    document.getElementById('mainWrap').classList.add('enter');
+  });
+
+  function daysUntil(dateStr){
+    var target = new Date(dateStr + 'T00:00:00');
+    var now = new Date();
+    var todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var diffMs = target - todayMid;
+    return Math.ceil(diffMs / (1000*60*60*24));
+  }
+  function formatDate(dateStr){
+    var d = new Date(dateStr + 'T00:00:00');
+    var opts = { day:'numeric', month:'long', year:'numeric' };
+    return d.toLocaleDateString('es-ES', opts);
+  }
+
+  function renderHeader(){
+    document.getElementById('titleView').textContent = state.title;
+    document.getElementById('subtitleView').textContent = state.subtitle;
+  }
+
+  function renderEnvelopes(){
+    var grid = document.getElementById('envelopeGrid');
+    grid.innerHTML='';
+    state.envelopes.forEach(function(env, idx){
+      var locked = !!(env.date && daysUntil(env.date) > 0);
+      var card = document.createElement('div');
+      card.className = 'envelope' + (locked ? ' locked' : '');
+      var statusText = '';
+      if(env.date){
+        statusText = locked ? ('Se abre en ' + daysUntil(env.date) + ' día' + (daysUntil(env.date)===1?'':'s')) : ('Disponible desde el ' + formatDate(env.date));
+      } else {
+        statusText = 'Disponible ahora';
+      }
+      card.innerHTML = '<div class="seal">'+(locked?'&#128274;':'♡')+'</div><div class="label">'+escapeHtml(env.label)+'</div><div class="status">'+statusText+'</div>';
+      card.addEventListener('click', function(){
+        if(locked){
+          card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+          return;
+        }
+        openLetter(env);
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  function openLetter(env){
+    var overlay = document.getElementById('letterOverlay');
+    var card = document.getElementById('letterCard');
+    var html = '<button class="letter-close" id="letterCloseBtn">&#10005;</button>';
+    html += '<div class="letter-label">'+escapeHtml(env.label)+'</div>';
+    if(env.photo) html += '<img class="letter-photo" src="'+env.photo+'">';
+    html += '<div class="letter-text">'+escapeHtml(env.text)+'</div>';
+    card.innerHTML = html;
+    overlay.classList.add('show');
+    document.getElementById('letterCloseBtn').addEventListener('click', function(){ overlay.classList.remove('show'); });
+    burstConfetti(18);
+  }
+
+  function burstConfetti(count){
+    var colors = ['#e2c07d','#a4172a','#eaf0ff','#b8863b'];
+    for(var i=0;i<count;i++){
+      var c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random()*100+'vw';
+      c.style.width = (5+Math.random()*4)+'px';
+      c.style.height = (5+Math.random()*4)+'px';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDuration = (2+Math.random()*1.5)+'s';
+      document.body.appendChild(c);
+      setTimeout(function(el){ return function(){ el.remove(); }; }(c), 3800);
+    }
+  }
+
+  function renderAll(){ renderHeader(); renderEnvelopes(); }
+
+  /* ================= EDITOR ================= */
+  var pencilBtn = document.getElementById('pencilBtn');
+  var edBack = document.getElementById('edBack');
+  pencilBtn.addEventListener('click', function(){
+    document.body.classList.add('editing');
+    fillSimpleFields();
+    renderEnvelopesEditor();
+    window.scrollTo(0,0);
+  });
+  edBack.addEventListener('click', function(){
+    document.body.classList.remove('editing');
+    document.getElementById('letterOverlay').classList.remove('show');
+    renderAll();
+  });
+
+  function bindText(id, key){
+    var el = document.getElementById(id);
+    el.value = state[key];
+    el.addEventListener('input', function(){ state[key] = el.value; persistState(); });
+  }
+  function fillSimpleFields(){
+    bindText('fTitle','title'); bindText('fSubtitle','subtitle');
+  }
+
+  function fileToCompressedDataUrl(file, maxSize){
+    maxSize = maxSize || 400;
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var img = new Image();
+        img.onload = function(){
+          var w=img.width, h=img.height;
+          var scale = Math.min(1, maxSize/Math.max(w,h));
+          w = Math.round(w*scale); h = Math.round(h*scale);
+          var c = document.createElement('canvas'); c.width=w; c.height=h;
+          c.getContext('2d').drawImage(img,0,0,w,h);
+          resolve(c.toDataURL('image/jpeg', 0.85));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderEnvelopesEditor(){
+    var wrap = document.getElementById('envelopesEditList');
+    wrap.innerHTML='';
+    state.envelopes.forEach(function(env, idx){
+      var card = document.createElement('div');
+      card.className = 'ed-card';
+      card.innerHTML =
+        '<button class="ed-card-remove" data-idx="'+idx+'">&#10005;</button>' +
+        '<h4>Carta '+(idx+1)+'</h4>' +
+        '<div class="ed-field"><label>Etiqueta (ej: "Abrir cuando...")</label><input type="text" class="e-label" maxlength="50"></div>' +
+        '<div class="ed-field"><label>Fecha de apertura (opcional)</label><input type="date" class="e-date"><button class="ed-clear-date" type="button">Quitar fecha (dejar siempre disponible)</button></div>' +
+        '<div class="ed-field"><label>Mensaje</label><textarea class="e-text" maxlength="260"></textarea></div>' +
+        '<div class="ed-photo-row"><div class="ed-photo-preview" id="ePrev'+idx+'">Sin foto</div>' +
+        '<div style="display:flex; flex-direction:column; gap:6px;">' +
+        '<label class="ed-small-btn">Subir foto<input type="file" accept="image/*" class="e-photo" style="display:none;"></label>' +
+        '<button class="ed-small-btn e-remove-photo">Quitar foto</button></div></div>';
+      wrap.appendChild(card);
+
+      card.querySelector('.e-label').value = env.label;
+      card.querySelector('.e-date').value = env.date || '';
+      card.querySelector('.e-text').value = env.text;
+
+      card.querySelector('.e-label').addEventListener('input', function(ev){ env.label = ev.target.value; persistState(); });
+      card.querySelector('.e-date').addEventListener('change', function(ev){ env.date = ev.target.value || null; persistState(); });
+      card.querySelector('.ed-clear-date').addEventListener('click', function(){
+        env.date = null; card.querySelector('.e-date').value = ''; persistState();
+      });
+      card.querySelector('.e-text').addEventListener('input', function(ev){ env.text = ev.target.value; persistState(); });
+
+      var preview = card.querySelector('#ePrev'+idx);
+      function updatePrev(){
+        if(env.photo){ preview.style.backgroundImage='url('+env.photo+')'; preview.textContent=''; }
+        else { preview.style.backgroundImage='none'; preview.textContent='Sin foto'; }
+      }
+      updatePrev();
+      card.querySelector('.e-photo').addEventListener('change', function(ev){
+        var file = ev.target.files && ev.target.files[0];
+        if(!file) return;
+        fileToCompressedDataUrl(file).then(function(dataUrl){ env.photo = dataUrl; persistState(); updatePrev(); });
+      });
+      card.querySelector('.e-remove-photo').addEventListener('click', function(){ env.photo=null; persistState(); updatePrev(); });
+
+      card.querySelector('.ed-card-remove').addEventListener('click', function(){
+        if(state.envelopes.length<=MIN_ENV) return;
+        state.envelopes.splice(idx,1); persistState(); renderEnvelopesEditor();
+      });
+    });
+    document.getElementById('addEnvBtn').disabled = state.envelopes.length>=MAX_ENV;
+  }
+  document.getElementById('addEnvBtn').addEventListener('click', function(){
+    if(state.envelopes.length>=MAX_ENV) return;
+    state.envelopes.push({label:'Abrir cuando...', date:null, text:'Escribe aquí tu mensaje.', photo:null});
+    persistState(); renderEnvelopesEditor();
+  });
+
+  /* ---- download ---- */
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+    persistState();
+    var keepEditor = document.getElementById('includeEditorCheckbox').checked;
+    document.body.classList.remove('editing');
+    document.getElementById('letterOverlay').classList.remove('show');
+    document.getElementById('coverScreen').classList.add('hide');
+    document.getElementById('mainWrap').classList.add('enter');
+    renderAll();
+    setTimeout(function(){
+      if(!keepEditor) document.body.classList.add('no-pencil');
+      var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      if(!keepEditor) document.body.classList.remove('no-pencil');
+      var blob = new Blob([html], {type:'text/html'});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      var name = document.getElementById('filenameInput').value.trim() || 'capsula-del-tiempo-personalizada.html';
+      if(!name.toLowerCase().endsWith('.html')) name += '.html';
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    }, 60);
+  });
+
+  /* ================= INIT ================= */
+  renderAll();
+})();
+</script>
+</body>
+</html>
