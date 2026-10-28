@@ -270,7 +270,7 @@
           a.onclick = function () {
             pickFiles(false, 'audio/mpeg,audio/mp3,audio/mp4,audio/aac,audio/ogg,audio/wav,.mp3,.m4a').then(function (f) {
               var file = f[0]; if (!file) return;
-              if (file.size > 1250 * 1024) { LE.toast('Tu canción pesa ' + (file.size / 1048576).toFixed(1) + ' MB. El máximo es 1.2 MB: usa un MP3 más corto o comprimido.', true); return; }
+              if (file.size > 2048 * 1024) { LE.toast('Tu canción pesa ' + (file.size / 1048576).toFixed(1) + ' MB. El máximo es 2 MB: usa un MP3 más corto o comprimido.', true); return; }
               a.disabled = true; a.textContent = 'Cargando…';
               var r = new FileReader();
               r.onerror = function () { LE.toast('No se pudo leer esa canción', true); build(); };
@@ -283,7 +283,7 @@
             });
           };
           w.appendChild(a);
-          w.appendChild(h('p', 'muted', 'Opcional · máximo 1.2 MB. Suena al tocar la pantalla.'));
+          w.appendChild(h('p', 'muted', 'Opcional · máximo 2 MB. Suena al tocar la pantalla.'));
         }
       })();
     }
