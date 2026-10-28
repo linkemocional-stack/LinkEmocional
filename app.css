@@ -249,3 +249,14 @@ radial-gradient(36% 32% at 8% 82%,rgba(58,42,112,.45),transparent 70%);
 animation:leAurora 32s ease-in-out infinite alternate;will-change:transform}
 @keyframes leAurora{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(3%,-2%,0) scale(1.06)}100%{transform:translate3d(-3%,3%,0) scale(1.02)}}
 @media(prefers-reduced-motion:reduce){body::before{animation:none}}
+
+/* ===== pulido de las páginas internas (crear, mis páginas, login...) ===== */
+.top{border-bottom:1px solid transparent;border-image:linear-gradient(90deg,transparent,rgba(139,111,240,.55),rgba(111,214,232,.45),transparent) 1}
+.top nav a.on{color:var(--ink);background:linear-gradient(#1a1438,#1a1438) padding-box,var(--grad) border-box;border:1px solid transparent}
+.top nav .cta{box-shadow:0 6px 18px rgba(139,111,240,.35)}
+.brand img{padding:1.5px;background:var(--grad)}
+.umenu{background:radial-gradient(120% 80% at 100% 0,rgba(139,111,240,.28),transparent 60%),rgba(20,15,44,.98);border-color:rgba(139,111,240,.45);border-radius:20px;box-shadow:0 24px 50px rgba(0,0,0,.6);animation:umIn .18s ease-out}
+@keyframes umIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.card{background:radial-gradient(120% 90% at 100% 0,rgba(139,111,240,.12),transparent 60%),var(--glass)}
+.card h2{background:none}
+@media(max-width:400px){.top{padding-left:10px;padding-right:10px}.top nav{gap:2px}.top nav a,.top nav button{padding:8px 7px;font-size:12.5px}}
