@@ -21,19 +21,23 @@
     "mem": [
      {
       "t": "Donde empezó todo",
-      "d": "Ese día sembraste algo en mí sin saberlo."
+      "d": "Ese día sembraste algo en mí sin saberlo.",
+      "f": ""
      },
      {
       "t": "Tu risa",
-      "d": "Mi sonido favorito en todo el universo."
+      "d": "Mi sonido favorito en todo el universo.",
+      "f": ""
      },
      {
       "t": "Nuestro primer abrazo",
-      "d": "El mundo se calló y solo quedamos tú y yo."
+      "d": "El mundo se calló y solo quedamos tú y yo.",
+      "f": ""
      },
      {
       "t": "Lo que viene",
-      "d": "Mil primaveras más a tu lado. Yo ya las quiero."
+      "d": "Mil primaveras más a tu lado. Yo ya las quiero.",
+      "f": ""
      }
     ]
    },
@@ -87,6 +91,11 @@
          "type": "textarea",
          "max": 300,
          "rows": 3
+        },
+        {
+         "key": "f",
+         "label": "Foto (opcional)",
+         "type": "photo"
         }
        ],
        "max": 12,
