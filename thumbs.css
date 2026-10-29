@@ -15,3 +15,6 @@
 @keyframes lts{to{transform:translateX(100%)}}
 @keyframes ltf{50%{transform:translateY(-4px)}}
 @media(prefers-reduced-motion:reduce){.lt .po i,.lt .po::after{animation:none}}
+
+/* celular: el regalo es vertical (9:16), así que la miniatura también, para que se vea completo y no cortado */
+@media(max-width:640px){.lt.lt,.lp-card .lt.lt,.tp .lt.lt{aspect-ratio:9/16}}

@@ -30,6 +30,7 @@
     f.src = 'previews/' + el.dataset.thumb + '.html';
     f.title = ''; f.tabIndex = -1; f.setAttribute('aria-hidden', 'true'); f.setAttribute('scrolling', 'no');
     f.onload = function () {
+      fit(el);
       // la portada (emoji) se queda hasta que la animación ya está corriendo
       setTimeout(function () { if (el._f === f) el.classList.add('ok'); }, 1150);
       // arranca la animación como si la persona tocara la pantalla
@@ -42,6 +43,7 @@
       }, 700);
     };
     fit(el); el._t = Date.now();
+    if (window.ResizeObserver && !el._ro) { el._ro = new ResizeObserver(function () { fit(el); }); el._ro.observe(el); }
     el.appendChild(f); el._f = f; live.push(el);
   }
   function fit(el) {

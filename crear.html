@@ -105,6 +105,56 @@
     });
   }
 
+
+  /* ---------- musica: comprime el MP3 en el navegador para que quepan varios minutos en ~2 MB ---------- */
+  var AUDIO_TARGET = 2000000;           // bytes finales (el servidor acepta ~2.1 MB)
+  var AUDIO_IN_MAX = 30 * 1048576;      // peso maximo del archivo original
+  var LAME_URL = 'https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js';
+  function loadLame() {
+    return new Promise(function (ok, fail) {
+      if (window.lamejs) return ok();
+      var s = document.createElement('script'); s.src = LAME_URL;
+      s.onload = function () { window.lamejs ? ok() : fail(); }; s.onerror = fail;
+      document.head.appendChild(s);
+    });
+  }
+  function tick() { return new Promise(function (r) { setTimeout(r, 0); }); }
+  function compressAudio(file, onProgress) {
+    var RATE = 32000, KBPS = [96, 80, 64, 56, 48, 40, 32];
+    return Promise.all([loadLame(), file.arrayBuffer()]).then(function (r) {
+      var AC = window.AudioContext || window.webkitAudioContext, ctx;
+      try { ctx = new AC({ sampleRate: RATE }); } catch (e) { ctx = new AC(); }
+      return new Promise(function (ok, fail) { ctx.decodeAudioData(r[1], ok, fail); }).then(function (buf) {
+        try { ctx.close(); } catch (e) {}
+        var dur = buf.duration, kbps = 0;
+        for (var i = 0; i < KBPS.length; i++) { if (KBPS[i] * 1000 / 8 * dur <= AUDIO_TARGET) { kbps = KBPS[i]; break; } }
+        if (!kbps) { var max = Math.floor(AUDIO_TARGET / (32000 / 8) / 60 * 10) / 10; throw new Error('long:' + max); }
+        /* a mono y a RATE (si el navegador no remuestreo) */
+        var ch = buf.numberOfChannels, len = buf.length, src = buf.sampleRate, mono = new Float32Array(len);
+        for (var c = 0; c < ch; c++) { var d = buf.getChannelData(c); for (var n = 0; n < len; n++) mono[n] += d[n] / ch; }
+        var pcm;
+        if (src === RATE) { pcm = mono; }
+        else { var outLen = Math.floor(len * RATE / src); pcm = new Float32Array(outLen); var k = src / RATE;
+          for (var o = 0; o < outLen; o++) { var pos = o * k, i0 = Math.floor(pos), f = pos - i0; pcm[o] = mono[i0] * (1 - f) + (mono[i0 + 1] != null ? mono[i0 + 1] : mono[i0]) * f; } }
+        var i16 = new Int16Array(pcm.length);
+        for (var j = 0; j < pcm.length; j++) { var v = Math.max(-1, Math.min(1, pcm[j])); i16[j] = v < 0 ? v * 32768 : v * 32767; }
+        var enc = new lamejs.Mp3Encoder(1, RATE, kbps), parts = [], size = 0, B = 1152, pos2 = 0;
+        function step() {
+          var t0 = Date.now();
+          while (pos2 < i16.length && Date.now() - t0 < 30) {
+            var out = enc.encodeBuffer(i16.subarray(pos2, pos2 + B)); pos2 += B;
+            if (out.length) { parts.push(new Int8Array(out)); size += out.length; }
+          }
+          if (onProgress) onProgress(Math.min(100, Math.round(pos2 / i16.length * 100)));
+          if (pos2 < i16.length) return tick().then(step);
+          var end = enc.flush(); if (end.length) { parts.push(new Int8Array(end)); size += end.length; }
+          return new Blob(parts, { type: 'audio/mpeg' });
+        }
+        return tick().then(step);
+      });
+    });
+  }
+
   /* ======================= campos del editor ======================= */
   function changed() { dirty = true; schedulePreview(); scheduleDraft(); }
 
@@ -270,20 +320,33 @@
           a.onclick = function () {
             pickFiles(false, 'audio/mpeg,audio/mp3,audio/mp4,audio/aac,audio/ogg,audio/wav,.mp3,.m4a').then(function (f) {
               var file = f[0]; if (!file) return;
-              if (file.size > 2048 * 1024) { LE.toast('Tu canción pesa ' + (file.size / 1048576).toFixed(1) + ' MB. El máximo es 2 MB: usa un MP3 más corto o comprimido.', true); return; }
-              a.disabled = true; a.textContent = 'Cargando…';
-              var r = new FileReader();
-              r.onerror = function () { LE.toast('No se pudo leer esa canción', true); build(); };
-              r.onload = function () {
-                var d = String(r.result || '');
-                if (!/^data:audio\//.test(d)) d = d.replace(/^data:[^;]*;/, 'data:audio/mpeg;');
-                obj[key] = d; if (nameKey) obj[nameKey] = file.name.slice(0, 60); build(); changed();
-              };
-              r.readAsDataURL(file);
+              if (file.size > AUDIO_IN_MAX) { LE.toast('Ese archivo pesa ' + (file.size / 1048576).toFixed(0) + ' MB. Elige uno de menos de 30 MB.', true); return; }
+              a.disabled = true;
+              function toData(blobOrFile, nm) {
+                var r = new FileReader();
+                r.onerror = function () { LE.toast('No se pudo leer esa canción', true); build(); };
+                r.onload = function () {
+                  var d = String(r.result || '');
+                  if (!/^data:audio\//.test(d)) d = d.replace(/^data:[^;]*;/, 'data:audio/mpeg;');
+                  if (d.length > 2850 * 1024) { LE.toast('La canción sigue pesando demasiado. Prueba con una más corta.', true); build(); return; }
+                  obj[key] = d; if (nameKey) obj[nameKey] = nm.slice(0, 60); build(); changed();
+                };
+                r.readAsDataURL(blobOrFile);
+              }
+              if (file.size <= AUDIO_TARGET) { a.textContent = 'Cargando…'; toData(file, file.name); return; }
+              a.textContent = 'Comprimiendo… 0%';
+              compressAudio(file, function (pct) { a.textContent = 'Comprimiendo… ' + pct + '%'; }).then(function (blob) {
+                toData(blob, file.name.replace(/\.[^.]+$/, '') + '.mp3');
+              }).catch(function (e) {
+                var m = String(e && e.message || '');
+                if (m.indexOf('long:') === 0) LE.toast('Esa canción dura demasiado (máximo ~' + m.slice(5) + ' min). Recórtala o elige otra.', true);
+                else LE.toast('No se pudo comprimir esa canción. Prueba con otro MP3 o revisa tu internet.', true);
+                build();
+              });
             });
           };
           w.appendChild(a);
-          w.appendChild(h('p', 'muted', 'Opcional · máximo 2 MB. Suena al tocar la pantalla.'));
+          w.appendChild(h('p', 'muted', 'Opcional · canciones de hasta ~8 min (se comprimen solas). Suena al tocar la pantalla.'));
         }
       })();
     }
