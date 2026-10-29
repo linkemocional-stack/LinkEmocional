@@ -423,8 +423,11 @@
   addEventListener('resize', function () { if (desktop()) { $('ed').classList.remove('show-prev'); if (dirty) schedulePreview(); } });
 
   function fullscreen(src) {
+    /* apaga la vista previa (y su música) mientras se prueba en pantalla completa, para que no suene doble */
+    var ph = $('phone'), hadPrev = !!(ph && ph.querySelector('iframe'));
+    if (hadPrev) { ph.innerHTML = '<div class="ph">Vista previa en pausa mientras pruebas en pantalla completa</div>'; dirty = true; }
     var o = h('div', 'fs'), b = h('button', '', '✕'); b.setAttribute('aria-label', 'Cerrar');
-    b.onclick = function () { o.remove(); };
+    b.onclick = function () { o.remove(); if (hadPrev && tpl && previewVisible()) buildPreview(); };
     o.appendChild(b); document.body.appendChild(o);
     var holder = document.createElement('div'); holder.style.cssText = 'position:absolute;inset:0';
     o.appendChild(holder);
