@@ -19,10 +19,11 @@ body.edm #hud{display:none}
 #go{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;cursor:pointer;background:radial-gradient(circle,#231a52,#05030f);transition:opacity 1.2s;font:700 1.9rem 'Dancing Script',cursive;text-shadow:0 0 14px var(--a);text-align:center;padding:20px}
 #go.hidden{opacity:0;pointer-events:none}#go span{font-size:3rem;animation:p 2s ease-in-out infinite}
 @keyframes p{50%{transform:scale(1.2)}}
-#card{position:fixed;left:50%;bottom:22px;width:min(92vw,420px);transform:translate(-50%,30px);opacity:0;pointer-events:none;transition:.45s;z-index:25;background:linear-gradient(160deg,rgba(50,20,80,.94),rgba(12,5,24,.96));border:1px solid var(--l);border-radius:20px;padding:20px 22px;backdrop-filter:blur(10px);box-shadow:0 0 30px var(--l)}
+#card{position:fixed;left:50%;bottom:22px;width:min(92vw,420px);transform:translate(-50%,30px);opacity:0;pointer-events:none;transition:.45s;z-index:25;background:linear-gradient(160deg,rgba(50,20,80,.94),rgba(12,5,24,.96));border:1px solid var(--l);border-radius:20px;padding:20px 22px;backdrop-filter:blur(10px);box-shadow:0 0 30px var(--l);max-height:88vh;overflow-y:auto;touch-action:pan-y}
 #card.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 #ci{font-size:.75rem;color:var(--a);font-weight:700}#ct{font:700 1.8rem 'Dancing Script',cursive;margin:4px 0 6px}
 #cp{margin:0 0 12px;line-height:1.55;font-size:.95rem;white-space:pre-wrap}
+#cf{display:none;width:100%;max-height:38vh;object-fit:cover;border-radius:14px;margin:0 0 12px;box-shadow:0 0 18px var(--l)}#cf.on{display:block}
 #cc,#pen,.x{background:rgba(255,255,255,.07);border:1px solid var(--l);color:var(--t);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:1rem}
 #pen{position:fixed;top:14px;right:14px;z-index:30;width:46px;height:46px;background:rgba(10,8,4,.5);backdrop-filter:blur(8px)}
 .noed #pen,.noed #ed{display:none!important}
@@ -53,7 +54,7 @@ html,body{pointer-events:none !important;-webkit-user-select:none;user-select:no
 <div id="hud"><h1 id="ttl"></h1><div id="sub"></div></div>
 <canvas id="c"></canvas><audio id="au" loop></audio>
 <div id="hint"></div><div id="bar"><i></i></div>
-<div id="card"><div id="ci"></div><h2 id="ct"></h2><p id="cp"></p><button id="cc">✕</button></div>
+<div id="card"><img id="cf" alt=""><div id="ci"></div><h2 id="ct"></h2><p id="cp"></p><button id="cc">✕</button></div>
 
 <script id="st" type="application/json">{"n1":"Tú","n2":"Yo","titulo":"Nuestro árbol","tap":"Toca para plantar la semilla","color":"#ffb3d1","auto":false,"musica":"","mnom":"","mem":[{"t":"Donde empezó todo","d":"Ese día sembraste algo en mí sin saberlo."},{"t":"Tu risa","d":"Mi sonido favorito en todo el universo."},{"t":"Nuestro primer abrazo","d":"El mundo se calló y solo quedamos tú y yo."},{"t":"Lo que viene","d":"Mil primaveras más a tu lado. Yo ya las quiero."}]}</script>
 <script>
@@ -98,7 +99,7 @@ requestAnimationFrame(fr)}
 cv.addEventListener('pointerdown',function(e){hold=1;px=e.clientX;py=e.clientY;mv=0});
 addEventListener('pointermove',function(e){if(!hold)return;mv+=Math.abs(e.clientX-px)+Math.abs(e.clientY-py);px=e.clientX;py=e.clientY});
 addEventListener('pointerup',function(){if(!hold)return;hold=0;if(mv<10&&G>=1.2){var b=null,bd=1e9;BL.forEach(function(o){var d=Math.hypot(o.x-px,o.y-py);if(d<o.r*1.8+16&&d<bd){bd=d;b=o}});if(b)show(b.m);else hide()}});
-function show(i){var m=S.mem[i];if(!m)return;sel=i;$('ci').textContent='💗 '+(i+1)+' / '+S.mem.length;$('ct').textContent=m.t;$('cp').textContent=m.d;$('card').classList.add('on')}
+function show(i){var m=S.mem[i];if(!m)return;sel=i;$('ci').textContent='💗 '+(i+1)+' / '+S.mem.length;$('ct').textContent=m.t;$('cp').textContent=m.d;var im=$('cf');if(m.f){if(im.getAttribute('src')!==m.f)im.src=m.f;im.classList.add('on')}else{im.removeAttribute('src');im.classList.remove('on')}$('card').classList.add('on')}
 function hide(){sel=-1;$('card').classList.remove('on')}$('cc').onclick=hide;
 function txt(){$('ttl').textContent=S.titulo;$('sub').textContent=S.n1&&S.n2?S.n1+' ∞ '+S.n2:(S.n1||S.n2||'');$('tap').textContent=S.tap;document.title='🌸 '+S.titulo}
 $('go').addEventListener('click',function(){if(go)return;go=1;au.volume=.7;var pr=au.play();if(pr&&pr.catch)pr.catch(function(){});$('go').classList.add('hidden')});
