@@ -313,7 +313,7 @@ border:1px solid rgba(139,111,240,.45);box-shadow:0 28px 60px rgba(0,0,0,.6),0 0
 <button class="lp-btn plans" type="button" onclick="showView('planes')"><svg class="ic" aria-hidden="true"><use href="#i-tag"/></svg>Ver planes</button>
 <button class="lp-btn ghost" type="button" onclick="showView('catalogo','personalizado')"><svg class="ic" aria-hidden="true"><use href="#i-gift"/></svg>Ver catálogo</button>
 </div>
-<div class="lp-chips"><span>16 horas gratis</span><span>Editor incluido</span><span>Se comparte por WhatsApp</span></div>
+<div class="lp-chips"><span>16 horas gratis</span><span>Editor incluido</span><span>Compártelo por WhatsApp o donde quieras</span></div>
 </div>
 <div class="lp-stage">
 <span class="lp-float a"><svg class="ic f" aria-hidden="true"><use href="#i-heart"/></svg></span><span class="lp-float b"><svg class="ic f" aria-hidden="true"><use href="#i-spark"/></svg></span><span class="lp-float c"><svg class="ic " aria-hidden="true"><use href="#i-heart"/></svg></span><span class="lp-float d"><svg class="ic " aria-hidden="true"><use href="#i-spark"/></svg></span>
@@ -696,13 +696,48 @@ set('lpLink',Number(lk).toFixed(2));set('lpLinkBs','≈ Bs '+(lk*fx).toFixed(2))
 .pz-bar{font-size:12px}
 }
 @media(max-width:380px){.pz-t h3{font-size:22px}.pz-price strong{font-size:27px}}
+
+/* --- cabecera de planes más vistosa --- */
+.pz-orb{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(#1c1544,#1c1544) padding-box,var(--grad-brand) border-box;border:1.5px solid transparent;box-shadow:0 0 0 8px rgba(139,111,240,.1),0 0 40px rgba(139,111,240,.55);animation:pzo 3.6s ease-in-out infinite}
+.pz-orb .ic{width:28px;height:28px}
+@keyframes pzo{50%{box-shadow:0 0 0 12px rgba(139,111,240,.06),0 0 56px rgba(111,214,232,.55)}}
+.pz-step{position:relative}
+@media(max-width:860px){
+.pz-head{padding:26px 18px 22px;border-radius:28px;border:1px solid var(--border-soft);background:radial-gradient(90% 60% at 50% 0,rgba(139,111,240,.28),transparent 70%),radial-gradient(70% 50% at 100% 100%,rgba(111,214,232,.14),transparent 70%),var(--glass);box-shadow:0 20px 50px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.07)}
+}
+@media(max-width:860px){.pz-free{font-size:12.5px;padding:7px 7px 7px 14px}.pz-free span{line-height:1.25}.pz-curhint{font-size:11.5px;margin-top:0}.pz-head{padding:24px 14px 20px}}
+@media(prefers-reduced-motion:reduce){.pz-orb{animation:none}}
+
+/* --- cabecera del catálogo --- */
+.cat-hero{position:relative;padding-top:34px}
+.cat-hero::before{content:"";position:absolute;left:50%;top:0;width:320px;height:200px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(139,111,240,.38),transparent);filter:blur(24px);pointer-events:none;z-index:0}
+.cat-hero>*{position:relative;z-index:1}
+.ch-kick{display:inline-flex;align-items:center;gap:7px;margin-bottom:12px;padding:6px 14px;border-radius:99px;font-weight:800;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-light);border:1px solid var(--border-soft-blue);background:rgba(111,214,232,.08)}
+.ch-kick .ic{width:14px;height:14px}
+.cat-hero h1{font-size:32px;margin:0 0 10px;letter-spacing:-.01em}
+.cat-hero p{font-size:14.5px;max-width:340px;margin:0 auto;line-height:1.55}
+.ch-perks{display:flex;justify-content:center;flex-wrap:nowrap;gap:6px;margin-top:18px;padding:0 12px}
+.ch-perks span{display:inline-flex;align-items:center;gap:5px;padding:8px 10px;border-radius:99px;font-weight:800;font-size:12.5px;white-space:nowrap;color:var(--ink);background:var(--glass-strong);border:1px solid var(--border-soft)}
+.ch-perks .ic{width:14px;height:14px}
+.preview-disclaimer{display:flex;align-items:center;gap:12px;max-width:420px;margin:18px auto 0;padding:13px 16px;box-sizing:border-box;width:calc(100% - 40px);border-radius:18px;text-align:left;font-size:13px;line-height:1.45;font-weight:700;color:var(--muted);background:linear-gradient(135deg,rgba(139,111,240,.16),rgba(111,214,232,.08));border:1px solid var(--border-soft);-webkit-text-fill-color:currentColor;animation:none}
+.preview-disclaimer .ic{width:26px;height:26px;flex:none}
+.preview-disclaimer b{color:var(--ink)}
+
+/* --- filtros de nivel con el color de cada plan --- */
+#tierTabs .cat-tab{--c:#8b6ff0;position:relative;overflow:hidden}
+#tierTabs .cat-tab:nth-child(2){--c:#6fd6e8}#tierTabs .cat-tab:nth-child(3){--c:#8b6ff0}#tierTabs .cat-tab:nth-child(4){--c:#f06292}#tierTabs .cat-tab:nth-child(5){--c:#ffc857}
+#tierTabs .cat-tab:not(:first-child){border-color:color-mix(in srgb,var(--c) 38%,transparent);background:radial-gradient(120% 90% at 50% 0,color-mix(in srgb,var(--c) 20%,transparent),transparent 70%),var(--glass)}
+#tierTabs .cat-tab:not(:first-child) .ct-n::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c);vertical-align:1px}
+#tierTabs .cat-tab:not(:first-child).active{border-color:var(--c);box-shadow:0 8px 24px color-mix(in srgb,var(--c) 38%,transparent);background:radial-gradient(120% 90% at 50% 0,color-mix(in srgb,var(--c) 38%,transparent),transparent 75%),var(--glass-strong)}
+#tierTabs .cat-tab:not(:first-child) .ct-p{color:color-mix(in srgb,var(--c) 70%,#fff)}
 @media(prefers-reduced-motion:reduce){.pz-free i,.pz-caret{animation:none}.pz-t,.pz-e{transition:none}}
 </style>
 
 <div class="pz-head">
+<span class="pz-orb" aria-hidden="true"><svg class="ic"><use href="#i-heart"/></svg></span>
 <span class="pz-kick">Precios claros · sin suscripciones</span>
 <h2>Una rosa de verdad se marchita. <em>La tuya, no.</em></h2>
-<p class="lp-sub">Desde <b id="pzFrom">Bs 10</b> y con un solo pago tu regalo queda online para siempre. Todos los niveles incluyen editor: elige el que mejor le queda a quien quieres sorprender.</p>
+<p class="lp-sub">Desde <b id="pzFrom">Bs 10</b> y con un solo pago tu regalo queda online para siempre. Todos los niveles incluyen editor.</p>
 <div class="pz-tools">
 <div class="pz-cur" id="pzCur" data-on="USD" role="group" aria-label="Moneda"><span class="pz-th" aria-hidden="true"></span><button type="button" data-c="USD" aria-pressed="true"><b>USD</b><small>Dólares</small></button><button type="button" data-c="BOB" aria-pressed="false"><b>Bs</b><small>Bolivianos</small></button></div>
 <div class="pz-free"><i aria-hidden="true"></i><span>Pruébalo 16 h gratis, sin tarjeta</span><a href="crear.html">Probar</a></div>
@@ -945,11 +980,17 @@ document.addEventListener('DOMContentLoaded', function () {
 <a class="brand" href="index.html" onclick="showView('home');return false"><img src="logo.jpg" alt=""><span>Link Emocional</span></a>
 </div>
 </div>
-<div class="hero">
+<div class="hero cat-hero">
+<span class="ch-kick" id="catKick"><svg class="ic" aria-hidden="true"><use href="#i-spark"/></svg><span id="catKickT">Regalos animados</span></span>
 <h1 id="catalogoTitulo">Código completo</h1>
 <p id="catalogoSubtitulo">Elige un diseño, mira el video y pide el tuyo por WhatsApp</p>
+<div class="ch-perks" id="catPerks">
+<span><svg class="ic" aria-hidden="true"><use href="#i-pen"/></svg>Tus frases</span>
+<span><svg class="ic" aria-hidden="true"><use href="#i-img"/></svg>Tus fotos</span>
+<span><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg>Tu música</span>
 </div>
-<div class="preview-disclaimer">La vista previa es solo una muestra pequeña — mira el video para ver el producto completo</div>
+</div>
+<div class="preview-disclaimer"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><span>La vista previa es solo una muestra pequeña. <b>Mira el video</b> para ver el producto completo.</span></div>
 <!-- estas pestañas solo se muestran dentro del catalogo "no personalizado" -->
 <div class="cat-tabs" id="catTabs">
 <button class="cat-tab" id="tabTodos" onclick="setSubTab('todos')">Todos</button>

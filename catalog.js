@@ -802,6 +802,8 @@ var tcfg = tiersCfg().filter(function(n){ return n.id === tierFilter; })[0];
 if (tierFilter && !tcfg) tierFilter = null;
 document.getElementById('catalogoTitulo').textContent = tcfg ? 'Nivel ' + tcfg.nombre : 'Con Editor';
 document.getElementById('catalogoSubtitulo').textContent = tcfg ? 'Diseños con editor de este nivel. Elige uno, hazlo tuyo y pídelo por WhatsApp' : 'Elige un diseño, hazlo tuyo y pídelo por WhatsApp';
+var kt=document.getElementById('catKickT'); if(kt) kt.textContent = tcfg ? 'Con editor · Nivel ' + tcfg.nombre : 'Con editor · 16 h gratis';
+var pk=document.getElementById('catPerks'); if(pk) pk.style.display = 'flex';
 note.style.display = 'block';
 note.textContent = 'Todos vienen con editor: puedes cambiar frases, fotos, colores y más.';
 renderTierTabs();
@@ -810,6 +812,8 @@ renderGrid();
 var tt = document.getElementById('tierTabs'); if (tt) tt.style.display = 'none';
 tabs.style.display = 'flex';
 document.getElementById('catalogoTitulo').textContent = 'Sin Editor';
+var kt2=document.getElementById('catKickT'); if(kt2) kt2.textContent = 'Listos para regalar';
+var pk2=document.getElementById('catPerks'); if(pk2) pk2.style.display = 'none';
 document.getElementById('catalogoSubtitulo').textContent = 'Diseños ya armados y bonitos, algunos gratis';
 setSubTab('todos');
 }
