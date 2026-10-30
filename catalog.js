@@ -754,13 +754,43 @@ if (toastTimer) clearTimeout(toastTimer);
 toastTimer = setTimeout(function(){ toast.classList.remove('open'); }, 3600);
 }
 /* ===================== NAVEGACION ENTRE VISTAS ===================== */
-function showView(name, mode){
+var tierFilter = null;
+function tiersCfg(){ return (window.LE_CONFIG && LE_CONFIG.NIVELES) || []; }
+function tierIdOf(price){
+var N = tiersCfg(), prev = -1;
+for (var i = 0; i < N.length; i++) { if (price > prev + 0.001 && price <= N[i].max + 0.001) return N[i].id; prev = N[i].max; }
+return null;
+}
+function showView(name, mode, tier){
 document.getElementById('viewHome').style.display = (name === 'home') ? 'block' : 'none';
 document.getElementById('viewCatalogo').style.display = (name === 'catalogo') ? 'block' : 'none';
+var vp = document.getElementById('viewPlanes');
+if (vp) vp.style.display = (name === 'planes') ? 'block' : 'none';
+try {
+if (name === 'planes') history.replaceState(null, '', '#planes');
+else if (/^#(planes|precios)$/.test(location.hash)) history.replaceState(null, '', location.pathname + location.search);
+} catch (e) {}
 window.scrollTo(0, 0);
 if (name === 'catalogo') {
+tierFilter = tier || null;
 setCatalogMode(mode || 'personalizado');
 }
+}
+function setTier(id){ tierFilter = id || null; setCatalogMode('personalizado'); }
+function renderTierTabs(){
+var box = document.getElementById('tierTabs'); if (!box) return;
+var N = tiersCfg(); if (!N.length) { box.style.display = 'none'; return; }
+var prices = {};
+PRODUCTS.forEach(function(p){ if (p.precioPersonalizado != null) { var t = tierIdOf(p.precioPersonalizado); if (t) (prices[t] = prices[t] || []).push(p.precioPersonalizado); } });
+var h = '<button class="cat-tab' + (!tierFilter ? ' active' : '') + '" data-tier="">Todos</button>';
+N.forEach(function(n){
+var a = prices[n.id]; if (!a || !a.length) return;
+var mn = Math.min.apply(null, a), mx = Math.max.apply(null, a);
+var rng = Math.abs(mx - mn) < 0.005 ? '$' + mn.toFixed(2) : '$' + mn.toFixed(2) + '–' + mx.toFixed(2);
+h += '<button class="cat-tab' + (tierFilter === n.id ? ' active' : '') + '" data-tier="' + n.id + '">' + n.nombre + ' <small style="opacity:.75;font-weight:700">' + rng + '</small></button>';
+});
+box.innerHTML = h; box.style.display = 'flex';
+box.onclick = function(e){ var b = e.target.closest('button[data-tier]'); if (b) setTier(b.getAttribute('data-tier')); };
 }
 function setCatalogMode(mode){
 catalogMode = mode;
@@ -768,12 +798,16 @@ var tabs = document.getElementById('catTabs');
 var note = document.getElementById('catNote');
 if (mode === 'personalizado') {
 tabs.style.display = 'none';
-document.getElementById('catalogoTitulo').textContent = 'Con Editor';
-document.getElementById('catalogoSubtitulo').textContent = 'Elige un diseño, hazlo tuyo y pídelo por WhatsApp';
+var tcfg = tiersCfg().filter(function(n){ return n.id === tierFilter; })[0];
+if (tierFilter && !tcfg) tierFilter = null;
+document.getElementById('catalogoTitulo').textContent = tcfg ? 'Nivel ' + tcfg.nombre : 'Con Editor';
+document.getElementById('catalogoSubtitulo').textContent = tcfg ? 'Diseños con editor de este nivel. Elige uno, hazlo tuyo y pídelo por WhatsApp' : 'Elige un diseño, hazlo tuyo y pídelo por WhatsApp';
 note.style.display = 'block';
 note.textContent = 'Todos vienen con editor: puedes cambiar frases, fotos, colores y más.';
+renderTierTabs();
 renderGrid();
 } else {
+var tt = document.getElementById('tierTabs'); if (tt) tt.style.display = 'none';
 tabs.style.display = 'flex';
 document.getElementById('catalogoTitulo').textContent = 'Sin Editor';
 document.getElementById('catalogoSubtitulo').textContent = 'Diseños ya armados y bonitos, algunos gratis';
@@ -898,7 +932,7 @@ var container = document.getElementById('grid');
 container.innerHTML = '';
 var list;
 if (catalogMode === 'personalizado') {
-list = PRODUCTS.filter(function(p){ return p.precioPersonalizado != null; });
+list = PRODUCTS.filter(function(p){ return p.precioPersonalizado != null && (!tierFilter || tierIdOf(p.precioPersonalizado) === tierFilter); });
 list.sort(function(a,b){
 var av = (a.ordenPersonalizado === undefined || a.ordenPersonalizado === null) ? 99 : a.ordenPersonalizado;
 var bv = (b.ordenPersonalizado === undefined || b.ordenPersonalizado === null) ? 99 : b.ordenPersonalizado;
