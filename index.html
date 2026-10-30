@@ -349,21 +349,348 @@ border:1px solid rgba(139,111,240,.45);box-shadow:0 28px 60px rgba(0,0,0,.6),0 0
 <div class="lp-grid" id="lpGrid"></div>
 <div class="lp-more"><a class="lp-btn main" href="crear.html">Crear mi página</a><span>Elige tu diseño, personalízalo y pruébalo gratis</span></div>
 </div></section>
-<section class="lp-sec" id="precios"><div class="lp-in">
-<h2>Precios que <em>no te duelen</em></h2>
-<p class="lp-sub">Pruebas gratis, y si te encanta lo dejas para siempre con un pago único. Sin suscripciones ni letra chica.</p>
-<div class="lp-price">
-<div class="lp-pc"><h3>Prueba</h3><div class="big">$0</div><div class="bs">Bs 0</div>
-<ul><li>16 horas gratis con tu enlace</li><li>Editor completo con fotos y mensaje</li><li>Sin tarjeta</li></ul>
-<a class="lp-btn ghost" href="crear.html">Probar gratis</a></div>
-<div class="lp-pc hot"><em>Recomendado</em><h3>Regalo permanente</h3><div class="big">desde $<span id="lpMin">0.99</span><small>pago único</small></div><div class="bs" id="lpMinBs">≈ Bs 9.90</div>
-<ul><li>No vence nunca</li><li>Hay diseños desde $<span id="lpMin2">0.99</span> hasta $<span id="lpMax">4.99</span>, según la animación</li><li>Enlace y QR para compartir</li><li>Lo editas cuando quieras desde Mis páginas</li></ul>
-<a class="lp-btn main" href="#disenos">Ver precios por diseño</a></div>
-<div class="lp-pc"><h3>Enlace con tu nombre</h3><div class="big">$<span id="lpLink">0.99</span><small>opcional</small></div><div class="bs" id="lpLinkBs">≈ Bs 9.90</div>
-<ul><li>link-emocional.vercel.app/s/tu-nombre</li><li>Fácil de recordar y de decir</li><li>Se suma a cualquier diseño</li></ul>
-<a class="lp-btn ghost" href="crear.html">Crear mi página</a></div>
+<section class="lp-sec pz" id="precios"><div class="lp-in">
+<style>
+.pz{position:relative;overflow:hidden}
+.pz::before{content:"";position:absolute;left:-140px;top:60px;width:360px;height:360px;border-radius:50%;background:#8b6ff0;filter:blur(100px);opacity:.25;pointer-events:none}
+.pz::after{content:"";position:absolute;right:-120px;top:520px;width:340px;height:340px;border-radius:50%;background:#2a8fae;filter:blur(100px);opacity:.2;pointer-events:none}
+.pz .lp-in{position:relative;z-index:1}
+.pz-head{text-align:center;max-width:720px;margin:0 auto 26px}
+.pz-kick{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--blue-light);padding:6px 14px;border-radius:99px;border:1px solid var(--border-soft-blue);background:rgba(111,214,232,.08);margin-bottom:14px}
+.pz-head h2{margin:0 0 12px;text-wrap:balance}
+.pz-head .lp-sub{margin:0 auto;max-width:34em}
+.pz-tools{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;margin-top:20px}
+.pz-seg{display:inline-flex;padding:4px;border-radius:99px;background:var(--glass);border:1px solid var(--border-soft);gap:2px}
+.pz-seg button{font:inherit;font-weight:800;font-size:13.5px;padding:8px 16px;border-radius:99px;border:0;background:none;color:var(--muted);cursor:pointer;transition:color .2s,background .2s}
+.pz-seg button[aria-pressed=true]{background:var(--grad-brand);color:#0d0a1e;box-shadow:0 6px 18px rgba(139,111,240,.35)}
+.pz-seg button:focus-visible,.pz-t .lp-btn:focus-visible,.pz-qty button:focus-visible{outline:2px solid var(--blue-light);outline-offset:2px}
+.pz-free{display:inline-flex;align-items:center;gap:10px;padding:8px 8px 8px 16px;border-radius:99px;background:rgba(80,220,160,.08);border:1px solid rgba(80,220,160,.35);font-weight:800;font-size:13.5px;color:#bff3da}
+.pz-free i{width:8px;height:8px;border-radius:50%;background:#50dca0;box-shadow:0 0 0 0 rgba(80,220,160,.6);animation:pzp 1.8s infinite}
+.pz-free a{padding:6px 14px;border-radius:99px;background:#50dca0;color:#06281a;text-decoration:none;font-weight:800;font-size:13px}
+@keyframes pzp{70%{box-shadow:0 0 0 9px rgba(80,220,160,0)}100%{box-shadow:0 0 0 0 rgba(80,220,160,0)}}
+.pz-rise{display:flex;align-items:center;gap:12px;margin:26px 0 6px;color:var(--muted-2);font-weight:800;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+.pz-rise::before,.pz-rise::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--border-soft))}
+.pz-rise::after{background:linear-gradient(270deg,transparent,var(--border-soft))}
+
+/* --- escalera de niveles --- */
+.pz-tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+.pz-t{--c:#6fd6e8;position:relative;display:flex;flex-direction:column;gap:10px;padding:14px 14px 20px;border-radius:26px;border:1px solid color-mix(in srgb,var(--c) 38%,transparent);background:radial-gradient(120% 70% at 50% 0,color-mix(in srgb,var(--c) 24%,transparent),transparent 65%),var(--glass);transition:transform .25s,border-color .25s,box-shadow .25s}
+.pz-t:hover{transform:translateY(-6px);border-color:var(--c);box-shadow:0 20px 50px color-mix(in srgb,var(--c) 28%,transparent)}
+.pz-t:nth-child(1){margin-top:54px}.pz-t:nth-child(2){margin-top:36px;--c:#8b6ff0}.pz-t:nth-child(3){margin-top:18px;--c:#f06292}.pz-t:nth-child(4){--c:#ffc857}
+.pz-t.hot{box-shadow:0 18px 50px color-mix(in srgb,var(--c) 26%,transparent);border-color:color-mix(in srgb,var(--c) 75%,transparent)}
+.pz-t:nth-child(4){background:radial-gradient(120% 70% at 50% 0,rgba(255,200,87,.26),transparent 62%),linear-gradient(180deg,rgba(255,200,87,.07),transparent 40%),var(--glass-strong)}
+.pz-lvl{position:absolute;top:24px;left:24px;z-index:3;font-weight:800;font-size:11px;letter-spacing:.1em;padding:4px 10px;border-radius:99px;background:rgba(8,5,26,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid color-mix(in srgb,var(--c) 60%,transparent);color:var(--c)}
+.pz-badge{position:absolute;top:-12px;right:18px;z-index:4;font-weight:800;font-size:11.5px;padding:5px 12px;border-radius:99px;background:linear-gradient(120deg,var(--c),color-mix(in srgb,var(--c) 55%,#fff));color:#0d0a1e;box-shadow:0 6px 16px color-mix(in srgb,var(--c) 40%,transparent)}
+.pz-t .lt{width:100%;aspect-ratio:16/11;border-radius:18px}
+.pz-body{display:flex;flex-direction:column;gap:9px;padding:6px 8px 0;flex:1}
+.pz-t h3{margin:0;font-size:22px;letter-spacing:-.01em}
+.pz-tag{margin:-4px 0 0;color:var(--muted);font-size:13.5px;font-weight:700}
+.pz-price{display:flex;flex-direction:column;gap:2px;margin:4px 0 2px}
+.pz-price strong{font-size:30px;line-height:1.05;font-weight:800;letter-spacing:-.02em;background:linear-gradient(120deg,#fff,var(--c));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.pz-price small{color:var(--muted-2);font-size:12.5px;font-weight:700}
+.pz-t ul{list-style:none;margin:2px 0 4px;padding:0;display:grid;gap:7px;color:var(--muted);font-size:13.5px;line-height:1.4}
+.pz-t li{display:flex;gap:9px;align-items:flex-start}
+.pz-t li::before{content:"✓";flex:none;display:grid;place-items:center;width:18px;height:18px;margin-top:1px;border-radius:50%;background:var(--c);color:#0d0a1e;font-size:10px;font-weight:800}
+.pz-ex{margin:0;padding-top:10px;border-top:1px dashed var(--border-soft);color:var(--muted-2);font-size:12.5px;line-height:1.5}
+.pz-ex b{color:var(--ink)}
+.pz-t .lp-btn{margin-top:auto;text-align:center;font-size:14.5px;padding:13px 18px}
+.pz-t .lp-btn.go{background:linear-gradient(120deg,var(--c),color-mix(in srgb,var(--c) 55%,#8b6ff0));color:#0d0a1e;box-shadow:0 8px 22px color-mix(in srgb,var(--c) 32%,transparent)}
+.pz-swipe{display:none;text-align:center;color:var(--muted-2);font-size:12.5px;font-weight:700;margin-top:8px}
+
+/* --- enlace + calculadora --- */
+.pz-duo{display:grid;grid-template-columns:5fr 7fr;gap:16px;margin-top:22px}
+.pz-card{position:relative;overflow:hidden;display:flex;flex-direction:column;padding:26px;border-radius:26px;border:1px solid var(--border-soft);background:radial-gradient(110% 80% at 0 0,rgba(139,111,240,.2),transparent 60%),var(--glass)}
+.pz-card.b{background:radial-gradient(110% 80% at 100% 0,rgba(111,214,232,.17),transparent 60%),var(--glass)}
+.pz-card h3{margin:10px 0 6px;font-size:21px}
+.pz-card>p{margin:0 0 16px;color:var(--muted);font-size:14.5px;line-height:1.55}
+.pz-ib{display:grid;place-items:center;width:46px;height:46px;border-radius:15px;background:linear-gradient(#1a1438,#1a1438) padding-box,var(--grad-brand) border-box;border:1.5px solid transparent;box-shadow:0 6px 18px rgba(139,111,240,.28)}
+.pz-ib .ic{width:22px;height:22px}
+.pz-url{display:flex;align-items:center;flex-wrap:wrap;padding:13px 14px;border-radius:14px;background:rgba(5,3,14,.55);border:1px solid var(--border-soft);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:var(--muted);overflow:hidden}
+.pz-url b{color:var(--blue-light);font-weight:700;min-height:1em}
+.pz-caret{width:2px;height:15px;margin-left:2px;background:var(--blue-light);animation:pzc 1s steps(1) infinite}
+@keyframes pzc{50%{opacity:0}}
+.pz-bl{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:9px;color:var(--muted);font-size:14px;line-height:1.4}.pz-bl li{display:flex;gap:10px;align-items:flex-start}.pz-bl li::before{content:"✓";flex:none;display:grid;place-items:center;width:18px;height:18px;margin-top:1px;border-radius:50%;background:var(--grad-brand);color:#0d0a1e;font-size:10px;font-weight:800}
+.pz-lp{margin-top:auto!important;padding-top:18px;display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 10px;margin-top:16px}
+.pz-lp s{color:var(--muted-2);font-weight:700}
+.pz-lp strong{font-size:32px;font-weight:800;letter-spacing:-.02em;background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.pz-lp small{color:var(--muted);font-weight:700;font-size:12.5px}
+.pz-lab{font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);margin:16px 0 8px}
+.pz-calc .pz-seg{display:flex;width:100%;flex-wrap:wrap;border-radius:18px}
+.pz-calc .pz-seg button{flex:1 1 auto;padding:9px 10px;border-radius:14px}
+.pz-qrow{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.pz-qty{display:inline-flex;align-items:center;border-radius:99px;border:1px solid var(--border-soft);background:var(--glass)}
+.pz-qty button{width:40px;height:40px;border:0;border-radius:50%;background:none;color:var(--ink);font:inherit;font-size:20px;font-weight:800;cursor:pointer}
+.pz-qty button:active{transform:scale(.9)}
+.pz-qty output{min-width:34px;text-align:center;font-weight:800;font-size:18px}
+.pz-packs{display:flex;flex-wrap:wrap;gap:8px}
+.pz-packs button{font:inherit;font-weight:800;font-size:12.5px;padding:8px 12px;border-radius:99px;border:1px dashed rgba(139,111,240,.6);background:rgba(139,111,240,.1);color:var(--ink);cursor:pointer}
+.pz-packs button em{font-style:normal;color:#50dca0;margin-left:4px}
+.pz-packs button[aria-pressed=true]{border-style:solid;background:var(--grad-brand);color:#0d0a1e}
+.pz-packs button[aria-pressed=true] em{color:#06281a}
+.pz-chk{display:flex;align-items:center;gap:10px;margin-top:16px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer}
+.pz-chk input{width:18px;height:18px;accent-color:#8b6ff0}
+.pz-res{margin-top:18px;padding:18px;border-radius:20px;background:rgba(5,3,14,.5);border:1px solid var(--border-soft);display:grid;gap:6px}
+.pz-save{display:inline-flex;align-items:center;gap:8px;justify-self:start;font-weight:800;font-size:13px;padding:5px 12px;border-radius:99px;background:rgba(80,220,160,.12);color:#8ff0c4;border:1px solid rgba(80,220,160,.35)}
+.pz-save[hidden]{display:none}
+.pz-tot{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.pz-tot s{color:var(--muted-2);font-weight:700}
+.pz-tot strong{font-size:38px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.pz-res small{color:var(--muted-2);font-size:12.5px;line-height:1.5}
+.pz-next{margin:0;font-weight:800;font-size:13.5px;color:var(--blue-light)}
+.pz-calc .lp-btn{display:block;text-align:center;margin-top:14px;text-decoration:none}
+
+/* --- promos --- */
+.pz-sub{display:flex;align-items:center;gap:12px;margin:34px 0 14px}
+.pz-sub h3{margin:0;font-size:20px}
+.pz-sub span{color:var(--muted);font-size:14px}
+.pz-earn{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pz-e{display:flex;flex-direction:column;gap:8px;padding:22px;border-radius:22px;background:var(--glass);border:1px solid var(--border-soft);transition:transform .2s,border-color .2s}
+.pz-e:hover{transform:translateY(-4px);border-color:rgba(139,111,240,.6)}
+.pz-e b{font-size:16.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pz-chip{font-size:11.5px;font-weight:800;padding:3px 10px;border-radius:99px;background:var(--grad-brand);color:#0d0a1e}
+.pz-chip.ok{background:#50dca0}
+.pz-chip.pk{background:linear-gradient(120deg,#f06292,#ff9ec0)}
+.pz-e p{margin:0 0 6px;color:var(--muted);font-size:14px;line-height:1.55}
+.pz-e a{margin-top:auto;font-weight:800;font-size:14px;color:var(--blue-light);text-decoration:none}
+.pz-e a:hover{text-decoration:underline}
+.pz-trust{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-top:30px;padding:16px 20px;border-radius:20px;border:1px solid var(--border-soft);background:var(--glass);color:var(--muted);font-weight:700;font-size:13.5px}
+.pz-trust span{display:inline-flex;align-items:center;gap:8px}
+.pz-trust span::before{content:"✓";display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--grad-brand);color:#0d0a1e;font-size:10px;font-weight:800}
+.pz-trust a{color:var(--ink)}
+
+@media(max-width:1020px){.pz-tiers{grid-template-columns:repeat(2,1fr)}.pz-t:nth-child(n){margin-top:0}.pz-t:nth-child(4){margin-top:0}}
+@media(max-width:860px){
+.pz-duo,.pz-earn{grid-template-columns:1fr}
+.pz-tiers{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:0 -22px;padding:14px 22px 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.pz-tiers::-webkit-scrollbar{display:none}
+.pz-t{flex:0 0 80%;max-width:340px;scroll-snap-align:center}
+.pz-swipe{display:block}
+.pz-rise{display:none}
+.pz-card{padding:22px}
+}
+@media(prefers-reduced-motion:reduce){.pz-free i,.pz-caret{animation:none}.pz-t,.pz-e{transition:none}}
+</style>
+
+<div class="pz-head">
+<span class="pz-kick">Precios claros · sin suscripciones</span>
+<h2>Una rosa de verdad se marchita. <em>La tuya, no.</em></h2>
+<p class="lp-sub">Desde <b id="pzFrom">Bs 10</b> y con un solo pago tu regalo queda online para siempre. Elige el nivel que mejor le queda a quien quieres sorprender.</p>
+<div class="pz-tools">
+<div class="pz-seg" id="pzCur" role="group" aria-label="Moneda"><button type="button" data-c="BOB" aria-pressed="true">Bs</button><button type="button" data-c="USD" aria-pressed="false">USD</button></div>
+<div class="pz-free"><i aria-hidden="true"></i><span>Pruébalo 16 h gratis, sin tarjeta</span><a href="crear.html">Probar</a></div>
 </div>
-<p class="lp-note">Pagas por QR si estás en Bolivia, o con tarjeta si escribes desde otro país. Escríbenos por WhatsApp y te guiamos en el pago. El tipo de cambio que mostramos es de referencia (1 USD = 10 Bs).</p>
+</div>
+
+<div class="pz-rise" aria-hidden="true">Más animación y más detalle a cada paso</div>
+<div class="pz-tiers" id="pzTiers"></div>
+<div class="pz-swipe" aria-hidden="true">Desliza para ver todos los niveles →</div>
+
+<div class="pz-duo">
+<div class="pz-card" id="pzLinkCard">
+<span class="pz-ib"><svg class="ic" aria-hidden="true"><use href="#i-link"/></svg></span>
+<h3>Dale tu nombre al regalo</h3>
+<p>Cambia el enlace largo por uno corto, fácil de recordar y de decir en voz alta. Se suma a cualquier diseño.</p>
+<div class="pz-url" aria-hidden="true"><span>link-emocional.vercel.app/s/</span><b id="pzTyped"></b><span class="pz-caret"></span></div>
+<ul class="pz-bl"><li>Se escribe y se dicta fácil por WhatsApp o en persona</li><li>Queda bonito en el QR y en tus historias</li><li>Elige el nombre que quieras mientras esté libre</li></ul>
+<div class="pz-lp"><s id="pzLinkOld">Bs 10</s><strong id="pzLinkNew">Bs 5</strong><small>si lo pides junto con tu diseño</small></div>
+</div>
+<div class="pz-card b pz-calc" id="pzCalcCard">
+<span class="pz-ib"><svg class="ic" aria-hidden="true"><use href="#i-tag"/></svg></span>
+<h3>Mientras más regalas, menos pagas</h3>
+<p>Para cumpleaños, aniversarios, fechas especiales o para toda la familia. Calcula tu ahorro.</p>
+<div class="pz-lab">Nivel</div>
+<div class="pz-seg" id="pzCN" role="group" aria-label="Nivel"></div>
+<div class="pz-lab">Cuántas páginas</div>
+<div class="pz-qrow">
+<div class="pz-qty"><button type="button" id="pzMinus" aria-label="Quitar una">−</button><output id="pzQ" aria-live="polite">3</output><button type="button" id="pzPlus" aria-label="Agregar una">+</button></div>
+<div class="pz-packs" id="pzPacks"></div>
+</div>
+<label class="pz-chk"><input type="checkbox" id="pzCL"><span id="pzCLtxt">Con enlace con tu nombre en cada una</span></label>
+<div class="pz-res">
+<span class="pz-save" id="pzSave" hidden></span>
+<div class="pz-tot"><s id="pzOld"></s><strong id="pzTotal"></strong></div>
+<small id="pzPer"></small>
+<p class="pz-next" id="pzNext"></p>
+</div>
+<a class="lp-btn main" id="pzWa" target="_blank" rel="noopener" href="#">Pedir por WhatsApp</a>
+</div>
+</div>
+
+<div class="pz-sub" id="pzEarnHead"><h3>Gana descuentos</h3><span>Ayúdanos a crecer y paga menos</span></div>
+<div class="pz-earn" id="pzEarn"></div>
+
+<div class="pz-trust">
+<span>Pago único, sin suscripciones</span>
+<span>QR en Bolivia o tarjeta desde afuera</span>
+<span>Activación en minutos por WhatsApp</span>
+<span><a href="reembolsos.html">Política de reembolsos clara</a></span>
+</div>
+<p class="lp-note" id="pzNote">Todos los precios son por página y en pago único. Los montos en Bs son de referencia (1 USD = 10 Bs). Escríbenos por WhatsApp y te guiamos en el pago.</p>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var C = window.LE_CONFIG || {}, FX = C.USD_BOB || 10;
+  var LINK = C.PRECIO_ENLACE_USD || 0.99;
+  var COMBO = (C.ENLACE_COMBO_USD != null) ? Number(C.ENLACE_COMBO_USD) : 0.49;
+  var NIV = (C.NIVELES && C.NIVELES.length) ? C.NIVELES : [
+    { id: 'esencial', nombre: 'Esencial', max: 1.49, min: 0.99, thumb: 'arbol-amor' },
+    { id: 'clasico', nombre: 'Clásico', max: 1.99, min: 1.99, thumb: 'ventana-lluvia' },
+    { id: 'premium', nombre: 'Premium', max: 2.99, min: 2.99, thumb: 'rosa' },
+    { id: 'imperial', nombre: 'Imperial', max: 99, min: 3.49, thumb: 'rosa-imperial' }];
+  var PACKS = (C.PACKS || [{ n: 2, off: 10, nombre: 'Dúo' }, { n: 3, off: 20, nombre: 'Trío' }, { n: 5, off: 30, nombre: 'Cupido' }]).slice().sort(function (a, b) { return a.n - b.n; });
+  var COPY = {
+    esencial: { tag: 'Tierno, rápido y liviano', pts: ['Sobre todo animaciones 2D, ideales para sorprender en segundos', 'Tus textos, fotos y música', 'Funcionan perfecto en cualquier celular'], btn: 'nopersonalizado' },
+    clasico: { tag: 'Más detalle, más magia', pts: ['Mezcla de escenas 2D y 3D', 'Más efectos y animaciones al tocar', 'Perfecto para aniversarios y cumpleaños'], btn: 'nopersonalizado' },
+    premium: { tag: 'Escenas 3D que se mueven con el dedo', pts: ['Rosas, galaxias, caja sorpresa y más en 3D', 'Efectos de luz y partículas', 'El favorito para regalos importantes'], btn: 'nopersonalizado' },
+    imperial: { tag: 'El regalo más personal', pts: ['Editor único: cambia frases, fotos, colores y música', 'Animaciones 3D estilo película', 'Vista previa en vivo mientras lo editas'], btn: 'personalizado' }
+  };
+  var cur = 'BOB'; try { cur = localStorage.getItem('le_cur') === 'USD' ? 'USD' : 'BOB'; } catch (e) {}
+  var T = [], tiers = [], sel = 2, qty = 3, withLink = false;
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function bs(u) { return Math.round(u * FX); }
+  function usd(u) { return '$' + u.toFixed(2); }
+  function main(u) { return cur === 'BOB' ? 'Bs ' + bs(u) : usd(u); }
+  function alt(u) { return cur === 'BOB' ? usd(u) : 'Bs ' + bs(u); }
+  function range(a, b) {
+    if (Math.abs(a - b) < 0.005) return main(a);
+    return cur === 'BOB' ? 'Bs ' + bs(a) + ' – ' + bs(b) : usd(a) + ' – ' + usd(b);
+  }
+  function altRange(a, b) {
+    if (Math.abs(a - b) < 0.005) return alt(a);
+    return cur === 'BOB' ? usd(a) + ' – ' + usd(b) : 'Bs ' + bs(a) + ' – ' + bs(b);
+  }
+  function wa(t) { return (window.LE && LE.wa) ? LE.wa(t) : 'https://wa.me/' + (C.WHATSAPP || '59178550176') + '?text=' + encodeURIComponent(t); }
+
+  function build() {
+    var prev = -1;
+    tiers = NIV.map(function (n) {
+      var m = T.filter(function (t) { var p = Number(t.price); return p > prev + 0.001 && p <= n.max + 0.001; });
+      prev = n.max;
+      var ps = m.map(function (t) { return Number(t.price); });
+      var mn = ps.length ? Math.min.apply(null, ps) : n.min, mx = ps.length ? Math.max.apply(null, ps) : n.min;
+      var avg = ps.length ? ps.reduce(function (a, b) { return a + b; }, 0) / ps.length : (n.min + (n.max < 50 ? n.max : n.min)) / 2;
+      var thumb = m.some(function (t) { return t.slug === n.thumb; }) ? n.thumb : (m[0] ? m[0].slug : n.thumb);
+      var emoji = (m.filter(function (t) { return t.slug === thumb; })[0] || {}).emoji || '';
+      return { n: n, items: m, min: mn, max: mx, avg: avg, thumb: thumb, emoji: emoji };
+    }).filter(function (t) { return t.items.length || !T.length; });
+    if (sel >= tiers.length) sel = Math.min(2, tiers.length - 1);
+  }
+
+  function renderTiers() {
+    var h = '';
+    tiers.forEach(function (t, i) {
+      var cp = COPY[t.n.id] || { tag: '', pts: [], btn: 'nopersonalizado' };
+      var names = t.items.slice(0, 3).map(function (x) { return esc(x.name.replace(/\s+(PRO|ULTRA|IMPERIAL)$/i, '')); }).join(', ');
+      var hot = t.n.id === 'premium', top = t.n.id === 'imperial';
+      h += '<article class="pz-t' + (hot ? ' hot' : '') + '">' +
+        (hot ? '<span class="pz-badge">Recomendado</span>' : '') + (top ? '<span class="pz-badge">Con editor único</span>' : '') +
+        '<span class="pz-lvl">NIVEL ' + (i + 1) + '</span>' +
+        '<div class="lt" data-thumb="' + esc(t.thumb) + '" data-emoji="' + esc(t.emoji) + '"></div>' +
+        '<div class="pz-body"><h3>' + esc(t.n.nombre) + '</h3><p class="pz-tag">' + esc(cp.tag) + '</p>' +
+        '<div class="pz-price"><strong>' + range(t.min, t.max) + '</strong><small>' + altRange(t.min, t.max) + ' · pago único por página</small></div>' +
+        '<ul>' + cp.pts.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+        (t.items.length ? '<p class="pz-ex"><b>' + t.items.length + ' diseños</b> · ' + names + '…</p>' : '') +
+        '<button type="button" class="lp-btn ' + (hot || top ? 'go' : 'ghost') + '" data-v="' + cp.btn + '">Ver diseños ' + esc(t.n.nombre) + '</button></div></article>';
+    });
+    $('pzTiers').innerHTML = h;
+    if (window.LEThumbs && LEThumbs.scan) LEThumbs.scan($('pzTiers'));
+    var first = tiers[0]; if (first) $('pzFrom').textContent = main(first.min);
+  }
+
+  function discount(n) { var d = 0; PACKS.forEach(function (p) { if (n >= p.n) d = p.off; }); return d; }
+  function nextPack(n) { for (var i = 0; i < PACKS.length; i++) if (PACKS[i].n > n) return PACKS[i]; return null; }
+
+  function renderCalc() {
+    if (!tiers.length) return;
+    var t = tiers[sel], d = discount(qty);
+    var perLink = COMBO;
+    $('pzCN').innerHTML = tiers.map(function (x, i) { return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === sel) + '">' + esc(x.n.nombre) + '</button>'; }).join('');
+    $('pzPacks').innerHTML = PACKS.map(function (p) { return '<button type="button" data-n="' + p.n + '" aria-pressed="' + (qty === p.n) + '">' + esc(p.nombre) + ' ×' + p.n + '<em>−' + p.off + '%</em></button>'; }).join('');
+    $('pzQ').textContent = qty;
+    $('pzCLtxt').textContent = 'Con enlace con tu nombre en cada una (+' + main(perLink) + ' c/u)';
+    var base = t.avg * qty, linkTot = withLink ? perLink * qty : 0;
+    var sub = base + linkTot, tot = base * (1 - d / 100) + linkTot;
+    var saved = sub - tot;
+    $('pzOld').textContent = d ? main(sub) : '';
+    $('pzOld').style.display = d ? '' : 'none';
+    $('pzTotal').textContent = main(tot);
+    var s = $('pzSave');
+    if (d) { s.hidden = false; s.textContent = '🎉 ' + d + '% OFF · ahorras ' + main(saved); } else s.hidden = true;
+    $('pzPer').textContent = '≈ ' + main(tot / qty) + ' por página · estimado con el precio promedio del nivel ' + t.n.nombre + ' (' + alt(tot) + ')';
+    var nx = nextPack(qty);
+    $('pzNext').textContent = nx ? 'Agrega ' + (nx.n - qty) + ' más y llévate ' + nx.off + '% OFF' : 'Ya tienes el mejor descuento 🎁';
+    var msg = 'Hola! Quiero un pack de ' + qty + (qty === 1 ? ' página' : ' páginas') + ' nivel ' + t.n.nombre +
+      (d ? ' con ' + d + '% OFF' : '') + (withLink ? ', con enlace con mi nombre' : '') + '.\nTotal estimado: Bs ' + bs(tot) + ' (' + usd(tot) + ').\nMe ayudas a elegir y pagar? 💗';
+    $('pzWa').href = wa(msg);
+    $('pzWa').textContent = qty === 1 ? 'Pedir por WhatsApp' : 'Pedir mi pack por WhatsApp';
+  }
+
+  function renderLink() {
+    $('pzLinkOld').textContent = main(LINK); $('pzLinkNew').textContent = main(COMBO);
+  }
+
+  function renderEarn() {
+    var W = {
+      tk: wa('Hola! Quiero el 50% OFF por subir mi página a TikTok 🎬\nMi video: (pega el link aquí)'),
+      gr: wa('Hola! Grabé cómo creo mi página en Link Emocional 🎬\nMi video: (pega el link aquí)'),
+      ref: wa('Hola! Vengo recomendado por: (nombre de tu amigo/a) 💗 Quiero mi descuento.')
+    }, tk = C.TIKTOK ? '@' + C.TIKTOK : 'nuestro TikTok', h = '';
+    if (C.PROMO_TIKTOK) {
+      h += '<div class="pz-e"><b>Sube tu página a TikTok <span class="pz-chip">50% OFF</span></b><p>Graba un video con tu página, súbelo con “Hecho en Link Emocional” y menciona ' + esc(tk) + '. Mándanos el link y pagas la mitad.</p><a target="_blank" rel="noopener" href="' + esc(W.tk) + '">Enviar mi TikTok →</a></div>' +
+        '<div class="pz-e"><b>Graba cómo la creas <span class="pz-chip ok">GRATIS</span></b><p>Muestra en video cómo creas tu página y súbelo mencionando ' + esc(tk) + '. Te la dejamos permanente sin costo.</p><a target="_blank" rel="noopener" href="' + esc(W.gr) + '">Enviar mi video →</a></div>';
+    }
+    if (C.PROMO_REFERIDOS !== false) {
+      var o = C.REFERIDOS_OFF || 15;
+      h += '<div class="pz-e"><b>Invita a un amigo <span class="pz-chip pk">' + o + '% OFF para ambos</span></b><p>Cuando alguien compre y diga que va de tu parte, los dos reciben ' + o + '% de descuento en su próxima página.</p><a target="_blank" rel="noopener" href="' + esc(W.ref) + '">Quiero mi descuento →</a></div>';
+    }
+    $('pzEarn').innerHTML = h;
+    var none = !h; $('pzEarn').hidden = none; $('pzEarnHead').hidden = none;
+  }
+
+  function renderAll() {
+    var b = $('pzCur').children; [].forEach.call(b, function (x) { x.setAttribute('aria-pressed', x.dataset.c === cur); });
+    renderTiers(); renderCalc(); renderLink();
+  }
+
+  /* eventos */
+  $('pzCur').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; cur = b.dataset.c; try { localStorage.setItem('le_cur', cur); } catch (x) {} renderAll(); });
+  $('pzTiers').addEventListener('click', function (e) { var b = e.target.closest('button[data-v]'); if (b && window.showView) showView('catalogo', b.dataset.v); });
+  $('pzCN').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; sel = Number(b.dataset.i); renderCalc(); });
+  $('pzPacks').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; qty = Number(b.dataset.n); renderCalc(); });
+  $('pzMinus').addEventListener('click', function () { qty = Math.max(1, qty - 1); renderCalc(); });
+  $('pzPlus').addEventListener('click', function () { qty = Math.min(10, qty + 1); renderCalc(); });
+  $('pzCL').addEventListener('change', function () { withLink = this.checked; renderCalc(); });
+
+  /* la calculadora se oculta si PACKS_ACTIVOS = false */
+  if (C.PACKS_ACTIVOS === false) { $('pzCalcCard').hidden = true; $('pzLinkCard').parentNode.style.gridTemplateColumns = '1fr'; }
+
+  /* animación de escritura del enlace */
+  (function () {
+    var names = ['maria-te-amo', 'feliz-cumple-papa', 'nuestro-aniversario', 'para-mi-reina'], i = 0, j = 0, dir = 1, el = $('pzTyped'), vis = true;
+    var still = window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if (still) { el.textContent = names[0]; return; }
+    var card = $('pzLinkCard');
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { vis = es[0].isIntersecting; }).observe(card);
+    (function tick() {
+      var d = 110;
+      if (vis && !document.hidden) {
+        j += dir; el.textContent = names[i].slice(0, j);
+        if (dir === 1 && j >= names[i].length) { dir = -1; d = 1800; }
+        else if (dir === -1 && j <= 0) { dir = 1; i = (i + 1) % names.length; d = 400; }
+        else if (dir === -1) d = 45;
+      }
+      setTimeout(tick, d);
+    })();
+  })();
+
+  renderEarn(); build(); renderAll();
+  fetch('templates.json').then(function (r) { return r.json(); }).then(function (d) {
+    T = d.templates || []; build(); renderAll();
+  }).catch(function () {});
+});
+</script>
 </div></section>
 <section class="lp-sec"><div class="lp-in">
 <h2>Pruébalo ahora mismo</h2>
