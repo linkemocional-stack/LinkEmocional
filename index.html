@@ -719,7 +719,7 @@ set('lpLink',Number(lk).toFixed(2));set('lpLinkBs','≈ Bs '+(lk*fx).toFixed(2))
 .ch-perks{display:flex;justify-content:center;flex-wrap:nowrap;gap:6px;margin-top:18px;padding:0 12px}
 .ch-perks span{display:inline-flex;align-items:center;gap:5px;padding:8px 10px;border-radius:99px;font-weight:800;font-size:12.5px;white-space:nowrap;color:var(--ink);background:var(--glass-strong);border:1px solid var(--border-soft)}
 .ch-perks .ic{width:14px;height:14px}
-.preview-disclaimer{display:flex;align-items:center;gap:12px;max-width:420px;margin:18px auto 0;padding:13px 16px;box-sizing:border-box;width:calc(100% - 40px);border-radius:18px;text-align:left;font-size:13px;line-height:1.45;font-weight:700;color:var(--muted);background:linear-gradient(135deg,rgba(139,111,240,.16),rgba(111,214,232,.08));border:1px solid var(--border-soft);-webkit-text-fill-color:currentColor;animation:none}
+.preview-disclaimer{display:none;max-width:420px;margin:18px auto 0;padding:13px 16px;box-sizing:border-box;width:calc(100% - 40px);border-radius:18px;text-align:left;font-size:13px;line-height:1.45;font-weight:700;color:var(--muted);background:linear-gradient(135deg,rgba(139,111,240,.16),rgba(111,214,232,.08));border:1px solid var(--border-soft);-webkit-text-fill-color:currentColor;animation:none}
 .preview-disclaimer .ic{width:26px;height:26px;flex:none}
 .preview-disclaimer b{color:var(--ink)}
 
@@ -730,6 +730,19 @@ set('lpLink',Number(lk).toFixed(2));set('lpLinkBs','≈ Bs '+(lk*fx).toFixed(2))
 #tierTabs .cat-tab:not(:first-child) .ct-n::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c);vertical-align:1px}
 #tierTabs .cat-tab:not(:first-child).active{border-color:var(--c);box-shadow:0 8px 24px color-mix(in srgb,var(--c) 38%,transparent);background:radial-gradient(120% 90% at 50% 0,color-mix(in srgb,var(--c) 38%,transparent),transparent 75%),var(--glass-strong)}
 #tierTabs .cat-tab:not(:first-child) .ct-p{color:color-mix(in srgb,var(--c) 70%,#fff)}
+
+/* --- movimiento suave en la cabecera del catálogo --- */
+@keyframes chUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes chPulse{50%{box-shadow:0 0 0 6px rgba(111,214,232,.0),0 0 22px rgba(111,214,232,.35)}}
+@keyframes chFloat{50%{transform:translateY(-3px)}}
+.cat-hero .ch-kick{animation:chUp .5s both,chPulse 3s ease-in-out 1s infinite}
+.cat-hero h1{animation:chUp .55s .08s both}
+.cat-hero p{animation:chUp .55s .16s both}
+.ch-perks span{animation:chUp .5s both,chFloat 4s ease-in-out infinite}
+.ch-perks span:nth-child(1){animation-delay:.24s,1s}.ch-perks span:nth-child(2){animation-delay:.32s,1.6s}.ch-perks span:nth-child(3){animation-delay:.4s,2.2s}
+#tierTabs .cat-tab{animation:chUp .5s both}
+#tierTabs .cat-tab:nth-child(2){animation-delay:.3s}#tierTabs .cat-tab:nth-child(3){animation-delay:.36s}#tierTabs .cat-tab:nth-child(4){animation-delay:.42s}#tierTabs .cat-tab:nth-child(5){animation-delay:.48s}
+@media(prefers-reduced-motion:reduce){.cat-hero .ch-kick,.cat-hero h1,.cat-hero p,.ch-perks span,#tierTabs .cat-tab{animation:none}}
 @media(prefers-reduced-motion:reduce){.pz-free i,.pz-caret{animation:none}.pz-t,.pz-e{transition:none}}
 </style>
 
@@ -990,7 +1003,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <span><svg class="ic" aria-hidden="true"><use href="#i-music"/></svg>Tu música</span>
 </div>
 </div>
-<div class="preview-disclaimer"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><span>La vista previa es solo una muestra pequeña. <b>Mira el video</b> para ver el producto completo.</span></div>
 <!-- estas pestañas solo se muestran dentro del catalogo "no personalizado" -->
 <div class="cat-tabs" id="catTabs">
 <button class="cat-tab" id="tabTodos" onclick="setSubTab('todos')">Todos</button>
