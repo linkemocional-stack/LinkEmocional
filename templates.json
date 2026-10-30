@@ -2053,7 +2053,13 @@
     "burst": true,
     "trail": true,
     "burstCount": 80,
-    "petalos": true
+    "petalos": true,
+    "contador": {
+     "on": false,
+     "modo": "juntos",
+     "fecha": "",
+     "et": ""
+    }
    },
    "groups": [
     {
@@ -2102,6 +2108,46 @@
        "type": "photos",
        "max": 10,
        "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Contador de tiempo",
+     "fields": [
+      {
+       "key": "on",
+       "label": "Mostrar contador en la página",
+       "type": "switch",
+       "obj": "contador"
+      },
+      {
+       "key": "modo",
+       "label": "Tipo de contador",
+       "type": "select",
+       "obj": "contador",
+       "options": [
+        {
+         "v": "juntos",
+         "l": "Tiempo que llevamos juntos"
+        },
+        {
+         "v": "faltan",
+         "l": "Cuenta regresiva hacia la fecha"
+        }
+       ]
+      },
+      {
+       "key": "fecha",
+       "label": "Fecha (desde que son novios, o la fecha especial)",
+       "type": "date",
+       "obj": "contador"
+      },
+      {
+       "key": "et",
+       "label": "Texto sobre el contador (opcional, ej: Juntos desde hace)",
+       "type": "text",
+       "max": 40,
+       "obj": "contador"
       }
      ]
     },
@@ -2372,7 +2418,13 @@
     "burst": true,
     "trail": true,
     "burstCount": 80,
-    "petalos": true
+    "petalos": true,
+    "contador": {
+     "on": false,
+     "modo": "juntos",
+     "fecha": "",
+     "et": ""
+    }
    },
    "groups": [
     {
@@ -2421,6 +2473,46 @@
        "type": "photos",
        "max": 10,
        "addLabel": "Subir fotos"
+      }
+     ]
+    },
+    {
+     "title": "Contador de tiempo",
+     "fields": [
+      {
+       "key": "on",
+       "label": "Mostrar contador en la página",
+       "type": "switch",
+       "obj": "contador"
+      },
+      {
+       "key": "modo",
+       "label": "Tipo de contador",
+       "type": "select",
+       "obj": "contador",
+       "options": [
+        {
+         "v": "juntos",
+         "l": "Tiempo que llevamos juntos"
+        },
+        {
+         "v": "faltan",
+         "l": "Cuenta regresiva hacia la fecha"
+        }
+       ]
+      },
+      {
+       "key": "fecha",
+       "label": "Fecha (desde que son novios, o la fecha especial)",
+       "type": "date",
+       "obj": "contador"
+      },
+      {
+       "key": "et",
+       "label": "Texto sobre el contador (opcional, ej: Juntos desde hace)",
+       "type": "text",
+       "max": 40,
+       "obj": "contador"
       }
      ]
     },

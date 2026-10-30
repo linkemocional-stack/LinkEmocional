@@ -380,7 +380,7 @@
       var d = h('details', 'grp'); if (gi === 0) d.open = true;
       d.appendChild(h('summary', '', E(g.title)));
       var body = h('div', 'body');
-      g.fields.forEach(function (sp) { body.appendChild(field(sp, cfg, sp.key)); });
+      g.fields.forEach(function (sp) { body.appendChild(field(sp, sp.obj && cfg[sp.obj] && typeof cfg[sp.obj] === 'object' ? cfg[sp.obj] : cfg, sp.key)); });
       d.appendChild(body); f.appendChild(d);
     });
   }
