@@ -1886,7 +1886,7 @@ var st=LE.state; st.extra=st.extra||{}; var ex=st.extra, elS=$('le-initial-state
 function persist(){ try{ elS.textContent=JSON.stringify(st); }catch(e){} }
 var DF={texto:'TE AMO',fotoIdx:1,reactivo:true,onda:true,fuegos:true,
  historia:{on:true,caps:[{fig:'rosa',txt:'Todo empezó con un instante',seg:8},{fig:'corazon',txt:'Y mi corazón supo que eras tú',seg:8},{fig:'anillo',txt:'Hoy quiero elegirte otra vez',seg:8},{fig:'texto',txt:'Te amo',seg:9}]},
- contador:{on:true,fecha:'2024-02-14',modo:'juntos',et:'Juntos desde hace'},
+ contador:{on:false,fecha:'',modo:'juntos',et:''},
  candado:{on:false,codigo:'',pista:''}};
 Object.keys(DF).forEach(function(k){ if(ex[k]===undefined) ex[k]=JSON.parse(JSON.stringify(DF[k])); });
 var FIGL=[['rosa','🌹 Rosa'],['corazon','♥ Corazón'],['anillo','💍 Anillo'],['saturno','🪐 Saturno'],['infinito','∞ Infinito'],['flor','✿ Flor'],['estrella','✦ Estrella'],['luna','☽ Luna'],['texto','Aa Texto 3D'],['foto','📷 Tu foto']];
