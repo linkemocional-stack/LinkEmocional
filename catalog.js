@@ -787,9 +787,9 @@ N.forEach(function(n){
 var a = prices[n.id]; if (!a || !a.length) return;
 var mn = Math.min.apply(null, a), mx = Math.max.apply(null, a);
 var rng = Math.abs(mx - mn) < 0.005 ? '$' + mn.toFixed(2) : '$' + mn.toFixed(2) + '–' + mx.toFixed(2);
-h += '<button class="cat-tab' + (tierFilter === n.id ? ' active' : '') + '" data-tier="' + n.id + '">' + n.nombre + ' <small style="opacity:.75;font-weight:700">' + rng + '</small></button>';
+h += '<button class="cat-tab' + (tierFilter === n.id ? ' active' : '') + '" data-tier="' + n.id + '"><span class="ct-n">' + n.nombre + '</span><small class="ct-p">' + rng + '</small></button>';
 });
-box.innerHTML = h; box.style.display = 'flex';
+box.innerHTML = h; box.style.display = 'grid';
 box.onclick = function(e){ var b = e.target.closest('button[data-tier]'); if (b) setTier(b.getAttribute('data-tier')); };
 }
 function setCatalogMode(mode){

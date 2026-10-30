@@ -310,8 +310,8 @@ border:1px solid rgba(139,111,240,.45);box-shadow:0 28px 60px rgba(0,0,0,.6),0 0
 <p>Elige un diseño animado en 2D o 3D, escribe tu mensaje, sube tus fotos y manda el enlace por WhatsApp. Lo armas en minutos.</p>
 <div class="lp-cta">
 <a class="lp-btn main" href="crear.html">Crear mi página</a>
-<button class="lp-btn plans" type="button" onclick="showView('planes')">Ver planes</button>
-<button class="lp-btn ghost" type="button" onclick="showView('catalogo','personalizado')">Ver catálogo</button>
+<button class="lp-btn plans" type="button" onclick="showView('planes')"><svg class="ic" aria-hidden="true"><use href="#i-tag"/></svg>Ver planes</button>
+<button class="lp-btn ghost" type="button" onclick="showView('catalogo','personalizado')"><svg class="ic" aria-hidden="true"><use href="#i-gift"/></svg>Ver catálogo</button>
 </div>
 <div class="lp-chips"><span>16 horas gratis</span><span>Editor incluido</span><span>Se comparte por WhatsApp</span></div>
 </div>
@@ -489,8 +489,18 @@ set('lpLink',Number(lk).toFixed(2));set('lpLinkBs','≈ Bs '+(lk*fx).toFixed(2))
 <section class="lp-sec pz" id="planes"><div class="lp-in">
 <style>
 #viewPlanes a{text-decoration:none}
-#tierTabs{max-width:680px;flex-wrap:wrap;justify-content:center}#tierTabs .cat-tab{flex:0 1 auto;padding:10px 16px;font-size:13.5px;white-space:nowrap}#tierTabs .cat-tab small{display:block;font-size:11px;margin-top:1px}
-.lp-btn.plans{color:var(--ink);background:linear-gradient(#17122e,#17122e) padding-box,var(--grad-brand) border-box;border:1.5px solid transparent;box-shadow:0 8px 26px rgba(139,111,240,.3)}
+/* --- botones del hero --- */
+.lp-cta{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:460px}
+.lp-cta .lp-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;text-align:center;flex:none}
+.lp-cta .lp-btn.main{grid-column:1/-1;font-size:17px;padding:17px 26px}
+.lp-cta .lp-btn:not(.main){font-size:15.5px;padding:14px 12px;border-radius:14px;transition:transform .18s,box-shadow .18s,border-color .18s}
+.lp-cta .lp-btn:not(.main):active{transform:scale(.97)}
+.lp-cta .lp-btn .ic{width:18px;height:18px}
+.lp-btn.plans{color:var(--ink);background:linear-gradient(135deg,#3b2c86 0%,#2b4f86 100%) padding-box,var(--grad-brand) border-box;border:1.5px solid transparent;box-shadow:0 10px 28px rgba(139,111,240,.38),inset 0 1px 0 rgba(255,255,255,.14)}
+.lp-btn.plans:hover{box-shadow:0 14px 34px rgba(139,111,240,.5),inset 0 1px 0 rgba(255,255,255,.18);transform:translateY(-2px)}
+.lp-cta .lp-btn.ghost{background:rgba(255,255,255,.07);border:1.5px solid rgba(134,215,232,.34);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.lp-cta .lp-btn.ghost:hover{border-color:rgba(134,215,232,.65);transform:translateY(-2px)}
+@media(max-width:860px){.lp-cta{max-width:none}}
 .pz{position:relative;overflow:hidden}
 .pz::before{content:"";position:absolute;left:-140px;top:60px;width:360px;height:360px;border-radius:50%;background:#8b6ff0;filter:blur(100px);opacity:.25;pointer-events:none}
 .pz::after{content:"";position:absolute;right:-120px;top:520px;width:340px;height:340px;border-radius:50%;background:#2a8fae;filter:blur(100px);opacity:.2;pointer-events:none}
@@ -640,6 +650,52 @@ set('lpLink',Number(lk).toFixed(2));set('lpLinkBs','≈ Bs '+(lk*fx).toFixed(2))
 .pz-rise{display:none}
 .pz-card{padding:22px}
 }
+
+/* --- pasos --- */
+.pz-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:6px 0 10px}
+.pz-step{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:20px;background:var(--glass);border:1px solid var(--border-soft)}
+.pz-step>b{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--grad-brand);color:#0d0a1e;font-size:16px;font-weight:800;box-shadow:0 6px 16px rgba(139,111,240,.35)}
+.pz-step strong{display:block;font-size:15px;margin-bottom:2px}
+.pz-step small{display:block;color:var(--muted);font-size:13px;line-height:1.4}
+.pz-t .lp-btn.ghost{background:color-mix(in srgb,var(--c) 14%,transparent);border:1.5px solid color-mix(in srgb,var(--c) 60%,transparent);color:var(--ink)}
+
+/* --- celular: todo en una columna, sin deslizar --- */
+@media(max-width:860px){
+.pz-head{margin-bottom:20px}
+.pz-head h2{font-size:clamp(26px,7.4vw,34px);line-height:1.15}
+.pz-kick{font-size:11px;letter-spacing:.06em;padding:6px 12px}
+.pz-head .lp-sub{font-size:15px;line-height:1.55}
+.pz-tools{flex-direction:column;align-items:stretch;gap:14px;margin-top:18px}
+.pz-cur{width:100%;max-width:340px;margin:0 auto;box-sizing:border-box}
+.pz-cur button{min-width:0}
+.pz-free{width:100%;max-width:340px;margin:0 auto;box-sizing:border-box;justify-content:space-between;gap:10px;font-size:13px}
+.pz-steps{grid-template-columns:1fr;gap:10px;margin:0 0 6px}
+.pz-step{padding:14px 16px}
+.pz-tiers{display:grid;grid-template-columns:1fr;gap:26px;overflow:visible;scroll-snap-type:none;margin:0;padding:22px 0 4px}
+.pz-t{flex:none;max-width:none;width:auto;padding:12px 12px 18px}
+.pz-t:hover{transform:none}
+.pz-t .lt{aspect-ratio:16/9}
+.pz-body{padding:8px 6px 0;gap:10px}
+.pz-t h3{font-size:24px}
+.pz-price{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.pz-price strong{font-size:30px}
+.pz-price small{flex-basis:100%}
+.pz-t ul{font-size:14px;gap:9px}
+.pz-t .lp-btn{width:100%;box-sizing:border-box;padding:15px 18px;font-size:15.5px;border-radius:14px}
+.pz-swipe{display:none}
+.pz-card h3{font-size:20px}
+.pz-calc .pz-seg{display:grid;grid-template-columns:1fr 1fr;border-radius:20px}
+.pz-calc .pz-seg button{padding:10px 8px}
+.pz-qrow{justify-content:space-between}
+.pz-tot strong{font-size:34px}
+.pz-other{flex-direction:column;align-items:stretch;text-align:left}
+.pz-other .lp-btn{width:100%;box-sizing:border-box;text-align:center;padding:14px 18px}
+.pz-sub{flex-direction:column;align-items:flex-start;gap:2px;margin:30px 0 14px}
+.pz-e{padding:20px}
+.pz-trust{display:grid;gap:12px;justify-content:stretch;padding:18px;font-size:14px}
+.pz-bar{font-size:12px}
+}
+@media(max-width:380px){.pz-t h3{font-size:22px}.pz-price strong{font-size:27px}}
 @media(prefers-reduced-motion:reduce){.pz-free i,.pz-caret{animation:none}.pz-t,.pz-e{transition:none}}
 </style>
 
@@ -652,6 +708,12 @@ set('lpLink',Number(lk).toFixed(2));set('lpLinkBs','≈ Bs '+(lk*fx).toFixed(2))
 <div class="pz-free"><i aria-hidden="true"></i><span>Pruébalo 16 h gratis, sin tarjeta</span><a href="crear.html">Probar</a></div>
 </div>
 <p class="pz-curhint" id="pzCurHint"></p>
+</div>
+
+<div class="pz-steps">
+<div class="pz-step"><b>1</b><span><strong>Elige un nivel</strong><small>Más nivel = más animación y más detalle.</small></span></div>
+<div class="pz-step"><b>2</b><span><strong>Personalízalo gratis</strong><small>Pruébalo 16 horas, sin tarjeta.</small></span></div>
+<div class="pz-step"><b>3</b><span><strong>Paga una sola vez</strong><small>Queda online y lo compartes por WhatsApp.</small></span></div>
 </div>
 
 <div class="pz-rise" aria-hidden="true">Más animación y más detalle a cada paso</div>
